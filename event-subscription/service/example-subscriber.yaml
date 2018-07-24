@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: event-email-service
+  labels:
+    example: event-bus    
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3000
+      protocol: TCP
+      name: http
+  selector:
+    app: event-email-service
+---
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: event-email-service
+  labels:
+    app: event-email-service
+    example: event-bus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: event-email-service
+  template:
+    metadata:
+      labels:
+        app: event-email-service
+        example: event-bus
+      annotations:
+        sidecar.istio.io/inject: "true"
+    spec:
+      containers:
+        - name: event-email-service
+          image: eu.gcr.io/kyma-project/example/event-email-service:0.0.2
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+          resources:
+            requests:
+              cpu: "100m"
+            limits:
+              memory: "32M"

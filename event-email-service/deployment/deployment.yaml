@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: event-email-service
+  labels:
+    example: event-email-service
+  annotations:
+    auth.istio.io/8017: NONE
+spec:
+  ports:
+  - name: http
+    port: 3000
+  selector:
+    example: event-email-service
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: event-email-service
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        example: event-email-service
+      annotations:
+        sidecar.istio.io/inject: "true"
+    spec:
+      containers:
+      # replace the repository URL with your own repository (e.g. {DockerID}/event-email-service:0.0.x for Docker Hub).
+      - image: eu.gcr.io/kyma-project/example/event-email-service:0.0.2
+        imagePullPolicy: IfNotPresent
+        name: event-email-service
+        ports:
+        - name: http
+          containerPort: 3000

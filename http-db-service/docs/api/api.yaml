@@ -1,0 +1,94 @@
+openapi: 3.0.0
+info:
+  title: Order service API
+  version: "0.0.1"
+paths:
+  /orders:
+    post:
+      description: Creates a new order.
+      tags:
+        - order
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+      responses:
+        '201':
+          description: Order created succesfully.
+        '400':
+          description: Bad request.
+        '409':
+          description: Order ID conflict.
+        '500':
+          description: Internal server error.
+    get:
+      description: Retrieve all orders.
+      tags:
+        - orders
+      responses:
+        '200':
+          description: Orders retrieved succesfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderList'
+        '500':
+          description: Internal server error.
+    delete:
+      description: Delete all orders.
+      tags:
+        - orders
+      responses:
+        '204':
+          description: All orders deleted succesfully.
+        '500':
+          description: Internal server error.
+  /namespace/X/orders:
+    get:
+      description: Retrieve all orders.
+      tags:
+        - orders
+      responses:
+        '200':
+          description: Orders retrieved succesfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderList'
+        '400':
+          description: Bad request.
+        '500':
+          description: Internal server error.
+    delete:
+      description: Delete all orders in namespace X.
+      tags:
+        - orders
+      responses:
+        '204':
+          description: All orders in namespace X deleted succesfully.
+        '400':
+          description: Bad request.
+        '500':
+          description: Internal server error.
+components:
+  schemas:
+    Order:
+      type: object
+      properties:
+        orderId:
+          type: string
+          example: 11854638GU110615ELIN54ZQ
+        namespace:
+          type: string
+          example: kyma-components
+        total:
+          type: number
+          example: 1234.56
+      required:
+        - orderId
+        - total
+    OrderList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Order'

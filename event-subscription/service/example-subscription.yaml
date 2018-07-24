@@ -1,0 +1,18 @@
+apiVersion: eventing.kyma.cx/v1alpha1
+kind: Subscription
+metadata:
+  name: example-subscription
+  labels:
+    example: event-bus
+spec:
+  endpoint: http://event-email-service.<environment>:3000/v1/events/register
+  push_request_timeout_ms: 2000
+  max_inflight: 400
+  include_subscription_name_header: true
+  include_topic_header: true
+  event_type: test-event-bus
+  event_type_version: v1
+  source:
+    source_namespace: local.kyma.commerce
+    source_type: commerce
+    source_environment: ec-qa

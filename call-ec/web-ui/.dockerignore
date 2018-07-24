@@ -1,0 +1,5 @@
+node_modules
+build-and-publish.sh
+k8s.yaml
+kdu-secret.yaml
+.env.local

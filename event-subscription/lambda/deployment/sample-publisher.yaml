@@ -1,0 +1,38 @@
+apiVersion: config.istio.io/v1alpha2
+kind: EgressRule
+metadata:
+  name: dlcdn-alpinelinuxorg-egress-rule
+  labels:
+    example: event-bus-lambda-subscription    
+spec:
+  destination:
+    service: dl-cdn.alpinelinux.org
+  ports:
+    - port: 80
+      protocol: http
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: sample-publisher
+  labels:
+    app: sample-publisher
+    example: event-bus-lambda-subscription     
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sample-publisher
+  template:
+    metadata:
+      name: sample-publisher
+      labels:
+        app: sample-publisher
+      annotations:
+        sidecar.istio.io/inject: "true"
+    spec:
+      containers:
+      - name: sample-publisher
+        image: alpine
+        imagePullPolicy: IfNotPresent
+        args: ['sh', '-c', 'apk add --update curl && while sleep 3600; do :; done']

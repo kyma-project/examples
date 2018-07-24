@@ -1,0 +1,17 @@
+*/debug
+*/.vscode-janus-debug
+*/jsconfig.json
+*/order-service.exe
+*/example-http-db-service.exe
+*/vscode/launch.json
+*/.idea/
+.idea/
+# Binaries
+*/*.exe
+*/*.dll
+*/*.so
+*/*.dylib
+*/main
+call-ec/web-ui/node_modules
+call-ec/web-ui/.env.honeybadgers
+.DS_Store

@@ -1,0 +1,12 @@
+apiVersion: servicecatalog.kyma.cx/v1alpha1
+kind: ServiceBindingUsage
+metadata:
+  name: fn-redis-client
+  labels:
+    example: service-binding
+spec:
+ serviceBindingRef:
+   name: redis-instance-binding
+ usedBy:
+   kind: Function
+   name: redis-client

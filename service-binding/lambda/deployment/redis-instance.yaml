@@ -1,0 +1,16 @@
+---
+apiVersion: servicecatalog.k8s.io/v1beta1
+kind: ServiceInstance
+metadata:
+  name: redis-instance
+  labels:
+    example: service-binding
+spec:
+  clusterServiceClassExternalName: redis
+  clusterServicePlanExternalName: micro
+  parameters:
+    redisPassword: SWxwQmNVVjJlbU5QUVc4aQo=
+    resources:
+      requests:
+        memory: 96Mi
+        

@@ -1,0 +1,11 @@
+apiVersion: remoteenvironment.kyma.cx/v1alpha1
+kind: EventActivation
+metadata:
+  name: example-event-activation
+  labels:
+    example: event-bus    
+spec:
+  source:
+    namespace: local.kyma.commerce
+    type: commerce
+    environment: ec-qa

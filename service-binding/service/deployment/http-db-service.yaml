@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: http-db-service
+  labels:
+    example: service-binding
+  annotations:
+    auth.istio.io/8017: NONE
+spec:
+  ports:
+  - name: http
+    port: 8017
+  selector:
+    example: service-binding
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: http-db-service
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        example: service-binding
+      annotations:
+        sidecar.istio.io/inject: "true"
+    spec:
+      containers:
+      # replace the repository URL with your own repository (e.g. {DockerID}/http-db-service:0.0.x for Docker Hub).
+      - image: eu.gcr.io/kyma-project/example/http-db-service:0.0.6
+        imagePullPolicy: IfNotPresent
+        name: http-db-service
+        ports:
+        - name: http
+          containerPort: 8017
+        env:
+        - name: dbtype
+          # available dbtypes are: [memory, mssql]
+          value: "mssql"
+
+

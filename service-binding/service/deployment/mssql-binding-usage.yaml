@@ -1,0 +1,12 @@
+apiVersion: servicecatalog.kyma.cx/v1alpha1
+kind: ServiceBindingUsage
+metadata:
+  name: mssql-instance-binding-usage
+  labels:
+    example: service-binding
+spec:
+ serviceBindingRef:
+   name: mssql-instance-binding
+ usedBy:
+   kind: Deployment
+   name: http-db-service
