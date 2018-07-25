@@ -41,12 +41,12 @@ podTemplate(label: label) {
                                 sh "docker login -u $uname -p '$pwd' $env.DOCKER_REGISTRY"
                             }
 
-                            if (isMaster) {
+                           // if (isMaster) {
                                 ws() {
                                     scriptUrl = "$env.CHECKMARX_LIBRARY"
                                     scan = loadModule url: scriptUrl, name: 'scan', branch: 'kyma'
                                 }
-                            }
+                          //  }
                         }
 
                         stage("resolve dependencies $application") {
@@ -71,11 +71,11 @@ podTemplate(label: label) {
                             }
                         }
 
-                        if (isMaster) {
+                        //if (isMaster) {
                             stage("security scan $application (Checkmarx)"){
-                                scan.checkmarx(projectname: "KYMA_" + application.toUpperCase() + "_" + "MASTER", credentialsId: 'checkmarx' )
+                                scan.checkmarx(projectname: "KYMA_" + application.toUpperCase() + "_" + "PR", credentialsId: 'checkmarx' )
                             }
-                        }
+                       // }
 
                         stage("build image $application") {
                             dir(env.APP_FOLDER){
