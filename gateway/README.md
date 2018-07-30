@@ -108,10 +108,10 @@ status:
       name: hello
       uid: fa807328-631d-11e8-a42f-3e54503ab95f
       version: "9562"
-  ingressStatus:
+  virtualServiceStatus:
     code: 2
     resource:
-      name: hello-ing
+      name: hello
       uid: fa7d02e1-631d-11e8-a42f-3e54503ab95f
       version: "9561"
 ```

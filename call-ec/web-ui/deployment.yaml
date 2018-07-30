@@ -36,7 +36,7 @@ spec:
 
 ---
 apiVersion: gateway.kyma.cx/v1alpha2
-kind: api
+kind: Api
 metadata:
     name: call-ec-web-ui
 spec:
@@ -44,3 +44,4 @@ spec:
       name: call-ec-web-ui
       port: 3000
     hostname: call-ec-web-ui.kyma.local
+    authentication: []
