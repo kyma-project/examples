@@ -1,4 +1,6 @@
 # Examples
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fkyma-project%2Fexamples.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fkyma-project%2Fexamples?ref=badge_shield)
+
 
 ## Overview
 
@@ -34,3 +36,6 @@ The summary of the documentation in the `examples` repository lists all availabl
 ## Installation
 
 You can run all the examples locally or in a cluster. For instructions on installing and running an example, refer to the `README.md` document of the specific example, either by using the [List of examples](#list-of-examples) or by navigating through the project structure.
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fkyma-project%2Fexamples.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fkyma-project%2Fexamples?ref=badge_large)
