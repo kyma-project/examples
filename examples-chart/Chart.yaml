@@ -1,0 +1,6 @@
+name: examples-chart
+version: 0.0.1
+description: Deploy & Test Examples
+keywords:
+  - test
+  - examples

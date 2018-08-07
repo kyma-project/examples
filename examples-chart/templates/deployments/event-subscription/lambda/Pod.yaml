@@ -1,0 +1,32 @@
+{{ if .Values.examples.eventSubscription.lambda.deploy }}
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ .Release.Name }}-event-subscription-lambda-deploy-{{ randAlphaNum 5 | lower }}"
+  labels:
+    example: event-subscription-lambda
+    chart: examples
+spec:
+  serviceAccountName: {{ .Release.Name }}-examples-service-account
+  containers:
+    - name: event-subscription-lambda-deploy
+      image: {{ .Values.examples.image }}
+      command: ['sh', '-c']
+      args: 
+        - export KYMA_EXAMPLE_ENV="{{ .Release.Namespace }}" || (touch /tmp/healthy && sleep 600) && 
+          cd event-subscription/lambda || (touch /tmp/healthy && sleep 600) && 
+          kubeless function deploy hello-with-data --label example=event-bus-lambda-subscription --runtime nodejs8 --handler hello-with-data.main --from-file js/hello-with-data.js --namespace $KYMA_EXAMPLE_ENV || (touch /tmp/healthy && sleep 600) && 
+          sed -i "s/<environment>/$KYMA_EXAMPLE_ENV/g" deployment/subscription.yaml || (touch /tmp/healthy && sleep 600) && 
+          kubectl apply -f deployment/event-activation.yaml,deployment/subscription.yaml -n $KYMA_EXAMPLE_ENV || (touch /tmp/healthy && sleep 600) &&
+          touch /tmp/healthy && sleep 600
+      readinessProbe:
+        exec:
+          command:
+          - cat
+          - /tmp/healthy
+        initialDelaySeconds: 5
+        periodSeconds: 5
+  restartPolicy: Never
+---
+{{ end }}
