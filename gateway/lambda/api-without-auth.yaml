@@ -7,7 +7,6 @@ metadata:
     example: serverless-lambda
   name: hello
 spec:
-  authentication: []
   hostname: hello.kyma.local
   service:
     name: hello
