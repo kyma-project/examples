@@ -5,19 +5,19 @@
 # For more details, read the following article on GitHub: https://help.github.com/articles/about-codeowners/.
 
 # These are the default owners for the whole content of the `examples` repository. The default owners are automatically added as reviewers when you open a pull request, unless different owners are specified in the file.
-* @a-thaler @clebs @ahmedami @suleymanakbas91 @lilitgh
+* @a-thaler @clebs @suleymanakbas91 @lilitgh
 
 # Event bus example
 /event-subscription/service/ @sslavic @abbi-gaurav @Abd4llA @marcobebway @montaro @radufa
 
 # Event bus lambda subscription example
-/event-subscription/lambda/ @joek @gchbg @rakesh-garimella @sayanh @venturasr @lilitgh
+/event-subscription/lambda/ @joek @rakesh-garimella @sayanh @venturasr @lilitgh
 
 # Serverless lambda subscription example
-/serverless-lambda/ @joek @gchbg @rakesh-garimella @sayanh @venturasr @lilitgh
+/serverless-lambda/ @joek @rakesh-garimella @sayanh @venturasr @lilitgh
 
 # Service binding example
-/service-binding/ @joek @gchbg @rakesh-garimella @sayanh @venturasr @lilitgh
+/service-binding/ @joek @rakesh-garimella @sayanh @venturasr @lilitgh
 
 # All .md files
 *.md @tomekpapiernik @kazydek @dpolitesap @klaudiagrz
