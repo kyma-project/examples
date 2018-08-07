@@ -130,6 +130,8 @@ kubectl apply -f ./lambda/api-with-default-auth.yaml -n <namespace>
 kubectl apply -f ./lambda/api-with-auth.yaml -n <namespace>
 ```
 
+##### How that works
+
 There are two possible ways of exposing secured Api - using default authentication settings and using custom settings. Authentication settings consist of JWKS URI and Issuer. 
 
 To use default settings omit or set empty list in authentication field and set:
