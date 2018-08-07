@@ -28,9 +28,9 @@ projects = [
 /* 
     project jobs to run are stored here to be sent into the parallel block outside the node executor.
 */
-jobs = [:] 
+jobs = [:]  
 
-//TODO: Trigger acceptance tests  
+runTests = true
 
 properties([
     buildDiscarder(logRotator(numToKeepStr: '10')),
@@ -80,6 +80,18 @@ podTemplate(label: label) {
 // trigger jobs for projects that have changes, in parallel
 stage('build projects') {
     parallel jobs
+}
+
+if (runTests) {
+    stage('run tests for the examples') {
+        build job: 'examples/tests/examples',
+            wait: false,
+            parameters: [
+                string(name:'GIT_REVISION', value: "$commitID"),
+                string(name:'GIT_BRANCH', value: "${env.BRANCH_NAME}"),
+                string(name:'APP_VERSION', value: "$appVersion")
+            ]
+    }
 }
 
 /* -------- Helper Functions -------- */
