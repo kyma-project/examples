@@ -64,7 +64,7 @@ kubectl apply -f ./expose-ec-function.yml
    **REACT_APP_OAUTH2_ISSUER**, **REACT_APP_OAUTH2_JWKS_URI**, and **REACT_APP_OAUTH2_AUTHORIZE_URL**.
    For most installations only `mycommerce.kyma.cx` domain has to be replaced with EC instance domain.
 
-1. Deploy the Web UI application in the Namespace of your choice and create a Kubernetes service and an Api for it:
+1. Deploy the Web UI application in the Namespace of your choice and create a Kubernetes service and an Api resource for it:
 
   ```bash
   kubectl apply -f ./web-ui/deployment.yaml
