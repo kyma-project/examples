@@ -1,0 +1,31 @@
+{{ if .Values.examples.eventEmailService.deploy }}
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ .Release.Name }}-event-email-service-deploy-{{ randAlphaNum 5 | lower }}"
+  labels:
+    example: event-email-service
+    chart: examples
+spec:
+  serviceAccountName: {{ .Release.Name }}-examples-service-account
+  containers:
+    - name: event-email-service-deploy
+      image: {{ .Values.examples.image }}
+      command: ['sh', '-c']
+      args: ["
+        sed -i 's~^      - image: .*$~      - image: {{ .Values.examples.eventEmailService.deploymentImage }}~' event-email-service/deployment/deployment.yaml || (touch /tmp/healthy && sleep 600) &&
+        kubectl apply -f event-email-service/deployment -n {{ .Release.Namespace }} || (touch /tmp/healthy && sleep 600) &&
+        kubectl wait --for=condition=available --timeout=60s deployment/event-email-service -n {{ .Release.Namespace }} || (touch /tmp/healthy && sleep 600) &&
+        touch /tmp/healthy && sleep 600
+        "]
+      readinessProbe:
+        exec:
+          command:
+          - cat
+          - /tmp/healthy
+        initialDelaySeconds: 5
+        periodSeconds: 5
+  restartPolicy: Never
+---
+{{ end }}

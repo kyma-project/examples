@@ -1,0 +1,31 @@
+{{ if .Values.examples.httpDBService.deploy }}
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ .Release.Name }}-http-db-service-deploy-{{ randAlphaNum 5 | lower }}"
+  labels:
+    example: http-db-service
+    chart: examples
+spec:
+  serviceAccountName: {{ .Release.Name }}-examples-service-account
+  containers:
+    - name: http-db-service-deploy
+      image: {{ .Values.examples.image }}
+      command: ['sh', '-c']
+      args: ["
+        sed -i 's~^      - image: .*$~      - image: {{ .Values.examples.httpDBService.deploymentImage }}~' http-db-service/deployment/deployment.yaml || (touch /tmp/healthy && sleep 600) && 
+        kubectl apply -f http-db-service/deployment -n {{ .Release.Namespace }} || (touch /tmp/healthy && sleep 600) &&
+        kubectl wait --for=condition=available --timeout=60s deployment/http-db-service -n {{ .Release.Namespace }} || (touch /tmp/healthy && sleep 600) &&
+        touch /tmp/healthy && sleep 600
+        "]
+      readinessProbe:
+        exec:
+          command:
+          - cat
+          - /tmp/healthy
+        initialDelaySeconds: 5
+        periodSeconds: 5
+  restartPolicy: Never
+---
+{{ end }}
