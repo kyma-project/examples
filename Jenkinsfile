@@ -43,9 +43,7 @@ podTemplate(label: label) {
                         }
 
                         stage("build image $application") {
-                            dir("examples"){
-                                sh "docker build -t $application:latest ."
-                            }
+                            sh "docker build -t $application:latest ."
                         }
 
                         stage("push image $application") {
@@ -59,7 +57,7 @@ podTemplate(label: label) {
                             }
 
                             stage("deploy $application") {
-                                dir("examples/examples-chart") {
+                                dir("examples-chart") {
                                     execute("helm install --wait --timeout=600 -f values.yaml --namespace ${dockerImageTag} --set examples.image=${dockerPushRoot}${application}:${dockerImageTag} .")
                                 }
                             }
@@ -69,9 +67,7 @@ podTemplate(label: label) {
                             }
 
                             /* stage("test $application") {
-                                dir("examples/examples-chart") {
-                                    execute("helm test")
-                                }
+                                execute("helm test")
                             }
 
                             stage("print test logs for $application") {
