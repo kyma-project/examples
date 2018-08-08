@@ -6,7 +6,6 @@ metadata:
     example: http-db-service
   name: http-db-service
 spec:
-  authentication: []
   hostname: http-db-service.kyma.local
   service:
     name: http-db-service

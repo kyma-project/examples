@@ -2,116 +2,166 @@
 
 ## Overview
 
-This basic example demonstrates how to expose a service or a function through an API in a public or secure manner.
+This basic example demonstrates how to expose a service or a function through an API in a public or secure manner through the console UI or manually using kubectl.
 
 ## Prerequisites
 
 - Kyma as the target deployment environment.
-- [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) 1.9.0
-- An environment to which to deploy the example.
+- An environment to which you deploy the example.
 
 ## Installation
 
-First of all, export your environment as variable by replacing the `<environment>` placeholder in the following command and running it.
-```bash
-export KYMA_EXAMPLE_ENV="<environment>"
-```
+This section contains installation steps on how to expose a service or a function through the console UI, and also manually, using kubectl.
 
-Run the following commands in either the 'lambda' or the 'service' folder.
+### Exposure through the console UI
 
-```bash
-kubectl create -f deployment.yaml,api-without-auth.yaml -n $KYMA_EXAMPLE_ENV
-```
+#### Create a service
+
+1. Open the [Kyma console](https://console.kyma.local/) and choose or create the Environment in which you want to deploy the example.
+2. Click the **Deploy new resource to the environment** button, select the `deployment.yaml` file from the `lambda` or `service` directory in this example, and click **Upload**.
+
+#### Expose a service without authentication
+
+1. Select the **Services** button and click on the name of the service you have created. The name should be the same as the Service or Function name in the `deployment.yaml` file.
+2. In the **Exposed APIs** section, click the **Expose API** button.
+3. Fill the **Host** textbox and click **Create**. The name you entered will be referred to as the **\{hostname\}**.
+4. Click the **Save** button.
 
 #### Test the APIs without authentication
 
 ```bash
-# for the function:
-curl -i https://hello.kyma.local
-# for the service
-curl -ik https://http-db-service.ykyma.local/orders
+# To perform a test for the function, use the following command:
+curl -ik https://{hostname}.kyma.local
+# > 200 Hello world
+
+# To perform a test for the service, use the following command:
+curl -ik https://{hostname}.kyma.local/orders
+# > 200 []
 ```
 
-#### Test the APIs with authentication  
+#### Expose a service with authentication
 
-Run the following commands in either the 'lambda' or the 'service' folder.
+1. Select the **Services** button and click **Expose API**.
+2. Fill the **Host** textbox and click **Create**. The name you entered will be referred to as the **\{hostname\}**.
+3. Check the **Secure API** checkbox and fill the **Issuer** and **JWKS URI** fields with custom values, or leave the default ones.
+4. Click the **Save** button.
+
+#### Fetch token
+
+1. In the **Exposed APIs** section, click on the API you have exposed.
+2. In the **Security** section, click the **Fetch token** button.
+3. Select all text and copy it to the clipboard, or click the **Copy to clipboard** button. Make sure that the word `Bearer` is also copied.
+4. The token will be referred to later as **\{token\}**.
+
+>**NOTE:** You do not have to expose API first. You can also fetch token while exposing a service. After checking the **Secure API** checkbox, the **Fetch token** button appears. Then you can fetch token and return without saving.
+
+#### Test the APIs with authentication
 
 ```bash
-kubectl apply -f api-with-auth.yaml -n $KYMA_EXAMPLE_ENV
+# To perform a test without token, use the following command:
+curl -ik https://{hostname}.kyma.local
+# > 401 Origin authentication failed.
+
+# To perform a test with token, use the following command:
+curl -ik https://{hostname}.kyma.local -H 'Authorization: <token>'
+# > 200 Hello world
 ```
 
-Retrieve a token by accessing the [Dex Web application](https://dex-web.kyma.local/). Sign in with the admin@kyma.cx email address and the generic password from the [Dex ConfigMap](../../../resources/core/charts/dex/templates/pre-install-dex-config-map.yaml) file.
+### Manual exposure using kubectl
 
-Call the secured APIs:
+There are additional prerequisites to exposing a service or a function manually using kubectl:
+
+- [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) version 1.10.0
+- Token fetched from the Console UI which will be referred to as **\{token\}**. For more details, see the **NOTE** in the **Fetch token** section.
+- Namespace with Istio injection enabled which will be referred to as **\{namespace\}**. You can enable Istio injection in the Namespace by labeling it using this command:
+
+``` bash
+kubectl label namespace {namespace} istio-injection=enabled
+```
+
+#### Create a service
+
+>**NOTE:** Almost all steps in this tutorial refer to lambda but you can apply them also to the service Deployment by changing directory and names in some places.
+
+Apply one of the `deployment.yaml` files from the `lambda` or `service` directory in this example.
+
+``` bash
+kubectl apply -f ./lambda/deployment.yaml -n {namespace}
+```
+
+#### Expose a service without authentication
+
+``` bash
+kubectl apply -f ./lambda/api-without-auth.yaml -n {namespace}
+```
+
+#### Test the APIs without authentication
+
+To perform a test, use the following command:
 
 ```bash
-# for the function:
-curl -i https://hello.kyma.local -H 'Authorization: Bearer <insert copied token here>'
-# for the service
-curl -ik https://http-db-service.kyma.local/orders -H 'Authorization: Bearer <insert copied token here>'
+curl -ik https://hello.kyma.local
+# > 200 Hello world
 ```
 
-### Cleanup
+#### Expose a service with authentication
 
-Run the following command to completely remove the example and all its resources from the cluster:
+There are two possible ways of exposing secured Api - using the default authentication settings, and using the custom settings. Authentication settings consist of the JWKS URI and the Issuer.
+
+``` bash
+# Create Api with the default authentication settings:
+kubectl apply -f ./lambda/api-with-default-auth.yaml -n {namespace}
+
+# OR
+
+# Create Api with the custom authentication settings:
+kubectl apply -f ./lambda/api-with-auth.yaml -n {namespace}
+```
+
+#### Test the APIs with authentication
 
 ```bash
-# for the function:
-kubectl delete function,api -l example=serverless-lambda -n $KYMA_EXAMPLE_ENV
+# To perform a test without token, use the following command:
+curl -ik https://{hostname}.kyma.local
+# > 401 Origin authentication failed.
 
-# for the service:
-kubectl delete service,deployment,api -l example=http-db-service -n $KYMA_EXAMPLE_ENV
+# To perform a test with token, use the following command:
+curl -ik https://{hostname}.kyma.local -H 'Authorization: <token>'
+# > 200 Hello world
 ```
 
-### Troubleshooting
+#### Cleanup
 
-- Exposing an API with authentication takes some time to work. Looking through the API resource can help. A good API should have:
-
-```yaml
-authenticationstatus
-  code: 2
-```
+Remove the Api by using the `kubectl delete` command on the latest Api resource you have applied. For example, if you have created an Api from the `api-with-auth.yaml` file, run the following command:
 
 ```bash
-kubectl get api hello -o yaml
-apiVersion: gateway.kyma.cx/v1alpha2
-kind: api
-metadata:
-  annotations:
-    kubectl.kubernetes.io/last-applied-configuration: |
-      {"apiVersion":"gateway.kyma.cx/v1alpha2","kind":"api","metadata":{"annotations":{},"labels":{"example":"serverless-lambda","function":"hello"},"name":"hello","namespace":"default"},"spec":{"authentication":[{"jwt":{"issuer":"https://dex.kyma.local","jwksUri":"http://dex-service.kyma-system.svc.cluster.local:5556/keys"},"type":"JWT"}],"hostname":"hello.kyma.local","service":{"name":"hello","port":8080}}}
-  clusterName: ""
-  creationTimestamp: 2018-05-29T08:55:04Z
-  generation: 0
-  labels:
-    example: serverless-lambda
-    function: hello
-  name: hello
-  namespace: default
-  resourceVersion: "9563"
-  selfLink: /apis/gateway.kyma.cx/v1alpha2/namespaces/default/apis/hello
-  uid: fa7805fe-631d-11e8-a42f-3e54503ab95f
-spec:
-  authentication:
-  - jwt:
-      issuer: https://dex.kyma.local
-      jwksUri: http://dex-service.kyma.local
-    type: JWT
-  hostname: hello.kyma.local
-  service:
-    name: hello
-    port: 8080
-status:
-  authenticationStatus:
-    code: 2
-    resource:
-      name: hello
-      uid: fa807328-631d-11e8-a42f-3e54503ab95f
-      version: "9562"
-  ingressStatus:
-    code: 2
-    resource:
-      name: hello-ing
-      uid: fa7d02e1-631d-11e8-a42f-3e54503ab95f
-      version: "9561"
+kubectl delete -f ./lambda/api-with-auth.yaml -n {namespace}
 ```
+
+Remove a service or lambda by using the `kubectl delete` command on the file from which the resource was created. See the example for lambda:
+
+```bash
+kubectl delete -f ./lambda/deployment.yaml -n {namespace}
+```
+
+## Troubleshooting
+
+The problem occurs when there is an Api resource with authentication enabled but after making a request without a JWT token, the received response code is `200`.
+
+Solution 1: Wait. If the cluster is under high workload, it may take a while for authentication policies to apply. If you still have the problem after a few seconds, look at the Solution 2.
+
+Solution 2: If you did not use the default settings, there might be something wrong with the JWKS URI you provided. If you use a local Deployment of Kyma on Minikube and the internal OIDC Identity Provider such as Dex, make sure that the JWKS URI is provided as FQDN, and that it points directly to the keys endpoint, for example: http://dex-service.kyma-system.svc.cluster.local:5556/keys. Envoy sidecars must be able to resolve a domain name to the proper inside-cluster or outside-cluster IP address.
+
+Solution 3: Check if the Pod you created has the istio-proxy container injected. Run:
+
+``` bash
+kubectl get pods -n {namespace}
+```
+
+Find the Pod created with the `deployment.yaml` file and copy its name. Run:
+
+``` bash
+kc get pod <pod-name> -n {namespace} -o json | jq '.spec.containers[].name'
+```
+
+One of the returned strings should be the istio-proxy. If there is no such string, the Namespace probably does not have Istio injection enabled. Read the additional prerequisites at the beginning of the **Manual exposure using kubectl** section in this document to fix that.
