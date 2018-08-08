@@ -21,7 +21,6 @@ DOCKER_CREDENTIALS=${env.DOCKER_CREDENTIALS}
 GIT_REVISION=${params.GIT_REVISION}
 GIT_BRANCH=${params.GIT_BRANCH}
 APP_VERSION=${params.APP_VERSION}
-APP_FOLDER=${env.APP_FOLDER}
 ********************************
 """
 
@@ -44,7 +43,7 @@ podTemplate(label: label) {
                         }
 
                         stage("build image $application") {
-                            dir(env.APP_FOLDER){
+                            dir("examples"){
                                 sh "docker build -t $application:latest ."
                             }
                         }
@@ -60,7 +59,7 @@ podTemplate(label: label) {
                             }
 
                             stage("deploy $application") {
-                                dir(env.APP_FOLDER + '/examples-chart') {
+                                dir("examples/examples-chart") {
                                     execute("helm install --wait --timeout=600 -f values.yaml --namespace ${dockerImageTag} --set examples.image=${dockerPushRoot}${application}:${dockerImageTag} .")
                                 }
                             }
@@ -70,7 +69,7 @@ podTemplate(label: label) {
                             }
 
                             /* stage("test $application") {
-                                dir(env.APP_FOLDER + '/examples-chart') {
+                                dir("examples/examples-chart") {
                                     execute("helm test")
                                 }
                             }
