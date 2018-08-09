@@ -1,4 +1,4 @@
-# Event Bus lambda subscription
+# Event Bus Lambda Subscription
 
 ## Overview
 

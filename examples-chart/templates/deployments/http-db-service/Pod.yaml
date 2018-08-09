@@ -14,7 +14,9 @@ spec:
       image: {{ .Values.examples.image }}
       command: ['sh', '-c']
       args: ["
+        {{ if .Values.examples.httpDBService.deploymentImage }}
         sed -i 's~^      - image: .*$~      - image: {{ .Values.examples.httpDBService.deploymentImage }}~' http-db-service/deployment/deployment.yaml || (touch /tmp/healthy && sleep 600) && 
+        {{ end }}
         kubectl apply -f http-db-service/deployment -n {{ .Release.Namespace }} || (touch /tmp/healthy && sleep 600) &&
         kubectl wait --for=condition=available --timeout=60s deployment/http-db-service -n {{ .Release.Namespace }} || (touch /tmp/healthy && sleep 600) &&
         touch /tmp/healthy && sleep 600

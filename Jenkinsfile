@@ -1,17 +1,23 @@
 #!/usr/bin/env groovy
+import groovy.json.JsonSlurperClassic
+import groovy.json.JsonOutput
+
 def label = "kyma-${UUID.randomUUID().toString()}"
-def application = 'examples'
+application = 'examples'
 def isMaster = params.GIT_BRANCH == 'master'
 
-def dockerPushRoot = isMaster 
+dockerPushRoot = isMaster 
     ? "${env.DOCKER_REGISTRY}"
     : "${env.DOCKER_REGISTRY}snapshot/"
 
-def dockerImageTag = isMaster
+dockerImageTag = isMaster
     ? params.APP_VERSION
     : params.GIT_BRANCH
 
-def deploy = false
+def changes = parseJson("${params.CHANGED_EXAMPLES}") 
+
+//For now, we only have deployment pods for these examples. Once we have for all, we can just eliminate this check.
+def deploy = changes.contains("http-db-service") || changes.contains("event-email-service") || changes.contains("event-subscription/lambda")
 
 echo """
 ********************************
@@ -21,6 +27,7 @@ DOCKER_CREDENTIALS=${env.DOCKER_CREDENTIALS}
 GIT_REVISION=${params.GIT_REVISION}
 GIT_BRANCH=${params.GIT_BRANCH}
 APP_VERSION=${params.APP_VERSION}
+CHANGED_EXAMPLES=${JsonOutput.prettyPrint(params.CHANGED_EXAMPLES)}
 ********************************
 """
 
@@ -40,6 +47,10 @@ podTemplate(label: label) {
                             withCredentials([usernamePassword(credentialsId: env.DOCKER_CREDENTIALS, passwordVariable: 'pwd', usernameVariable: 'uname')]) {
                                 sh "docker login -u $uname -p '$pwd' $env.DOCKER_REGISTRY"
                             }
+
+                            withCredentials([usernamePassword(credentialsId: 'examples-jenkins-user', passwordVariable: 'pwd', usernameVariable: 'uname')]) {
+                                sh "curl -o kubeconfig --user $uname:$pwd https://jenkins.poc.servicefactory.cd.ydev.hybris.com/job/azure/job/ondemand/job/huskiesOnDemand/lastSuccessfulBuild/artifact/kyma/kubeconfig"
+                            }
                         }
 
                         stage("build image $application") {
@@ -53,29 +64,31 @@ podTemplate(label: label) {
 
                         if (deploy) {
                             stage("create namespace for $application") {
-                                execute("kubectl create ns ${dockerImageTag}")
+                                execute("kubectl create ns ${params.GIT_REVISION}")
                             }
 
                             stage("deploy $application") {
-                                dir("examples-chart") {
-                                    execute("helm install --wait --timeout=600 -f values.yaml --namespace ${dockerImageTag} --set examples.image=${dockerPushRoot}${application}:${dockerImageTag} .")
-                                }
+                                execute("cd examples-chart && helm install --wait --timeout=600 --name examples -f values.yaml --namespace ${params.GIT_REVISION} . --set examples.image=${dockerPushRoot}${application}:${dockerImageTag} " + configureChart(changes))
                             }
 
                             stage("print logs for $application") {
-                                execute("kubectl logs -l chart=examples")
+                                execute("kubectl logs -l chart=examples -n ${params.GIT_REVISION}")
                             }
 
                             /* stage("test $application") {
-                                execute("helm test")
+                                execute("helm test examples")
                             }
 
                             stage("print test logs for $application") {
-                                execute("kubectl logs -l chart=examples-tests")
+                                execute("kubectl logs -l chart=examples-tests -n ${params.GIT_REVISION}")
                             } */
 
+                            stage("delete $application") {
+                                execute("helm delete --purge examples")
+                            }
+
                             stage("delete namespace for $application") {
-                                execute("kubectl delete ns ${dockerImageTag}")
+                                execute("kubectl delete ns ${params.GIT_REVISION}")
                             }
                         }
                     }
@@ -90,8 +103,30 @@ podTemplate(label: label) {
     }
 }
 
-def execute(command, envs = '') {
-    def envText = envs=='' ? '' : "--env $envs"
-    sh "docker run --rm $envText ${dockerPushRoot}${application}:${dockerImageTag} /bin/sh -c '$command'"
+def configureChart(changedExamples) {
+    def set = ""
+    
+    if (changedExamples.contains("http-db-service")) {
+        set += "--set examples.httpDBService.deploy=true --set examples.httpDBService.deploymentImage=${dockerPushRoot}example/http-db-service:${dockerImageTag} "
+    }
+    if (changedExamples.contains("event-email-service")) {
+        set += "--set examples.eventEmailService.deploy=true --set examples.eventEmailService.deploymentImage=${dockerPushRoot}example/event-email-service:${dockerImageTag} "
+    }
+    if (changedExamples.contains("event-subscription/lambda")) {
+        set += "--set examples.eventSubscription.lambda.deploy=true "
+    }
+    
+    return set
 }
 
+def execute(command, envs = '') {
+    def envText = envs=='' ? '' : "--env $envs"
+    def workDir = pwd()
+    sh "docker run --rm --env KUBECONFIG=/kubeconfig $envText ${dockerPushRoot}${application}:${dockerImageTag} /bin/sh -c '$command'"
+}
+
+@NonCPS
+def parseJson(changedExamples) {
+    def parser = new JsonSlurperClassic()
+    return parser.parseText(changedExamples)
+}

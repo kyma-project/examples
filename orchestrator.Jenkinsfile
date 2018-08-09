@@ -1,4 +1,5 @@
 #!/usr/bin/env groovy
+import groovy.json.JsonOutput
 /* 
 
 Monorepo root orchestrator: This Jenkinsfile runs the Jenkinsfiles of all subprojects based on the changes made.
@@ -26,12 +27,17 @@ projects = [
     "monitoring-custom-metrics"
 ]
 
+/*
+    Projects that are NOT built when changed, but do trigger the tests.
+*/
+additionalProjects = ["event-subscription/lambda"]
+
 /* 
     project jobs to run are stored here to be sent into the parallel block outside the node executor.
 */
-jobs = [:]  
+jobs = [:]
 
-runTests = true
+runTests = false
 
 properties([
     buildDiscarder(logRotator(numToKeepStr: '10')),
@@ -48,6 +54,10 @@ podTemplate(label: label) {
                             // use HEAD of branch as revision, Jenkins does a merge to master commit before starting this script, which will not be available on the jobs triggered below
                             commitID = sh (script: "git rev-parse origin/${env.BRANCH_NAME}", returnStdout: true).trim()
                             changes = changedProjects()
+                            runTests = changes.size() > 0
+                            if (changes.size() == 1 && changes[0] == "governance") {
+                                runTests = false
+                            }
                         }
 
                         stage('collect projects') {
@@ -85,12 +95,16 @@ stage('build projects') {
 
 if (runTests) {
     stage('run tests for the examples') {
+        // convert changes to JSON string to pass on
+        changes = JsonOutput.toJson(changes)
+
         build job: 'examples/tests/examples',
-            wait: false,
+            wait: true,
             parameters: [
                 string(name:'GIT_REVISION', value: "$commitID"),
                 string(name:'GIT_BRANCH', value: "${env.BRANCH_NAME}"),
-                string(name:'APP_VERSION', value: "$appVersion")
+                string(name:'APP_VERSION', value: "$appVersion"),
+                string(name:'CHANGED_EXAMPLES', value: "$changes")
             ]
     }
 }
@@ -102,6 +116,7 @@ if (runTests) {
  */
 String[] changedProjects() {
     res = []
+    def allProjects = projects + additionalProjects
     echo "Looking for changes in the following projects: $projects."
 
     // get all changes
@@ -109,18 +124,18 @@ String[] changedProjects() {
 
     if (allChanges.size() == 0) {
         echo "No changes found or could not be fetched, triggering all projects."
-        return projects
+        return allProjects
     }
 
     // parse changeset and keep only relevant folders -> match with projects defined
-    for (int i=0; i < projects.size(); i++) {
+    for (int i=0; i < allProjects.size(); i++) {
         for (int j=0; j < allChanges.size(); j++) {
-            if (allChanges[j].startsWith(projects[i]) && changeIsValidFileType(allChanges[j],projects[i]) && !res.contains(projects[i])) {
-                res.add(projects[i])
+            if (allChanges[j].startsWith(allProjects[i]) && changeIsValidFileType(allChanges[j],allProjects[i]) && !res.contains(allProjects[i])) {
+                res.add(allProjects[i])
                 break // already found a change in the current project, no need to continue iterating the changeset
             }
-            if (projects[i] == "governance" && allChanges[j].endsWith(".md") && !res.contains(projects[i])) {
-                res.add(projects[i])
+            if (allProjects[i] == "governance" && allChanges[j].endsWith(".md") && !res.contains(allProjects[i])) {
+                res.add(allProjects[i])
                 break // already found a change in one of the .md files, no need to continue iterating the changeset
             }
         }

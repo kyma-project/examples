@@ -1,4 +1,4 @@
-# HTTP DB service
+# HTTP DB Service
 
 ## Overview
 

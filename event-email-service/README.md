@@ -41,7 +41,6 @@ This example illustrates how to write a service in `NodeJS` that listens for eve
     kubectl port-forward -n $KYMA_EXAMPLE_ENV $(kubectl get pod -n $KYMA_EXAMPLE_ENV -l example=event-email-service | grep event-email-service | awk '{print $1}') 3000
     ```
 
-
 ### Test the service
 
 To test the service, simulate an event via cURL:
@@ -51,7 +50,6 @@ curl -H "Content-Type: application/json" -d '{"event":{"customer":{"customerID":
 ```
 
 After sending the event, you should see a log entry either in your terminal (if running locally) or in the Pod's logs (if running on Kyma) confirming the event reception.
-
 
 ### Cleanup
 
