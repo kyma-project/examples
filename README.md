@@ -33,4 +33,4 @@ The summary of the documentation in the `examples` repository lists all availabl
 
 ## Installation
 
-You can run all the examples locally or in a cluster. For instructions on installing and running an example, refer to the `README.md` document of the specific example, either by using the [List of examples](#list-of-examples) or by navigating through the project structure.
+You can run all the examples locally or in a cluster. For instructions on installing and running an example, refer to the `README.md` document of the specific example, either by using the **List of examples** section or by navigating through the project structure.
