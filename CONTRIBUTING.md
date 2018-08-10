@@ -86,7 +86,7 @@ A CI/CD configuration file accompanies each example to ensure its validity as pa
 
 ### Acceptance tests
 
-For details on acceptance tests for examples, see the [`acceptance-tests.md`](docs/acceptance-tests.md) document.
+For details on acceptance tests for examples, see the [`acceptance-tests`](tests/README.md) document.
 
 ### Releases
 
