@@ -1,0 +1,6 @@
+white-list-external: ["localhost", "console.kyma.local"]
+black-list: ["/vendor/"]
+files:
+  - path: "./examples/call-ec/web-ui/README.md"
+    config:
+      white-list-internal: ["../config/webpack.config.prod.js"]
