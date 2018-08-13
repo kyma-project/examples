@@ -51,7 +51,7 @@ Istio 0.8 provides a way to include those inbound ports to be redirected to Envo
 
 Envoy will capture only traffic on ports listed in containerPorts of the pod, `containerPort: 8080`, or the list of ports in the annotation "traffic.sidecar.istio.io/includeInboundPorts".
 
-In Kyma port ***8080*** is used by the [Kubeless lambda functions](../serverless-lambda/README.md), therefore needs to be included in the inbound ports list.
+In Kyma port ***8080*** is used by the [Kubeless lambda functions](../event-subscription/lambda/README.md), therefore needs to be included in the inbound ports list.
 
 ```yaml
 spec:
