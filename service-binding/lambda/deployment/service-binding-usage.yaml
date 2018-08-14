@@ -8,5 +8,5 @@ spec:
  serviceBindingRef:
    name: redis-instance-binding
  usedBy:
-   kind: Function
+   kind: function
    name: redis-client
