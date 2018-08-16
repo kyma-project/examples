@@ -8,5 +8,5 @@ spec:
  serviceBindingRef:
    name: mssql-instance-binding
  usedBy:
-   kind: Deployment
+   kind: deployment
    name: http-db-service
