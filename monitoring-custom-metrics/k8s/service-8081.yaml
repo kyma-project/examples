@@ -1,0 +1,16 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: sample-metrics-8081
+  labels:
+    k8s-app: metrics
+    example: monitoring-custom-metrics
+  namespace: default
+spec:
+  selector:
+    app: sample-metrics
+  ports:
+  - name: web
+    port: 8081
+    protocol: TCP

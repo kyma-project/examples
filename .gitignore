@@ -15,3 +15,7 @@
 call-ec/web-ui/node_modules
 call-ec/web-ui/.env.honeybadgers
 .DS_Store
+monitoring-custom-metrics/bin
+
+# Vendor
+monitoring-custom-metrics/vendor
