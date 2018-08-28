@@ -21,7 +21,7 @@ This example shows how to expose custom metrics to Prometheus with a golang serv
 
 - Deploy the application, service and servicemonitor
     ```bash
-    kubectl apply -f k8s -R
+    kubectl apply -f deployment -R
     ```
     
 #### Access the exposed metrics in Prometheus
