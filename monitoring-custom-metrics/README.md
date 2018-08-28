@@ -2,15 +2,15 @@
 
 ## Overview
 
-This example shows how to expose custom metrics to Prometheus with a golang service in Kyma.
+This example shows how to expose custom metrics to Prometheus with a Golang service in Kyma. To do so, follow these steps:
 
-1. Expose a sample application serving metrics on port 8081
-2. Access the exposed metrics in Prometheus
+1. Expose a sample application serving metrics on the `8081` port.
+2. Access the exposed metrics in Prometheus.
 
 ## Prerequisites
 
 - Kyma as the target deployment environment.
-- If sidecar injection is not enabled for **default** namespace, then run the following:
+- If sidecar injection is not enabled for the `default` Namespace, run the following command:
     ```bash
     kubectl label namespace default istio-injection=enabled
     ```
@@ -19,34 +19,35 @@ This example shows how to expose custom metrics to Prometheus with a golang serv
 
 ### Expose a sample metrics application
 
-- Deploy the application, service and servicemonitor
+- Deploy the application, service, and servicemonitor:
     ```bash
     kubectl apply -f deployment -R
     ```
     
-#### Access the exposed metrics in Prometheus
+### Access the exposed metrics in Prometheus
 
-- Run the port-forward on service core-prometheus
+- Run the `port-forward` command on `core-prometheus` service:
     
     ```bash
     kubectl port-forward -n kyma-system svc/core-prometheus 9090:9090
     ```
-In [targets](http://localhost:9090/targets#job-sample-metrics-8081) all the **sample-metrics** endpoint will appear.
+All the **sample-metrics** endpoints appear as the [`Targets`](http://localhost:9090/targets#job-sample-metrics-8081) list.
 
-- Use either one of the registered metrics `cpu_temperature_celsius` or `hd_errors_total` in the `expression` field in [here](http://localhost:9090/graph) and `Execute` to check the values scrapped by Prometheus.
+- Use either the `cpu_temperature_celsius` or `hd_errors_total` in the `expression` field [here](http://localhost:9090/graph).
+- Click the **Execute** button to check the values scrapped by Prometheus.
 
-## Cleanup
+### Cleanup
 Run the following commands to completely remove the example and all its resources from the cluster:
 
-- Remove **label** istio-injection from **default** namespace
+1. Remove the **istio-injection** label from the `default` Namespace.
     ```bash
     kubectl label namespace default istio-injection-
     ```
-- Remove **ServiceMonitor** in namespace kyma-system
+2. Remove **ServiceMonitor** in the `kyma-system` Namespace.
     ```bash
     kubectl delete servicemonitor -l example=monitoring-custom-metrics -n kyma-system
     ```
-- Remove sample-metrics deployments in namespace default
+3. Remove the `sample-metrics` Deployments in the `default` Namespace.
     ```bash
     kubectl delete all -l example=monitoring-custom-metrics
     ```
