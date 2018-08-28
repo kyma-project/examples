@@ -18,5 +18,5 @@ spec:
     spec:
       containers:
       - name: sample-metrics
-        image: eu.gcr.io/kyma-project/snapshot/example/monitoring-custom-metrics:PR-16
+        image: eu.gcr.io/kyma-project/example/monitoring-custom-metrics:0.1.44
         imagePullPolicy: IfNotPresent
