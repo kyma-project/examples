@@ -72,13 +72,13 @@ Access the event publishing API from the cluster through port `8080` on the foll
     curl -i \
         -H "Content-Type: application/json" \
         -X POST http://core-publish.kyma-system:8080/v1/events \
-        -d '{"source": {"source-namespace": "com.github", "source-type": "commerce", "source-environment": "ec-qa"}, "event-type": "test-event-bus", "event-type-version": "v1", "event-time": "2018-11-02T22:08:41+00:00", "data": {"event":{"customer":{"customerID": "1234", "uid": "rick.sanchez@mail.com"}}}}'
+        -d '{"source": {"source-namespace": "local.kyma.commerce", "source-type": "commerce", "source-environment": "ec-qa"}, "event-type": "test-event-bus", "event-type-version": "v1", "event-time": "2018-11-02T22:08:41+00:00", "data": {"event":{"customer":{"customerID": "1234", "uid": "rick.sanchez@mail.com"}}}}'
 
     # or use the fully-qualified event publishing API service name
     curl -i \
         -H "Content-Type: application/json" \
         -X POST http://core-publish.kyma-system.svc.cluster.local:3000/v1/events \
-        -d '{"source": {"source-namespace": "com.github", "source-type": "commerce", "source-environment": "ec-qa"}, "event-type": "test-event-bus", "event-type-version": "v1", "event-time": "2018-11-02T22:08:41+00:00", "data": {"event":{"customer":{"customerID": "1234", "uid": "rick.sanchez@mail.com"}}}}'
+        -d '{"source": {"source-namespace": "local.kyma.commerce", "source-type": "commerce", "source-environment": "ec-qa"}, "event-type": "test-event-bus", "event-type-version": "v1", "event-time": "2018-11-02T22:08:41+00:00", "data": {"event":{"customer":{"customerID": "1234", "uid": "rick.sanchez@mail.com"}}}}'
     ```
     > **NOTE:** To send multiple events, change the `orderCode` to have a unique value for each POST request.
 
