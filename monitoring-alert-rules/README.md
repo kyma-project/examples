@@ -2,16 +2,14 @@
 
 ## Overview
 
-This example shows how to configure alert rules in Kyma.
-
-Define a new alert rule for AlertManager.
+This example shows how to configure alert rules in Kyma and to define a new alert rule for AlertManager.
 
 ## Prerequisites
 
 - Kyma as the target deployment environment.
 
 ## Installation
-> **Note:** You need access to the `kyma-system` Namespace to execute the following steps.
+>**Note:** You need access to the `kyma-system` Namespace to execute the following steps.
 
 ### Configure a new alert
 1. Create a ConfigMap for the alert-rule.
@@ -26,7 +24,7 @@ Define a new alert rule for AlertManager.
     kubectl port-forward pod/prometheus-core-0 -n kyma-system 9090:9090
     ```
 
-    You will find the rule, **http-db-service-is-not-running** [here](http://localhost:9090/rules).
+    Find the **http-db-service-is-not-running** rule [here](http://localhost:9090/rules).
 
     As the `http-db-service` Deployment does not the exist, the alert is fired [here](http://localhost:9090/alerts).
 
