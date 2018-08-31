@@ -9,7 +9,7 @@ This example shows how to configure alert rules in Kyma and to define a new aler
 - Kyma as the target deployment environment.
 
 ## Installation
->**Note:** You need access to the `kyma-system` Namespace to execute the following steps.
+>**NOTE:** You need access to the `kyma-system` Namespace to execute the following steps.
 
 ### Configure a new alert
 1. Create a ConfigMap for the alert-rule.
