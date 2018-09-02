@@ -62,7 +62,7 @@ storage/                           # Subdivision based on technology
     |--rethinkdb
 ```
 
-**NOTE:** This is an example layout and does not reflect the actual structure. It is based on the [Kubernetes examples structure](https://github.com/kubernetes/kubernetes/tree/master/examples).
+**NOTE:** This is an example layout and does not reflect the actual structure. It is based on the [Kubernetes examples structure](https://github.com/kubernetes/examples).
 
 ### Build
 

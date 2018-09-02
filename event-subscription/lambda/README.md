@@ -12,7 +12,7 @@ This example shows how to perform the following tasks:
 
 ## Prerequisites
 
-- Install the Kubeless CLI as described in the [Kubeless installation guide](https://github.com/kubeless/kubeless#installation).
+- Install the Kubeless CLI as described in the [Kubeless installation guide](https://kubeless.io/docs/quick-start/).
 
 - After installing the CLI, export the name of the `kubeless config` configmap resource name and the `namespace` where it is located into the shell environment.
 
