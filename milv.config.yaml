@@ -1,6 +1,5 @@
-white-list-external: ["localhost", "console.kyma.local"]
-black-list: ["/vendor/"]
-files:
-  - path: "./examples/call-ec/web-ui/README.md"
-    config:
-      white-list-internal: ["../config/webpack.config.prod.js"]
+white-list-external: ["localhost", "kyma.local", "kyma-system"]
+#./examples/call-ec/web-ui/README.md is a template from https://github.com/facebook/create-react-app. Updating links in this file would be like updating links in create-react-app repo.
+black-list: ["/vendor/", "./examples/call-ec/web-ui/README.md"]
+timeout: 60
+request-repeats: 5
