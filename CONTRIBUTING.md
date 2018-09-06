@@ -62,7 +62,7 @@ storage/                           # Subdivision based on technology
     |--rethinkdb
 ```
 
-**NOTE:** This is an example layout and does not reflect the actual structure. It is based on the [Kubernetes examples structure](https://github.com/kubernetes/examples).
+> **NOTE:** This is an example layout and does not reflect the actual structure. It is based on the [Kubernetes examples structure](https://github.com/kubernetes/examples).
 
 ### Build
 
@@ -82,7 +82,7 @@ All examples are deployable in the cloud. Follow these rules to achieve this and
 
 ### Continuous integration
 
-A CI/CD configuration file accompanies each example to ensure its validity as part of the automation pipeline. However, since CI is temporarily not publicly available, the reviewer must check if the related CI job has completed successfully.
+A CI/CD configuration file accompanies each example to ensure its validity as part of the automation pipeline. However, since CI is temporarily not publicly available, the reviewer must check if the related CI job has completed successfully after running it manually.
 
 ### Acceptance tests
 
