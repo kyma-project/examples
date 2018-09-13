@@ -67,7 +67,6 @@ if [[ ! -z $SRCCLR_API_TOKEN ]]; then
     ENV+="-e SRCCLR_API_TOKEN "
 fi
 
-echo "Host path: $HOST_PATH"
 # Run in the buildpack container
 echo "🚀 Running make $GOAL on $CONTAINER_PATH:"
 docker run --rm -v $HOST_PATH:/go$CONTAINER_PATH -w /go$CONTAINER_PATH $ENV eu.gcr.io/kyma-project/golang-buildpack:0.0.8 /bin/bash -c "make $GOAL"
