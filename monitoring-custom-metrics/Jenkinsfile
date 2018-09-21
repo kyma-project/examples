@@ -59,7 +59,6 @@ podTemplate(label: label) {
                             }
                         }
 
-
                         stage("push image $application") {
                             sh "docker tag ${application}:latest ${dockerPushRoot}example/${application}:${dockerImageTag}"
                             sh "docker push ${dockerPushRoot}example/${application}:${dockerImageTag}"
