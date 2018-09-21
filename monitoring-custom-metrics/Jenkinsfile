@@ -53,14 +53,6 @@ podTemplate(label: label) {
                             execute("make build")
                         }
 
-                        if (isMaster) {
-                            stage("IP scan $application (Sourceclear)"){
-                                withCredentials([string(credentialsId: 'SRCCLR_API_TOKEN', variable: 'SRCCLR_API_TOKEN')]) {
-                                    execute("make scan","SRCCLR_API_TOKEN=$SRCCLR_API_TOKEN")
-                                }
-                            }
-                        }
-
                         stage("build image $application") {
                             dir(env.APP_FOLDER){
                                 sh "docker build -t $application:latest ."
