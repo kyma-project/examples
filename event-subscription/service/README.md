@@ -87,7 +87,7 @@ Access the event publishing API from the cluster through port `8080` on the foll
 
 To view the traces:
 
-1. [Access the tracing UI](https://github.com/kyma-project/kyma/blob/master/docs/tracing/docs/001-overview-tracing.md#access-jaeger).
+1. [Access the tracing UI](https://github.com/kyma-project/kyma/blob/master/docs/tracing/docs/001-overview-tracing.md).
 2. Select `webhook-service`.
 3. Click `Find Traces`.
 

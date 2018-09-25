@@ -17,7 +17,7 @@ The flow of operations:
 
 To follow this example you need:
 
-- an Environment created in Kyma. For more information, read the [related documentation](https://github.com/kyma-project/kyma/blob/master/docs/kyma/docs/005-environments.md).
+- an Environment created in Kyma. For more information, read the [related documentation](https://github.com/kyma-project/kyma/blob/master/docs/kyma/docs/005-details-environments.md).
 
   >**NOTE:** Execute all commands in this example against the Environment you use (-n {Name_Of_The_Environment}).
 
