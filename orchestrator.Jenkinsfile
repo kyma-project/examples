@@ -163,3 +163,5 @@ def commitHashForBuild(build) {
   def scmAction = build?.actions.find { action -> action instanceof jenkins.scm.api.SCMRevisionAction }
   return scmAction?.revision?.hash
 }
+
+/* 1,2,1,2, this is just a test. */
