@@ -7,7 +7,7 @@ paths:
     post:
       description: Creates a new order.
       tags:
-        - order
+        - orders
       requestBody:
         content:
           application/json:
@@ -48,7 +48,7 @@ paths:
     get:
       description: Retrieve all orders.
       tags:
-        - orders
+        - namespace orders
       responses:
         '200':
           description: Orders retrieved succesfully.
@@ -63,7 +63,7 @@ paths:
     delete:
       description: Delete all orders in namespace X.
       tags:
-        - orders
+        - namespace orders
       responses:
         '204':
           description: All orders in namespace X deleted succesfully.

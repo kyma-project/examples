@@ -18,6 +18,6 @@ func SwaggerAPIRedirectHandler(w http.ResponseWriter, r *http.Request) {
 		protocol = "https"
 	}
 
-	rd := fmt.Sprintf("%s://editor.swagger.io/#/?import=%s://%s/api.yaml", protocol, protocol, r.Host)
+	rd := fmt.Sprintf("%s://editor.swagger.io/#/?url=%s://%s/api.yaml", protocol, protocol, r.Host)
 	http.Redirect(w, r, rd, http.StatusPermanentRedirect)
 }
