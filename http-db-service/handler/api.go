@@ -1,6 +1,9 @@
 package handler
 
-import "net/http"
+import (
+	"fmt"
+	"net/http"
+)
 
 // SwaggerAPIHandler provides the Swagger API specification file
 func SwaggerAPIHandler(w http.ResponseWriter, r *http.Request) {
@@ -10,5 +13,11 @@ func SwaggerAPIHandler(w http.ResponseWriter, r *http.Request) {
 
 // SwaggerAPIRedirectHandler is used to redirect from root (of the service) to the file which contains the service's API
 func SwaggerAPIRedirectHandler(w http.ResponseWriter, r *http.Request) {
-	http.Redirect(w, r, "/api.yaml", http.StatusMovedPermanently)
+	protocol := "http"
+	if r.TLS != nil {
+		protocol = "https"
+	}
+
+	rd := fmt.Sprintf("%s://editor.swagger.io/#/?import=%s://%s/api.yaml", protocol, protocol, r.Host)
+	http.Redirect(w, r, rd, http.StatusPermanentRedirect)
 }

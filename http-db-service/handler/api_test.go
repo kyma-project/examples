@@ -34,14 +34,12 @@ func TestSwaggerAPIHandler(t *testing.T) {
 func TestSwaggerAPIRedirectHandler(t *testing.T) {
 	router := mux.NewRouter()
 	router.HandleFunc("/", SwaggerAPIRedirectHandler)
-	router.HandleFunc("/api.yaml", func(w http.ResponseWriter, r *http.Request) {
-		// just send accepted response to check that the redirect / -> /api.yaml happened.
-		w.WriteHeader(http.StatusAccepted)
-	})
 	ts := httptest.NewServer(router)
 	defer ts.Close()
 
 	resp, err := http.Get(ts.URL)
 	assert.NoError(t, err)
-	assert.Equal(t, http.StatusAccepted, resp.StatusCode)
+	assert.Equal(t, http.StatusOK, resp.StatusCode)
+	// check that redirect goes to editor.swagger.io
+	assert.Contains(t, resp.Request.URL.String(), "editor.swagger.io")
 }
