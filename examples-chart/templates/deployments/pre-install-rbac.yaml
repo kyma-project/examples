@@ -24,7 +24,7 @@ rules:
   - apiGroups: ["kubeless.io"]
     resources: ["functions"]
     verbs: ["get", "watch", "list", "create", "update", "patch", "delete"]
-  - apiGroups: ["remoteenvironment.kyma.cx"]
+  - apiGroups: ["applicationconnector.kyma-project.io"]
     resources: ["eventactivations"]
     verbs: ["get", "watch", "list", "create", "update", "patch", "delete"]
   - apiGroups: ["eventing.kyma.cx"]

@@ -1,11 +1,8 @@
-apiVersion: remoteenvironment.kyma.cx/v1alpha1
+apiVersion: applicationconnector.kyma-project.io/v1alpha1
 kind: EventActivation
 metadata:
   name: hello-with-data-activation
   labels:
     example: event-bus-lambda-subscription
 spec:
-  source:
-    namespace: local.kyma.commerce
-    type: commerce
-    environment: ec-qa
+  sourceId: stage.commerce.kyma.local
