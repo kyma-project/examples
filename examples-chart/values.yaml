@@ -1,14 +1,11 @@
 examples:
-    image: eu.gcr.io/kyma-project/examples:0.0.1
+    image: eu.gcr.io/kyma-project/examples:0.1.38
     httpDBService:
-        deploy: true
-        deploymentImage: eu.gcr.io/kyma-project/example/http-db-service:0.0.6
-        testImage: eu.gcr.io/kyma-project/example/http-db-service-acceptance-tests:0.0.2
+        deploy: false
     eventSubscription:
         lambda:
-            deploy: true
+            deploy: false
     eventEmailService:
-        deploy: true
-        deploymentImage: eu.gcr.io/kyma-project/example/event-email-service:0.0.2
+        deploy: false
 rbac: 
     enabled: true

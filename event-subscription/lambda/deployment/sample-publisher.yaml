@@ -17,7 +17,7 @@ metadata:
   name: sample-publisher
   labels:
     app: sample-publisher
-    example: event-bus-lambda-subscription     
+    example: event-bus-lambda-subscription
 spec:
   replicas: 1
   selector:

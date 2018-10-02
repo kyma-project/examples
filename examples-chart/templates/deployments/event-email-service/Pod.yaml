@@ -14,7 +14,9 @@ spec:
       image: {{ .Values.examples.image }}
       command: ['sh', '-c']
       args: ["
+        {{ if .Values.examples.eventEmailService.deploymentImage }}
         sed -i 's~^      - image: .*$~      - image: {{ .Values.examples.eventEmailService.deploymentImage }}~' event-email-service/deployment/deployment.yaml || (touch /tmp/healthy && sleep 600) &&
+        {{ end }}
         kubectl apply -f event-email-service/deployment -n {{ .Release.Namespace }} || (touch /tmp/healthy && sleep 600) &&
         kubectl wait --for=condition=available --timeout=60s deployment/event-email-service -n {{ .Release.Namespace }} || (touch /tmp/healthy && sleep 600) &&
         touch /tmp/healthy && sleep 600
