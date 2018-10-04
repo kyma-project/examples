@@ -24,7 +24,8 @@ projects = [
     "tests/http-db-service",
     "call-ec",
     "governance",
-    "monitoring-custom-metrics"
+    "monitoring-custom-metrics",
+    "example-tracing"
 ]
 
 /*
