@@ -43,4 +43,4 @@ spec:
             requests:
               cpu: "100m"
             limits:
-              memory: "32M"
+              memory: "64M"
