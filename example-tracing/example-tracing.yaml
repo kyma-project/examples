@@ -1,0 +1,108 @@
+apiVersion: gateway.kyma.cx/v1alpha2
+kind: Api
+metadata:
+    name: order-front-api
+    labels:
+      example: tracing
+spec:
+    service:
+      name: order-front
+      port: 8080
+    hostname: order-front-api.kyma.local
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: order-front
+  labels:
+    example: tracing
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      protocol: TCP
+      name: http
+  selector:
+    app: order-front
+---
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: order-front
+  labels:
+    example: tracing
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: order-front
+  template:
+    metadata:
+      labels:
+        app: order-front
+        example: tracing
+      annotations:
+        sidecar.istio.io/inject: "true"
+    spec:
+      containers:
+        - name: order-front
+          image: eu.gcr.io/kyma-project/example/tracing/order-front:0.0.1
+          imagePullPolicy: IfNotPresent
+          args:
+            - --port=8080
+            - --db-url=http://db-service:8017/orders
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              cpu: "100m"
+            limits:
+              memory: "32M"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-service
+  labels:
+    example: tracing
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 8017
+    protocol: TCP
+  selector:
+    app: db-service
+---
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: db-service
+  labels:
+    example: tracing
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db-service
+  template:
+    metadata:
+      labels:
+        example: tracing
+        app: db-service
+      annotations:
+        sidecar.istio.io/inject: "true"
+    spec:
+      imagePullSecrets:
+      containers:
+      # replace the repository URL with your own repository (e.g. {DockerID}/http-db-service:0.0.x for Docker Hub).
+      - image: eu.gcr.io/kyma-project/example/http-db-service:0.0.6
+        imagePullPolicy: IfNotPresent
+        name: db-service
+        ports:
+        - name: http
+          containerPort: 8017
+        env:
+        - name: dbtype
+          # available dbtypes are: [memory, mssql]
+          value: "memory"
