@@ -60,11 +60,11 @@ podTemplate(label: label) {
                         }
 
                         // if (isMaster) {
-                        //     stage("IP scan $application (WhiteSource)") {
-                        //         withCredentials([string(credentialsId: 'whitesource_apikey', variable: 'apikey')]) {
-                        //             execute("make scan", ["API_KEY=$apikey"])
-                        //         }
-                        //     }
+                            // stage("IP scan $application (WhiteSource)") {
+                            //     withCredentials([string(credentialsId: 'whitesource_apikey', variable: 'apikey')]) {
+                            //         execute("make scan", ["API_KEY=$apikey"])
+                            //     }
+                            // }
                         // }
 
                         if (isMaster) {
