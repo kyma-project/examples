@@ -17,8 +17,12 @@ This chart provides an easy way to deploy and test the examples.
 ## Prerequisites
 
 - Kubernetes 1.10+
+- Kyma as the target deployment environment.
+- An environment to deploy the examples.
 
 ## Details
+
+### Installation
 
 Configure these options on [values.yaml](values.yaml):
 
@@ -33,3 +37,23 @@ Configure these options on [values.yaml](values.yaml):
 | examples.eventEmailService.deploymentImage | Deployment image for Event Email Service example |
 | rbac.enabled  | Enable RBAC |
 
+Deploy the examples:
+```
+Helm install -f values.yaml --name examples --namespace <environment> .
+```
+
+#### Testing
+
+Deploy the test pods defined under [templates/tests](templates/tests):
+```
+helm test --cleanup examples
+```
+Output of this command will show whether the tests are passed or failed.
+
+#### Cleanup
+
+Cleanup the environment:
+```
+helm delete --purge examples
+kubectl delete ns <environment>
+```
