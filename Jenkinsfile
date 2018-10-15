@@ -17,7 +17,7 @@ dockerImageTag = isMaster
 def changes = parseJson("${params.CHANGED_EXAMPLES}") 
 
 //For now, we only have deployment pods for these examples. Once we have for all, we can just eliminate this check.
-def deploy = changes.contains("http-db-service") || changes.contains("event-email-service") || changes.contains("event-subscription/lambda")
+def deploy = changes.contains("http-db-service") || changes.contains("tests/http-db-service") || changes.contains("event-email-service") || changes.contains("event-subscription/lambda")
 
 echo """
 ********************************
@@ -71,24 +71,8 @@ podTemplate(label: label) {
                                 execute("cd examples-chart && helm install --wait --timeout=600 --name examples -f values.yaml --namespace ${params.GIT_REVISION} . --set examples.image=${dockerPushRoot}${application}:${dockerImageTag} " + configureChart(changes))
                             }
 
-                            stage("print logs for $application") {
-                                execute("kubectl logs -l chart=examples -n ${params.GIT_REVISION}")
-                            }
-
-                            /* stage("test $application") {
+                            stage("test $application") {
                                 execute("helm test examples")
-                            }
-
-                            stage("print test logs for $application") {
-                                execute("kubectl logs -l chart=examples-tests -n ${params.GIT_REVISION}")
-                            } */
-
-                            stage("delete $application") {
-                                execute("helm delete --purge examples")
-                            }
-
-                            stage("delete namespace for $application") {
-                                execute("kubectl delete ns ${params.GIT_REVISION}")
                             }
                         }
                     }
@@ -99,6 +83,19 @@ podTemplate(label: label) {
             currentBuild.result = "FAILURE"
             def body = "${currentBuild.currentResult} ${env.JOB_NAME}${env.BUILD_DISPLAY_NAME}: on branch: ${params.GIT_BRANCH}. See details: ${env.BUILD_URL}"
             emailext body: body, recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'CulpritsRecipientProvider'], [$class: 'RequesterRecipientProvider']], subject: "${currentBuild.currentResult}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'"
+        } finally {
+            stage("print logs for $application") {
+                execute("kubectl logs -l chart=examples -n ${params.GIT_REVISION}")
+            }
+            stage("print logs for tests"){
+                execute("kubectl logs -l chart=examples-tests -n ${params.GIT_REVISION}")
+            }
+            stage("delete $application") {
+                execute("helm delete --purge examples")
+            }
+            stage("delete namespace for $application") {
+                execute("kubectl delete ns ${params.GIT_REVISION}")
+            }
         }
     }
 }
@@ -106,8 +103,16 @@ podTemplate(label: label) {
 def configureChart(changedExamples) {
     def set = ""
     
-    if (changedExamples.contains("http-db-service")) {
-        set += "--set examples.httpDBService.deploy=true --set examples.httpDBService.deploymentImage=${dockerPushRoot}example/http-db-service:${dockerImageTag} "
+    def deployHttpDBService = changedExamples.contains("http-db-service")
+    def deployHttpDBServiceTests = changedExamples.contains("tests/http-db-service")
+    if (deployHttpDBService || deployHttpDBServiceTests) {
+        set += "--set examples.httpDBService.deploy=true "
+        if (deployHttpDBService) {
+            set += "--set examples.httpDBService.deploymentImage=${dockerPushRoot}example/http-db-service:${dockerImageTag} "
+        }
+        if (deployHttpDBServiceTests) {
+            set += "--set examples.httpDBService.testImage=${dockerPushRoot}example/http-db-service-acceptance-tests:${dockerImageTag} "
+        }
     }
     if (changedExamples.contains("event-email-service")) {
         set += "--set examples.eventEmailService.deploy=true --set examples.eventEmailService.deploymentImage=${dockerPushRoot}example/event-email-service:${dockerImageTag} "

@@ -34,3 +34,8 @@ spec:
         ports:
         - name: http
           containerPort: 3000
+        resources:
+          limits:
+            memory: 100Mi
+          requests:
+            memory: 32Mi

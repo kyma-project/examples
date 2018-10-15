@@ -24,3 +24,8 @@ spec:
         image: alpine
         imagePullPolicy: IfNotPresent
         args: ['sh', '-c', 'apk add --update curl && while sleep 3600; do :; done']
+        resources:
+          requests:
+            cpu: "100m"
+          limits:
+            memory: "64M"

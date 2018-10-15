@@ -1,0 +1,43 @@
+{{ if .Values.examples.httpDBService.deploy }}
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ .Release.Name }}-http-db-service-tests-{{ randAlphaNum 5 | lower }}"
+  labels:
+    example: http-db-service
+    chart: examples-tests
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  serviceAccountName: {{ .Release.Name }}-examples-service-account
+  containers:
+    - image: {{ .Values.examples.image }}
+      name: http-db-service-tests
+      command: ['sh', '-c']
+      args: ["
+        {{ if .Values.examples.httpDBService.testImage }}
+        sed -i 's~^  - image: .*$~  - image: {{ .Values.examples.httpDBService.testImage }}~' tests/http-db-service/deployment/pod.yaml  
+        {{ end }}
+        for i in $(seq 1 5); do 
+          [ $i -gt 1 ] && sleep 15;
+          kubectl apply -f tests/http-db-service/deployment -n {{ .Release.Namespace }} &&
+          kubectl wait --for=condition=Ready --timeout=60s pod/http-db-service-acceptance-tests -n {{ .Release.Namespace }} &&
+          sleep 10 &&
+          kubectl logs http-db-service-acceptance-tests -n {{ .Release.Namespace }} | grep -q 'PASS' &&
+          s=0 && break ||
+          s=$?; 
+          echo 'Retrying in 15 seconds..';
+          kubectl delete -f tests/http-db-service/deployment -n {{ .Release.Namespace }};
+        done;
+        exit $s
+        "]
+      resources:
+        limits:
+          memory: 100Mi
+        requests:
+          memory: 32Mi
+  restartPolicy: Never
+---
+{{ end }}
+
