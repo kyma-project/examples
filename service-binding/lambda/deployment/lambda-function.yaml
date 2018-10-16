@@ -22,7 +22,7 @@ spec:
   function: |
       const redis = require('redis');
       module.exports = {
-          handler: (event, context) => {
+          main: (event, context) => {
               const client = redis.createClient({host: process.env.HOST, port: process.env.PORT, password: process.env.REDIS_PASSWORD});
               client.info(function (err, reply) {
                   if (err) {
