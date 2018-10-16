@@ -1,15 +1,3 @@
-apiVersion: config.istio.io/v1alpha2
-kind: EgressRule
-metadata:
-  name: dlcdn-alpinelinuxorg-egress-rule
-  labels:
-    example: event-bus-lambda-subscription    
-spec:
-  destination:
-    service: dl-cdn.alpinelinux.org
-  ports:
-    - port: 80
-      protocol: http
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
