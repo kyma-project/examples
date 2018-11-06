@@ -24,7 +24,7 @@ This chart provides an easy way to deploy and test the examples.
 
 ### Installation
 
-Configure these options on [values.yaml](values.yaml):
+Configure these options in the [values.yaml](values.yaml) file:
 
 | Parameter                        | Description |
 |--------------------------------- | -----------: |
@@ -38,21 +38,22 @@ Configure these options on [values.yaml](values.yaml):
 | rbac.enabled  | Enable RBAC |
 
 Deploy the examples:
+
 ```
-Helm install -f values.yaml --name examples --namespace <environment> .
+helm install -f values.yaml --name examples --namespace <environment> .
 ```
 
-#### Testing
+### Testing
 
-Deploy the test pods defined under [templates/tests](templates/tests):
+Deploy the test Pods defined under [templates/tests](templates/tests):
 ```
 helm test --cleanup examples
 ```
-Output of this command will show whether the tests are passed or failed.
+The output of this command shows whether the tests passed or failed.
 
-#### Cleanup
+### Cleanup
 
-Cleanup the environment:
+Clean up the environment:
 ```
 helm delete --purge examples
 kubectl delete ns <environment>
