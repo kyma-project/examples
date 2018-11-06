@@ -64,7 +64,7 @@ podTemplate(label: label) {
 
                         if (deploy) {
                             stage("create namespace for $application") {
-                                execute("kubectl create ns ${params.GIT_REVISION}")
+                                execute("kubectl create ns ${params.GIT_REVISION}; kubectl label ns ${params.GIT_REVISION} env=true")
                             }
 
                             stage("deploy $application") {
