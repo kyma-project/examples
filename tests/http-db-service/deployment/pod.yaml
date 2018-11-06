@@ -6,7 +6,7 @@ spec:
   containers:
   # replace the repository URL with your own repository (e.g. {DockerID}/http-db-service-acceptance-tests:0.0.x for Docker Hub).
   - image: eu.gcr.io/kyma-project/example/http-db-service-acceptance-tests:0.1.15
-    imagePullPolicy: Always
+    imagePullPolicy: IfNotPresent
     name: http-db-service-acceptance-tests
     resources:
       limits:
