@@ -29,7 +29,7 @@ spec:
       containers:
       # replace the repository URL with your own repository (e.g. {DockerID}/event-email-service:0.0.x for Docker Hub).
       - image: eu.gcr.io/kyma-project/example/event-email-service:0.0.2
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         name: event-email-service
         ports:
         - name: http
