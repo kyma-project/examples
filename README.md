@@ -19,7 +19,7 @@ The examples project provides a central repository to showcase and illustrate fe
 
 The summary of the documentation in the `examples` repository lists all available examples organized by the feature or concept they showcase. This structure provides a quick overview and easy navigation.
 
->**NOTE:** The table with examples is also available as an Overview document in the `kyma` repository under [this](https://github.com/kyma-project/kyma/blob/master/docs/kyma/docs/007-overview-examples.md) link. Each time you update the table, modify the Overview document accordingly.
+>**NOTE:** The table with examples is also available under `docs` in the `kyma` repository. Whenever you update the table, modify the [Overview](https://github.com/kyma-project/kyma/blob/master/docs/kyma/docs/007-overview-examples.md) document accordingly.
 
 | Example | Description | Technology |
 |---|---|---|
