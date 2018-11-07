@@ -8,4 +8,9 @@ spec:
   - image: eu.gcr.io/kyma-project/example/http-db-service-acceptance-tests:0.1.15
     imagePullPolicy: IfNotPresent
     name: http-db-service-acceptance-tests
+    resources:
+      limits:
+        memory: 200Mi
+      requests:
+        memory: 64Mi
   restartPolicy: Never

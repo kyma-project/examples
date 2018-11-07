@@ -1,0 +1,35 @@
+{{ if .Values.examples.eventEmailService.deploy }}
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ .Release.Name }}-event-email-service-tests-{{ randAlphaNum 5 | lower }}"
+  labels:
+    example: event-email-service
+    chart: examples-tests
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  serviceAccountName: {{ .Release.Name }}-examples-service-account
+  containers:
+    - name: event-email-service-tests
+      image: {{ .Values.examples.image }}
+      command: ['sh', '-c']
+      args: ['
+        for i in $(seq 1 5); do  
+          curl -H "Content-Type: application/json" -d ''{"event":{"customer":{"customerID": "1234", "uid": "rick.sanchez@mail.com"}}}'' http://event-email-service.{{ .Release.Namespace }}:3000/v1/events/register
+          && s=0 && break ||
+          s=$?;
+          echo "Retrying in 15 seconds..";
+          sleep 15;
+        done;
+        exit $s
+        ']
+      resources:
+        limits:
+          memory: 100Mi
+        requests:
+          memory: 32Mi
+  restartPolicy: Never
+---
+{{ end }}

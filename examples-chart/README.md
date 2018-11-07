@@ -1,15 +1,5 @@
-```
+# Example Chart
 
-  ______                           _              _____ _                _   
- |  ____|                         | |            / ____| |              | |  
- | |__  __  ____ _ _ __ ___  _ __ | | ___  ___  | |    | |__   __ _ _ __| |_ 
- |  __| \ \/ / _` | '_ ` _ \| '_ \| |/ _ \/ __| | |    | '_ \ / _` | '__| __|
- | |____ >  < (_| | | | | | | |_) | |  __/\__ \ | |____| | | | (_| | |  | |_ 
- |______/_/\_\__,_|_| |_| |_| .__/|_|\___||___/  \_____|_| |_|\__,_|_|   \__|
-                            | |                                              
-                            |_|                                              
-
-```
 ## Overview
 
 This chart provides an easy way to deploy and test the examples.
@@ -17,10 +7,14 @@ This chart provides an easy way to deploy and test the examples.
 ## Prerequisites
 
 - Kubernetes 1.10+
+- Kyma as the target deployment environment.
+- An environment to deploy the examples.
 
 ## Details
 
-Configure these options on [values.yaml](values.yaml):
+### Installation
+
+Configure these options in the [values.yaml](values.yaml) file:
 
 | Parameter                        | Description |
 |--------------------------------- | -----------: |
@@ -33,3 +27,24 @@ Configure these options on [values.yaml](values.yaml):
 | examples.eventEmailService.deploymentImage | Deployment image for Event Email Service example |
 | rbac.enabled  | Enable RBAC |
 
+Deploy the examples:
+
+```
+helm install -f values.yaml --name examples --namespace <environment> .
+```
+
+### Testing
+
+Deploy the test Pods defined under [templates/tests](templates/tests):
+```
+helm test --cleanup examples
+```
+The output of this command shows whether the tests passed or failed.
+
+### Cleanup
+
+Clean up the environment:
+```
+helm delete --purge examples
+kubectl delete ns <environment>
+```

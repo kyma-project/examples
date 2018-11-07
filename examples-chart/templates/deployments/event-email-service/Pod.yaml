@@ -28,6 +28,11 @@ spec:
           - /tmp/healthy
         initialDelaySeconds: 5
         periodSeconds: 5
+      resources:
+        limits:
+          memory: 100Mi
+        requests:
+          memory: 32Mi
   restartPolicy: Never
 ---
 {{ end }}
