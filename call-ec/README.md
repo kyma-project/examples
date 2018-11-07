@@ -1,21 +1,21 @@
-# Lambda that calls OCC API in the context of the end user
+# Lambda that calls Omni Commerce Connect (OCC) API in the context of the end user
 
 ## Overview
 
-This example shows how to call an OCC API and integrate with the Enterprise Commerce.
+This example shows how to call an OCC API and integrate with SAP Commerce.
 
-The following diagram illustrates how the web application included in the example interacts with Enterprise Commerce and the lambda function to call the OCC API in the context of a specific user.
-![](./diagram.png)
+The following diagram illustrates how the web application included in the example interacts with SAP Commerce and the lambda function to call the OCC API in the context of a specific user.
+![](./diagram.svg)
 
-The flow of operations:
-1. The Web UI application redirects the user to the Enterprise Commerce to perform authentication.
-2. The Enterprise Commerce redirects the user to the Web UI. The access token and the ID token are passed as query parameters.
-3. The Web UI application calls the lambda using the access token and the ID token. The access token is passed in the `occ-token` custom header, whereas the ID token is passed in the `Authorization` header.
+The flow of operations is as follows:
+1. The Web UI application redirects the user to SAP Commerce to perform authentication.
+2. SAP Commerce redirects the user to the Web UI. The access token and the ID token are passed as query parameters.
+3. The Web UI application calls the lambda using the access token and the ID token. The access token is passed in the **occ-token** custom header, whereas the ID token is passed in the **Authorization** header.
 4. The Application Connector uses the access token to call the OCC API.    
 
 ## Prerequisites
 
-To follow this example you need:
+To follow this example, you need:
 
 - an Environment created in Kyma. For more information, read the [related documentation](https://github.com/kyma-project/kyma/blob/master/docs/kyma/docs/011-details-environments.md).
 
@@ -29,7 +29,7 @@ This section describes how to deploy, expose, and call the lambda function you d
 
 ### Deploy the lambda function
 
-1. Before you deploy the lambda, modify the [call-ec-function.yml](call-ec-function.yml) file by setting the `name` container environment variable value to the full URL of the access service that represents the underlying OCC API. For example, for the access service with the `http://ec-default-b515fe5b-7d06-446d-858f-db0128792bb8.kyma-integration` URL:  
+1. Before you deploy the lambda, modify the [`call-ec-function.yml`](call-ec-function.yml) file by setting the `name` container environment variable value to the full address of the access service that represents the underlying OCC API. See the example for the access service with the `http://ec-default-b515fe5b-7d06-446d-858f-db0128792bb8.kyma-integration` address:  
 
 ```
 containers:
@@ -50,21 +50,21 @@ kubectl describe function/calculate-promotion
 
 ### Expose the lambda function
 
-1. Edit the [expose-ec-function.yml](expose-ec-function.yaml) file, and change the `$YOUR_DOMAIN` placeholder in the `hostname` parameter value to the domain of your Kyma cluster.
+1. Edit the [`expose-ec-function.yml`](expose-ec-function.yaml) file and change the `$YOUR_DOMAIN` placeholder in the `hostname` parameter value to the domain of your Kyma cluster.
 For example, a local Kyma cluster uses the `kyma.local` domain.
 
-2. Expose the lambda function. Specify the Namespace to which you deployed the lambda in the command. Run:
+2. Expose the lambda function. Specify the Namespace to which you deployed the lambda. Run this command:
 ```
 kubectl apply -f ./expose-ec-function.yml
 ```
 
 ### Deploy the Web UI application
 
-1. Edit the [web-ui/.env](web-ui/.env) file and set URLs appropriate for used EC instance for:
+1. Edit the [`web-ui/.env`](web-ui/.env) file and set addresses appropriate for the SAP Commerce instance for
    **REACT_APP_OAUTH2_ISSUER**, **REACT_APP_OAUTH2_JWKS_URI**, and **REACT_APP_OAUTH2_AUTHORIZE_URL**.
-   For most installations only `mycommerce.kyma.cx` domain has to be replaced with EC instance domain.
+   For most installations, only the `mycommerce.kyma.cx` domain has to be replaced with the domain of the SAP Commerce instance.
 
-1. Deploy the Web UI application in the Namespace of your choice and create a Kubernetes service and an Api resource for it:
+1. Deploy the Web UI application in the Namespace of your choice, and create a Kubernetes service and an Api resource for it:
 
   ```bash
   kubectl apply -f ./web-ui/deployment.yaml
@@ -72,13 +72,13 @@ kubectl apply -f ./expose-ec-function.yml
 
 1. Expose the Web UI application:
 
-   1. Check the name of the Web UI application Pod (name starting with `call-ec-web-ui-`):
+   1. Check the name of the Web UI application Pod. The name starts with `call-ec-web-ui-`.
 
       ```bash
       kubectl get pods
       ```
 
-   1. Forward Web UI application port, so the application will be available on the same port of localhost:
+   1. Forward the Web UI application port to enable the application on the same port of localhost.
 
       ```bash
       kubectl port-forward {Pod_Name} 3000
@@ -88,32 +88,34 @@ kubectl apply -f ./expose-ec-function.yml
 
 The lambda function expects these query parameters:
 
-- `user-id` - an identifier of an EC user.
-- `threshold` - a minimal value of ordered items needed to get a promotion.
+- **user-id** which is an identifier of a SAP Commerce user.
+- **threshold** which is a minimal value of ordered items needed to get a promotion.
 
-After you expose the function, you can invoke by sending this request:
+After you expose the function, you can invoke it by sending this request:
+
 ```bash
 curl -i -G https://calculate-promotion.{YOUR.CLUSTER.DOMAIN} -d "user-id={customer_id}" -d "threshold=1000" -H "occ-token: {EC_access_token}" -H "Authorization: Bearer {EC_ID_token}"
 ```
 
 ### Use the UI
 
-To access the UI, go to `http://localhost:3000` and authenticate in Enterprise Commerce. After you authenticate, the system redirects you back to the Web UI application.
-Find the access token and the ID token issued for your application by Enterprise Commerce in the **Authentication** section. Expand **The Function** section to call the function and check the results of the operation.
+To access the UI, go to `http://localhost:3000` and authenticate in SAP Commerce. After you authenticate, the system redirects you back to the Web UI application.
+Find the access token and the ID token issued for your application by SAP Commerce in the **Authentication** section. Expand **The Function** section to call the Function and check the results of the operation.
 
 ### Cleanup
-Delete all objects created by the example using this command:
+
+Use this command to delete all objects created by the example:
 ```bash
 kubectl delete all -l example=call-ec
 ```
 
 ## Troubleshooting
 
-### Lambda returns Internal Server Error
+### Lambda returns an Internal Server Error
 
-Internal Server Error may occur in one of the following situations:
-- You don't specify the required query parameters when you invoke the lamda.
-- You don't set the correct URL of the access service that represents the underlying OCC API in the [call-ec-function.yml](call-ec-function.yml) file.
+An Internal Server Error can occur in one of the following situations:
+- You don't specify the required query parameters when you invoke the lambda.
+- You don't set the correct address of the access service that represents the underlying OCC API in the [`call-ec-function.yml`](call-ec-function.yml) file.
 - The underlying OCC API is not available.
 - The underlying OCC API returns a status different than `200`.
 
@@ -121,12 +123,13 @@ Check the logs of the lambda function to troubleshoot the issue.
 
 ### Check the log file
 
-Find the Pod that contains the lambda function. List all Pods in a given Namespace using this command:
+Find the Pod that contains the lambda function. Use this command to list all Pods in a given Namespace:
 ```bash
 kubectl get po
 ```
 
 Get the logs of the chosen Pod:
+
 ```bash
 kubectl log {Pod_name}
 ```      

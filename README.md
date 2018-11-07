@@ -19,17 +19,19 @@ The examples project provides a central repository to showcase and illustrate fe
 
 The summary of the documentation in the `examples` repository lists all available examples organized by the feature or concept they showcase. This structure provides a quick overview and easy navigation.
 
+>**NOTE:** The table with examples is also available as an Overview document in the `kyma` repository under [this](https://github.com/kyma-project/kyma/blob/master/docs/kyma/docs/007-overview-examples.md) link. Each time you update the table, modify the Overview document accordingly.
+
 | Example | Description | Technology |
 |---|---|---|
-| [HTTP DB service](http-db-service/README.md) | Service exposing an HTTP API to access a database on the cluster. | Go, MSSQL |
-| [Event Service Subscription](event-subscription/service/README.md) | The example demonstrating publish and consume features of the Event Bus. | Go |
-| [Event Lambda Subscription](event-subscription/lambda/README.md) | Create functions, trigger functions on Events, and bind to services.  | Kubeless |
+| [HTTP DB Service](http-db-service/README.md) | Test the service that exposes an HTTP API to access a database on the cluster. | Go, MSSQL |
+| [Event Service Subscription](event-subscription/service/README.md) | Test the example that demonstrates the `publish` and `consume` features of the Event Bus. | Go |
+| [Event Lambda Subscription](event-subscription/lambda/README.md) | Create functions, trigger them on Events, and bind them to services.  | Kubeless |
 | [Gateway](gateway/README.md) | Expose APIs for functions or services.  | Kubeless |
-| [Service Binding](service-binding/lambda/README.md) | Bind a Redis service to a Lambda Function. | Kubeless, Redis, NodeJS |
-| [Calling Enterprise Commerce](call-ec/README.md) | Call Enterprise Commerce in the context of the end user | Kubeless, NodeJS |
-| [Alerting Rules](monitoring-alert-rules/README.md) | Configure alert rules in Kyma.  | Prometheus |
-| [Custom Metrics in Kyma](monitoring-custom-metrics/README.md) | Expose Custom Metrics in Kyma.  | go, Prometheus |
-| [Event Email Service](event-email-service/README.md) | Send an automated email when an event is received.  | NodeJS |
+| [Service Binding](service-binding/lambda/README.md) | Bind a Redis service to a lambda function. | Kubeless, Redis, NodeJS |
+| [Call SAP Commerce](call-ec/README.md) | Call SAP Commerce in the context of the end user. | Kubeless, NodeJS |
+| [Alert Rules](monitoring-alert-rules/README.md) | Configure alert rules in Kyma.  | Prometheus |
+| [Custom Metrics in Kyma](monitoring-custom-metrics/README.md) | Expose custom metrics in Kyma.  | Go, Prometheus |
+| [Event Email Service](event-email-service/README.md) | Send an automated email upon receiving an Event.  | NodeJS |
 | [Tracing](example-tracing/README.md) | Configure tracing for a service in Kyma. | Go |
 
 ## Installation

@@ -1,4 +1,4 @@
-# Alerting Rules Example
+# Alert Rules Example
 
 ## Overview
 
@@ -19,7 +19,7 @@ This example shows how to configure alert rules in Kyma and to define a new aler
     ```
 
 2. Run the `port-forward` command on the `core-prometheus` service to access the Prometheus dashboard.
-    
+
     ```bash
     kubectl port-forward pod/prometheus-core-0 -n kyma-system 9090:9090
     ```
@@ -28,7 +28,7 @@ This example shows how to configure alert rules in Kyma and to define a new aler
 
     As the `http-db-service` Deployment does not the exist, the alert is fired [here](http://localhost:9090/alerts).
 
-### Stop the alert from getting fired 
+### Stop the alert from getting fired
 To stop the alert from getting fired, create a Deployment as follows:
 
 ```bash
