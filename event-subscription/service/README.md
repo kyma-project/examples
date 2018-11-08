@@ -8,7 +8,7 @@ This example demonstrates how to publish and consume Events using the Event Bus 
 
 Kyma comes with the NATS Streaming messaging cluster. Instead of interacting with the NATS Streaming cluster directly, use the publish HTTP API and the push subscription support that Kyma offers, to enable basic Event publishing and Event delivery through push notifications to an HTTP endpoint.
 
-Access the Event publishing API from the cluster through the port `8080` on the following hostnames:
+Access the Event publishing API from the cluster through the `8080` port on the following hostnames:
 
 * `core-publish.kyma-system`
 * `core-publish.kyma-system.svc.cluster.local`

@@ -63,7 +63,7 @@ curl -ik https://{hostname}.kyma.local
 # > 401 Origin authentication failed.
 
 # To perform a test with the token, use the following command:
-curl -ik https://{hostname}.kyma.local -H 'Authorization: <token>'
+curl -ik https://{hostname}.kyma.local -H 'Authorization: {token}'
 # > 200 Hello world
 ```
 
@@ -108,7 +108,7 @@ curl -ik https://hello.kyma.local
 
 #### Expose a service with authentication
 
-There are two possible ways of exposing secured Api, either by using the default authentication settings or the custom settings. Authentication settings consist of the JWKS URI and the Issuer.
+There are two possible ways of exposing secured Api, either using the default authentication settings or the custom settings. Authentication settings consist of the JWKS URI and the Issuer.
 
 ``` bash
 # Create Api with the default authentication settings:
@@ -128,7 +128,7 @@ curl -ik https://{hostname}.kyma.local
 # > 401 Origin authentication failed.
 
 # To perform a test with the token, use the following command:
-curl -ik https://{hostname}.kyma.local -H 'Authorization: <token>'
+curl -ik https://{hostname}.kyma.local -H 'Authorization: {token}'
 # > 200 Hello world
 ```
 
@@ -163,7 +163,7 @@ kubectl get pods -n {namespace}
 Find the Pod created with the `deployment.yaml` file and copy its name. Run this command:
 
 ``` bash
-kc get pod <pod-name> -n {namespace} -o json | jq '.spec.containers[].name'
+kc get pod {pod-name} -n {namespace} -o json | jq '.spec.containers[].name'
 ```
 
 One of the returned strings should be the istio-proxy. If there is no such string, the Namespace probably does not have Istio injection enabled. Read the additional prerequisites at the beginning of the **Manual exposure using kubectl** section in this document to fix that.
