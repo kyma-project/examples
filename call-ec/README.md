@@ -100,7 +100,7 @@ curl -i -G https://calculate-promotion.{YOUR.CLUSTER.DOMAIN} -d "user-id={custom
 ### Use the UI
 
 To access the UI, go to `http://localhost:3000` and authenticate in SAP Commerce. After you authenticate, the system redirects you back to the Web UI application.
-Find the access token and the ID token issued for your application by SAP Commerce in the **Authentication** section. Expand **The Function** section to call the Function and check the results of the operation.
+Find the access token and the ID token issued for your application by SAP Commerce in the **Authentication** section. Expand **The Function** section to call the function and check the results of the operation.
 
 ### Cleanup
 
