@@ -2,13 +2,13 @@
 
 ## Overview
 
-This example shows how to subscribe lambda functions to the **Kyma Event Bus** to receive events.
+This example shows how to subscribe lambda functions to the Kyma Event Bus to receive Events.
 
-This example shows how to perform the following tasks:
+Follow it to:
 
-1. Create a kubeless function to handle published events.
-2. Subscribe the created function to a topic, so that events can activate or trigger it.
-3. Test triggering of the function by publishing events.
+1. Create a Kubeless function to handle published Events.
+2. Subscribe the created function to a topic, so that Events can activate or trigger it.
+3. Test triggering of the function by publishing Events.
 
 ## Prerequisites
 
@@ -16,14 +16,14 @@ This example shows how to perform the following tasks:
 
 - After installing the CLI, export the name of the `kubeless config` configmap resource name and the `namespace` where it is located into the shell environment.
 
-- An environment to which to deploy the example.
+- An Environment to which to deploy the example.
 
 ```bash
 export KUBELESS_CONFIG=core-kubeless-config
 export KUBELESS_NAMESPACE=kyma-system
 ```
 
-To get information about currently-supported runtimes, use:
+To get information about currently-supported runtimes, use this command:
 
 ```bash
 kubeless get-server-config
@@ -31,36 +31,41 @@ kubeless get-server-config
 
 ## Installation
 
-1. Export your environment as variable by replacing the `<environment>` placeholder in the following command and running it:
+1. Export your Environment as a variable by replacing the **{environment}** placeholder in the following command and running it:
+
     ```bash
-    export KYMA_EXAMPLE_ENV="<environment>"
+    export KYMA_EXAMPLE_ENV="{environment}"
     ```
 
-2. Create a kubeless function to receive a JSON event
+2. Create a Kubeless function to receive a JSON Event.
+
     >**NOTE:** The function must be able to receive `POST` requests.
 
     You can find the function file [here](js/hello-with-data.js)
+
+    Run this command:
 
     ```bash
     kubeless function deploy hello-with-data --label example=event-bus-lambda-subscription --runtime nodejs8 --handler hello-with-data.main --from-file js/hello-with-data.js -n $KYMA_EXAMPLE_ENV
     ```
 
-3. Set your environment on the subscription endpoint
+3. Set your Environment on the subscription endpoint:
+
     ```bash
     #Linux
     sed -i "s/<environment>/$KYMA_EXAMPLE_ENV/g" deployment/subscription.yaml
     #OSX
     sed -i '' "s/<environment>/$KYMA_EXAMPLE_ENV/g" deployment/subscription.yaml
     ```
-    To manually edit [subscription.yaml](./deployment/subscription.yaml), replace the `<environment>` placeholder in the endpoint with your environment.
+    To manually edit [subscription.yaml](./deployment/subscription.yaml), replace the `<environment>` placeholder in the endpoint with your Environment.
 
 
-4. Subscribe the function to an Event
+4. Subscribe the function to an Event:
     ```bash
     kubectl apply -f deployment/event-activation.yaml,deployment/subscription.yaml -n $KYMA_EXAMPLE_ENV
     ```
 
-5. Test publishing Events to the subscribed function
+5. Test publishing Events to the subscribed function.
     - Start a sample publisher.
         The system creates the [`Publisher`](deployment/sample-publisher.yaml) deployment.
         ```bash
@@ -73,7 +78,11 @@ kubeless get-server-config
         ```
 
     - Publish an Event inside the publisher container.
+
         >**NOTE:** The **data** field expects a `JSON` object.
+
+        Run this command:
+
         ```bash
         curl -i \
         -H "Content-Type: application/json" \
@@ -81,7 +90,7 @@ kubeless get-server-config
         -d '{"source-id": "stage.commerce.kyma.local", "event-type": "hello", "event-type-version": "v1", "event-time": "2018-11-02T22:08:41+00:00", "data": { "order-number": 123 }}'
         ```
 
-    - Verify that tailing logs for the function Pod trigger the function.
+    - Verify that tailing logs for the function Pod trigger the function:
         ```bash
         kubectl logs -f $(kubectl get po -n $KYMA_EXAMPLE_ENV -l function=hello-with-data --no-headers | grep -i running | awk '{print $1}') -c hello-with-data -n $KYMA_EXAMPLE_ENV
         ```

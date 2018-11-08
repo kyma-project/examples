@@ -8,8 +8,6 @@ This folder contains the acceptance tests for the examples that you can run as p
 
 This section provides information on how to build and version the Docker image, as well as how to configure Kyma.
 
-
-
 ### Configure Kyma
 
 After building and pushing the Docker image, set the proper tag `acceptanceTest.imageTag` in the `resources/core/values.yaml` file.

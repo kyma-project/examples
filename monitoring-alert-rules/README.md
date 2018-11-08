@@ -2,14 +2,15 @@
 
 ## Overview
 
-This example shows how to configure alert rules in Kyma and to define a new alert rule for AlertManager.
+This example shows how to configure alert rules in Kyma and how to define a new alert rule for AlertManager.
 
 ## Prerequisites
 
 - Kyma as the target deployment environment.
 
 ## Installation
->**NOTE:** You need access to the `kyma-system` Namespace to execute the following steps.
+
+You need access to the `kyma-system` Namespace to execute the described steps.
 
 ### Configure a new alert
 1. Create a ConfigMap for the alert-rule.

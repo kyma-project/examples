@@ -18,38 +18,38 @@ The example covers these tasks:
 
 ## Installation
 
-Apply a battery of yaml files to run the example.
+Apply a battery of `yaml` files to run the example.
 
 ### Steps
 
-1. Export your environment as variable by replacing the `<environment>` placeholder in the following command and running it:
+1. Export your environment as a variable by replacing the `{environment}` placeholder in the following command and running it:
     ```bash
-    export KYMA_EXAMPLE_ENV="<environment>"
+    export KYMA_EXAMPLE_ENV="{environment}"
     ```
 
-2. Create a Redis instance and a service binding to the instance.
+2. Create a Redis instance and a service binding to the instance:
     ```bash
     kubectl apply -f deployment/redis-instance.yaml,deployment/redis-instance-binding.yaml -n $KYMA_EXAMPLE_ENV
     ```
 
-3. Ensure that the Redis instance and Redis binding service are provisioned.
+3. Ensure that the Redis instance and Redis binding service are provisioned:
     ```bash
     kubectl get serviceinstance/redis-instance -o jsonpath='{ .status.conditions[0].reason }' -n $KYMA_EXAMPLE_ENV
 
     kubectl get servicebinding/redis-instance-binding -o jsonpath='{ .status.conditions[0].reason }' -n $KYMA_EXAMPLE_ENV
     ```
 
-4. Create a lambda function as Redis client.
+4. Create a lambda function as a Redis client:
     ```bash
     kubectl apply -f deployment/lambda-function.yaml -n $KYMA_EXAMPLE_ENV
     ```
 
-5. Create a ServiceBindingUsage resource.
+5. Create a ServiceBindingUsage resource:
     ```bash
     kubectl apply -f deployment/service-binding-usage.yaml -n $KYMA_EXAMPLE_ENV
     ```
 
-6. Verify that the lambda function is ready.
+6. Verify that the lambda function is ready:
     ```bash
     kubeless function ls redis-client -n $KYMA_EXAMPLE_ENV
     ```
