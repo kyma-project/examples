@@ -7,7 +7,7 @@ const ACCESS_TOKEN_HEADER = "access-token";
 module.exports = {
 	'calculate-promotion': (event, context) => {
 		return new Promise((resolve, reject) => {
-			console.log("Startiing calculate-promotion lambda function")
+			console.log("Starting calculate-promotion lambda function")
 
 			const request = event.extensions.request;
 			const threshold = request.query[ORDER_THRESHOLD_PARAM];
