@@ -2,7 +2,7 @@
 
 ## Overview
 
-This example shows how to call an OCC API and integrate with the Enterprise Commerce.
+This example shows how to call an OCC API and integrate with the SAP Commerce.
 
 The following diagram illustrates how the web application included in the example interacts with Enterprise Commerce and the lambda function to call the OCC API in the context of a specific user.
 ![](./diagram.png)
