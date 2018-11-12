@@ -19,31 +19,31 @@ This example shows how to expose custom metrics to Prometheus with a Golang serv
 
 ### Expose a sample metrics application
 
-Deploy the application, service, and servicemonitor:
+Deploy the application, service, and ServiceMonitor:
 ```bash
 kubectl apply -f deployment -R
 ```
-    
+
 ### Access the exposed metrics in Prometheus
 
 1. Run the `port-forward` command on the `core-prometheus` service:
-    
+
     ```bash
     kubectl port-forward -n kyma-system svc/core-prometheus 9090:9090
     ```
 All the **sample-metrics** endpoints appear as the [`Targets`](http://localhost:9090/targets#job-sample-metrics-8081) list.
 
-2. Use either the `cpu_temperature_celsius` or `hd_errors_total` in the **expression** field [here](http://localhost:9090/graph).
+2. Use either `cpu_temperature_celsius` or `hd_errors_total` in the **expression** field [here](http://localhost:9090/graph).
 3. Click the **Execute** button to check the values scrapped by Prometheus.
 
 ### Cleanup
 Run the following commands to completely remove the example and all its resources from the cluster:
 
-1. Remove the **istio-injection** label from the `default` Namespace.
+1. Remove the `istio-injection` label from the `default` Namespace.
     ```bash
     kubectl label namespace default istio-injection-
     ```
-2. Remove **ServiceMonitor** in the `kyma-system` Namespace.
+2. Remove ServiceMonitor in the `kyma-system` Namespace.
     ```bash
     kubectl delete servicemonitor -l example=monitoring-custom-metrics -n kyma-system
     ```
