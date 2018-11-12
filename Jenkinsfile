@@ -84,17 +84,19 @@ podTemplate(label: label) {
             def body = "${currentBuild.currentResult} ${env.JOB_NAME}${env.BUILD_DISPLAY_NAME}: on branch: ${params.GIT_BRANCH}. See details: ${env.BUILD_URL}"
             emailext body: body, recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'CulpritsRecipientProvider'], [$class: 'RequesterRecipientProvider']], subject: "${currentBuild.currentResult}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'"
         } finally {
-            stage("print logs for $application") {
-                execute("kubectl logs -l chart=examples -n ${params.GIT_REVISION}")
-            }
-            stage("print logs for tests"){
-                execute("kubectl logs -l chart=examples-tests -n ${params.GIT_REVISION}")
-            }
-            stage("delete $application") {
-                execute("helm delete --purge examples")
-            }
-            stage("delete namespace for $application") {
-                execute("kubectl delete ns ${params.GIT_REVISION}")
+            if (deploy){
+                stage("print logs for $application") {
+                    execute("kubectl logs -l chart=examples -n ${params.GIT_REVISION}")
+                }
+                stage("print logs for tests"){
+                    execute("kubectl logs -l chart=examples-tests -n ${params.GIT_REVISION}")
+                }
+                stage("delete $application") {
+                    execute("helm delete --purge examples")
+                }
+                stage("delete namespace for $application") {
+                    execute("kubectl delete ns ${params.GIT_REVISION}")
+                }
             }
         }
     }
