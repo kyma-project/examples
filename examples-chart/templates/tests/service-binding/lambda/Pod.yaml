@@ -15,10 +15,11 @@ spec:
     - name: service-binding-lambda-test
       image: {{ .Values.examples.image }}
       command: ['sh', '-c']
-      args: ["
-        kubeless function call redis-client -n {{ .Release.Namespace }} || (touch /tmp/healthy && sleep 600) &&
-        kubectl logs -l function=redis-client -n {{ .Release.Namespace }} | grep -q 'redis_version'
-        "]
+      args: ['
+        export KYMA_EXAMPLE_ENV="{{ .Release.Namespace }}" &&
+        kubeless function call redis-client -n $KYMA_EXAMPLE || (touch /tmp/healthy && sleep 600) &&
+        kubectl logs -l function=redis-client -n $KYMA_EXAMPLE | grep -q "redis_version"
+        ']
       resources:
         limits:
           memory: 100Mi
