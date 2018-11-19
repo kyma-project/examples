@@ -19,7 +19,6 @@ spec:
           kubectl apply -f deployment/redis-instance.yaml,deployment/redis-instance-binding.yaml -n $KYMA_EXAMPLE_ENV || (touch /tmp/healthy && sleep 600) && 
           kubectl apply -f deployment/lambda-function.yaml -n $KYMA_EXAMPLE_ENV || (touch /tmp/healthy && sleep 600) &&
           kubectl apply -f deployment/service-binding-usage.yaml -n $KYMA_EXAMPLE_ENV || (touch /tmp/healthy && sleep 600) &&
-          kubeless function ls redis-client -n $KYMA_EXAMPLE_ENV || (touch /tmp/healthy && sleep 600) &&
           touch /tmp/healthy && sleep 600
       readinessProbe:
         exec:
