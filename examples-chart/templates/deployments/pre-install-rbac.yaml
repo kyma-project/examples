@@ -33,6 +33,15 @@ rules:
   - apiGroups: ["config.istio.io"]
     resources: ["rules", "deniers", "checknothings", "egressrules"]
     verbs: ["get", "watch", "list", "create", "update", "patch", "delete"] 
+  - apiGroups: ["kubeless.io"]
+    resources: ["functions"]
+    verbs: ["create", "delete", "get", "list"]
+  - apiGroups: ["servicecatalog.k8s.io"]
+    resources: ["serviceinstances", "servicebindings"]
+    verbs: ["create", "delete", "get", "list"]
+  - apiGroups: ["servicecatalog.kyma.cx"]
+    resources: ["servicebindingusages"]
+    verbs: ["create", "delete", "get", "list"]
 ---
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1beta1
