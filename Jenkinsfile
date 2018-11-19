@@ -17,7 +17,7 @@ dockerImageTag = isMaster
 def changes = parseJson("${params.CHANGED_EXAMPLES}") 
 
 //For now, we only have deployment pods for these examples. Once we have for all, we can just eliminate this check.
-def deploy = changes.contains("http-db-service") || changes.contains("tests/http-db-service") || changes.contains("event-email-service") || changes.contains("event-subscription/lambda")
+def deploy = changes.contains("http-db-service") || changes.contains("tests/http-db-service") || changes.contains("event-email-service") || changes.contains("event-subscription/lambda") || changes.contains("service-binding/lambda")
 
 echo """
 ********************************
@@ -121,6 +121,9 @@ def configureChart(changedExamples) {
     }
     if (changedExamples.contains("event-subscription/lambda")) {
         set += "--set examples.eventSubscription.lambda.deploy=true "
+    }
+    if (changedExamples.contains("service-binding/lambda")) {
+        set += "--set examples.serviceBinding.lambda.deploy=true "
     }
     
     return set

@@ -5,7 +5,7 @@ metadata:
   labels:
     example: service-binding
 spec:
-  handler: app.handler
+  handler: handler.main
   runtime: nodejs8
   type: HTTP
   deps: |

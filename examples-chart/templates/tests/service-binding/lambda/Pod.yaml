@@ -1,0 +1,30 @@
+{{ if .Values.examples.serviceBinding.lambda.deploy }}
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ .Release.Name }}-service-binding-lambda-test-{{ randAlphaNum 5 | lower }}"
+  labels:
+    example: service-binding-lambda
+    chart: examples-tests
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  serviceAccountName: {{ .Release.Name }}-examples-service-account
+  containers:
+    - name: service-binding-lambda-test
+      image: {{ .Values.examples.image }}
+      command: ['sh', '-c']
+      args: [' 
+        export KYMA_EXAMPLE_ENV="{{ .Release.Namespace }}" &&
+        kubeless function call redis-client -n $KYMA_EXAMPLE_ENV || (touch /tmp/healthy && sleep 600) &&
+        kubectl logs -l function=redis-client -n $KYMA_EXAMPLE_ENV | grep -q 'redis_version:'
+        ']
+      resources:
+        limits:
+          memory: 100Mi
+        requests:
+          memory: 32Mi
+  restartPolicy: Never
+---
+{{ end }}
