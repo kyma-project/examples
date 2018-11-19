@@ -16,9 +16,8 @@ spec:
       image: {{ .Values.examples.image }}
       command: ['sh', '-c']
       args: ["
-        export KYMA_EXAMPLE_ENV="{{ .Release.Namespace }}" &&
-        kubeless function call redis-client -n $KYMA_EXAMPLE_ENV || (touch /tmp/healthy && sleep 600) &&
-        kubectl logs -l function=redis-client -n $KYMA_EXAMPLE_ENV | grep -q 'redis_version'
+        kubeless function call redis-client -n {{ .Release.Namespace }} || (touch /tmp/healthy && sleep 600) &&
+        kubectl logs -l function=redis-client -n {{ .Release.Namespace }} | grep -q 'redis_version'
         "]
       resources:
         limits:
