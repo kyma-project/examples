@@ -32,7 +32,10 @@ projects = [
 /*
     Projects that are NOT built when changed, but do trigger the tests.
 */
-additionalProjects = ["event-subscription/lambda"]
+additionalProjects = [
+    "event-subscription/lambda",
+    "service-binding/lambda"
+]
 
 /* 
     project jobs to run are stored here to be sent into the parallel block outside the node executor.
