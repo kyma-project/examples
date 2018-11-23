@@ -1,4 +1,4 @@
-apiVersion: gateway.kyma.cx/v1alpha2
+apiVersion: gateway.kyma-project.io/v1alpha2
 kind: Api
 metadata:
     name: order-front-api
@@ -46,7 +46,7 @@ spec:
     spec:
       containers:
         - name: order-front
-          image: eu.gcr.io/kyma-project/example/tracing/order-front:0.0.1
+          image: eu.gcr.io/kyma-project/example/tracing/order-front:0.1.16
           imagePullPolicy: IfNotPresent
           args:
             - --port=8080

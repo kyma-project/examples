@@ -1,7 +1,7 @@
 FROM golang:1.10 as builder
 
-WORKDIR /go/src/example-tracing
-COPY order-front.go .
+WORKDIR /go/src/tracing
+COPY src/order-front.go .
 RUN ls ./
 RUN CGO_ENABLED=0 GOOS=linux go build -v -a -installsuffix cgo -o order-front .
 
@@ -9,7 +9,7 @@ FROM scratch
 
 WORKDIR /root/
 
-COPY --from=builder /go/src/example-tracing .
+COPY --from=builder /go/src/tracing .
 
 EXPOSE 8080
 
