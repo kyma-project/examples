@@ -2,7 +2,6 @@ FROM golang:1.10 as builder
 
 WORKDIR /go/src/tracing
 COPY src/order-front.go .
-RUN ls ./
 RUN CGO_ENABLED=0 GOOS=linux go build -v -a -installsuffix cgo -o order-front .
 
 FROM scratch
