@@ -26,7 +26,7 @@ projects = [
     "call-ec",
     "governance",
     "monitoring-custom-metrics",
-    "example-tracing"
+    "tracing"
 ]
 
 /*
