@@ -46,7 +46,7 @@ spec:
     spec:
       containers:
         - name: order-front
-          image: eu.gcr.io/kyma-project/example/tracing-order-front:0.1.16
+          image: eu.gcr.io/kyma-project/snapshot/example/tracing-order-front:PR-64
           imagePullPolicy: IfNotPresent
           args:
             - --port=8080
