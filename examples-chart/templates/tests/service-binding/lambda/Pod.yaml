@@ -18,7 +18,7 @@ spec:
       args: ['
         export KYMA_EXAMPLE_ENV="{{ .Release.Namespace }}" &&
         kubectl wait --for condition=Ready --timeout=60s -n $KYMA_EXAMPLE_ENV pod -l function=redis-client &&
-        sleep 50 &&
+        sleep 60 &&
         kubeless function call redis-client -n $KYMA_EXAMPLE_ENV &&
         sleep 10 &&
         kubectl logs -l function=redis-client -n $KYMA_EXAMPLE_ENV -c redis-client | grep -q "redis_version"

@@ -67,6 +67,9 @@ podTemplate(label: label) {
                                 execute("kubectl create ns ${params.GIT_REVISION}; kubectl label ns ${params.GIT_REVISION} env=true")
                             }
 
+                            stage("Increase resource quota for ns")
+                                execute("kubectl apply -f resourceQuota.yaml -n ${params.GIT_REVISION}")
+
                             stage("deploy $application") {
                                 execute("cd examples-chart && helm install --wait --timeout=600 --name examples -f values.yaml --namespace ${params.GIT_REVISION} . --set examples.image=${dockerPushRoot}${application}:${dockerImageTag} " + configureChart(changes))
                             }
