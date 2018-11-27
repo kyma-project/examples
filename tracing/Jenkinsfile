@@ -51,7 +51,7 @@ podTemplate(label: label) {
                         }
 
                         stage("build $application") {
-                            execute("make build", "buildpath = ./src")
+                            execute("CGO_ENABLED=0 go build -o ./bin/app ./src")
                         }
 
                         stage("build image $application") {
