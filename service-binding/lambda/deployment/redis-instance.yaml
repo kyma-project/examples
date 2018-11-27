@@ -9,6 +9,7 @@ spec:
   clusterServiceClassExternalName: redis
   clusterServicePlanExternalName: micro
   parameters:
+  # replace the repository URL
     redisPassword: SWxwQmNVVjJlbU5QUVc4aQo=
     resources:
       requests:
