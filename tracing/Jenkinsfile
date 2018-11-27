@@ -51,7 +51,7 @@ podTemplate(label: label) {
                         }
 
                         stage("build $application") {
-                            execute("make build")
+                            execute("make build", "./src")
                         }
 
                         stage("build image $application") {
