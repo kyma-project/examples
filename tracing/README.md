@@ -25,7 +25,7 @@ To understand how traces are propagated, see the [Go application](src/order-fron
 helm install -n jaeger -f jaeger/values.yaml --namespace kyma-system --set-string global.domainName=kyma.local --set-string global.isLocalEnv=true jaeger/
 ```
 
-2. Follow the instructions in  **cluster installation** section (skip step 2). You can access the tracing UI locally at `https://jaeger.kyma.local`.
+2. Follow the instructions in the  **Cluster installation** section (skip step 2). You can access the tracing UI locally at `https://jaeger.kyma.local`.
 
 ### Cluster installation
 
