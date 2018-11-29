@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 def label = "kyma-${UUID.randomUUID().toString()}"
-def application = 'tracing/order-front'
+def application = 'tracing-order-front'
 def isMaster = params.GIT_BRANCH == 'master'
 
 def dockerPushRoot = isMaster 
@@ -51,7 +51,7 @@ podTemplate(label: label) {
                         }
 
                         stage("build $application") {
-                            execute("make build")
+                            execute("CGO_ENABLED=0 go build -o ./bin/app ./src")
                         }
 
                         stage("build image $application") {

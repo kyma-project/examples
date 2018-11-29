@@ -2,7 +2,7 @@
 set -e
 set -o pipefail
 
-IMAGE_NAME=eu.gcr.io/kyma-project/example/tracing/order-front:0.0.1
+IMAGE_NAME=order-front:latest
 
 echo -e "Start building docker image [ ${IMAGE_NAME} ]"
 
