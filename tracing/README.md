@@ -17,7 +17,7 @@ To understand how traces are propagated, see the [Go application](src/order-fron
 
 ### Local installation
 
-If you use a local Deployment of Kyma on Minikube, you need to know that Jaeger installation is optional, and you cannot install it locally by default. However, you can install it on a Kyma instance and run it locally using Helm.
+> **NOTE:** If you use a local Deployment of Kyma on Minikube,  be aware that Jaeger installation is optional, and you cannot install it locally by default. However, you can install it on a Kyma instance and run it locally using Helm.
 
 To install Jaeger, go to the [Kyma resources](https://github.com/kyma-project/kyma/tree/master/resources) directory and run the following command:
 
