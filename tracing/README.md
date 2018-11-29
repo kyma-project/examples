@@ -29,7 +29,7 @@ helm install -n jaeger -f jaeger/values.yaml --namespace kyma-system --set-strin
 
 ### Cluster installation
 
-1. Export your Environment as variable by replacing the `{environment}` placeholder in the following command and running it:
+1. Export your Environment as a variable by replacing the `{environment}` placeholder in the following command and running it:
 
     ```bash
     export KYMA_EXAMPLE_ENV="{environment}"
