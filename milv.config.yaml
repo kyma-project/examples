@@ -10,4 +10,4 @@ files:
       white-list-external: ["https://www.first.org/cvss/calculator/3.0#CVSS:3.0/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N"]
   - path: "./examples/tracing/README.md"
     config:
-      white-list-external: ["https://jaeger.{YOUR_CLUSTER_DOMAIN}"]
+      white-list-external: ["https://jaeger.{YOUR_CLUSTER_DOMAIN"]
