@@ -51,7 +51,8 @@ podTemplate(label: label) {
 
                         stage("resolve dependencies $application") {
                             withCredentials([usernamePassword(credentialsId: 'npm-r', passwordVariable: 'pwd', usernameVariable: 'uname')]) {
-                                execute("make resolve-hybris", ["USERNAME=$uname", "PASSWORD=$pwd"])
+                                execute("curl -u $(USERNAME):$(PASSWORD) https://repository.hybris.com/api/npm/auth >> /.npmrc && cp /.npmrc ./.npmrc", ["USERNAME=$uname", "PASSWORD=$pwd"])
+                                execute("npm install --no-optional")
                             }
                         }
 

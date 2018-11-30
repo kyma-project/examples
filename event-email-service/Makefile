@@ -2,10 +2,6 @@ APP_NAME = event-email-service
 IMG = $(DOCKER_PUSH_REPOSITORY)$(DOCKER_PUSH_DIRECTORY)/$(APP_NAME)
 TAG = $(DOCKER_TAG)
 
-resolve-hybris:
-	curl -u $(USERNAME):$(PASSWORD) https://repository.hybris.com/api/npm/auth >> /.npmrc && cp /.npmrc ./.npmrc 
-	npm install --no-optional
-
 resolve:
 	npm install --no-optional
 
