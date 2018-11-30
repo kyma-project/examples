@@ -6,10 +6,9 @@ resolve:
 	dep ensure --vendor-only -v
 
 validate:
-	go build -o golint-vendored ./vendor/github.com/golang/lint/golint
-	./golint-vendored
-	rm golint-vendored
-
+	curl https://raw.githubusercontent.com/alecthomas/gometalinter/master/scripts/install.sh | sh -s v2.0.8
+	gometalinter --vendor --deadline=2m --disable-all --enable=vet ./...
+	
 build:
 	go generate ./...
 	CGO_ENABLED=0 go build -o ./bin/app $(buildpath)

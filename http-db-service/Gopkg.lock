@@ -23,15 +23,6 @@
   revision = "270bc3860bb94dd3a3ffd047377d746c5e276726"
 
 [[projects]]
-  branch = "travis-1.9"
-  name = "github.com/golang/lint"
-  packages = [
-    ".",
-    "golint"
-  ]
-  revision = "883fe33ffc4344bad1ecd881f61afd5ec5d80e0a"
-
-[[projects]]
   name = "github.com/gorilla/context"
   packages = ["."]
   revision = "1ea25387ff6f684839d82767c1733ff4d4d15d0a"
@@ -42,17 +33,6 @@
   packages = ["."]
   revision = "53c1911da2b537f792e7cafcb446b05ffe33b996"
   version = "v1.6.1"
-
-[[projects]]
-  branch = "master"
-  name = "github.com/kyma-project/examples"
-  packages = [
-    "http-db-service/config",
-    "http-db-service/handler",
-    "http-db-service/internal/mssqldb",
-    "http-db-service/internal/repository"
-  ]
-  revision = "b9d1964838785b5b75e6323c0e1fbf5af00a389a"
 
 [[projects]]
   branch = "master"
@@ -121,20 +101,9 @@
   ]
   revision = "ac767d655b305d4e9612f5f6e33120b9176c4ad4"
 
-[[projects]]
-  branch = "master"
-  name = "golang.org/x/tools"
-  packages = [
-    "go/ast/astutil",
-    "go/gcexportdata",
-    "go/internal/gcimporter",
-    "go/types/typeutil"
-  ]
-  revision = "1c3d964395ce8f04f3b03b30aaed0b096c08c3c6"
-
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "a074741de7ee7c5c7f09bde07d0bf2cd6445f57c3d5ba0f59f11d28f45d94406"
+  inputs-digest = "15e87532c510929bc99f0c9aa229bfa75c4a6f6b16ad331dd57b228bf2f8d60d"
   solver-name = "gps-cdcl"
   solver-version = 1
