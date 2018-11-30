@@ -96,8 +96,8 @@ podTemplate(label: label) {
 }
 
 def execute(command, envs = []) {
-    def repositoryName = 'monorepo'
-    def buildpack = 'node-buildpack:0.0.8'
+    def repositoryName = 'examples'
+    def buildpack = 'node-buildpack:0.0.10'
     def envText = ''
     for (it in envs) {
         envText = "$envText --env $it"
