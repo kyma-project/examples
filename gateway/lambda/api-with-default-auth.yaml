@@ -8,7 +8,7 @@ metadata:
   name: hello
 spec:
   authenticationEnabled: true
-  hostname: hello.kyma.local
+  hostname: hello
   service:
     name: hello
     port: 8080

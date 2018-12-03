@@ -43,5 +43,5 @@ spec:
     service:
       name: call-ec-web-ui
       port: 3000
-    hostname: call-ec-web-ui.kyma.local
+    hostname: call-ec-web-ui
     authentication: []
