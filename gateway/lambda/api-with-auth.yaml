@@ -12,7 +12,7 @@ spec:
     jwt:
       jwksUri: http://dex-service.kyma-system.svc.cluster.local:5556/keys
       issuer: https://dex.kyma.local
-  hostname: hello.kyma.local
+  hostname: hello
   service:
     name: hello
     port: 8080

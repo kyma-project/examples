@@ -7,7 +7,7 @@ spec:
     service:
       name: calculate-promotion
       port: 8080
-    hostname: calculate-promotion.$YOUR_DOMAIN
+    hostname: calculate-promotion
     authentication:
     - type: JWT
       jwt:

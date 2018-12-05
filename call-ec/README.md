@@ -50,10 +50,7 @@ kubectl describe function/calculate-promotion
 
 ### Expose the lambda function
 
-1. Edit the [`expose-ec-function.yml`](expose-ec-function.yaml) file and change the `$YOUR_DOMAIN` placeholder in the `hostname` parameter value to the domain of your Kyma cluster.
-For example, a local Kyma cluster uses the `kyma.local` domain.
-
-2. Expose the lambda function. Specify the Namespace to which you deployed the lambda. Run this command:
+1. Expose the lambda function. Specify the Namespace to which you deployed the lambda. Run this command:
 ```
 kubectl apply -f ./expose-ec-function.yml
 ```

@@ -35,9 +35,7 @@ helm install -n jaeger -f jaeger/values.yaml --namespace kyma-system --set-strin
     export KYMA_EXAMPLE_ENV="{environment}"
     ```
 
-2. Change the value of the **hostname** parameter from `order-front-api.kyma.local` to `order-front-api.{YOUR_CLUSTER_DOMAIN}` in the [`deployment`](deployment/deployment.yaml) file.
-
-3. Deploy the service. Run this command:
+2. Deploy the service. Run this command:
 
     ```bash
     kubectl apply -f deployment/deployment.yaml -n $KYMA_EXAMPLE_ENV
@@ -48,7 +46,7 @@ helm install -n jaeger -f jaeger/values.yaml --namespace kyma-system --set-strin
 1. Call the example service to simulate an incoming order. Run:
 
     ```bash
-    curl -H "Content-Type: application/json" -d '{"orderCode" : "007", "orderPrice" : 12.0}' https://order-front-api.{domain-of-kyma-cluster}/orders
+    curl -H "Content-Type: application/json" -d '{"orderCode" : "007", "orderPrice" : 12.0}' https://order-front-api.{YOUR_CLUSTER_DOMAIN}/orders
     ```
 
 2. Access the tracing UI on a cluster at `https://jaeger.{YOUR_CLUSTER_DOMAIN}`.
