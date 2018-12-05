@@ -6,7 +6,7 @@ metadata:
     example: http-db-service
   name: http-db-service
 spec:
-  hostname: http-db-service.kyma.local
+  hostname: http-db-service
   service:
     name: http-db-service
     port: 8017
