@@ -32,7 +32,7 @@ The summary of the documentation in the `examples` repository lists all availabl
 | [Alert Rules](monitoring-alert-rules/README.md) | Configure alert rules in Kyma.  | Prometheus |
 | [Custom Metrics in Kyma](monitoring-custom-metrics/README.md) | Expose custom metrics in Kyma.  | Go, Prometheus |
 | [Event Email Service](event-email-service/README.md) | Send an automated email upon receiving an Event.  | NodeJS |
-| [Tracing](example-tracing/README.md) | Configure tracing for a service in Kyma. | Go |
+| [Tracing](tracing/README.md) | Configure tracing for a service in Kyma. | Go |
 
 ## Installation
 

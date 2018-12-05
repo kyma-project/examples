@@ -46,7 +46,7 @@ podTemplate(label: label) {
                         }
 
                         stage("code quality $application") {
-                            execute("make validate")
+                            execute("gometalinter --vendor --deadline=2m --disable-all --enable=vet ./...")
                         }
 
                         stage("build $application") {

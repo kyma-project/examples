@@ -51,12 +51,13 @@ podTemplate(label: label) {
 
                         stage("resolve dependencies $application") {
                             withCredentials([usernamePassword(credentialsId: 'npm-r', passwordVariable: 'pwd', usernameVariable: 'uname')]) {
-                                execute("make resolve", ["USERNAME=$uname", "PASSWORD=$pwd"])
+                                execute("curl -u ${uname}:${pwd} https://repository.hybris.com/api/npm/auth >> /.npmrc && cp /.npmrc ./.npmrc")
+                                execute("npm install --no-optional")
                             }
                         }
 
                         stage("code quality $application") {
-                            execute("make validate")
+                            execute("linter")
                         }
 
                         stage("test $application") {
