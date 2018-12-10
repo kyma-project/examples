@@ -1,9 +1,0 @@
-apiVersion: servicecatalog.k8s.io/v1beta1
-kind: ServiceBinding
-metadata:
-  name: mssql-instance-binding
-  labels: 
-    example: service-binding   
-spec:
-  instanceRef:
-    name: mssql-instance

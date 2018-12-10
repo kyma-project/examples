@@ -5,7 +5,7 @@ data:
     - name: pod-not-running-rule
       rules:
       - alert: http-db-service-is-not-running
-        expr: absent(kube_pod_container_status_running{namespace="default",pod=~"^http-db-service(.*)"})
+        expr: absent(kube_pod_container_status_running{pod=~"^http-db-service(.*)"})
         for: 15s
         labels:
           severity: critical

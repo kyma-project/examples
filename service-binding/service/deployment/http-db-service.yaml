@@ -35,4 +35,16 @@ spec:
           # available dbtypes are: [memory, mssql]
           value: "mssql"
 
-
+---
+apiVersion: servicecatalog.kyma.cx/v1alpha1
+kind: ServiceBindingUsage
+metadata:
+  name: mssql-instance-binding-usage
+  labels:
+    example: service-binding
+spec:
+ serviceBindingRef:
+   name: mssql-instance-binding
+ usedBy:
+   kind: deployment
+   name: http-db-service

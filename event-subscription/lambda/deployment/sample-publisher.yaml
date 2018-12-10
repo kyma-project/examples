@@ -16,6 +16,7 @@ spec:
       name: sample-publisher
       labels:
         app: sample-publisher
+        example: event-bus-lambda-subscription
     spec:
       containers:
       - name: sample-publisher

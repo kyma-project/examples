@@ -4,7 +4,7 @@ metadata:
   name: example-publisher
   labels:
     app: example-publisher
-    example: event-bus
+    example: event-bus-service-subscription
 spec:
   replicas: 1
   selector:
@@ -15,7 +15,7 @@ spec:
       name: example-publisher
       labels:
         app: example-publisher
-        example: event-bus
+        example: event-bus-service-subscription
     spec:
       containers:
       - name: example-publisher

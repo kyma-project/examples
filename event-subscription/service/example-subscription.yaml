@@ -3,7 +3,7 @@ kind: Subscription
 metadata:
   name: example-subscription
   labels:
-    example: event-bus
+    example: event-bus-service-subscription
 spec:
   endpoint: http://event-email-service.<environment>:3000/v1/events/register
   push_request_timeout_ms: 2000
