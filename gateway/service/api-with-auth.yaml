@@ -1,5 +1,5 @@
 ---
-apiVersion: gateway.kyma.cx/v1alpha2
+apiVersion: gateway.kyma-project.io/v1alpha2
 kind: Api
 metadata:  
   labels:
@@ -11,7 +11,7 @@ spec:
     jwt:
       jwksUri: http://dex-service.kyma-system.svc.cluster.local:5556/keys
       issuer: https://dex.kyma.local
-  hostname: http-db-service.kyma.local
+  hostname: http-db-service
   service:
     name: http-db-service
     port: 8017

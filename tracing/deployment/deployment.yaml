@@ -8,7 +8,7 @@ spec:
     service:
       name: order-front
       port: 8080
-    hostname: order-front-api.kyma.local
+    hostname: order-front-api
 ---
 apiVersion: v1
 kind: Service
