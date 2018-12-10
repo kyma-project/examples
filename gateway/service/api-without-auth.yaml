@@ -3,7 +3,7 @@ apiVersion: gateway.kyma.cx/v1alpha2
 kind: Api
 metadata:
   labels:
-    example: http-db-service
+    example: gateway
   name: http-db-service
 spec:
   hostname: http-db-service.kyma.local

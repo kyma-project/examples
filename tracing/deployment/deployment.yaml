@@ -41,8 +41,6 @@ spec:
       labels:
         app: order-front
         example: tracing
-      annotations:
-        sidecar.istio.io/inject: "true"
     spec:
       containers:
         - name: order-front
@@ -90,8 +88,6 @@ spec:
       labels:
         example: tracing
         app: db-service
-      annotations:
-        sidecar.istio.io/inject: "true"
     spec:
       imagePullSecrets:
       containers:

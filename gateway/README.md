@@ -73,28 +73,29 @@ There are additional prerequisites to exposing a service or a function manually 
 
 - [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) version 1.10.0
 - A token fetched from the Console UI which is later referred to as **\{token\}**. For more details, see the **NOTE** in the **Fetch token** section.
-- The Namespace with Istio injection enabled which is later referred to as **\{namespace\}**. You can enable Istio injection in the Namespace by labeling it using this command:
-
-``` bash
-kubectl label namespace {namespace} istio-injection=enabled
-```
 
 #### Create a service
 
 >**NOTE:** Almost all steps in this tutorial refer to a lambda but you can apply them also to the service Deployment by changing the directory and names in some places.
 
-Apply one of the `deployment.yaml` files from the `lambda` or `service` directory in this example.
+1. Export your Environment as variable by replacing the `{environment}` placeholder in the following command and running it:
 
-``` bash
-kubectl apply -f ./lambda/deployment.yaml -n {namespace}
-```
+    ```bash
+    export KYMA_EXAMPLE_ENV="{environment}"
+    ```
+
+2. Apply one of the `deployment.yaml` files from the `lambda` or `service` directory in this example.
+
+    ``` bash
+    kubectl apply -f ./lambda/deployment.yaml -n $KYMA_EXAMPLE_ENV
+    ```
 
 #### Expose a service without authentication
 
 Run this command:
 
 ``` bash
-kubectl apply -f ./lambda/api-without-auth.yaml -n {namespace}
+kubectl apply -f ./lambda/api-without-auth.yaml -n $KYMA_EXAMPLE_ENV
 ```
 
 #### Test the APIs without authentication
@@ -112,12 +113,12 @@ There are two possible ways of exposing secured Api, either using the default au
 
 ``` bash
 # Create Api with the default authentication settings:
-kubectl apply -f ./lambda/api-with-default-auth.yaml -n {namespace}
+kubectl apply -f ./lambda/api-with-default-auth.yaml -n $KYMA_EXAMPLE_ENV
 
 # OR
 
 # Create Api with the custom authentication settings:
-kubectl apply -f ./lambda/api-with-auth.yaml -n {namespace}
+kubectl apply -f ./lambda/api-with-auth.yaml -n $KYMA_EXAMPLE_ENV
 ```
 
 #### Test the APIs with authentication
@@ -134,16 +135,12 @@ curl -ik https://{hostname}.kyma.local -H 'Authorization: {token}'
 
 #### Cleanup
 
-Remove the Api using the `kubectl delete` command on the latest Api resource you applied. For example, if you created an Api from the `api-with-auth.yaml` file, run the following command:
+### Cleanup
+
+Run the following command to completely remove the example and all its resources from the cluster:
 
 ```bash
-kubectl delete -f ./lambda/api-with-auth.yaml -n {namespace}
-```
-
-Remove a service or lambda using the `kubectl delete` command on the file from which the resource was created. See the example for a lambda:
-
-```bash
-kubectl delete -f ./lambda/deployment.yaml -n {namespace}
+kubectl delete all -l example=gateway -n $KYMA_EXAMPLE_ENV
 ```
 
 ## Troubleshooting
@@ -157,13 +154,13 @@ The problem occurs when there is an Api resource with authentication enabled, bu
 **Solution 3:** Check if the Pod you created has the istio-proxy container injected. Run this command:
 
 ``` bash
-kubectl get pods -n {namespace}
+kubectl get pods -n $KYMA_EXAMPLE_ENV
 ```
 
 Find the Pod created with the `deployment.yaml` file and copy its name. Run this command:
 
 ``` bash
-kc get pod {pod-name} -n {namespace} -o json | jq '.spec.containers[].name'
+kc get pod {pod-name} -n $KYMA_EXAMPLE_ENV -o json | jq '.spec.containers[].name'
 ```
 
 One of the returned strings should be the istio-proxy. If there is no such string, the Namespace probably does not have Istio injection enabled. Read the additional prerequisites at the beginning of the **Manual exposure using kubectl** section in this document to fix that.

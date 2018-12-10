@@ -4,8 +4,6 @@ metadata:
   name: event-email-service
   labels:
     example: event-email-service
-  annotations:
-    auth.istio.io/8017: NONE
 spec:
   ports:
   - name: http
@@ -23,8 +21,6 @@ spec:
     metadata:
       labels:
         example: event-email-service
-      annotations:
-        sidecar.istio.io/inject: "true"
     spec:
       containers:
       # replace the repository URL with your own repository (e.g. {DockerID}/event-email-service:0.0.x for Docker Hub).

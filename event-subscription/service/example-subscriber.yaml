@@ -30,8 +30,6 @@ spec:
       labels:
         app: event-email-service
         example: event-bus
-      annotations:
-        sidecar.istio.io/inject: "true"
     spec:
       containers:
         - name: event-email-service

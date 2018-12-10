@@ -10,19 +10,25 @@ This example shows how to expose custom metrics to Prometheus with a Golang serv
 ## Prerequisites
 
 - Kyma as the target deployment environment.
-- If sidecar injection is not enabled for the `default` Namespace, run the following command:
-    ```bash
-    kubectl label namespace default istio-injection=enabled
-    ```
+- An Environment to which to deploy the example.
 
 ## Installation
 
 ### Expose a sample metrics application
 
-Deploy the application, service, and ServiceMonitor:
-```bash
-kubectl apply -f deployment -R
-```
+1. Export your Environment as variable by replacing the `{environment}` placeholder in the following command and running it:
+
+    ```bash
+    export KYMA_EXAMPLE_ENV="{environment}"
+    ```
+2. Deploy the service:
+    ```bash
+    kubectl apply -f deployment/deployment.yaml -n $KYMA_EXAMPLE_ENV
+    ```
+3. Deploy the ServiceMonitor:
+    ```bash
+    kubectl apply -f deployment/service-monitor.yaml
+    ```
 
 ### Access the exposed metrics in Prometheus
 
@@ -39,15 +45,11 @@ All the **sample-metrics** endpoints appear as the [`Targets`](http://localhost:
 ### Cleanup
 Run the following commands to completely remove the example and all its resources from the cluster:
 
-1. Remove the `istio-injection` label from the `default` Namespace.
-    ```bash
-    kubectl label namespace default istio-injection-
-    ```
-2. Remove ServiceMonitor in the `kyma-system` Namespace.
+1. Remove ServiceMonitor in the `kyma-system` Namespace.
     ```bash
     kubectl delete servicemonitor -l example=monitoring-custom-metrics -n kyma-system
     ```
-3. Remove the `sample-metrics` Deployments in the `default` Namespace.
+2. Run the following command to completely remove the example service and all its resources from the cluster:
     ```bash
-    kubectl delete all -l example=monitoring-custom-metrics
+    kubectl delete all -l example=monitoring-custom-metrics -n $KYMA_EXAMPLE_ENV
     ```

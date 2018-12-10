@@ -16,8 +16,6 @@ spec:
       name: sample-publisher
       labels:
         app: sample-publisher
-      annotations:
-        sidecar.istio.io/inject: "true"
     spec:
       containers:
       - name: sample-publisher

@@ -17,5 +17,4 @@ spec:
   - port: web
     interval: 10s
   namespaceSelector:
-    matchNames:
-      - default
+    any: true
