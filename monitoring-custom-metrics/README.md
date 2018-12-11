@@ -10,13 +10,13 @@ This example shows how to expose custom metrics to Prometheus with a Golang serv
 ## Prerequisites
 
 - Kyma as the target deployment environment.
-- An Environment to which to deploy the example.
+- An Environment to which you deploy the example.
 
 ## Installation
 
 ### Expose a sample metrics application
 
-1. Export your Environment as variable by replacing the `{environment}` placeholder in the following command and running it:
+1. Export your Environment as a variable. Replace the `{environment}` placeholder in the following command and run it:
 
     ```bash
     export KYMA_EXAMPLE_ENV="{environment}"

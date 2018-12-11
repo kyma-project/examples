@@ -78,7 +78,7 @@ There are additional prerequisites to exposing a service or a function manually 
 
 >**NOTE:** Almost all steps in this tutorial refer to a lambda but you can apply them also to the service Deployment by changing the directory and names in some places.
 
-1. Export your Environment as variable by replacing the `{environment}` placeholder in the following command and running it:
+1. Export your Environment as a variable. Replace the `{environment}` placeholder in the following command and run it:
 
     ```bash
     export KYMA_EXAMPLE_ENV="{environment}"
