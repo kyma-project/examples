@@ -12,14 +12,3 @@ spec:
     resourceGroup: examples
     firewallStartIPAddress: "0.0.0.0"
     firewallEndIPAddress: "255.255.255.255"
-
----
-apiVersion: servicecatalog.k8s.io/v1beta1
-kind: ServiceBinding
-metadata:
-  name: mssql-instance-binding
-  labels: 
-    example: service-binding   
-spec:
-  instanceRef:
-    name: mssql-instance

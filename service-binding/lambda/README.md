@@ -32,14 +32,14 @@ Apply a battery of `yaml` files to run the example.
     kubectl apply -f deployment/redis-instance.yaml -n $KYMA_EXAMPLE_ENV
     ```
 
-3. Ensure that the Redis instance and Redis binding service are provisioned:
+3. Ensure that the Redis instance is provisioned:
     ```bash
     kubectl get serviceinstance/redis-instance -o jsonpath='{ .status.conditions[0].reason }' -n $KYMA_EXAMPLE_ENV
 
     kubectl get servicebinding/redis-instance-binding -o jsonpath='{ .status.conditions[0].reason }' -n $KYMA_EXAMPLE_ENV
     ```
 
-4. Create a lambda function as a Redis client and the ServiceBindingUsage resource:
+4. Create a lambda function as a Redis client, the ServiceBindung and the ServiceBindingUsage resource:
     ```bash
     kubectl apply -f deployment/lambda-function.yaml -n $KYMA_EXAMPLE_ENV
     ```

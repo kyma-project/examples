@@ -35,6 +35,16 @@ spec:
       };
 
 ---
+apiVersion: servicecatalog.k8s.io/v1beta1
+kind: ServiceBinding
+metadata:
+  name: redis-instance-binding
+  labels: 
+    example: service-binding   
+spec:
+  instanceRef:
+    name: redis-instance
+---
 apiVersion: servicecatalog.kyma.cx/v1alpha1
 kind: ServiceBindingUsage
 metadata:

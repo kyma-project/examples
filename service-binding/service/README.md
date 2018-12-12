@@ -26,7 +26,7 @@ Run the following commands to provision a managed MSSQL database, create a bindi
     export KYMA_EXAMPLE_ENV="<environment>"
     ```
 
-2. Create a MSSQL instance and a binding to it.
+2. Create a MSSQL instance.
     ```bash
     kubectl apply -f deployment/mssql-instance.yaml -n $KYMA_EXAMPLE_ENV
     ```
@@ -37,12 +37,12 @@ Run the following commands to provision a managed MSSQL database, create a bindi
     ```
     > NOTE: Service instances usually take some minutes to be provisioned.
 
-4. Deploy the service binding usage and the http-db-service.
+4. Deploy the service binding, the service binding usage and the http-db-service.
     ```bash
     kubectl apply -f deployment/mssql-binding-usage.yaml -n $KYMA_EXAMPLE_ENV
     ```
 
-5. Ensure that the MSSQL binding service is provisioned.
+5. Ensure that the MSSQL service binding is provisioned.
     ```bash
     kubectl get ServiceBinding/mssql-instance-binding -o jsonpath='{ .status.conditions[0].reason }' -n $KYMA_EXAMPLE_ENV
     ```
