@@ -87,7 +87,7 @@ kubeless get-server-config
         curl -i \
         -H "Content-Type: application/json" \
         -X POST http://core-publish.kyma-system:8080/v1/events \
-        -d '{"source-id": "stage.commerce.kyma.local", "event-type": "hello", "event-type-version": "v1", "event-time": "2018-11-02T22:08:41+00:00", "data": { "order-number": 123 }}'
+        -d '{"source-id": "external-application", "event-type": "hello", "event-type-version": "v1", "event-time": "2018-11-02T22:08:41+00:00", "data": { "order-number": 123 }}'
         ```
 
     - Verify that tailing logs for the function Pod trigger the function:

@@ -5,4 +5,4 @@ metadata:
   labels:
     example: event-bus-service-subscription
 spec:
-  sourceId: stage.commerce.kyma.local
+  sourceId: external-application
