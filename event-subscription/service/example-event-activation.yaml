@@ -3,6 +3,6 @@ kind: EventActivation
 metadata:
   name: example-event-activation
   labels:
-    example: event-bus    
+    example: event-bus-service-subscription
 spec:
-  sourceId: stage.commerce.kyma.local
+  sourceId: external-application

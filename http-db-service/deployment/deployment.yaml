@@ -4,8 +4,6 @@ metadata:
   name: http-db-service
   labels:
     example: http-db-service
-  annotations:
-    auth.istio.io/8017: NONE
 spec:
   ports:
   - name: http

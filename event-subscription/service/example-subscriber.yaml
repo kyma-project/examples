@@ -19,7 +19,7 @@ metadata:
   name: event-email-service
   labels:
     app: event-email-service
-    example: event-bus
+    example: event-bus-service-subscription
 spec:
   replicas: 1
   selector:
@@ -29,7 +29,7 @@ spec:
     metadata:
       labels:
         app: event-email-service
-        example: event-bus
+        example: event-bus-service-subscription
       annotations:
         sidecar.istio.io/inject: "true"
     spec:

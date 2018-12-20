@@ -4,8 +4,6 @@ metadata:
   name: http-db-service
   labels:
     example: service-binding
-  annotations:
-    auth.istio.io/8017: NONE
 spec:
   ports:
   - name: http
@@ -39,4 +37,27 @@ spec:
           # available dbtypes are: [memory, mssql]
           value: "mssql"
 
+---
+apiVersion: servicecatalog.k8s.io/v1beta1
+kind: ServiceBinding
+metadata:
+  name: mssql-instance-binding
+  labels: 
+    example: service-binding   
+spec:
+  instanceRef:
+    name: mssql-instance
 
+---
+apiVersion: servicecatalog.kyma.cx/v1alpha1
+kind: ServiceBindingUsage
+metadata:
+  name: mssql-instance-binding-usage
+  labels:
+    example: service-binding
+spec:
+ serviceBindingRef:
+   name: mssql-instance-binding
+ usedBy:
+   kind: deployment
+   name: http-db-service

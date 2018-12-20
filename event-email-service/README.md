@@ -56,5 +56,5 @@ After sending the Event, you should see a log entry either in your terminal (if 
 Clean all deployed example resources from Kyma with the following command:
 
 ```bash
-kubectl delete deployment,svc -l example=event-email-service -n $KYMA_EXAMPLE_ENV
+kubectl delete all -l example=event-email-service -n $KYMA_EXAMPLE_ENV
 ```

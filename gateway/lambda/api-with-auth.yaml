@@ -4,7 +4,7 @@ kind: Api
 metadata:
   labels:
     function: hello
-    example: serverless-lambda
+    example: gateway
   name: hello
 spec:
   authentication:

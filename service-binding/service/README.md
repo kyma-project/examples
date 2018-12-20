@@ -26,9 +26,9 @@ Run the following commands to provision a managed MSSQL database, create a bindi
     export KYMA_EXAMPLE_ENV="<environment>"
     ```
 
-2. Create a MSSQL instance and a binding to it.
+2. Create a MSSQL instance.
     ```bash
-    kubectl apply -f deployment/mssql-instance.yaml,deployment/mssql-binding.yaml -n $KYMA_EXAMPLE_ENV
+    kubectl apply -f deployment/mssql-instance.yaml -n $KYMA_EXAMPLE_ENV
     ```
 
 3. Ensure that the MSSQL instance is provisioned and running.
@@ -37,12 +37,12 @@ Run the following commands to provision a managed MSSQL database, create a bindi
     ```
     > NOTE: Service instances usually take some minutes to be provisioned.
 
-4. Deploy the service binding usage and the http-db-service.
+4. Deploy the service binding, the service binding usage and the http-db-service.
     ```bash
-    kubectl apply -f deployment/mssql-binding-usage.yaml,deployment/http-db-service.yaml -n $KYMA_EXAMPLE_ENV
+    kubectl apply -f deployment/mssql-binding-usage.yaml -n $KYMA_EXAMPLE_ENV
     ```
 
-5. Ensure that the MSSQL binding service is provisioned.
+5. Ensure that the MSSQL service binding is provisioned.
     ```bash
     kubectl get ServiceBinding/mssql-instance-binding -o jsonpath='{ .status.conditions[0].reason }' -n $KYMA_EXAMPLE_ENV
     ```
@@ -71,7 +71,7 @@ Run the following commands to provision a managed MSSQL database, create a bindi
 Run the following command to completely remove the example and all its resources from the cluster:
 
 ```bash
-kubectl delete deployment,service,sbu,servicebinding,serviceinstance -l example=service-binding -n $KYMA_EXAMPLE_ENV
+kubectl delete all,sbu,servicebinding,serviceinstance -l example=service-binding -n $KYMA_EXAMPLE_ENV
 ```
 
 ## Troubleshooting

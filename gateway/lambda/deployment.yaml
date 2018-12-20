@@ -4,7 +4,7 @@ kind: Function
 metadata:
   name: hello
   labels:
-    example: serverless-lambda
+    example: gateway
 spec:
   deps: ""
   function: |-

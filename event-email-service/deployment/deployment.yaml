@@ -4,8 +4,6 @@ metadata:
   name: event-email-service
   labels:
     example: event-email-service
-  annotations:
-    auth.istio.io/8017: NONE
 spec:
   ports:
   - name: http

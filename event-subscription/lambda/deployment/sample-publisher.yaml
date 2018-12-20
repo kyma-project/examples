@@ -16,6 +16,7 @@ spec:
       name: sample-publisher
       labels:
         app: sample-publisher
+        example: event-bus-lambda-subscription
       annotations:
         sidecar.istio.io/inject: "true"
     spec:

@@ -3,14 +3,13 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: sample-metrics
-  namespace: default
 spec:
-  replicas: 4
+  replicas: 1
   template:
     metadata:
       annotations:
-        sidecar.istio.io/inject: "true"    
         traffic.sidecar.istio.io/includeInboundPorts: "8080"  
+        sidecar.istio.io/inject: "true"
       labels:
         app: sample-metrics
         example: monitoring-custom-metrics
@@ -20,3 +19,34 @@ spec:
       - name: sample-metrics
         image: eu.gcr.io/kyma-project/example/monitoring-custom-metrics:0.1.44
         imagePullPolicy: IfNotPresent
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: sample-metrics-8080
+  labels:
+    example: monitoring-custom-metrics
+spec:
+  selector:
+    app: sample-metrics
+  ports:
+  - name: web
+    port: 8080
+    protocol: TCP
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: sample-metrics-8081
+  labels:
+    k8s-app: metrics
+    example: monitoring-custom-metrics
+spec:
+  selector:
+    app: sample-metrics
+  ports:
+  - name: web
+    port: 8081
+    protocol: TCP

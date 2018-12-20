@@ -33,3 +33,27 @@ spec:
               });
           },
       };
+
+---
+apiVersion: servicecatalog.k8s.io/v1beta1
+kind: ServiceBinding
+metadata:
+  name: redis-instance-binding
+  labels: 
+    example: service-binding   
+spec:
+  instanceRef:
+    name: redis-instance
+---
+apiVersion: servicecatalog.kyma.cx/v1alpha1
+kind: ServiceBindingUsage
+metadata:
+  name: fn-redis-client
+  labels:
+    example: service-binding
+spec:
+ serviceBindingRef:
+   name: redis-instance-binding
+ usedBy:
+   kind: function
+   name: redis-client

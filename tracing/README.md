@@ -61,5 +61,5 @@ helm install -n jaeger -f jaeger/values.yaml --namespace kyma-system --set-strin
 To remove all resources related to this example from your Kyma cluster, run this command:
 
 ```bash
-kubectl delete deployment,svc,api -l example=tracing -n $KYMA_EXAMPLE_ENV
+kubectl delete all,api -l example=tracing -n $KYMA_EXAMPLE_ENV
 ```
