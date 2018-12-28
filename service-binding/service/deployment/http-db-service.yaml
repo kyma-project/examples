@@ -49,7 +49,7 @@ spec:
     name: mssql-instance
 
 ---
-apiVersion: servicecatalog.kyma.cx/v1alpha1
+apiVersion: servicecatalog.kyma-project.io/v1alpha1
 kind: ServiceBindingUsage
 metadata:
   name: mssql-instance-binding-usage
