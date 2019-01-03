@@ -84,8 +84,6 @@ All examples are deployable in the cloud. Follow these rules to achieve this and
 
 A CI/CD configuration file accompanies each example to ensure its validity as part of the automation pipeline. 
 
-> **NOTE:** For more details on the CI tool, see the [Prow](https://github.com/kyma-project/test-infra/blob/master/prow/README.md) documentation.
-
 ### Acceptance tests
 
 For details on acceptance tests for examples, see the [`acceptance-tests`](tests/README.md) document.
