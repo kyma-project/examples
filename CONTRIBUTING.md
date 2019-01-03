@@ -82,7 +82,7 @@ All examples are deployable in the cloud. Follow these rules to achieve this and
 
 ### Continuous integration
 
-A CI/CD configuration file accompanies each example to ensure its validity as part of the automation pipeline. However, since CI is temporarily not publicly available, the reviewer must check if the related CI job has completed successfully after running it manually.
+A CI/CD configuration file accompanies each example to ensure its validity as part of the automation pipeline. 
 
 ### Acceptance tests
 
