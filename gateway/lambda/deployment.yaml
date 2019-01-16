@@ -6,6 +6,12 @@ metadata:
   labels:
     example: gateway
 spec:
+  deployment:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: hello
   deps: ""
   function: |-
     module.exports = {
