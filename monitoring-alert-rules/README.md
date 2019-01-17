@@ -30,18 +30,21 @@ You need access to the `kyma-system` Namespace to execute the described steps.
     As the `http-db-service` Deployment does not the exist, the alert is fired [here](http://localhost:9090/alerts).
 
 ### Stop the alert from getting fired
-1. Export your Environment as a variable. Replace the `{environment}` placeholder in the following command and run it:
+
+1. Export your Namespace as a variable. Replace the `{namespace}` placeholder in the following command and run it:
 
     ```bash
-    export KYMA_EXAMPLE_ENV="{environment}"
+    export KYMA_EXAMPLE_NS="{namespace}"
     ```
 
 2. To stop the alert from getting fired, create a Deployment as follows:
+
 ```bash
-kubectl apply -f ../http-db-service/deployment/deployment.yaml -n $KYMA_EXAMPLE_ENV
+kubectl apply -f ../http-db-service/deployment/deployment.yaml -n $KYMA_EXAMPLE_NS
 ```
 
 ### Cleanup
+
 Run the following commands to completely remove the example and all its resources from the cluster:
 
 1. Remove the `http-db-service-is-not-running` alert rule from the cluster.
@@ -53,5 +56,5 @@ kubectl delete cm -n kyma-system -l example=monitoring-alert-rules
 1. Run the following command to completely remove `http-db-service` and all its resources from the cluster:
 
 ```bash
-kubectl delete all -l example=http-db-service -n $KYMA_EXAMPLE_ENV
+kubectl delete all -l example=http-db-service -n $KYMA_EXAMPLE_NS
 ```

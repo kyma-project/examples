@@ -5,7 +5,7 @@ metadata:
   labels:
     example: event-bus-service-subscription
 spec:
-  endpoint: http://event-email-service.<environment>:3000/v1/events/register
+  endpoint: http://event-email-service.<namespace>:3000/v1/events/register
   push_request_timeout_ms: 2000
   max_inflight: 400
   include_subscription_name_header: true

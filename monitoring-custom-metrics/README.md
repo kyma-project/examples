@@ -10,20 +10,20 @@ This example shows how to expose custom metrics to Prometheus with a Golang serv
 ## Prerequisites
 
 - Kyma as the target deployment environment.
-- An Environment to which you deploy the example.
+- A Namespace to which you deploy the example.
 
 ## Installation
 
 ### Expose a sample metrics application
 
-1. Export your Environment as a variable. Replace the `{environment}` placeholder in the following command and run it:
+1. Export your Namespace as a variable. Replace the `{namespace}` placeholder in the following command and run it:
 
     ```bash
-    export KYMA_EXAMPLE_ENV="{environment}"
+    export KYMA_EXAMPLE_NS="{namespace}"
     ```
 2. Deploy the service:
     ```bash
-    kubectl apply -f deployment/deployment.yaml -n $KYMA_EXAMPLE_ENV
+    kubectl apply -f deployment/deployment.yaml -n $KYMA_EXAMPLE_NS
     ```
 3. Deploy the ServiceMonitor:
     ```bash
@@ -51,5 +51,5 @@ Run the following commands to completely remove the example and all its resource
     ```
 2. Run the following command to completely remove the example service and all its resources from the cluster:
     ```bash
-    kubectl delete all -l example=monitoring-custom-metrics -n $KYMA_EXAMPLE_ENV
+    kubectl delete all -l example=monitoring-custom-metrics -n $KYMA_EXAMPLE_NS
     ```

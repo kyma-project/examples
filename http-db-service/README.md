@@ -9,7 +9,7 @@ This example demonstrates Kyma capabilities, such as HTTP endpoints that expose 
 - A [Docker](https://docs.docker.com/install) installation.
 - Kyma as the target deployment environment.
 - An MSSQL database for the service's database functionality. You can also use Azure MSSQL that you can provision using the Kyma Open Service Broker API.
-- An Environment to which to deploy the example.
+- A Namespace to which to deploy the example.
 
 ## Installation
 
@@ -25,14 +25,14 @@ The `deployment` folder contains `.yaml` descriptors used for the deployment of 
 
 Run the following commands to deploy the published service to Kyma:
 
-1. Export your Environment as variable by replacing the `{environment}` placeholder in the following command and running it:
+1. Export your Namespace as variable by replacing the `{namespace}` placeholder in the following command and running it:
 
     ```bash
-    export KYMA_EXAMPLE_ENV="{environment}"
+    export KYMA_EXAMPLE_NS="{namespace}"
     ```
 2. Deploy the service:
     ```bash
-    kubectl apply -f deployment/deployment.yaml -n $KYMA_EXAMPLE_ENV
+    kubectl apply -f deployment/deployment.yaml -n $KYMA_EXAMPLE_NS
     ```
 
 ### MSSQL Database tests
@@ -49,7 +49,7 @@ The command starts a MSSQL database in a container.
 username=sa password='Password!123' database=master tablename='test_orders' host=localhost port=1433 dbtype=mssql go test ./... -v
 ```
 
-The command runs the specific unit tests for MSSQL databases with the Environment information to connect to the previously started MSSQL database.
+The command runs the specific unit tests for MSSQL databases with the environment information to connect to the previously started MSSQL database.
 
 
 ### Deployment smoke test
@@ -65,5 +65,5 @@ curl --request GET --url http://{host}:{port}/orders
 Run the following command to completely remove the example and all its resources from the cluster:
 
 ```bash
-kubectl delete all -l example=http-db-service -n $KYMA_EXAMPLE_ENV
+kubectl delete all -l example=http-db-service -n $KYMA_EXAMPLE_NS
 ```

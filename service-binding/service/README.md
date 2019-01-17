@@ -15,45 +15,45 @@ The example covers the following tasks:
 
 - Kyma as the target deployment environment.
 - [Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) CLI tool to deploy the example's resources to Kyma
-- An environment to which to deploy the example.
+- A Namespace to which to deploy the example.
 
 ## Installation
 
 Run the following commands to provision a managed MSSQL database, create a binding to it and deploy the service that will use the binding.
 
-1. Export your environment as variable by replacing the `<environment>` placeholder in the following command and running it:
+1. Export your Namespace as variable by replacing the `<namespace>` placeholder in the following command and running it:
     ```bash
-    export KYMA_EXAMPLE_ENV="<environment>"
+    export KYMA_EXAMPLE_NS="<namespace>"
     ```
 
 2. Create a MSSQL instance.
     ```bash
-    kubectl apply -f deployment/mssql-instance.yaml -n $KYMA_EXAMPLE_ENV
+    kubectl apply -f deployment/mssql-instance.yaml -n $KYMA_EXAMPLE_NS
     ```
 
 3. Ensure that the MSSQL instance is provisioned and running.
     ```bash
-    kubectl get serviceinstance/mssql-instance -o jsonpath='{ .status.conditions[0].reason }' -n $KYMA_EXAMPLE_ENV
+    kubectl get serviceinstance/mssql-instance -o jsonpath='{ .status.conditions[0].reason }' -n $KYMA_EXAMPLE_NS
     ```
     > NOTE: Service instances usually take some minutes to be provisioned.
 
 4. Deploy the service binding, the service binding usage and the http-db-service.
     ```bash
-    kubectl apply -f deployment/mssql-binding-usage.yaml -n $KYMA_EXAMPLE_ENV
+    kubectl apply -f deployment/mssql-binding-usage.yaml -n $KYMA_EXAMPLE_NS
     ```
 
 5. Ensure that the MSSQL service binding is provisioned.
     ```bash
-    kubectl get ServiceBinding/mssql-instance-binding -o jsonpath='{ .status.conditions[0].reason }' -n $KYMA_EXAMPLE_ENV
+    kubectl get ServiceBinding/mssql-instance-binding -o jsonpath='{ .status.conditions[0].reason }' -n $KYMA_EXAMPLE_NS
     ```
 6. Verify that the http-db-service is ready.
     ```bash
-    kubectl get pods -l example=service-binding -n $KYMA_EXAMPLE_ENV
+    kubectl get pods -l example=service-binding -n $KYMA_EXAMPLE_NS
     ```
 
 7. Forward the service port to be able to reach the service.
     ```bash
-    kubectl port-forward -n $KYMA_EXAMPLE_ENV $(kubectl get pod -n $KYMA_EXAMPLE_ENV -l example=service-binding | grep http-db-service | awk '{print $1}') 8017
+    kubectl port-forward -n $KYMA_EXAMPLE_NS $(kubectl get pod -n $KYMA_EXAMPLE_NS -l example=service-binding | grep http-db-service | awk '{print $1}') 8017
     ```
 8. Check that the service works as expected.
     
@@ -71,7 +71,7 @@ Run the following commands to provision a managed MSSQL database, create a bindi
 Run the following command to completely remove the example and all its resources from the cluster:
 
 ```bash
-kubectl delete all,sbu,servicebinding,serviceinstance -l example=service-binding -n $KYMA_EXAMPLE_ENV
+kubectl delete all,sbu,servicebinding,serviceinstance -l example=service-binding -n $KYMA_EXAMPLE_NS
 ```
 
 ## Troubleshooting

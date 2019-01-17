@@ -8,7 +8,7 @@ This chart provides an easy way to deploy and test the examples.
 
 - Kubernetes 1.10+
 - Kyma as the target deployment environment.
-- An Environment to deploy the examples.
+- A Namespace to deploy the examples.
 
 ## Details
 
@@ -30,7 +30,7 @@ Configure these options in the [`values.yaml`](values.yaml) file:
 Deploy the examples:
 
 ```
-helm install -f values.yaml --name examples --namespace <environment> .
+helm install -f values.yaml --name examples --namespace <namespace> .
 ```
 
 ### Testing
@@ -43,8 +43,8 @@ The output of this command shows whether the tests passed or failed.
 
 ### Cleanup
 
-Clean up the Environment:
+Clean up the Namespace:
 ```
 helm delete --purge examples
-kubectl delete ns <environment>
+kubectl delete ns <namespace>
 ```

@@ -8,7 +8,7 @@ This example illustrates how to write a service in `NodeJS` that listens for Eve
 
 - A [Docker](https://docs.docker.com/install) installation
 - Kyma as the target deployment environment
-- An Environment to which to deploy the example
+- A Namespace to which to deploy the example
 
 ## Installation
 
@@ -26,19 +26,19 @@ This example illustrates how to write a service in `NodeJS` that listens for Eve
 
 ### Cluster installation
 
-1. Export your Environment as a variable by replacing the **{environment}** placeholder in the following command and running it:
+1. Export your Namespace as a variable by replacing the **{namespace}** placeholder in the following command and running it:
     ```bash
-    export KYMA_EXAMPLE_ENV="{environment}"
+    export KYMA_EXAMPLE_NS="{namespace}"
     ```
 
 2. Deploy the service:
     ```bash
-    kubectl apply -f deployment -n $KYMA_EXAMPLE_ENV
+    kubectl apply -f deployment -n $KYMA_EXAMPLE_NS
     ```
 
 3. Expose the service endpoint:
     ```bash
-    kubectl port-forward -n $KYMA_EXAMPLE_ENV $(kubectl get pod -n $KYMA_EXAMPLE_ENV -l example=event-email-service | grep event-email-service | awk '{print $1}') 3000
+    kubectl port-forward -n $KYMA_EXAMPLE_NS $(kubectl get pod -n $KYMA_EXAMPLE_NS -l example=event-email-service | grep event-email-service | awk '{print $1}') 3000
     ```
 
 ### Test the service
@@ -56,5 +56,5 @@ After sending the Event, you should see a log entry either in your terminal (if 
 Clean all deployed example resources from Kyma with the following command:
 
 ```bash
-kubectl delete all -l example=event-email-service -n $KYMA_EXAMPLE_ENV
+kubectl delete all -l example=event-email-service -n $KYMA_EXAMPLE_NS
 ```

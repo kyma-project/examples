@@ -9,7 +9,7 @@ To understand how traces are propagated, see the [Go application](src/order-fron
 ## Prerequisites
 
 - Kyma as the target deployment environment.
-- An Environment created in Kyma to which you deploy the example application.
+- A Namespace created in Kyma to which you deploy the example application.
 - Helm for local installation.
 
 
@@ -29,16 +29,16 @@ helm install -n jaeger -f jaeger/values.yaml --namespace kyma-system --set-strin
 
 ### Cluster installation
 
-1. Export your Environment as a variable by replacing the `{environment}` placeholder in the following command and running it:
+1. Export your Namespace as a variable by replacing the `{namespace}` placeholder in the following command and running it:
 
     ```bash
-    export KYMA_EXAMPLE_ENV="{environment}"
+    export KYMA_EXAMPLE_NS="{namespace}"
     ```
 
 2. Deploy the service. Run this command:
 
     ```bash
-    kubectl apply -f deployment/deployment.yaml -n $KYMA_EXAMPLE_ENV
+    kubectl apply -f deployment/deployment.yaml -n $KYMA_EXAMPLE_NS
     ```
 
 ## Get traces from the example service
@@ -61,5 +61,5 @@ helm install -n jaeger -f jaeger/values.yaml --namespace kyma-system --set-strin
 To remove all resources related to this example from your Kyma cluster, run this command:
 
 ```bash
-kubectl delete all,api -l example=tracing -n $KYMA_EXAMPLE_ENV
+kubectl delete all,api -l example=tracing -n $KYMA_EXAMPLE_NS
 ```
