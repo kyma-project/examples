@@ -8,6 +8,12 @@ spec:
   handler: handler.main
   runtime: nodejs8
   type: HTTP
+  deployment:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: redis-client
   deps: |
     {
       "name": "app",
