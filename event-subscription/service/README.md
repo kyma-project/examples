@@ -18,53 +18,53 @@ Access the Event publishing API from the cluster through the `8080` port on the 
 * A [Docker](https://docs.docker.com/install) installation if modification of the image is necessary.
 * A [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) installation.
 * Kyma as the target deployment environment.
-* An Environment to which to deploy the example.
+* A Namespace to which to deploy the example.
 
 
 ## Installation
 
-1. Export your Environment as a variable by replacing the **{environment}** placeholder in the following command and running it:
+1. Export your Namespace as a variable by replacing the **{namespace}** placeholder in the following command and running it:
     ```bash
-    export KYMA_EXAMPLE_ENV="{environment}"
+    export KYMA_EXAMPLE_NS="{namespace}"
     ```
 
 2. Deploy the example subscriber:
     ```bash
-    kubectl apply -f example-subscriber.yaml -n $KYMA_EXAMPLE_ENV
+    kubectl apply -f example-subscriber.yaml -n $KYMA_EXAMPLE_NS
     ```
 
 3. Enable the Event activation:
     ```bash
-    kubectl apply -f example-event-activation.yaml -n $KYMA_EXAMPLE_ENV
+    kubectl apply -f example-event-activation.yaml -n $KYMA_EXAMPLE_NS
     ```
-4. Set your Environment on the subscription endpoint:
+4. Set your Namespace on the subscription endpoint:
     ```bash
     #Linux
-    sed -i "s/<environment>/$KYMA_EXAMPLE_ENV/g" example-subscription.yaml
+    sed -i "s/<namespace>/$KYMA_EXAMPLE_NS/g" example-subscription.yaml
     #OSX
-    sed -i '' "s/<environment>/$KYMA_EXAMPLE_ENV/g" example-subscription.yaml
+    sed -i '' "s/<namespace>/$KYMA_EXAMPLE_NS/g" example-subscription.yaml
     ```
-    To manually edit [example-subscription.yaml](./example-subscription.yaml), replace the **{environment}** placeholder in the endpoint with your Environment.
+    To manually edit [example-subscription.yaml](./example-subscription.yaml), replace the **{namespace}** placeholder in the endpoint with your Namespace.
 
 5. Deploy the example subscription:
     ```bash
-    kubectl apply -f example-subscription.yaml -n $KYMA_EXAMPLE_ENV
+    kubectl apply -f example-subscription.yaml -n $KYMA_EXAMPLE_NS
     ```
 
 6. Deploy the example publisher:
     ```bash
-    kubectl apply -f example-publisher.yaml -n $KYMA_EXAMPLE_ENV
+    kubectl apply -f example-publisher.yaml -n $KYMA_EXAMPLE_NS
     ```
 
 7. Verify that the example subscriber and publisher Pods are running:
     ```bash
-    kubectl get pods -n $KYMA_EXAMPLE_ENV
+    kubectl get pods -n $KYMA_EXAMPLE_NS
     ```
     The system eventually applies EgressRule, which allows the example publisher container to download cURL. Istio grants access and the example publisher Pod starts.
 
 8. Once the example subscriber and publisher Pods are running, access the example publisher container through SSH:
     ```bash
-    kubectl exec -n $KYMA_EXAMPLE_ENV $(kubectl get pods -n $KYMA_EXAMPLE_ENV -l app=example-publisher --output=jsonpath={.items..metadata.name}) -c example-publisher -i -t -- sh
+    kubectl exec -n $KYMA_EXAMPLE_NS $(kubectl get pods -n $KYMA_EXAMPLE_NS -l app=example-publisher --output=jsonpath={.items..metadata.name}) -c example-publisher -i -t -- sh
     ```
 
 9. Publish a message:
@@ -97,7 +97,7 @@ Exit the example publisher container and perform a cleanup using this command:
 
 ```bash
 exit
-kubectl delete all,subscription,eventactivation -l example=event-bus -n $KYMA_EXAMPLE_ENV
+kubectl delete all,subscription,eventactivation -l example=event-bus -n $KYMA_EXAMPLE_NS
 ```
 
 ## Troubleshooting

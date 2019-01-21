@@ -22,37 +22,37 @@ Apply a battery of `yaml` files to run the example.
 
 ### Steps
 
-1. Export your environment as a variable by replacing the `{environment}` placeholder in the following command and running it:
+1. Export your Namespace as a variable by replacing the `{namespace}` placeholder in the following command and running it:
     ```bash
-    export KYMA_EXAMPLE_ENV="{environment}"
+    export KYMA_EXAMPLE_NS="{namespace}"
     ```
 
 2. Create a Redis instance and a service binding to the instance:
     ```bash
-    kubectl apply -f deployment/redis-instance.yaml -n $KYMA_EXAMPLE_ENV
+    kubectl apply -f deployment/redis-instance.yaml -n $KYMA_EXAMPLE_NS
     ```
 
 3. Ensure that the Redis instance is provisioned:
     ```bash
-    kubectl get serviceinstance/redis-instance -o jsonpath='{ .status.conditions[0].reason }' -n $KYMA_EXAMPLE_ENV
+    kubectl get serviceinstance/redis-instance -o jsonpath='{ .status.conditions[0].reason }' -n $KYMA_EXAMPLE_NS
 
-    kubectl get servicebinding/redis-instance-binding -o jsonpath='{ .status.conditions[0].reason }' -n $KYMA_EXAMPLE_ENV
+    kubectl get servicebinding/redis-instance-binding -o jsonpath='{ .status.conditions[0].reason }' -n $KYMA_EXAMPLE_NS
     ```
 
 4. Create a lambda function as a Redis client, the ServiceBindung and the ServiceBindingUsage resource:
     ```bash
-    kubectl apply -f deployment/lambda-function.yaml -n $KYMA_EXAMPLE_ENV
+    kubectl apply -f deployment/lambda-function.yaml -n $KYMA_EXAMPLE_NS
     ```
 
 5. Verify that the lambda function is ready:
     ```bash
-    kubeless function ls redis-client -n $KYMA_EXAMPLE_ENV
+    kubeless function ls redis-client -n $KYMA_EXAMPLE_NS
     ```
 
 6. Trigger the function.
     The information and statistics about the Redis server appear in the logs of the function Pod.
     ```bash
-    kubeless function call redis-client -n $KYMA_EXAMPLE_ENV
+    kubeless function call redis-client -n $KYMA_EXAMPLE_NS
     ```
 
 ### Cleanup
@@ -60,7 +60,7 @@ Apply a battery of `yaml` files to run the example.
 Use this command to remove the example and all its resources from your Kyma cluster:
 
 ```bash
-kubectl delete all,function,servicebinding,serviceinstance,servicebindingusage -l example=service-binding -n $KYMA_EXAMPLE_ENV
+kubectl delete all,function,servicebinding,serviceinstance,servicebindingusage -l example=service-binding -n $KYMA_EXAMPLE_NS
 ```
 
 ## Troubleshooting
@@ -68,7 +68,7 @@ kubectl delete all,function,servicebinding,serviceinstance,servicebindingusage -
 Make sure the password is injected correctly into the Pod. The password should match the one in the [redis-instance.yaml](./deployment/redis-instance.yaml)
 
 ```bash
-kubectl exec -n $KYMA_EXAMPLE_ENV -it $(kubectl get po -n $KYMA_EXAMPLE_ENV -l example=service-binding --no-headers | awk '{print $1}') bash
+kubectl exec -n $KYMA_EXAMPLE_NS -it $(kubectl get po -n $KYMA_EXAMPLE_NS -l example=service-binding --no-headers | awk '{print $1}') bash
 
 env | grep -i redis_password
 ```

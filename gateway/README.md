@@ -7,7 +7,7 @@ This basic example demonstrates how to expose a service or a function through an
 ## Prerequisites
 
 - Kyma as the target deployment environment.
-- An Environment to which you deploy the example.
+- A Namespace to which you deploy the example.
 
 ## Installation
 
@@ -17,8 +17,8 @@ This section contains installation steps on how to expose a service or a functio
 
 #### Create a service
 
-1. Open the [Kyma console](https://console.kyma.local/) and choose or create the Environment in which you want to deploy the example.
-2. Click the **Deploy new resource to the environment** button, select the `deployment.yaml` file from the `lambda` or `service` directory in this example, and click **Upload**.
+1. Open the [Kyma console](https://console.kyma.local/) and choose or create the Namespace in which you want to deploy the example.
+2. Click the **Deploy new resource to the namespace** button, select the `deployment.yaml` file from the `lambda` or `service` directory in this example, and click **Upload**.
 
 #### Expose a service without authentication
 
@@ -78,16 +78,16 @@ There are additional prerequisites to exposing a service or a function manually 
 
 >**NOTE:** Almost all steps in this tutorial refer to a lambda but you can apply them also to the service Deployment by changing the directory and names in some places.
 
-1. Export your Environment as a variable. Replace the `{environment}` placeholder in the following command and run it:
+1. Export your Namespace as a variable. Replace the `{namespace}` placeholder in the following command and run it:
 
     ```bash
-    export KYMA_EXAMPLE_ENV="{environment}"
+    export KYMA_EXAMPLE_NS="{namespace}"
     ```
 
 2. Apply one of the `deployment.yaml` files from the `lambda` or `service` directory in this example.
 
     ``` bash
-    kubectl apply -f ./lambda/deployment.yaml -n $KYMA_EXAMPLE_ENV
+    kubectl apply -f ./lambda/deployment.yaml -n $KYMA_EXAMPLE_NS
     ```
 
 #### Expose a service without authentication
@@ -95,7 +95,7 @@ There are additional prerequisites to exposing a service or a function manually 
 Run this command:
 
 ``` bash
-kubectl apply -f ./lambda/api-without-auth.yaml -n $KYMA_EXAMPLE_ENV
+kubectl apply -f ./lambda/api-without-auth.yaml -n $KYMA_EXAMPLE_NS
 ```
 
 #### Test the APIs without authentication
@@ -113,12 +113,12 @@ There are two possible ways of exposing secured Api, either using the default au
 
 ``` bash
 # Create Api with the default authentication settings:
-kubectl apply -f ./lambda/api-with-default-auth.yaml -n $KYMA_EXAMPLE_ENV
+kubectl apply -f ./lambda/api-with-default-auth.yaml -n $KYMA_EXAMPLE_NS
 
 # OR
 
 # Create Api with the custom authentication settings:
-kubectl apply -f ./lambda/api-with-auth.yaml -n $KYMA_EXAMPLE_ENV
+kubectl apply -f ./lambda/api-with-auth.yaml -n $KYMA_EXAMPLE_NS
 ```
 
 #### Test the APIs with authentication
@@ -140,7 +140,7 @@ curl -ik https://{hostname}.kyma.local -H 'Authorization: {token}'
 Run the following command to completely remove the example and all its resources from the cluster:
 
 ```bash
-kubectl delete all -l example=gateway -n $KYMA_EXAMPLE_ENV
+kubectl delete all -l example=gateway -n $KYMA_EXAMPLE_NS
 ```
 
 ## Troubleshooting
@@ -154,13 +154,13 @@ The problem occurs when there is an Api resource with authentication enabled, bu
 **Solution 3:** Check if the Pod you created has the istio-proxy container injected. Run this command:
 
 ``` bash
-kubectl get pods -n $KYMA_EXAMPLE_ENV
+kubectl get pods -n $KYMA_EXAMPLE_NS
 ```
 
 Find the Pod created with the `deployment.yaml` file and copy its name. Run this command:
 
 ``` bash
-kc get pod {pod-name} -n $KYMA_EXAMPLE_ENV -o json | jq '.spec.containers[].name'
+kc get pod {pod-name} -n $KYMA_EXAMPLE_NS -o json | jq '.spec.containers[].name'
 ```
 
 One of the returned strings should be the istio-proxy. If there is no such string, the Namespace probably does not have Istio injection enabled. Read the additional prerequisites at the beginning of the **Manual exposure using kubectl** section in this document to fix that.

@@ -17,9 +17,9 @@ The flow of operations is as follows:
 
 To follow this example, you need:
 
-- an Environment created in Kyma. For more information, read the [related documentation](https://github.com/kyma-project/kyma/blob/master/docs/kyma/docs/011-details-environments.md).
+- a Namespace created in Kyma. For more information, read the [related documentation](https://github.com/kyma-project/kyma/blob/master/docs/kyma/docs/011-details-namespaces.md).
 
->**NOTE:** Execute all commands in this example against the Environment you use (-n {Name_Of_The_Environment}).
+>**NOTE:** Execute all commands in this example against the Namespace you use (-n {Name_Of_The_Namespace}).
 
 - an OCC API registered in the Application Connector's Registration API.
 

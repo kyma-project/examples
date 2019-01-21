@@ -16,7 +16,7 @@ Follow it to:
 
 - After installing the CLI, export the name of the `kubeless config` configmap resource name and the `namespace` where it is located into the shell environment.
 
-- An Environment to which to deploy the example.
+- A Namespace to which to deploy the example.
 
 ```bash
 export KUBELESS_CONFIG=core-kubeless-config
@@ -31,10 +31,10 @@ kubeless get-server-config
 
 ## Installation
 
-1. Export your Environment as a variable by replacing the **{environment}** placeholder in the following command and running it:
+1. Export your Namespace as a variable by replacing the **{namespace}** placeholder in the following command and running it:
 
     ```bash
-    export KYMA_EXAMPLE_ENV="{environment}"
+    export KYMA_EXAMPLE_NS="{namespace}"
     ```
 
 2. Create a Kubeless function to receive a JSON Event.
@@ -46,35 +46,35 @@ kubeless get-server-config
     Run this command:
 
     ```bash
-    kubeless function deploy hello-with-data --label example=event-bus-lambda-subscription --runtime nodejs8 --handler hello-with-data.main --from-file js/hello-with-data.js -n $KYMA_EXAMPLE_ENV
+    kubeless function deploy hello-with-data --label example=event-bus-lambda-subscription --runtime nodejs8 --handler hello-with-data.main --from-file js/hello-with-data.js -n $KYMA_EXAMPLE_NS
     ```
 
-3. Set your Environment on the subscription endpoint:
+3. Set your Namespace on the subscription endpoint:
 
     ```bash
     #Linux
-    sed -i "s/<environment>/$KYMA_EXAMPLE_ENV/g" deployment/subscription.yaml
+    sed -i "s/<namespace>/$KYMA_EXAMPLE_NS/g" deployment/subscription.yaml
     #OSX
-    sed -i '' "s/<environment>/$KYMA_EXAMPLE_ENV/g" deployment/subscription.yaml
+    sed -i '' "s/<namespace>/$KYMA_EXAMPLE_NS/g" deployment/subscription.yaml
     ```
-    To manually edit [subscription.yaml](./deployment/subscription.yaml), replace the `<environment>` placeholder in the endpoint with your Environment.
+    To manually edit [subscription.yaml](./deployment/subscription.yaml), replace the `<namespace>` placeholder in the endpoint with your Namespace.
 
 
 4. Subscribe the function to an Event:
     ```bash
-    kubectl apply -f deployment/event-activation.yaml,deployment/subscription.yaml -n $KYMA_EXAMPLE_ENV
+    kubectl apply -f deployment/event-activation.yaml,deployment/subscription.yaml -n $KYMA_EXAMPLE_NS
     ```
 
 5. Test publishing Events to the subscribed function.
     - Start a sample publisher.
         The system creates the [`Publisher`](deployment/sample-publisher.yaml) deployment.
         ```bash
-        kubectl apply -f deployment/sample-publisher.yaml -n $KYMA_EXAMPLE_ENV
+        kubectl apply -f deployment/sample-publisher.yaml -n $KYMA_EXAMPLE_NS
         ```
 
     - Spawn a shell inside the publisher.
         ```bash
-        kubectl exec -n $KYMA_EXAMPLE_ENV $(kubectl get pods -n $KYMA_EXAMPLE_ENV -l app=sample-publisher --output=jsonpath={.items..metadata.name}) -c sample-publisher -i -t -- sh
+        kubectl exec -n $KYMA_EXAMPLE_NS $(kubectl get pods -n $KYMA_EXAMPLE_NS -l app=sample-publisher --output=jsonpath={.items..metadata.name}) -c sample-publisher -i -t -- sh
         ```
 
     - Publish an Event inside the publisher container.
@@ -92,7 +92,7 @@ kubeless get-server-config
 
     - Verify that tailing logs for the function Pod trigger the function:
         ```bash
-        kubectl logs -f $(kubectl get po -n $KYMA_EXAMPLE_ENV -l function=hello-with-data --no-headers | grep -i running | awk '{print $1}') -c hello-with-data -n $KYMA_EXAMPLE_ENV
+        kubectl logs -f $(kubectl get po -n $KYMA_EXAMPLE_NS -l function=hello-with-data --no-headers | grep -i running | awk '{print $1}') -c hello-with-data -n $KYMA_EXAMPLE_NS
         ```
 
 ### Cleanup
@@ -100,5 +100,5 @@ kubeless get-server-config
 Run this command to remove the example and all of its resources:
 
 ```bash
-kubectl delete all -l example=event-bus-lambda-subscription -n $KYMA_EXAMPLE_ENV
+kubectl delete all -l example=event-bus-lambda-subscription -n $KYMA_EXAMPLE_NS
 ```
