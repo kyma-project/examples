@@ -18,7 +18,7 @@ Access the Event publishing API from the cluster through the `8080` port on the 
 * A [Docker](https://docs.docker.com/install) installation if modification of the image is necessary.
 * A [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) installation.
 * Kyma as the target deployment environment.
-* A Namespace to which to deploy the example with the env: "true" label. For more information, read the [related documentation](https://github.com/kyma-project/kyma/blob/master/docs/kyma/docs/011-details-namespaces.md).
+* A Namespace to which to deploy the example with the `env: "true"` label. For more information, read the [related documentation](https://github.com/kyma-project/kyma/blob/master/docs/kyma/docs/011-details-namespaces.md).
 
 
 ## Installation
