@@ -17,7 +17,7 @@ The flow of operations is as follows:
 
 To follow this example, you need:
 
-- a Namespace created in Kyma. For more information, read the [related documentation](https://github.com/kyma-project/kyma/blob/master/docs/kyma/docs/011-details-namespaces.md).
+- A Namespace to which you deploy the example with the `env: "true"` label. For more information, read the [related documentation](https://github.com/kyma-project/kyma/blob/master/docs/kyma/docs/011-details-namespaces.md).
 
 >**NOTE:** Execute all commands in this example against the Namespace you use (-n {Name_Of_The_Namespace}).
 

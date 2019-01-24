@@ -9,7 +9,7 @@ This example demonstrates Kyma capabilities, such as HTTP endpoints that expose 
 - A [Docker](https://docs.docker.com/install) installation.
 - Kyma as the target deployment environment.
 - An MSSQL database for the service's database functionality. You can also use Azure MSSQL that you can provision using the Kyma Open Service Broker API.
-- A Namespace to which to deploy the example.
+- A Namespace to which to deploy the example with the `env: "true"` label. For more information, read the [related documentation](https://github.com/kyma-project/kyma/blob/master/docs/kyma/docs/011-details-namespaces.md).
 
 ## Installation
 
