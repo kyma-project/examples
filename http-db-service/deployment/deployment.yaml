@@ -9,6 +9,7 @@ spec:
   - name: http
     port: 8017
   selector:
+    app: http-db-service
     example: http-db-service
 ---
 apiVersion: extensions/v1beta1
@@ -17,9 +18,14 @@ metadata:
   name: http-db-service
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: http-db-service
+      example: http-db-service
   template:
     metadata:
       labels:
+        app: http-db-service
         example: http-db-service
       annotations:
         sidecar.istio.io/inject: "true"

@@ -9,6 +9,7 @@ spec:
   - name: http
     port: 3000
   selector:
+    app: event-email-service
     example: event-email-service
 ---
 apiVersion: extensions/v1beta1
@@ -17,9 +18,13 @@ metadata:
   name: event-email-service
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: event-email-service
   template:
     metadata:
       labels:
+        app: event-email-service
         example: event-email-service
       annotations:
         sidecar.istio.io/inject: "true"
