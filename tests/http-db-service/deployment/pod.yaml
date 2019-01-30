@@ -1,6 +1,8 @@
 apiVersion: v1
 kind: Pod
 metadata:
+  labels:
+    app: http-db-service-acceptance-tests
   name: http-db-service-acceptance-tests
 spec:
   containers:
