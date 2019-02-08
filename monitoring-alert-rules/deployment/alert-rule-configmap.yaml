@@ -10,13 +10,13 @@ data:
         labels:
           severity: critical
         annotations:
-          description: "kubeless-controller pod is not running"
-          summary: "kubeless-controller pod is not running"
+          description: "http-db-service pod is not running"
+          summary: "http-db-service pod is not running"
 kind: ConfigMap
 metadata:
   labels:
     app: Kyma
-    prometheus: core
+    prometheus: monitoring
     role: alert-rules
     example: monitoring-alert-rules
   name: http-db-service-alert-rules
