@@ -15,7 +15,7 @@ The example covers the following tasks:
 
 - Kyma as the target deployment environment.
 - [Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) CLI tool to deploy the example's resources to Kyma.
-- A Namespace to which you deploy the example with the `env: "true"` label. For more information, read the [related documentation](https://github.com/kyma-project/kyma/blob/master/docs/kyma/docs/011-details-namespaces.md).
+- A Namespace to which you deploy the example with the `env: "true"` label. For more information, read the [related documentation](https://github.com/kyma-project/kyma/blob/master/docs/kyma/docs/03-02-namespaces.md).
 
 ## Installation
 
