@@ -12,6 +12,17 @@ data:
         annotations:
           description: "http-db-service pod is not running"
           summary: "http-db-service pod is not running"
+    - name: http-db-service-container-utilization-rule
+      rules:
+      - alert: http-db-service-memory-usage-alert
+        # alert will be fired when current memory usage exceeds 80% of the limit
+        expr: ((scalar(container_memory_usage_bytes{container_name="http-db-service"}) / max(kube_pod_container_resource_limits_memory_bytes{container="http-db-service"})) > bool 0.0000008) == 1
+        for: 15s
+        labels:
+          severity: high
+        annotations:
+          description: "http-db-service high memory usage"
+          summary: "http-db-service high memory usage"
 kind: ConfigMap
 metadata:
   labels:
