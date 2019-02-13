@@ -16,7 +16,7 @@ data:
       rules:
       - alert: http-db-service-memory-usage-alert
         # alert will be fired when current memory usage exceeds 80% of the limit
-        expr: ((scalar(container_memory_usage_bytes{container_name="http-db-service"}) / max(kube_pod_container_resource_limits_memory_bytes{container="http-db-service"})) > bool 0.0000008) == 1
+        expr: ((scalar(container_memory_usage_bytes{container_name="http-db-service"}) / max(kube_pod_container_resource_limits_memory_bytes{container="http-db-service"})) > bool 0.8) == 1
         for: 15s
         labels:
           severity: high
