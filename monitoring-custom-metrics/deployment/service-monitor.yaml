@@ -5,7 +5,7 @@ metadata:
   name: metrics
   namespace: kyma-system
   labels:
-    prometheus: core
+    prometheus: monitoring
     example: monitoring-custom-metrics
 spec:
   selector:
@@ -14,7 +14,7 @@ spec:
   targetLabels:
     - k8s-app
   endpoints:
-  - port: web
-    interval: 10s
+    - port: web
+      interval: 10s
   namespaceSelector:
     any: true
