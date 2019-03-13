@@ -1,0 +1,33 @@
+apiVersion: serving.knative.dev/v1alpha1
+kind: Service
+metadata:
+  name: http-db-service
+spec:
+  runLatest:
+    configuration:
+      build:
+        apiVersion: build.knative.dev/v1alpha1
+        kind: Build
+        spec:
+          serviceAccountName: registry
+          source:
+            git:
+              url: https://github.com/kyma-project/examples.git
+              revision: master
+          steps:
+            - name: build-and-push
+              image: gcr.io/kaniko-project/executor
+              args:
+              - --dockerfile=/workspace/http-db-service/Dockerfile
+              - --destination=docker.io/{YOUR_USERNAME}/http-db-service # Replace {YOUR_USERNAME} with your Docker Hub username
+              - --context=/workspace/http-db-service/
+              env:
+              - name: DOCKER_CONFIG
+                value: /builder/home/.docker
+      revisionTemplate:
+        spec:
+          container:
+            image: docker.io/{YOUR_USERNAME}/http-db-service # Replace {YOUR_USERNAME} with your Docker Hub username
+            imagePullPolicy: Always
+            ports:
+              - containerPort: 8017
