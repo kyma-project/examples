@@ -81,7 +81,7 @@ You can retrieve detailed information on the build's status with (replace `http-
 kubectl describe build http-db-service-0001
 ```
 
-Once the service is ready you should be able to access it at `https://http-db-service.NAMESPACE.CLUSTERDOMAIN`. If you are unsure about the domain, you can look it up with:
+Once the service is ready you should be able to access via https on the host `http-db-service.{NAMESPACE}.{CLUSTERDOMAIN}`. If you are unsure about the domain, you can look it up with:
 
 ```
 kubectl get ksvc http-db-service -ojsonpath='{.status.domain}'
