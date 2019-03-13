@@ -20,8 +20,7 @@
 /service-binding/ @joek @rakesh-garimella @sayanh @venturasr @lilitgh
 
 # All .md files
-*.md @tomekpapiernik @kazydek @bszwarc @klaudiagrz
+*.md @tomekpapiernik @kazydek @bszwarc @klaudiagrz @mmitoraj
 
 # Config file for MILV - milv.config.yaml
 milv.config.yaml @akucharska @michal-hudy @pkosiec @mjasinski5 @aerfio @magicmatatjahu
-
