@@ -32,7 +32,7 @@ Open the file `registry-credentials.yaml` with a text editor. Encode your Docker
 
 To encode your username and your password in base64 you can use tools of your operating system (`{VALUE}` is the placeholder for the username/password you have to encode):
 
-- For macOS and Linux: Execute `echo "{VALUE} | base64` on your shell
+- For macOS and Linux: Execute `echo "{VALUE}" | base64` on your shell
   
 - For Windows: Open a PowerShell window and execute: `[Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes("{VALUE}"))`
 
