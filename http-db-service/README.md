@@ -35,6 +35,7 @@ Run the following commands to deploy the published service to Kyma:
     ```
 2. Deploy the service:
     ```bash
+    kubectl create namespace $KYMA_EXAMPLE_NS
     kubectl apply -f deployment/deployment.yaml -n $KYMA_EXAMPLE_NS
     ```
 

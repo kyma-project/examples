@@ -35,6 +35,7 @@ kubeless get-server-config
 
     ```bash
     export KYMA_EXAMPLE_NS="{namespace}"
+    kubectl create namespace $KYMA_EXAMPLE_NS
     ```
 
 2. Create a Kubeless function to receive a JSON Event.
