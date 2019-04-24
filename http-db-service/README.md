@@ -17,7 +17,6 @@ This example demonstrates Kyma capabilities, such as HTTP endpoints that expose 
 Use these commands to build and run the service with Docker:
 
 ```
-make resolve && make build
 ./build.sh
 docker run -it --rm -p 8017:8017 http-db-service:latest
 ```
