@@ -77,7 +77,7 @@ Access the Event publishing API from the cluster through the `8080` port on the 
     # or use the fully-qualified Event publishing API service name
     curl -i \
         -H "Content-Type: application/json" \
-        -X POST http://event-bus-publish.kyma-system.svc.cluster.local:3000/v1/events \
+        -X POST http://event-bus-publish.kyma-system.svc.cluster.local:8080/v1/events \
         -d '{"source-id": "external-application", "event-type": "test-event-bus", "event-type-version": "v1", "event-time": "2018-11-02T22:08:41+00:00", "data": {"event":{"customer":{"customerID": "1234", "uid": "rick.sanchez@mail.com"}}}}'
     ```
     > **NOTE:** To send multiple Events, change the `orderCode` to have a unique value for each POST request.
@@ -88,7 +88,7 @@ Access the Event publishing API from the cluster through the `8080` port on the 
 To view the traces:
 
 1. [Access the tracing UI](https://github.com/kyma-project/kyma/blob/master/docs/tracing/docs/01-01-tracing.md).
-2. Select **webhook-service**.
+2. Select **event-publish-knative-service**.
 3. Click **Find Traces**.
 
 ### Cleanup
