@@ -38,12 +38,12 @@ Apply a battery of `yaml` files to run the example.
     kubectl get serviceinstance/redis-instance -o jsonpath='{ .status.conditions[0].reason }' -n $KYMA_EXAMPLE_NS
     ```
 
-4. Create a lambda function as a Redis client, the ServiceBindung and the ServiceBindingUsage resource:    
+4. Create a Redis client through a lambda function, along with the ServiceBinding, and the ServiceBindingUsage custom resource:    
     ```bash
     kubectl apply -f deployment/lambda-function.yaml -n $KYMA_EXAMPLE_NS
     ```
 
-5. Ensure that Redis service binding works
+5. Ensure that the Redis ServiceBinding works:
    ```bash
    kubectl get servicebinding/redis-instance-binding -o jsonpath='{ .status.conditions[0].reason }' -n $KYMA_EXAMPLE_NS
    ```
