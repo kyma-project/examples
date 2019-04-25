@@ -43,10 +43,11 @@ curl -ik https://{hostname}.kyma.local/orders
 
 #### Expose a service with authentication
 
-1. Select the **Services** button and click **Expose API**.
-2. Fill the **Host** text box and click **Create**. The name you entered is referred to as the **\{hostname\}**.
-3. Check the **Secure API** checkbox and fill the **Issuer** and **JWKS URI** fields with custom values, or leave the default ones.
-4. Click the **Save** button.
+1. [Create a service](#create-a-service)
+2. Select the **Services** button and click **Expose API**.
+3. Fill the **Host** text box and click **Create**. The name you entered is referred to as the **\{hostname\}**.
+4. Check the **Secure API** checkbox and fill the **Issuer** and **JWKS URI** fields with custom values, or leave the default ones.
+5. Click the **Save** button.
 
 #### Fetch token
 
