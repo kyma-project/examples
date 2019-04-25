@@ -22,7 +22,7 @@ You need access to the `kyma-system` Namespace to execute the described steps.
 2. Run the `port-forward` command on the `core-prometheus` service to access the Prometheus dashboard.
 
     ```bash
-    kubectl port-forward pod/prometheus-core-0 -n kyma-system 9090:9090
+    kubectl port-forward pod/prometheus-monitoring-0 -n kyma-system 9090:9090
     ```
 
     Find the **http-db-service-is-not-running** rule [here](http://localhost:9090/rules).
