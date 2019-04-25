@@ -13,6 +13,8 @@ This basic example demonstrates how to expose a service or a function through an
 
 This section contains installation steps on how to expose a service or a function through the console UI, and manually, using kubectl.
 
+>**NOTE:** Each service may have only one API.
+
 ### Exposure through the console UI
 
 #### Create a service
