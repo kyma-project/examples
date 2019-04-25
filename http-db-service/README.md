@@ -10,10 +10,12 @@ This example demonstrates Kyma capabilities, such as HTTP endpoints that expose 
 - Kyma as the target deployment environment.
 - An MSSQL database for the service's database functionality. You can also use Azure MSSQL that you can provision using the Kyma Open Service Broker API.
 - A Namespace to which to deploy the example with the `env: "true"` label. For more information, read the [related documentation](https://github.com/kyma-project/kyma/blob/master/docs/kyma/docs/03-02-namespaces.md).
+- [Golang](https://golang.org/dl/) and [dep](https://github.com/golang/dep) installed.
 
 ## Installation
 
 Use these commands to build and run the service with Docker:
+
 ```
 ./build.sh
 docker run -it --rm -p 8017:8017 http-db-service:latest
@@ -32,6 +34,7 @@ Run the following commands to deploy the published service to Kyma:
     ```
 2. Deploy the service:
     ```bash
+    kubectl create namespace $KYMA_EXAMPLE_NS
     kubectl apply -f deployment/deployment.yaml -n $KYMA_EXAMPLE_NS
     ```
 

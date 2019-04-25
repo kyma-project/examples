@@ -28,7 +28,7 @@ Apply a battery of `yaml` files to run the example.
     export KYMA_EXAMPLE_NS="{namespace}"
     ```
 
-2. Create a Redis instance and a service binding to the instance:
+2. Create a Redis instance:
     ```bash
     kubectl apply -f deployment/redis-instance.yaml -n $KYMA_EXAMPLE_NS
     ```
@@ -36,21 +36,24 @@ Apply a battery of `yaml` files to run the example.
 3. Ensure that the Redis instance is provisioned:
     ```bash
     kubectl get serviceinstance/redis-instance -o jsonpath='{ .status.conditions[0].reason }' -n $KYMA_EXAMPLE_NS
-
-    kubectl get servicebinding/redis-instance-binding -o jsonpath='{ .status.conditions[0].reason }' -n $KYMA_EXAMPLE_NS
     ```
 
-4. Create a lambda function as a Redis client, the ServiceBindung and the ServiceBindingUsage resource:
+4. Create a Redis client through a lambda function, along with the ServiceBinding, and the ServiceBindingUsage custom resource:    
     ```bash
     kubectl apply -f deployment/lambda-function.yaml -n $KYMA_EXAMPLE_NS
     ```
 
-5. Verify that the lambda function is ready:
+5. Ensure that the Redis ServiceBinding works:
+   ```bash
+   kubectl get servicebinding/redis-instance-binding -o jsonpath='{ .status.conditions[0].reason }' -n $KYMA_EXAMPLE_NS
+   ```
+
+6. Verify that the lambda function is ready:
     ```bash
     kubeless function ls redis-client -n $KYMA_EXAMPLE_NS
     ```
 
-6. Trigger the function.
+7. Trigger the function.
     The information and statistics about the Redis server appear in the logs of the function Pod.
     ```bash
     kubeless function call redis-client -n $KYMA_EXAMPLE_NS

@@ -35,7 +35,7 @@ This example shows how to expose custom metrics to Prometheus with a Golang serv
 1. Run the `port-forward` command on the `core-prometheus` service:
 
     ```bash
-    kubectl port-forward -n kyma-system svc/core-prometheus 9090:9090
+    kubectl port-forward -n kyma-system svc/monitoring-prometheus 9090:9090
     ```
 All the **sample-metrics** endpoints appear as the [`Targets`](http://localhost:9090/targets#job-sample-metrics-8081) list.
 
