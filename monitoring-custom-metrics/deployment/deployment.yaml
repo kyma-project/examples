@@ -9,7 +9,6 @@ spec:
     metadata:
       annotations:
         traffic.sidecar.istio.io/includeInboundPorts: "8080"  
-        sidecar.istio.io/inject: "true"
       labels:
         app: sample-metrics
         example: monitoring-custom-metrics

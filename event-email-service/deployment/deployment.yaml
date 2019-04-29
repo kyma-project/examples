@@ -26,8 +26,6 @@ spec:
       labels:
         app: event-email-service
         example: event-email-service
-      annotations:
-        sidecar.istio.io/inject: "true"
     spec:
       containers:
       # replace the repository URL with your own repository (e.g. {DockerID}/event-email-service:0.0.x for Docker Hub).

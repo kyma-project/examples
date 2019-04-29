@@ -27,8 +27,6 @@ spec:
       labels:
         app: http-db-service
         example: gateway
-      annotations:
-        sidecar.istio.io/inject: "true"
     spec:
       containers:
       # replace the repository URL with your own repository (e.g. {DockerID}/http-db-service:0.0.x for Docker Hub).
