@@ -43,7 +43,7 @@ curl -ik https://{hostname}.kyma.local/orders
 
 #### Expose a service with authentication
 
-1. If you followed **Expose a service without authentication** section, you have to delete previously created API. If you didn't, you can go straight to the second point. To remove previously created API select the **APIs** button, open the contextual menu for the API, select **Delete** and confirm deletion.
+1. If you **didn't** follow the steps in **Expose a service without authentication** section, go straight to step 2 of this instruction. If you did, you must delete the previously created API. Select the **APIs** button, open the contextual menu for the API, select **Delete** and confirm.
 2. Select the **Services** button and click **Expose API**.
 3. Fill the **Host** text box and click **Create**. The name you entered is referred to as the **\{hostname\}**.
 4. Check the **Secure API** checkbox and fill the **Issuer** and **JWKS URI** fields with custom values, or leave the default ones.
@@ -112,7 +112,7 @@ curl -ik https://hello.kyma.local
 
 There are two possible ways of exposing secured Api, either using the default authentication settings or the custom settings. Authentication settings consist of the JWKS URI and the Issuer.
 
-> **NOTE:** If you followed **Expose a service without authentication** section, the previously created API will be updated after applying the templates below.
+> **NOTE:** If you followed the steps in **Expose a service without authentication** section, the previously created API will be updated after applying the templates.
 
 ```bash
 # Create Api with the default authentication settings:
