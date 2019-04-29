@@ -13,7 +13,7 @@ This basic example demonstrates how to expose a service or a function through an
 
 This section contains installation steps on how to expose a service or a function through the console UI, and manually, using kubectl.
 
->**NOTE:** Each service may have only one API.
+> **NOTE:** Each service may have only one API.
 
 ### Exposure through the console UI
 
@@ -43,7 +43,7 @@ curl -ik https://{hostname}.kyma.local/orders
 
 #### Expose a service with authentication
 
-1. [Create a service](#create-a-service)
+1. If you followed [Expose a service without authentication](#Expose a service without authentication) section, you have to delete previously created API. If you didn't, you can go straight to the second point. To remove previously created API select the **APIs** button, open the contextual menu for the API, select **Delete** and confirm deletion.
 2. Select the **Services** button and click **Expose API**.
 3. Fill the **Host** text box and click **Create**. The name you entered is referred to as the **\{hostname\}**.
 4. Check the **Secure API** checkbox and fill the **Issuer** and **JWKS URI** fields with custom values, or leave the default ones.
@@ -55,8 +55,6 @@ curl -ik https://{hostname}.kyma.local/orders
 2. In the **Security** section, click the **Fetch token** button.
 3. Select the whole text and copy it to the clipboard, or click the **Copy to clipboard** button. Make sure that the word `Bearer` is also copied.
 4. The token is later referred to as **\{token\}**.
-
->**NOTE:** You do not have to expose API first. You can also fetch a token while exposing a service. After checking the **Secure API** checkbox, the **Fetch token** button appears. You can fetch the token and return without saving.
 
 #### Test the APIs with authentication
 
@@ -79,25 +77,25 @@ There are additional prerequisites to exposing a service or a function manually 
 
 #### Create a service
 
->**NOTE:** Almost all steps in this tutorial refer to a lambda but you can apply them also to the service Deployment by changing the directory and names in some places.
+> **NOTE:** Almost all steps in this tutorial refer to a lambda but you can apply them also to the service Deployment by changing the directory and names in some places.
 
 1. Export your Namespace as a variable. Replace the `{namespace}` placeholder in the following command and run it:
 
-    ```bash
-    export KYMA_EXAMPLE_NS="{namespace}"
-    ```
+   ```bash
+   export KYMA_EXAMPLE_NS="{namespace}"
+   ```
 
 2. Apply one of the `deployment.yaml` files from the `lambda` or `service` directory in this example.
 
-    ``` bash
-    kubectl apply -f ./lambda/deployment.yaml -n $KYMA_EXAMPLE_NS
-    ```
+   ```bash
+   kubectl apply -f ./lambda/deployment.yaml -n $KYMA_EXAMPLE_NS
+   ```
 
 #### Expose a service without authentication
 
 Run this command:
 
-``` bash
+```bash
 kubectl apply -f ./lambda/api-without-auth.yaml -n $KYMA_EXAMPLE_NS
 ```
 
@@ -114,7 +112,9 @@ curl -ik https://hello.kyma.local
 
 There are two possible ways of exposing secured Api, either using the default authentication settings or the custom settings. Authentication settings consist of the JWKS URI and the Issuer.
 
-``` bash
+> **NOTE:** If you followed [Expose a service without authentication](#Expose a service without authentication) section, the previously created API will be updated after applying the templates below.
+
+```bash
 # Create Api with the default authentication settings:
 kubectl apply -f ./lambda/api-with-default-auth.yaml -n $KYMA_EXAMPLE_NS
 
@@ -156,13 +156,13 @@ The problem occurs when there is an Api resource with authentication enabled, bu
 
 **Solution 3:** Check if the Pod you created has the istio-proxy container injected. Run this command:
 
-``` bash
+```bash
 kubectl get pods -n $KYMA_EXAMPLE_NS
 ```
 
 Find the Pod created with the `deployment.yaml` file and copy its name. Run this command:
 
-``` bash
+```bash
 kc get pod {pod-name} -n $KYMA_EXAMPLE_NS -o json | jq '.spec.containers[].name'
 ```
 
