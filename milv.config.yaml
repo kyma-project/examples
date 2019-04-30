@@ -1,5 +1,6 @@
-white-list-external: ["localhost", "kyma.local", "kyma-system"]
+white-list-external: ["localhost", "kyma.local", "kyma-system", "$DOMAIN"]
 black-list: ["/vendor/"]
+
 timeout: 60
 request-repeats: 5
 files:

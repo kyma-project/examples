@@ -32,6 +32,7 @@ The summary of the documentation in the `examples` repository lists all availabl
 | [Custom Metrics in Kyma](monitoring-custom-metrics/README.md) | Expose custom metrics in Kyma.  | Go, Prometheus |
 | [Event Email Service](event-email-service/README.md) | Send an automated email upon receiving an Event.  | NodeJS |
 | [Tracing](tracing/README.md) | Configure tracing for a service in Kyma. | Go |
+| [Securing resources using Hydra and Oathkeeper](ory-hydra/scenarios/client-credentials/README.md) | Secure resources with ORY Hydra OAuth 2.0 and OpenID Connect Provider and ORY Oathkeeper Reverse Proxy | Hydra, Oathkeeper, Kubeless |
 
 ## Installation
 
