@@ -1,0 +1,171 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: school-mock
+  labels:
+    app: school-mock
+    example: auth-token-relay
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: school-mock
+        example: auth-token-relay
+    spec:
+      containers:
+      - image: eu.gcr.io/kyma-project/incubator/varkes-example-combined-openapi-mock:latest
+        imagePullPolicy: Always
+        name: school-mock
+        ports:
+        - name: http
+          containerPort: 10000
+        env:
+        - name: DEBUG
+          value: "true"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: school-mock
+  labels:
+    app: school-mock
+    example: auth-token-relay
+spec:
+  ports:
+  - name: http
+    port: 10000
+  selector:
+    app: school-mock
+---
+apiVersion: gateway.kyma-project.io/v1alpha2
+kind: Api
+metadata:
+  name: school-mock
+  labels:
+    app: school-mock
+    example: auth-token-relay
+spec:
+  hostname: school-mock
+  service:
+    name: school-mock
+    port: 10000
+---
+apiVersion: kubeless.io/v1beta1
+kind: Function
+metadata:
+  name: school-function
+  labels:
+    app: school-function
+    example: auth-token-relay
+spec:
+  deployment:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: school-function
+  handler: handler.main
+  runtime: nodejs8
+  type: HTTP
+  deps: |
+    {
+      "name": "school-function",
+      "version": "0.0.1",
+      "dependencies": {
+        "request": "^2.85.0"
+      }
+    }
+  function: |-
+    const request = require('request');
+    const ACCESS_TOKEN_HEADER = "access-token";
+
+    module.exports = {
+      'school-function': (event, context) => {
+        return new Promise((resolve, reject) => {
+          console.log("Starting schools lambda function")
+
+          const request = event.extensions.request;
+
+          if (validateRequest(request)) {
+            const accessToken = request.headers[ACCESS_TOKEN_HEADER];
+            const url = `${process.env.GATEWAY_URL}/schools`;
+            const options = {
+              url: url,
+              headers: {
+                [ACCESS_TOKEN_HEADER]: `Bearer ${accessToken}`
+              },
+              json: true
+            };
+
+            request.get(options, (error, response, body) => {
+                if (!error) {
+                  if (response.statusCode == 200) {
+                    console.log('Getting schools succeeded.');
+        
+                    resolve(body);
+                  }
+                  else {
+                    reject({
+                      stack: `Getting orders returned unexpected status: ${response.statusCode}.`
+                    })
+                  }
+                } else {
+                  reject({
+                    stack: "Failed to get orders."
+                  })
+                }
+              })
+          }
+        })
+      }
+    }
+
+    function validateRequest(request) {
+      return request.headers[ACCESS_TOKEN_HEADER] != undefined
+    }
+
+---
+apiVersion: applicationconnector.kyma-project.io/v1alpha1
+kind: Application
+metadata:
+  name: school-app
+  labels:
+    app: school-app
+    example: auth-token-relay
+spec:
+  description: Application for school management
+---
+apiVersion: gateway.kyma-project.io/v1alpha2
+kind: Api
+metadata:
+  name: school-function
+  labels:
+    app: school-function
+    example: auth-token-relay
+spec:
+  authentication:
+  - type: JWT
+    jwt:
+      jwksUri: http://school-mock/keys
+      issuer: http://school-mock
+  hostname: schools
+  service:
+    name: school-function
+    port: 8080
+---
+apiVersion: applicationconnector.kyma-project.io/v1alpha1
+kind: TokenRequest
+metadata:
+  name: school-app
+  labels:
+    app: school-function
+    example: auth-token-relay
+---
+apiVersion: applicationconnector.kyma-project.io/v1alpha1
+kind: ApplicationMapping
+metadata:
+  name: school-app
+  labels:
+    app: school-function
+    example: auth-token-relay

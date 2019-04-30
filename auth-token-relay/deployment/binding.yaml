@@ -1,0 +1,36 @@
+---
+apiVersion: servicecatalog.k8s.io/v1beta1
+kind: ServiceInstance
+metadata:
+  name: school-app-api
+  labels:
+    app: school-app
+    example: auth-token-relay
+spec:
+  serviceClassExternalName: schools-api-XXX
+  servicePlanExternalName: default
+---
+apiVersion: servicecatalog.k8s.io/v1beta1
+kind: ServiceBinding
+metadata:
+  name: school-function
+  labels:
+    app: school-function
+    example: auth-token-relay
+spec:
+  instanceRef:
+    name: school-app-api
+---
+apiVersion: servicecatalog.kyma-project.io/v1alpha1
+kind: ServiceBindingUsage
+metadata:
+  name: school-function
+  labels:
+    app: school-function
+    example: auth-token-relay
+spec:
+ serviceBindingRef:
+   name: school-function
+ usedBy:
+   kind: function
+   name: school-function
