@@ -17,3 +17,4 @@ monitoring-custom-metrics/bin
 
 # Vendor
 monitoring-custom-metrics/vendor
+tests/http-db-service/vendor
