@@ -37,19 +37,6 @@
   version = "v1.7.1"
 
 [[projects]]
-  branch = "master"
-  digest = "1:106a13cb02b23c903505377a05e6e3ff647b9a68782a2572e63914261fbbc952"
-  name = "github.com/kyma-project/examples"
-  packages = [
-    "http-db-service/config",
-    "http-db-service/handler",
-    "http-db-service/internal/mssqldb",
-    "http-db-service/internal/repository",
-  ]
-  pruneopts = "UT"
-  revision = "ff4609a6e96fae8815a1a709b9e279b0573d0336"
-
-[[projects]]
   digest = "1:bc1c0be40c67b6b4aee09d7508d5a2a52c1c116b1fa43806dad2b0d6b4d4003b"
   name = "github.com/lib/pq"
   packages = [
@@ -142,10 +129,6 @@
     "github.com/Sirupsen/logrus",
     "github.com/denisenkom/go-mssqldb",
     "github.com/gorilla/mux",
-    "github.com/kyma-project/examples/http-db-service/config",
-    "github.com/kyma-project/examples/http-db-service/handler",
-    "github.com/kyma-project/examples/http-db-service/internal/mssqldb",
-    "github.com/kyma-project/examples/http-db-service/internal/repository",
     "github.com/lib/pq",
     "github.com/pkg/errors",
     "github.com/rs/cors",
