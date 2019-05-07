@@ -1,4 +1,4 @@
-FROM golang:1.10-alpine
+FROM golang:1.12-alpine
 
 ENV SRC_DIR=/go/src/github.com/kyma-project/examples/tests/http-db-service
 

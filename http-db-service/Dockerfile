@@ -1,4 +1,4 @@
-FROM golang:1.10 as builder
+FROM golang:1.12 as builder
 ARG DOCK_PKG_DIR=/go/src/github.com/kyma-project/examples/http-db-service/
 ADD . $DOCK_PKG_DIR
 WORKDIR $DOCK_PKG_DIR
