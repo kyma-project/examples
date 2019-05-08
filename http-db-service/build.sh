@@ -3,9 +3,6 @@
 # docker image name.
 PACKAGE_NAME=http-db-service
 
-# go binary name.
-BINARY_ARTIFACT_EXAMPLE=main
-
 set -e
 set -u
 set -o pipefail
@@ -17,13 +14,10 @@ VERBOSE=true
 HELP=false
 APP_VERSION=latest
 
-declare IMAGE_NAME_BROKER
 declare DOCKER_SYSTEM_NAME
 declare IMAGE_NAME_EXAMPLE=${PACKAGE_NAME}:${APP_VERSION}
 
-RED='\033[0;31m'
 GREEN='\033[0;32m'
-INVERTED='\033[7m'
 NC='\033[0m' # No Color
 
 function usage() {
@@ -107,9 +101,9 @@ if [[ ${VERBOSE} == "true" ]]; then echo -e "${GREEN}Build Example binary locall
 
 if [[ ${VERBOSE} == "true" ]]; then
     echo -e "${GREEN}Build docker image ${IMAGE_NAME_EXAMPLE} ${NC}"
-    docker build -t ${IMAGE_NAME_EXAMPLE} -f Dockerfile .
+    docker build -t "${IMAGE_NAME_EXAMPLE}" -f Dockerfile .
     echo -e "${GREEN}Built Docker image successfully...${NC}"
 else
-    docker build -t ${IMAGE_NAME_EXAMPLE} -f Dockerfile . > /dev/null
+    docker build -t "${IMAGE_NAME_EXAMPLE}" -f Dockerfile . > /dev/null
 fi
 
