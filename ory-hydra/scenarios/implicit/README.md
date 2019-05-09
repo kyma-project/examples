@@ -40,12 +40,12 @@ The scenario consists of following steps:
 * Replace `<domainName>` with the proper domain name of your ingress gateway for cluster installations or **kyma.local** for local installation.
   Run:  `export DOMAIN_NAME=<domainName>`
 
-* Run  `curl -ik -X POST "https://oauth2-admin.${DOMAIN_NAME}/clients" -d '{"grant_types":["implicit"], "response_types":["id_token"], "scope":"openid", "redirect_uris":["http://localhost:8080/callback"], "client_id":"implicit-client", "client_secret":"some-secret"}'`
+* Run  `curl -ik -X POST "https://oauth2-admin.$DOMAIN_NAME/clients" -d '{"grant_types":["implicit"], "response_types":["id_token"], "scope":"openid", "redirect_uris":["http://localhost:8080/callback"], "client_id":"implicit-client", "client_secret":"some-secret"}'`
 
 _Note: The client is using `http://localhost:8080/callback` redirect URI. This doesn't have to be an URL of any real application. Since OpenID Connect Implict flow is browser-based, it's only important to have a valid URL here. The final redirect of the flow contains the token. In case the application does not exist, the browser will report a non-existing address, but the token will be present in the address bar._
 
 ### Fetch a JWT token
-* create an OpenID Connect token request: `echo "http://oauth2.${DOMAIN_NAME}/oauth2/auth?client_id=implicit-client&response_type=id_token&scope=openid&state=8230b269ffa679e9c662cd10e1f1b145&redirect_uri=http://localhost:8080/callback&nonce=$(date | md5)"`
+* create an OpenID Connect token request: `echo "http://oauth2.$DOMAIN_NAME/oauth2/auth?client_id=implicit-client&response_type=id_token&scope=openid&state=8230b269ffa679e9c662cd10e1f1b145&redirect_uri=http://localhost:8080/callback&nonce=$(date | md5)"`
 * Copy the URL into your browser
 * Authenticate. After successful authentication, you should be redirected to the address that looks like this: `http://localhost:8080/callback#id_token=eyJ...&state=8230b269ffa679e9c662cd10e1f1b145`
 * Copy the **id_token** value from the browser address bar. It is long!
