@@ -47,8 +47,8 @@ _Note: The client is using `http://localhost:8080/callback` redirect URI. This d
 ### Fetch a JWT token
 * create an OpenID Connect token request: `echo "http://oauth2.${DOMAIN_NAME}/oauth2/auth?client_id=implicit-client&response_type=id_token&scope=openid&state=8230b269ffa679e9c662cd10e1f1b145&redirect_uri=http://localhost:8080/callback&nonce=$(date | md5)"`
 * Copy the URL into your browser
-* Authenticate. After successful authentication, you should be redirected to the address `http://localhost:8080/callback#id_token=eyJ...s2k&state=8230b269ffa679e9c662cd10e1f1b145`
-* Copy the **id_token** value from the browser address bar (it is long!).
+* Authenticate. After successful authentication, you should be redirected to the address that looks like this: `http://localhost:8080/callback#id_token=eyJ...&state=8230b269ffa679e9c662cd10e1f1b145`
+* Copy the **id_token** value from the browser address bar. It is long!
 * `export JWT=<copied id_token value>`
 
 ### Call the lambda with the token
