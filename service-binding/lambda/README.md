@@ -15,7 +15,7 @@ The example covers these tasks:
 ## Prerequisites
 
 - Install the Kubeless CLI as described in the [Kubeless installation guide](https://kubeless.io/docs/quick-start/).
-- A Namespace to which you deploy the example with the `env: "true"` label. For more information, read the [related documentation](https://github.com/kyma-project/kyma/blob/master/docs/kyma/docs/03-02-namespaces.md).
+- A Namespace to which you deploy the example with the `env: "true"` label. For more information, read the [related documentation](https://kyma-project.io/docs/root/kyma/#details-namespaces).
 
 ## Installation
 
