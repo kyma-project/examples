@@ -8,7 +8,7 @@ This example illustrates how to write a service in `NodeJS` that listens for Eve
 
 - A [Docker](https://docs.docker.com/install) installation.
 - Kyma as the target deployment environment.
-- A Namespace to which to deploy the example with the `env: "true"` label. For more information, read the [related documentation](https://github.com/kyma-project/kyma/blob/master/docs/kyma/docs/03-02-namespaces.md).
+- A Namespace to which to deploy the example with the `env: "true"` label. For more information, read the [related documentation](https://kyma-project.io/docs/root/kyma/#details-namespaces).
 
 ## Installation
 

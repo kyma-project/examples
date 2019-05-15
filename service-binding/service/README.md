@@ -15,7 +15,7 @@ The example covers the following tasks:
 
 - Kyma as the target deployment environment.
 - [Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) CLI tool to deploy the example's resources to Kyma.
-- A Namespace to which you deploy the example with the `env: "true"` label. For more information, read the [related documentation](https://github.com/kyma-project/kyma/blob/master/docs/kyma/docs/03-02-namespaces.md).
+- A Namespace to which you deploy the example with the `env: "true"` label. For more information, read the [related documentation](https://kyma-project.io/docs/root/kyma/#details-namespaces).
 
 ## Installation
 
@@ -56,7 +56,7 @@ Run the following commands to provision a managed MSSQL database, create a bindi
     kubectl port-forward -n $KYMA_EXAMPLE_NS $(kubectl get pod -n $KYMA_EXAMPLE_NS -l example=service-binding | grep http-db-service | awk '{print $1}') 8017
     ```
 8. Check that the service works as expected.
-    
+
     Create an order:
     ```bash
     curl -d '{"orderId":"66", "total":9000}' -H "Content-Type: application/json" -X POST http://localhost:8017/orders
