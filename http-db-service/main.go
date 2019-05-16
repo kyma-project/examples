@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/kyma-project/examples/http-db-service/handler/events"
 	"log"
 	"net/http"
 
@@ -24,20 +25,25 @@ func main() {
 	}
 	log.Print(cfg)
 
-	repo, err := repository.Create(cfg.DbType)
+	router := mux.NewRouter().StrictSlash(true)
+
+	addOrderHandlers(router, cfg.DbType)
+	addEventsHandler(router)
+	addAPIHandler(router)
+
+	if err := startService(cfg.Port, router); err != nil {
+		log.Fatal("Unable to start server", err)
+	}
+}
+
+func addOrderHandlers(router *mux.Router, dbType string) {
+
+	repo, err := repository.Create(dbType)
 	if err != nil {
 		log.Fatal("Unable to initiate repository", err)
 	}
 
 	orderHandler := handler.NewOrderHandler(repo)
-
-	if err := startService(orderHandler, cfg.Port); err != nil {
-		log.Fatal("Unable to start server", err)
-	}
-}
-
-func startService(orderHandler handler.Order, port string) error {
-	router := mux.NewRouter().StrictSlash(true)
 
 	// orders
 	router.HandleFunc("/orders", orderHandler.InsertOrder).Methods(http.MethodPost)
@@ -47,11 +53,20 @@ func startService(orderHandler handler.Order, port string) error {
 
 	router.HandleFunc("/orders", orderHandler.DeleteOrders).Methods(http.MethodDelete)
 	router.HandleFunc("/namespace/{namespace}/orders", orderHandler.DeleteNamespaceOrders).Methods(http.MethodDelete)
+}
 
+func addEventsHandler(router *mux.Router) {
+	router.HandleFunc("/events/order/created", events.HandleOrderCreatedEvent).Methods(http.MethodPost)
+
+}
+
+func addAPIHandler(router *mux.Router) {
 	// API
 	router.HandleFunc("/", handler.SwaggerAPIRedirectHandler).Methods(http.MethodGet)
 	router.HandleFunc("/api.yaml", handler.SwaggerAPIHandler).Methods(http.MethodGet)
+}
 
+func startService(port string, router *mux.Router) error {
 	log.Printf("Starting server on port %s ", port)
 
 	c := cors.AllowAll()

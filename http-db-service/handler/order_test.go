@@ -3,6 +3,7 @@ package handler
 import (
 	"bytes"
 	"fmt"
+	"github.com/kyma-project/examples/http-db-service/handler/utils"
 
 	"encoding/json"
 	"errors"
@@ -60,7 +61,7 @@ func TestCreateOrderValidation(t *testing.T) {
 	require.NoError(t, err)
 
 	// then
-	var m errorResponse
+	var m utils.ErrorResponse
 
 	b, err := ioutil.ReadAll(res.Body)
 	require.NoError(t, err)
@@ -101,7 +102,7 @@ func TestCreateOrderConflict(t *testing.T) {
 	require.NoError(t, err)
 
 	// then
-	var errorResponse errorResponse
+	var errorResponse utils.ErrorResponse
 
 	responseBody, err := ioutil.ReadAll(response.Body)
 	require.NoError(t, err)
@@ -144,7 +145,7 @@ func TestOrderCreateInternalError(t *testing.T) {
 	require.NoError(t, err)
 	defer response.Body.Close()
 
-	var errorResponse errorResponse
+	var errorResponse utils.ErrorResponse
 	json.Unmarshal(responseBody, &errorResponse)
 
 	assert.Equal(t, 500, errorResponse.Status)
@@ -247,7 +248,7 @@ func TestGetOrderInternalError(t *testing.T) {
 	require.NoError(t, err)
 
 	// then
-	var m errorResponse
+	var m utils.ErrorResponse
 
 	b, err := ioutil.ReadAll(res.Body)
 	require.NoError(t, err)
@@ -329,7 +330,7 @@ func TestDeletingOrdersInternalError(t *testing.T) {
 
 	// then
 	require.NoError(t, err)
-	var m errorResponse
+	var m utils.ErrorResponse
 
 	b, err := ioutil.ReadAll(res.Body)
 	require.NoError(t, err)
