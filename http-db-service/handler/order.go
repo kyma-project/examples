@@ -3,7 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/kyma-project/examples/http-db-service/handler/utils"
+	"github.com/kyma-project/examples/http-db-service/handler/response"
 	"io/ioutil"
 	"net/http"
 
@@ -31,7 +31,7 @@ func (orderHandler Order) InsertOrder(w http.ResponseWriter, r *http.Request) {
 	b, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		log.Error("Error parsing request.", err)
-		utils.RespondWithCodeAndMessage(http.StatusInternalServerError, "Internal error.", w)
+		response.WriteCodeAndMessage(http.StatusInternalServerError, "Internal error.", w)
 		return
 	}
 
@@ -39,7 +39,7 @@ func (orderHandler Order) InsertOrder(w http.ResponseWriter, r *http.Request) {
 	var order repository.Order
 	err = json.Unmarshal(b, &order)
 	if err != nil || order.OrderId == "" || order.Total == 0 {
-		utils.RespondWithCodeAndMessage(http.StatusBadRequest, "Invalid request body, orderId / total fields cannot be empty.", w)
+		response.WriteCodeAndMessage(http.StatusBadRequest, "Invalid request body, orderId / total fields cannot be empty.", w)
 		return
 	}
 	if order.Namespace == "" {
@@ -53,10 +53,10 @@ func (orderHandler Order) InsertOrder(w http.ResponseWriter, r *http.Request) {
 	case nil:
 		w.WriteHeader(http.StatusCreated)
 	case repository.ErrDuplicateKey:
-		utils.RespondWithCodeAndMessage(http.StatusConflict, fmt.Sprintf("Order %s already exists.", order.OrderId), w)
+		response.WriteCodeAndMessage(http.StatusConflict, fmt.Sprintf("Order %s already exists.", order.OrderId), w)
 	default:
 		log.Error(fmt.Sprintf("Error inserting order: '%+v'", order), err)
-		utils.RespondWithCodeAndMessage(http.StatusInternalServerError, "Internal error.", w)
+		response.WriteCodeAndMessage(http.StatusInternalServerError, "Internal error.", w)
 	}
 }
 
@@ -68,13 +68,13 @@ func (orderHandler Order) GetOrders(w http.ResponseWriter, r *http.Request) {
 	orders, err := orderHandler.repository.GetOrders()
 	if err != nil {
 		log.Error("Error retrieving orders.", err)
-		utils.RespondWithCodeAndMessage(http.StatusInternalServerError, "Internal error.", w)
+		response.WriteCodeAndMessage(http.StatusInternalServerError, "Internal error.", w)
 		return
 	}
 
 	if err = respondOrders(orders, w); err != nil {
 		log.Error("Error sending orders response.", err)
-		utils.RespondWithCodeAndMessage(http.StatusInternalServerError, "Internal error.", w)
+		response.WriteCodeAndMessage(http.StatusInternalServerError, "Internal error.", w)
 		return
 	}
 }
@@ -84,7 +84,7 @@ func (orderHandler Order) GetOrders(w http.ResponseWriter, r *http.Request) {
 func (orderHandler Order) GetNamespaceOrders(w http.ResponseWriter, r *http.Request) {
 	ns, exists := mux.Vars(r)["namespace"]
 	if !exists {
-		utils.RespondWithCodeAndMessage(http.StatusBadRequest, "No namespace provided.", w)
+		response.WriteCodeAndMessage(http.StatusBadRequest, "No namespace provided.", w)
 		return
 	}
 
@@ -93,13 +93,13 @@ func (orderHandler Order) GetNamespaceOrders(w http.ResponseWriter, r *http.Requ
 	orders, err := orderHandler.repository.GetNamespaceOrders(ns)
 	if err != nil {
 		log.Error("Error retrieving orders.", err)
-		utils.RespondWithCodeAndMessage(http.StatusInternalServerError, "Internal error.", w)
+		response.WriteCodeAndMessage(http.StatusInternalServerError, "Internal error.", w)
 		return
 	}
 
 	if err = respondOrders(orders, w); err != nil {
 		log.Error("Error sending orders response.", err)
-		utils.RespondWithCodeAndMessage(http.StatusInternalServerError, "Internal error.", w)
+		response.WriteCodeAndMessage(http.StatusInternalServerError, "Internal error.", w)
 		return
 	}
 }
@@ -124,7 +124,7 @@ func (orderHandler Order) DeleteOrders(w http.ResponseWriter, r *http.Request) {
 
 	if err := orderHandler.repository.DeleteOrders(); err != nil {
 		log.Error("Error deleting orders.", err)
-		utils.RespondWithCodeAndMessage(http.StatusInternalServerError, "Internal error.", w)
+		response.WriteCodeAndMessage(http.StatusInternalServerError, "Internal error.", w)
 		return
 	}
 	w.WriteHeader(http.StatusNoContent)
@@ -134,14 +134,14 @@ func (orderHandler Order) DeleteOrders(w http.ResponseWriter, r *http.Request) {
 func (orderHandler Order) DeleteNamespaceOrders(w http.ResponseWriter, r *http.Request) {
 	ns, exists := mux.Vars(r)["namespace"]
 	if !exists {
-		utils.RespondWithCodeAndMessage(http.StatusBadRequest, "No namespace provided.", w)
+		response.WriteCodeAndMessage(http.StatusBadRequest, "No namespace provided.", w)
 		return
 	}
 
 	log.Debugf("Deleting orders in namespace %s\n", ns)
 	if err := orderHandler.repository.DeleteNamespaceOrders(ns); err != nil {
 		log.Errorf("Deleting orders in namespace %s\n. %s", ns, err)
-		utils.RespondWithCodeAndMessage(http.StatusInternalServerError, "Internal error.", w)
+		response.WriteCodeAndMessage(http.StatusInternalServerError, "Internal error.", w)
 		return
 	}
 	w.WriteHeader(http.StatusNoContent)

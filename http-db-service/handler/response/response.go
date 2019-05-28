@@ -1,4 +1,4 @@
-package utils
+package response
 
 import (
 	"encoding/json"
@@ -6,15 +6,15 @@ import (
 	"net/http"
 )
 
-type ErrorResponse struct {
+type Body struct {
 	Status  int    `json:"status"`
 	Message string `json:"message"`
 }
 
-func RespondWithCodeAndMessage(code int, msg string, w http.ResponseWriter) {
+func WriteCodeAndMessage(code int, msg string, w http.ResponseWriter) {
 	w.Header().Set("Content-Type", "application/json;charset=UTF-8")
 	w.WriteHeader(code)
-	response := ErrorResponse{code, msg}
+	response := Body{code, msg}
 	if err := json.NewEncoder(w).Encode(response); err != nil {
 		log.Error("Error sending response", err)
 	}

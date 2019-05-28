@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	log "github.com/Sirupsen/logrus"
-	"github.com/kyma-project/examples/http-db-service/handler/utils"
+	"github.com/kyma-project/examples/http-db-service/handler/response"
 	"github.com/kyma-project/examples/http-db-service/internal/repository"
 	"io/ioutil"
 	"net/http"
@@ -15,7 +15,7 @@ func HandleOrderCreatedEvent(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		log.Error("error parsing request", err)
-		utils.RespondWithCodeAndMessage(http.StatusInternalServerError, "Internal error.", w)
+		response.WriteCodeAndMessage(http.StatusInternalServerError, "Internal error.", w)
 		return
 	}
 
@@ -25,7 +25,7 @@ func HandleOrderCreatedEvent(w http.ResponseWriter, r *http.Request) {
 	err = json.Unmarshal(b, &event)
 
 	if err != nil || event.OrderCode == "" {
-		utils.RespondWithCodeAndMessage(http.StatusBadRequest, "Invalid request body, orderCode cannot be empty.", w)
+		response.WriteCodeAndMessage(http.StatusBadRequest, "Invalid request body, orderCode cannot be empty.", w)
 		return
 	}
 	fmt.Println("handle order create called.")
