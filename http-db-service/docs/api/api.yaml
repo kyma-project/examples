@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: Order service API
+  title: Order service and Events API
   version: "0.0.1"
 paths:
   /orders:
@@ -71,6 +71,23 @@ paths:
           description: Bad request.
         '500':
           description: Internal server error.
+  /events/order/created:
+    post:
+      description: Handle order created event
+      tags:
+        - events orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderCreatedEvent'
+      responses:
+        '200':
+          description: Order created event handled successfully.
+        '400':
+          description: Bad request.
+        '500':
+          description: Internal Server error.
 components:
   schemas:
     Order:
@@ -92,3 +109,11 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Order'
+    OrderCreatedEvent:
+      type: object
+      properties:
+        orderCode:
+          type: string
+          example: 76272727
+      required:
+        - orderCode

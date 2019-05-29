@@ -23,3 +23,7 @@ type OrderRepository interface {
 
 // ErrDuplicateKey is thrown when there is an attempt to create an order with an OrderId which already is used.
 var ErrDuplicateKey = errors.New("Duplicate key")
+
+type OrderCreatedEvent struct {
+	OrderCode string `json:"orderCode"`
+}

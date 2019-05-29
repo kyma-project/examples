@@ -2,12 +2,13 @@ package handler
 
 import (
 	"encoding/json"
+	"fmt"
+	"github.com/kyma-project/examples/http-db-service/handler/response"
 	"io/ioutil"
 	"net/http"
-	"fmt"
 
-	"github.com/gorilla/mux"
 	log "github.com/Sirupsen/logrus"
+	"github.com/gorilla/mux"
 
 	"github.com/kyma-project/examples/http-db-service/internal/repository"
 )
@@ -24,18 +25,13 @@ func NewOrderHandler(repository repository.OrderRepository) Order {
 	return Order{repository}
 }
 
-type errorResponse struct {
-	Status  int    `json:"status"`
-	Message string `json:"message"`
-}
-
 // InsertOrder handles an http request for creating an Order given in JSON format.
 // The handler also validates the Order payload fields and handles duplicate entry or unexpected errors.
 func (orderHandler Order) InsertOrder(w http.ResponseWriter, r *http.Request) {
 	b, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		log.Error("Error parsing request.", err)
-		respondWithCodeAndMessage(http.StatusInternalServerError, "Internal error.", w)
+		response.WriteCodeAndMessage(http.StatusInternalServerError, "Internal error.", w)
 		return
 	}
 
@@ -43,7 +39,7 @@ func (orderHandler Order) InsertOrder(w http.ResponseWriter, r *http.Request) {
 	var order repository.Order
 	err = json.Unmarshal(b, &order)
 	if err != nil || order.OrderId == "" || order.Total == 0 {
-		respondWithCodeAndMessage(http.StatusBadRequest, "Invalid request body, orderId / total fields cannot be empty.", w)
+		response.WriteCodeAndMessage(http.StatusBadRequest, "Invalid request body, orderId / total fields cannot be empty.", w)
 		return
 	}
 	if order.Namespace == "" {
@@ -54,14 +50,14 @@ func (orderHandler Order) InsertOrder(w http.ResponseWriter, r *http.Request) {
 	err = orderHandler.repository.InsertOrder(order)
 
 	switch err {
-		case nil:
-			w.WriteHeader(http.StatusCreated)
-		case repository.ErrDuplicateKey:
-			respondWithCodeAndMessage(http.StatusConflict, fmt.Sprintf("Order %s already exists.", order.OrderId), w)
-		default:
-			log.Error(fmt.Sprintf("Error inserting order: '%+v'", order), err)
-			respondWithCodeAndMessage(http.StatusInternalServerError, "Internal error.", w)
-   }
+	case nil:
+		w.WriteHeader(http.StatusCreated)
+	case repository.ErrDuplicateKey:
+		response.WriteCodeAndMessage(http.StatusConflict, fmt.Sprintf("Order %s already exists.", order.OrderId), w)
+	default:
+		log.Error(fmt.Sprintf("Error inserting order: '%+v'", order), err)
+		response.WriteCodeAndMessage(http.StatusInternalServerError, "Internal error.", w)
+	}
 }
 
 // GetOrders handles an http request for retrieving all Orders from all namespaces.
@@ -72,13 +68,13 @@ func (orderHandler Order) GetOrders(w http.ResponseWriter, r *http.Request) {
 	orders, err := orderHandler.repository.GetOrders()
 	if err != nil {
 		log.Error("Error retrieving orders.", err)
-		respondWithCodeAndMessage(http.StatusInternalServerError, "Internal error.", w)
+		response.WriteCodeAndMessage(http.StatusInternalServerError, "Internal error.", w)
 		return
 	}
 
 	if err = respondOrders(orders, w); err != nil {
 		log.Error("Error sending orders response.", err)
-		respondWithCodeAndMessage(http.StatusInternalServerError, "Internal error.", w)
+		response.WriteCodeAndMessage(http.StatusInternalServerError, "Internal error.", w)
 		return
 	}
 }
@@ -88,7 +84,7 @@ func (orderHandler Order) GetOrders(w http.ResponseWriter, r *http.Request) {
 func (orderHandler Order) GetNamespaceOrders(w http.ResponseWriter, r *http.Request) {
 	ns, exists := mux.Vars(r)["namespace"]
 	if !exists {
-		respondWithCodeAndMessage(http.StatusBadRequest, "No namespace provided.", w)
+		response.WriteCodeAndMessage(http.StatusBadRequest, "No namespace provided.", w)
 		return
 	}
 
@@ -97,13 +93,13 @@ func (orderHandler Order) GetNamespaceOrders(w http.ResponseWriter, r *http.Requ
 	orders, err := orderHandler.repository.GetNamespaceOrders(ns)
 	if err != nil {
 		log.Error("Error retrieving orders.", err)
-		respondWithCodeAndMessage(http.StatusInternalServerError, "Internal error.", w)
+		response.WriteCodeAndMessage(http.StatusInternalServerError, "Internal error.", w)
 		return
 	}
 
 	if err = respondOrders(orders, w); err != nil {
 		log.Error("Error sending orders response.", err)
-		respondWithCodeAndMessage(http.StatusInternalServerError, "Internal error.", w)
+		response.WriteCodeAndMessage(http.StatusInternalServerError, "Internal error.", w)
 		return
 	}
 }
@@ -128,7 +124,7 @@ func (orderHandler Order) DeleteOrders(w http.ResponseWriter, r *http.Request) {
 
 	if err := orderHandler.repository.DeleteOrders(); err != nil {
 		log.Error("Error deleting orders.", err)
-		respondWithCodeAndMessage(http.StatusInternalServerError, "Internal error.", w)
+		response.WriteCodeAndMessage(http.StatusInternalServerError, "Internal error.", w)
 		return
 	}
 	w.WriteHeader(http.StatusNoContent)
@@ -138,24 +134,15 @@ func (orderHandler Order) DeleteOrders(w http.ResponseWriter, r *http.Request) {
 func (orderHandler Order) DeleteNamespaceOrders(w http.ResponseWriter, r *http.Request) {
 	ns, exists := mux.Vars(r)["namespace"]
 	if !exists {
-		respondWithCodeAndMessage(http.StatusBadRequest, "No namespace provided.", w)
+		response.WriteCodeAndMessage(http.StatusBadRequest, "No namespace provided.", w)
 		return
 	}
 
 	log.Debugf("Deleting orders in namespace %s\n", ns)
 	if err := orderHandler.repository.DeleteNamespaceOrders(ns); err != nil {
 		log.Errorf("Deleting orders in namespace %s\n. %s", ns, err)
-		respondWithCodeAndMessage(http.StatusInternalServerError, "Internal error.", w)
+		response.WriteCodeAndMessage(http.StatusInternalServerError, "Internal error.", w)
 		return
 	}
 	w.WriteHeader(http.StatusNoContent)
-}
-
-func respondWithCodeAndMessage(code int, msg string, w http.ResponseWriter) {
-	w.Header().Set("Content-Type", "application/json;charset=UTF-8")
-	w.WriteHeader(code)
-	response := errorResponse{code, msg}
-	if err := json.NewEncoder(w).Encode(response); err != nil {
-		log.Error("Error sending response", err)
-	}
 }
