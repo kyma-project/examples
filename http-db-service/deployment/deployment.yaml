@@ -30,7 +30,7 @@ spec:
     spec:
       containers:
       # replace the repository URL with your own repository (e.g. {DockerID}/http-db-service:0.0.x for Docker Hub).
-      - image: eu.gcr.io/kyma-project/example/http-db-service:0.0.6
+      - image: eu.gcr.io/kyma-project/develop/http-db-service:47d43e19
         imagePullPolicy: IfNotPresent
         name: http-db-service
         ports:
