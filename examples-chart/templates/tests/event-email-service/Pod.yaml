@@ -6,6 +6,7 @@ metadata:
   name: "{{ .Release.Name }}-event-email-service-tests-{{ randAlphaNum 5 | lower }}"
   labels:
     example: event-email-service
+    app: event-email-service-test
     chart: examples-tests
   annotations:
     "helm.sh/hook": test-success

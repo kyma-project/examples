@@ -47,7 +47,7 @@ kubeless get-server-config
     Run this command:
 
     ```bash
-    kubeless function deploy hello-with-data --label example=event-bus-lambda-subscription --runtime nodejs8 --handler hello-with-data.main --from-file js/hello-with-data.js -n $KYMA_EXAMPLE_NS
+    kubeless function deploy hello-with-data --label example=event-subscription-lambda --runtime nodejs8 --handler hello-with-data.main --from-file js/hello-with-data.js -n $KYMA_EXAMPLE_NS
     ```
 
 3. Set your Namespace on the subscription endpoint:
@@ -101,5 +101,5 @@ kubeless get-server-config
 Run this command to remove the example and all of its resources:
 
 ```bash
-kubectl delete all -l example=event-bus-lambda-subscription -n $KYMA_EXAMPLE_NS
+kubectl delete all -l example=event-subscription-lambda -n $KYMA_EXAMPLE_NS
 ```

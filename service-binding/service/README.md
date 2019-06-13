@@ -71,7 +71,7 @@ Run the following commands to provision a managed MSSQL database, create a bindi
 Run the following command to completely remove the example and all its resources from the cluster:
 
 ```bash
-kubectl delete all,sbu,servicebinding,serviceinstance -l example=service-binding -n $KYMA_EXAMPLE_NS
+kubectl delete all,sbu,servicebinding,serviceinstance -l example=service-binding-service -n $KYMA_EXAMPLE_NS
 ```
 
 ## Troubleshooting

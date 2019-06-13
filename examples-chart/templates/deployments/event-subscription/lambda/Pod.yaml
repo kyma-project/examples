@@ -6,6 +6,7 @@ metadata:
   name: "{{ .Release.Name }}-event-subscription-lambda-deploy-{{ randAlphaNum 5 | lower }}"
   labels:
     example: event-subscription-lambda
+    app: event-subscription-lambda-test
     chart: examples
 spec:
   serviceAccountName: {{ .Release.Name }}-examples-service-account

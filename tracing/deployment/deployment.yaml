@@ -16,6 +16,7 @@ metadata:
   name: order-front
   labels:
     example: tracing
+    app: order-front
 spec:
   type: ClusterIP
   ports:
@@ -31,11 +32,13 @@ metadata:
   name: order-front
   labels:
     example: tracing
+    app: order-front
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: order-front
+      example: tracing
   template:
     metadata:
       labels:
@@ -63,6 +66,7 @@ metadata:
   name: db-service
   labels:
     example: tracing
+    app: db-service
 spec:
   type: ClusterIP
   ports:
@@ -78,10 +82,12 @@ metadata:
   name: db-service
   labels:
     example: tracing
+    app: db-service
 spec:
   replicas: 1
   selector:
     matchLabels:
+      example: tracing
       app: db-service
   template:
     metadata:

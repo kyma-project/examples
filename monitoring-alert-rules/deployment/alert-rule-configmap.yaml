@@ -15,7 +15,6 @@ data:
 kind: ConfigMap
 metadata:
   labels:
-    app: Kyma
     prometheus: monitoring
     role: alert-rules
     example: monitoring-alert-rules

@@ -97,7 +97,7 @@ Exit the example publisher container and perform a cleanup using this command:
 
 ```bash
 exit
-kubectl delete all,subscription,eventactivation -l example=event-bus -n $KYMA_EXAMPLE_NS
+kubectl delete all,subscription,eventactivation -l example=event-subscription-service -n $KYMA_EXAMPLE_NS
 ```
 
 ## Troubleshooting

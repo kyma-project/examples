@@ -4,7 +4,8 @@ kind: Function
 metadata:
   name: hello
   labels:
-    example: gateway
+    example: gateway-lambda
+    app: hello
 spec:
   deployment:
     spec:

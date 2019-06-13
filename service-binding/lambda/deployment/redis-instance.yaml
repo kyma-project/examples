@@ -4,7 +4,7 @@ kind: ServiceInstance
 metadata:
   name: redis-instance
   labels:
-    example: service-binding
+    example: service-binding-lambda
 spec:
   clusterServiceClassExternalName: redis
   clusterServicePlanExternalName: micro

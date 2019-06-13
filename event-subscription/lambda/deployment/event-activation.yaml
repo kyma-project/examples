@@ -3,6 +3,6 @@ kind: EventActivation
 metadata:
   name: hello-with-data-activation
   labels:
-    example: event-bus-lambda-subscription
+    example: event-subscription-lambda
 spec:
   sourceId: external-application

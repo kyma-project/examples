@@ -6,6 +6,7 @@ metadata:
   name: "{{ .Release.Name }}-http-db-service-tests-{{ randAlphaNum 5 | lower }}"
   labels:
     example: http-db-service
+    app: http-db-service-test
     chart: examples-tests
   annotations:
     "helm.sh/hook": test-success

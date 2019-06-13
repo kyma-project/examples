@@ -4,6 +4,7 @@ metadata:
   name: event-email-service
   labels:
     example: event-email-service
+    app: event-email-service
 spec:
   ports:
   - name: http
@@ -16,11 +17,15 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: event-email-service
+  labels:
+    app: event-email-service
+    example: event-email-service
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: event-email-service
+      example: event-email-service
   template:
     metadata:
       labels:

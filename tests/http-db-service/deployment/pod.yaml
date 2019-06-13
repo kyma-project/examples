@@ -3,6 +3,7 @@ kind: Pod
 metadata:
   labels:
     app: http-db-service-acceptance-tests
+    example: http-db-service
   name: http-db-service-acceptance-tests
 spec:
   containers:
