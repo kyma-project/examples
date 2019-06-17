@@ -16,7 +16,6 @@ Follow it to:
 
 - After installing the CLI, export the name of the `kubeless config` configmap resource name and the `namespace` where it is located into the shell environment.
 
-- A Namespace to which to deploy the example with the `env: "true"` label. For more information, read the [related documentation](https://kyma-project.io/docs/root/kyma/#details-namespaces).
 
 ```bash
 export KUBELESS_CONFIG=core-kubeless-config

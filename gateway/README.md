@@ -7,7 +7,7 @@ This basic example demonstrates how to expose a service or a function through an
 ## Prerequisites
 
 - Kyma as the target deployment environment.
-- A Namespace to which you deploy the example with the `env: "true"` label. For more information, read the [related documentation](https://kyma-project.io/docs/root/kyma/#details-namespaces).
+
 
 ## Installation
 

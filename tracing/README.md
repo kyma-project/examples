@@ -10,7 +10,6 @@ To understand how traces are propagated, see the [Go application](src/order-fron
 
 - Kyma as the target deployment environment.
 - Helm for local installation.
-- A Namespace to which you deploy the example with the `env: "true"` label. For more information, read the [related documentation](https://kyma-project.io/docs/root/kyma/#details-namespaces).
 
 
 ## Installation

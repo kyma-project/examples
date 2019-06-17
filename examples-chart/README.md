@@ -8,7 +8,7 @@ This chart provides an easy way to deploy and test the examples.
 
 - Kubernetes 1.10+
 - Kyma as the target deployment environment.
-- A Namespace to deploy the examples with the `env: "true"` label. For more information, read the [related documentation](https://kyma-project.io/docs/root/kyma/#details-namespaces).
+
 
 ## Details
 
