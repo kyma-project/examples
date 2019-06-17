@@ -9,7 +9,6 @@ This example demonstrates Kyma capabilities, such as HTTP endpoints that expose 
 - A [Docker](https://docs.docker.com/install) installation.
 - Kyma as the target deployment environment.
 - An MSSQL database for the service's database functionality. You can also use Azure MSSQL that you can provision using the Kyma Open Service Broker API.
-- A Namespace to which to deploy the example with the `env: "true"` label. For more information, read the [related documentation](https://kyma-project.io/docs/root/kyma/#details-namespaces).
 - [Golang](https://golang.org/dl/) and [dep](https://github.com/golang/dep) installed.
 
 ## Installation

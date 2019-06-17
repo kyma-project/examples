@@ -10,7 +10,7 @@ This example shows how to expose custom metrics to Prometheus with a Golang serv
 ## Prerequisites
 
 - Kyma as the target deployment environment.
-- A Namespace to which you deploy the example with the `env: "true"` label. For more information, read the [related documentation](https://kyma-project.io/docs/root/kyma/#details-namespaces).
+
 
 ## Installation
 
