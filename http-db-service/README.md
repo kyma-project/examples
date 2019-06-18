@@ -53,15 +53,6 @@ username=sa password='Password!123' database=master tablename='test_orders' host
 
 The command runs the specific unit tests for MSSQL databases with the environment information to connect to the previously started MSSQL database.
 
-
-### Deployment smoke test
-
-Run the CURL command to verify that the service is running:
-
-```bash
-curl --request GET --url http://{host}:{port}/orders
-```
-
 ### Cleanup
 
 Run the following command to completely remove the example and all its resources from the cluster:

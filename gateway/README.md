@@ -141,7 +141,8 @@ curl -ik https://{hostname}.kyma.local -H 'Authorization: {token}'
 Run the following command to completely remove the example and all its resources from the cluster:
 
 ```bash
-kubectl delete all -l example=gateway -n $KYMA_EXAMPLE_NS
+kubectl delete all -l example=gateway-lambda -n $KYMA_EXAMPLE_NS
+kubectl delete all -l example=gateway-service -n $KYMA_EXAMPLE_NS
 ```
 
 ## Troubleshooting

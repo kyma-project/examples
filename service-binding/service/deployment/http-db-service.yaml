@@ -3,24 +3,34 @@ kind: Service
 metadata:
   name: http-db-service
   labels:
-    example: service-binding
+    example: service-binding-service
+    app: http-db-service
 spec:
   ports:
   - name: http
     port: 8017
   selector:
-    example: service-binding
+    example: service-binding-service
+    app: http-db-service
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: http-db-service
+  labels:
+    example: service-binding-service
+    app: http-db-service
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: order-front
+      example: service-binding-service
   template:
     metadata:
       labels:
-        example: service-binding
+        example: service-binding-service
+        app: http-db-service
     spec:
       containers:
       # replace the repository URL with your own repository (e.g. {DockerID}/http-db-service:0.0.x for Docker Hub).
@@ -41,7 +51,7 @@ kind: ServiceBinding
 metadata:
   name: mssql-instance-binding
   labels: 
-    example: service-binding   
+    example: service-binding-service   
 spec:
   instanceRef:
     name: mssql-instance
@@ -52,7 +62,7 @@ kind: ServiceBindingUsage
 metadata:
   name: mssql-instance-binding-usage
   labels:
-    example: service-binding
+    example: service-binding-service
 spec:
  serviceBindingRef:
    name: mssql-instance-binding

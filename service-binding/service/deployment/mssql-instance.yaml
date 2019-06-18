@@ -3,7 +3,7 @@ kind: ServiceInstance
 metadata:
   name: mssql-instance
   labels: 
-    example: service-binding   
+    example: service-binding-service   
 spec:
   clusterServiceClassExternalName: azure-sqldb
   clusterServicePlanExternalName: basic

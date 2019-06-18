@@ -3,30 +3,33 @@ kind: Service
 metadata:
   name: http-db-service
   labels:
-    example: gateway
+    example: gateway-service
+    app: http-db-service
 spec:
   ports:
   - name: http
     port: 8017
   selector:
     app: http-db-service
-    example: gateway
+    example: gateway-service
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: http-db-service
+  labels:
+    app: http-db-service
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: http-db-service
-      example: gateway
+      example: gateway-service
   template:
     metadata:
       labels:
         app: http-db-service
-        example: gateway
+        example: gateway-service
     spec:
       containers:
       # replace the repository URL with your own repository (e.g. {DockerID}/http-db-service:0.0.x for Docker Hub).

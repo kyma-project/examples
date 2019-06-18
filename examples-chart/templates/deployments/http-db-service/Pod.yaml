@@ -6,6 +6,7 @@ metadata:
   name: "{{ .Release.Name }}-http-db-service-deploy-{{ randAlphaNum 5 | lower }}"
   labels:
     example: http-db-service
+    app: http-db-service-test
     chart: examples
 spec:
   serviceAccountName: {{ .Release.Name }}-examples-service-account

@@ -4,6 +4,7 @@ metadata:
   name: http-db-service
   labels:
     example: http-db-service
+    app: http-db-service
 spec:
   ports:
   - name: http
@@ -16,6 +17,9 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: http-db-service
+  labels:
+    example: http-db-service
+    app: http-db-service
 spec:
   replicas: 1
   selector:

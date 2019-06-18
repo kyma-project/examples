@@ -3,6 +3,9 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: sample-metrics
+  labels:
+    app: sample-metrics
+    example: monitoring-custom-metrics
 spec:
   replicas: 1
   template:
@@ -26,6 +29,7 @@ metadata:
   name: sample-metrics-8080
   labels:
     example: monitoring-custom-metrics
+    app: sample-metrics
 spec:
   selector:
     app: sample-metrics
@@ -41,6 +45,7 @@ metadata:
   name: sample-metrics-8081
   labels:
     k8s-app: metrics
+    app: sample-metrics
     example: monitoring-custom-metrics
 spec:
   selector:

@@ -3,7 +3,8 @@ kind: Function
 metadata:
   name: redis-client
   labels:
-    example: service-binding
+    example: service-binding-lambda
+    app: service-binding
 spec:
   handler: handler.main
   runtime: nodejs8
@@ -46,7 +47,7 @@ kind: ServiceBinding
 metadata:
   name: redis-instance-binding
   labels: 
-    example: service-binding   
+    example: service-binding-lambda   
 spec:
   instanceRef:
     name: redis-instance
@@ -56,7 +57,7 @@ kind: ServiceBindingUsage
 metadata:
   name: fn-redis-client
   labels:
-    example: service-binding
+    example: service-binding-lambda
 spec:
  serviceBindingRef:
    name: redis-instance-binding

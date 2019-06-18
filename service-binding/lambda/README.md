@@ -72,7 +72,7 @@ kubectl delete all,function,servicebinding,serviceinstance,servicebindingusage -
 Make sure the password is injected correctly into the Pod. The password should match the one in the [redis-instance.yaml](./deployment/redis-instance.yaml)
 
 ```bash
-kubectl exec -n $KYMA_EXAMPLE_NS -it $(kubectl get po -n $KYMA_EXAMPLE_NS -l example=service-binding --no-headers | awk '{print $1}') bash
+kubectl exec -n $KYMA_EXAMPLE_NS -it $(kubectl get po -n $KYMA_EXAMPLE_NS -l example=service-binding-lambda --no-headers | awk '{print $1}') bash
 
 env | grep -i redis_password
 ```

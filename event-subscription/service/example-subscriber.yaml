@@ -3,7 +3,8 @@ kind: Service
 metadata:
   name: event-email-service
   labels:
-    example: event-bus    
+    example: event-subscription-service
+    app: event-email-service
 spec:
   type: ClusterIP
   ports:
@@ -19,7 +20,7 @@ metadata:
   name: event-email-service
   labels:
     app: event-email-service
-    example: event-bus-service-subscription
+    example: event-subscription-service
 spec:
   replicas: 1
   selector:
@@ -29,7 +30,7 @@ spec:
     metadata:
       labels:
         app: event-email-service
-        example: event-bus-service-subscription
+        example: event-subscription-service
     spec:
       containers:
         - name: event-email-service

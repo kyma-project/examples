@@ -4,7 +4,7 @@ kind: Api
 metadata:
   labels:
     function: hello
-    example: gateway
+    example: gateway-lambda
   name: hello
 spec:
   authenticationEnabled: true

@@ -3,7 +3,7 @@ kind: Subscription
 metadata:
   name: hello-with-data-subscription
   labels:
-    example: event-bus-lambda-subscription
+    example: event-subscription-lambda
 spec:
   endpoint: http://hello-with-data.<namespace>:8080/
   push_request_timeout_ms: 2000

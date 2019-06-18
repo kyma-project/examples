@@ -6,6 +6,7 @@ metadata:
   name: "{{ .Release.Name }}-event-subscription-lambda-test-{{ randAlphaNum 5 | lower }}"
   labels:
     example: event-subscription-lambda
+    app:  event-subscription-lambda-test
     chart: examples-tests
   annotations:
     "helm.sh/hook": test-success
