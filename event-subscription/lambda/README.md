@@ -94,6 +94,17 @@ kubeless get-server-config
         ```bash
         kubectl logs -f $(kubectl get po -n $KYMA_EXAMPLE_NS -l function=hello-with-data --no-headers | grep -i running | awk '{print $1}') -c hello-with-data -n $KYMA_EXAMPLE_NS
         ```
+6. To access attributes for events which are compliant to CloudEvents [specification](https://github.com/cloudevents/spec/blob/v0.3/http-transport-binding.md), you can access event object as follows:
+    |Field|JSON path|
+    |---|---|
+    |ce-specversion | event.extensions.request.headers['ce-specversion'] |
+    |ce-type|event.extensions.request.headers['ce-type']|
+    |ce-source|event.extensions.request.headers['ce-source']|
+    |ce-id|event.extensions.request.headers['ce-id']|
+    |ce-time|event.extensions.request.headers['ce-time']|
+    |ce-eventtypeversion|event.extensions.request.headers['ce-eventtypeversion']|
+    |ce-knativehistory|event.extensions.request.headers['ce-knativehistory']|
+    |content-type|event.extensions.request.headers['content-type']|
 
 ### Cleanup
 
