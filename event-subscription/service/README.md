@@ -81,7 +81,7 @@ Access the Event publishing API from the cluster through the `8080` port on the 
     ```
     > **NOTE:** To send multiple Events, change the `orderCode` to have a unique value for each POST request.
 
-10. To access attributes for events which are compliant to CloudEvents [specification](https://github.com/cloudevents/spec/blob/v0.3/http-transport-binding.md), you can access event object as follows:
+10. To access attributes of events which are compliant to CloudEvents [specification](https://github.com/cloudevents/spec/blob/v0.3/http-transport-binding.md), you can access event object as follows:
 
     |Field|JSON path|
     |---|---|
