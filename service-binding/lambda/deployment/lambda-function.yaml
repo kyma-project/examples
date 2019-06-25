@@ -64,3 +64,16 @@ spec:
  usedBy:
    kind: function
    name: redis-client
+---
+apiVersion: gateway.kyma-project.io/v1alpha2
+kind: Api
+metadata:
+  labels:
+    function: redis-client
+    example: service-binding-lambda
+  name: service-binding-lambda
+spec:
+  hostname: redis-client-test.kyma.local
+  service:
+    name: redis-client
+    port: 8080
