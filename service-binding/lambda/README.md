@@ -26,6 +26,7 @@ Apply a battery of `yaml` files to run the example.
 1. Export your Namespace as a variable by replacing the `{namespace}` placeholder in the following command and running it:
     ```bash
     export KYMA_EXAMPLE_NS="{namespace}"
+    export KYMA_EXAMPLE_DOMAIN="{kyma domain}"
     ```
 
 2. Create a Redis instance:
@@ -56,7 +57,7 @@ Apply a battery of `yaml` files to run the example.
 7. Trigger the function.
     The information and statistics about the Redis server appear in the logs of the function Pod.
     ```bash
-     curl curl -ik https://redis-client.kyma.local
+     curl -ik https://redis-client.$KYMA_EXAMPLE_DOMAIN
     ```
 
 ### Cleanup
