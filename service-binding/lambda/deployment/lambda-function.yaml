@@ -73,7 +73,7 @@ metadata:
     example: service-binding-lambda
   name: service-binding-lambda
 spec:
-  hostname: redis-client-test.kyma.local
+  hostname: redis-client-test
   service:
     name: redis-client
     port: 8080
