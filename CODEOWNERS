@@ -8,13 +8,13 @@
 * @a-thaler @clebs @suleymanakbas91 @lilitgh @igor-karpukhin
 
 # Event bus example
-/event-subscription/service/ @abbi-gaurav @marcobebway @montaro @radufa @suleymanakbas91 @anishj0shi
+/event-subscription/service/ @joek @abbi-gaurav @rakesh-garimella @venturasr @lilitgh @k15r @nachtmaar @anishj0shi @montaro @abbi-gaurav @marcobebway @radufa @sayanh
 
 # Event bus lambda subscription example
-/event-subscription/lambda/ @joek @rakesh-garimella @sayanh @venturasr @lilitgh @anishj0shi
+/event-subscription/lambda/ @joek @abbi-gaurav @rakesh-garimella @venturasr @lilitgh @k15r @nachtmaar @anishj0shi @montaro @abbi-gaurav @marcobebway @radufa @sayanh
 
 # Service binding example
-/service-binding/ @joek @rakesh-garimella @sayanh @venturasr @lilitgh @anishj0shi
+/service-binding/ @joek @abbi-gaurav @rakesh-garimella @venturasr @lilitgh @k15r @nachtmaar @anishj0shi @montaro @abbi-gaurav @marcobebway @radufa @sayanh
 
 # All .md files
 *.md @tomekpapiernik @kazydek @bszwarc @klaudiagrz @mmitoraj
