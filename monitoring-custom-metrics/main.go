@@ -31,7 +31,7 @@ func init() {
 	prometheus.MustRegister(hdFailures)
 }
 
-// randomTemp generates temperature in the range from 60 to 70
+// randomTemp generates temperature in the range from 60 to 90
 func randomTemp() float64 {
 	return math.Round(rand.Float64()*300)/10 + 60
 }
