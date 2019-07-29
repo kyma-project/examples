@@ -2,6 +2,8 @@ package main
 
 import (
 	"log"
+	"math"
+	"math/rand"
 	"net/http"
 	"time"
 
@@ -10,10 +12,10 @@ import (
 )
 
 var (
-	cpuTemp = prometheus.NewGauge(prometheus.GaugeOpts{
+	cpuTemp = prometheus.NewGaugeFunc(prometheus.GaugeOpts{
 		Name: "cpu_temperature_celsius",
 		Help: "Current temperature of the CPU.",
-	})
+	}, randomTemp)
 	hdFailures = prometheus.NewCounterVec(
 		prometheus.CounterOpts{
 			Name: "hd_errors_total",
@@ -29,8 +31,12 @@ func init() {
 	prometheus.MustRegister(hdFailures)
 }
 
+// randomTemp generates the temperature ranging from 60 to 90
+func randomTemp() float64 {
+	return math.Round(rand.Float64()*300)/10 + 60
+}
+
 func main() {
-	cpuTemp.Set(65.3)
 	hdFailures.With(prometheus.Labels{"device": "/dev/sda"}).Inc()
 
 	// The Handler function provides a default handler to expose metrics
