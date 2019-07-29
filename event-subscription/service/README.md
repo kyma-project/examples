@@ -10,8 +10,8 @@ Kyma comes with the NATS Streaming messaging cluster. Instead of interacting wit
 
 Access the Event publishing API from the cluster through the `8080` port on the following hostnames:
 
-* `event-bus-publish.kyma-system`
-* `event-bus-publish.kyma-system.svc.cluster.local`
+* `event-publish-service.kyma-system`
+* `event-publish-service.kyma-system.svc.cluster.local`
 
 ## Prerequisites
 
@@ -70,13 +70,13 @@ Access the Event publishing API from the cluster through the `8080` port on the 
     ```bash
     curl -i \
         -H "Content-Type: application/json" \
-        -X POST http://event-bus-publish.kyma-system:8080/v1/events \
+        -X POST http://event-publish-service.kyma-system:8080/v1/events \
         -d '{"source-id": "external-application", "event-type": "test-event-bus", "event-type-version": "v1", "event-time": "2018-11-02T22:08:41+00:00", "data": {"event":{"customer":{"customerID": "1234", "uid": "rick.sanchez@mail.com"}}}}'
 
     # or use the fully-qualified Event publishing API service name
     curl -i \
         -H "Content-Type: application/json" \
-        -X POST http://event-bus-publish.kyma-system.svc.cluster.local:8080/v1/events \
+        -X POST http://event-publish-service.kyma-system.svc.cluster.local:8080/v1/events \
         -d '{"source-id": "external-application", "event-type": "test-event-bus", "event-type-version": "v1", "event-time": "2018-11-02T22:08:41+00:00", "data": {"event":{"customer":{"customerID": "1234", "uid": "rick.sanchez@mail.com"}}}}'
     ```
     > **NOTE:** To send multiple Events, change the `orderCode` to have a unique value for each POST request.

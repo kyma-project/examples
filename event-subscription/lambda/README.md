@@ -86,7 +86,7 @@ kubeless get-server-config
         ```bash
         curl -i \
         -H "Content-Type: application/json" \
-        -X POST http://event-bus-publish.kyma-system:8080/v1/events \
+        -X POST http://event-publish-service.kyma-system:8080/v1/events \
         -d '{"source-id": "external-application", "event-type": "hello", "event-type-version": "v1", "event-time": "2018-11-02T22:08:41+00:00", "data": { "order-number": 123 }}'
         ```
 
