@@ -28,7 +28,7 @@ You need access to the `kyma-system` Namespace to execute the described steps.
 
 3. Go to `http://localhost:9090/rules` and find the **pod-not-running** rule.
 
-    Because the http-db-service Deployment does not the exist, [Alertmanager](https://kyma-project.io/docs/components/monitoring#details-alertmanager) fires an alert listed at `http://localhost:9090/alerts`.
+    Because the `http-db-service` Deployment does not exist, [Alertmanager](https://kyma-project.io/docs/components/monitoring#details-alertmanager) fires an alert listed at `http://localhost:9090/alerts`.
 
 ### Stop the alert from getting fired
 
