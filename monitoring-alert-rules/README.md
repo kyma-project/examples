@@ -59,4 +59,4 @@ Run the following commands to completely remove the example and all its resource
     ```bash
     kubectl delete all -l example=http-db-service -n $KYMA_EXAMPLE_NS
     ```
-For a complete tutorial on how to expose metrics and define alerting rules, see [these](https://kyma-project.io/docs/components/monitoring/#tutorials-tutorials) tutorials.
+For complete guidelines on how to expose metrics and define alerting rules, see [these](https://kyma-project.io/docs/components/monitoring/#tutorials-tutorials) tutorials.
