@@ -1,0 +1,24 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: pod-not-running-rule
+  namespace: kyma-system
+  labels:
+    app: pod-not-running-rule
+    prometheus: monitoring
+    release: monitoring
+    role: alert-rules
+spec:
+  groups:
+  - name: pod-not-running-rule
+    rules:
+    - alert: PodNotRunning
+      expr: absent(kube_pod_container_status_running{pod=~"^http-db-service(.*)"})
+      for: 10s
+      labels:
+        severity: critical
+      annotations:
+        description: "http-db-service Pod is not running"
+        summary: "http-db-service Pod is not running"
+
+

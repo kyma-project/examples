@@ -2,21 +2,22 @@
 
 ## Overview
 
-This example shows how to configure alert rules in Kyma and how to define a new alert rule for AlertManager.
+This example shows how to deploy and view alerting rules in Kyma.
 
 ## Prerequisites
 
-- Kyma as the target deployment environment.
+* Kyma as the target deployment environment.
 
 ## Installation
 
 You need access to the `kyma-system` Namespace to execute the described steps.
 
-### Configure a new alert
-1. Create a ConfigMap for the alert-rule.
+### Add a new alerting rule
+
+1. Create the PrometheusRule resource holding the configuration of your alerting rule. 
 
     ```bash
-    kubectl apply -f deployment/alert-rule-configmap.yaml -n kyma-system
+    kubectl apply -f deployment/alert-rule.yaml -n kyma-system
     ```
 
 2. Run the `port-forward` command on the `monitoring-prometheus` service to access the Prometheus dashboard.
@@ -25,36 +26,37 @@ You need access to the `kyma-system` Namespace to execute the described steps.
     kubectl port-forward pod/prometheus-monitoring-0 -n kyma-system 9090:9090
     ```
 
-    Find the **http-db-service-is-not-running** rule [here](http://localhost:9090/rules).
+3. Go to `http://localhost:9090/rules` and find the **pod-not-running** rule.
 
-    As the `http-db-service` Deployment does not the exist, the alert is fired [here](http://localhost:9090/alerts).
+    Because the `http-db-service` Deployment does not exist, [Alertmanager](https://kyma-project.io/docs/components/monitoring#details-alertmanager) fires an alert listed at `http://localhost:9090/alerts`.
 
 ### Stop the alert from getting fired
 
-1. Export your Namespace as a variable. Replace the `{namespace}` placeholder in the following command and run it:
+1. Export your Namespace as a variable:
 
     ```bash
     export KYMA_EXAMPLE_NS="{namespace}"
     ```
 
-2. To stop the alert from getting fired, create a Deployment as follows:
+2. To stop the alert from getting fired, create the Deployment:
 
-```bash
-kubectl apply -f ../http-db-service/deployment/deployment.yaml -n $KYMA_EXAMPLE_NS
-```
+    ```bash
+    kubectl apply -f ../http-db-service/deployment/deployment.yaml -n $KYMA_EXAMPLE_NS
+    ```
 
 ### Cleanup
 
 Run the following commands to completely remove the example and all its resources from the cluster:
 
-1. Remove the `http-db-service-is-not-running` alert rule from the cluster.
+1. Remove the **pod-not-running** alerting rule from the cluster:
 
-```bash
-kubectl delete cm -n kyma-system -l example=monitoring-alert-rules
-````
+    ```bash
+    kubectl delete cm -n kyma-system -l example=monitoring-alert-rules
+    ```
 
-1. Run the following command to completely remove `http-db-service` and all its resources from the cluster:
+2. Remove the **http-db-service** example and all its resources from the cluster:
 
-```bash
-kubectl delete all -l example=http-db-service -n $KYMA_EXAMPLE_NS
-```
+    ```bash
+    kubectl delete all -l example=http-db-service -n $KYMA_EXAMPLE_NS
+    ```
+For complete guidelines on how to define alerting rules, see [this](https://kyma-project.io/docs/components/monitoring#tutorials-define-alerting-rules) tutorial.
