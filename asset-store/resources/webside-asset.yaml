@@ -1,0 +1,11 @@
+apiVersion: assetstore.kyma-project.io/v1alpha2
+kind: Asset
+metadata:
+  name: webside
+  namespace: default
+spec:
+  bucketRef:
+    name: pages
+  source:
+    url: https://github.com/flying-seals/page/archive/master.zip
+    mode: package
