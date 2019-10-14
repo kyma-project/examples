@@ -30,11 +30,11 @@ This example illustrates how to use [asset-store](https://kyma-project.io/docs/1
     apiVersion: assetstore.kyma-project.io/v1alpha2
     kind: Bucket
     metadata:
-        name: pages
-        namespace: default
+      name: pages
+      namespace: default
     spec:
-        region: "us-east-1"
-        policy: readwrite
+      region: "us-east-1"
+      policy: readwrite
     EOF
     ```
 
@@ -48,24 +48,53 @@ This example illustrates how to use [asset-store](https://kyma-project.io/docs/1
       name: webside
       namespace: default
     spec:
-      bucketRef:
-        name: pages
-    source:
+      source:
         url: ${GH_WEBSIDE_URL}
         mode: package
+      bucketRef:
+        name: pages
     EOF
+    ```
+
+### Testing
+
+1. Describe asset CR:
+
+    ```bash
+    kubectl describe assets.assetstore.kyma-project.io webside
+    ```
+    
+2. Find "Asset Ref" field and merge "Base URL" with file name of your index.html
+
+    Example:
+    ```
+    Status:
+      Asset Ref:
+        Base URL:  https://minio.kyma.local/pages-1bjc0e7p0qdue/webside
+        Files:
+          Name:             simple-page-for-asset-store-master/LICENSE
+          Name:             simple-page-for-asset-store-master/README.md
+          Name:             simple-page-for-asset-store-master/index.html
+          Name:             simple-page-for-asset-store-master/jquery.js
+          Name:             simple-page-for-asset-store-master/myscript.js
+          Name:             simple-page-for-asset-store-master/style.css
+    ```
+    
+    In this case it should looks like that:
+    ```
+    https://minio.kyma.local/pages-1bjc0e7p0qdue/webside/simple-page-for-asset-store-master/index.html
     ```
 
 ### Creanup
 
-1. Delete bucket CR:
+1. Delete asset CR:
 
-    ```bash
-    kubectl delete assetstore.kyma-project.io pages
+    ```
+    kubectl delete assets.assetstore.kyma-project.io webside
     ```
 
-2. Delete asset CR:
+2. Delete bucket CR:
 
-    ```bash
-    kubectl delete assetstore.kyma-project.io webside
+    ```
+    kubectl delete buckets.assetstore.kyma-project.io pages
     ```
