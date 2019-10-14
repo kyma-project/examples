@@ -1,22 +1,21 @@
-# Event Email Service
+# Asset Store
 
 ## Overview
 
-This example illustrates how to use [asset-store](https://kyma-project.io/docs/1.5/components/asset-store/) to store simple websides on [ABS](https://azure.microsoft.com/en-us/services/storage/blobs/).
+This example illustrates how to use [asset-store](https://kyma-project.io/docs/1.5/components/asset-store/) to store simple websides.
 
 ## Prerequisites
 
 - [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
-- [Azure Subscription](https://docs.microsoft.com/en-us/azure/billing/billing-add-change-azure-subscription-administrator)
 - [Kyma](https://kyma-project.io/docs/) as the target deployment environment
+-  By default minio store all resources on current cluster, but it works fine also on cloud storage systems. Read [asset-store tutorials](https://kyma-project.io/docs/components/asset-store#tutorials-tutorials) for more informations.
+
 
 ## Details
 
 ### Installation
 
-1. [Set Minio to the Azure Blob Storage Gateway mode](https://kyma-project.io/docs/1.6/components/asset-store/#tutorials-set-minio-to-the-azure-blob-storage-gateway-mode)
-
-2. Run the export GH_WEBSIDE_URL={value}, where value contain address to download webside
+1. Run the export GH_WEBSIDE_URL={value}, where value contain address to download webside
 
     Example:
 
@@ -24,9 +23,9 @@ This example illustrates how to use [asset-store](https://kyma-project.io/docs/1
     export GH_WEBSIDE_URL=https://github.com/pPrecel/simple-page-for-asset-store/archive/master.zip
     ```
 
-3. Apply bucket CR:
+2. Apply bucket CR:
 
-    ```bash
+    ```
     cat <<EOF | kubectl apply -f -
     apiVersion: assetstore.kyma-project.io/v1alpha2
     kind: Bucket
@@ -39,9 +38,9 @@ This example illustrates how to use [asset-store](https://kyma-project.io/docs/1
     EOF
     ```
 
-4. Apply asset CR:
+3. Apply asset CR:
 
-    ```bash
+    ```
     cat <<EOF | kubectl apply -f -
     apiVersion: assetstore.kyma-project.io/v1alpha2
     kind: Asset
@@ -56,24 +55,6 @@ This example illustrates how to use [asset-store](https://kyma-project.io/docs/1
         mode: package
     EOF
     ```
-
-### Testing
-
-1. Describe asset CR:
-
-    ```bash
-    kubectl describe assets.assetstore.kyma-project.io webside
-    ```
-
-2. Find and coppy url addres from x/x/x field
-
-    Example:
-
-3. Find and coppy path to index.html file from section below:
-
-    Example:
-
-4. Merge this two addresses and put it to your favorite browser
 
 ### Creanup
 
