@@ -15,12 +15,12 @@ By default minio store all resources on current cluster, but it works fine also 
 
 ### Installation
 
-1. Run the export GH_WEBSITE_URL={value}, where value contain address to download webpage
+1. Run the export GH_WEBPAGE_URL={value}, where value contain address to download webpage
 
     Example:
 
     ```bash
-    export GH_WEBSITE_URL=https://github.com/pPrecel/simple-page-for-asset-store/archive/master.zip
+    export GH_WEBPAGE_URL=https://github.com/pPrecel/simple-page-for-asset-store/archive/master.zip
     ```
 
 2. Apply bucket CR:
@@ -49,7 +49,7 @@ By default minio store all resources on current cluster, but it works fine also 
       namespace: default
     spec:
       source:
-        url: ${GH_WEBSITE_URL}
+        url: ${GH_WEBPAGE_URL}
         mode: package
       bucketRef:
         name: pages
