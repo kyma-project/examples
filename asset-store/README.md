@@ -25,7 +25,7 @@ By default minio store all resources on current cluster, but it works fine also 
 
 2. Apply bucket CR:
 
-    ```
+    ```bash
     cat <<EOF | kubectl apply -f -
     apiVersion: assetstore.kyma-project.io/v1alpha2
     kind: Bucket
@@ -40,7 +40,7 @@ By default minio store all resources on current cluster, but it works fine also 
 
 3. Apply asset CR:
 
-    ```
+    ```bash
     cat <<EOF | kubectl apply -f -
     apiVersion: assetstore.kyma-project.io/v1alpha2
     kind: Asset
@@ -63,11 +63,12 @@ By default minio store all resources on current cluster, but it works fine also 
     ```bash
     kubectl describe assets.assetstore.kyma-project.io webpage
     ```
-    
+
 2. Find "Asset Ref" field and merge "Base URL" with file name of your index.html
 
     Example:
-    ```
+
+    ```yaml
     Status:
       Asset Ref:
         Base URL:  https://minio.kyma.local/pages-1bjc0e7p0qdue/webpage
@@ -79,9 +80,10 @@ By default minio store all resources on current cluster, but it works fine also 
           Name:             simple-page-for-asset-store-master/myscript.js
           Name:             simple-page-for-asset-store-master/style.css
     ```
-    
+
     In this case it should looks like that:
-    ```
+
+    ```url
     https://minio.kyma.local/pages-1bjc0e7p0qdue/webpage/simple-page-for-asset-store-master/index.html
     ```
 
@@ -89,12 +91,12 @@ By default minio store all resources on current cluster, but it works fine also 
 
 1. Delete asset CR:
 
-    ```
+    ```bash
     kubectl delete assets.assetstore.kyma-project.io webpage
     ```
 
 2. Delete bucket CR:
 
-    ```
+    ```bash
     kubectl delete buckets.assetstore.kyma-project.io pages
     ```
