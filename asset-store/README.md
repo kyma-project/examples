@@ -13,7 +13,7 @@ By default, [Minio](https://min.io/) stores all resources on a cluster, but it a
 
 ## Installation
 
-1. Run the export GH_WEBPAGE_URL={value}, where value contain address to download webpage
+1. Export a GitHub webpage URL of a ready-to-use webpage.
 
     Example:
 
@@ -21,7 +21,7 @@ By default, [Minio](https://min.io/) stores all resources on a cluster, but it a
     export GH_WEBPAGE_URL=https://github.com/pPrecel/simple-page-for-asset-store/archive/master.zip
     ```
 
-2. Apply bucket CR:
+2. Apply a Bucket custom resource (CR):
 
     ```bash
     cat <<EOF | kubectl apply -f -
@@ -36,7 +36,7 @@ By default, [Minio](https://min.io/) stores all resources on a cluster, but it a
     EOF
     ```
 
-3. Apply asset CR:
+3. Apply an Asset CR:
 
     ```bash
     cat <<EOF | kubectl apply -f -
@@ -83,7 +83,7 @@ By default, [Minio](https://min.io/) stores all resources on a cluster, but it a
     https://minio.kyma.local/pages-1bjc0e7p0qdue/webpage/simple-page-for-asset-store-master/index.html
     ```
 
-### Creanup
+### Cleanup
 
 1. Delete the Asset CR:
 
