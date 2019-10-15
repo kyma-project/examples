@@ -32,7 +32,7 @@ The summary of the documentation in the `examples` repository lists all availabl
 | [Custom Metrics in Kyma](monitoring-custom-metrics/README.md) | Expose custom metrics in Kyma.  | Go, Prometheus |
 | [Event Email Service](event-email-service/README.md) | Send an automated email upon receiving an Event.  | NodeJS |
 | [Tracing](tracing/README.md) | Configure tracing for a service in Kyma. | Go |
-| [Asset Store](asset-store/README.md) | Store static page via asset-store | HTML, CSS |
+| [Asset Store](asset-store/README.md) | Store static webpages using the Asset Store | HTML, CSS |
 
 ## Installation
 
