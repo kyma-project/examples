@@ -2,7 +2,7 @@
 
 ## Overview
 
-This example illustrates how to use [asset-store](https://kyma-project.io/docs/1.5/components/asset-store/) to store simple webpages.
+This example illustrates how to use the [Asset Store](https://kyma-project.io/docs/1.5/components/asset-store/) to store simple webpages.
 
 ## Prerequisites
 
