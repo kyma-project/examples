@@ -77,7 +77,7 @@ By default, [Minio](https://min.io/) stores all resources on a cluster, but it a
           Name:             simple-page-for-asset-store-master/style.css
     ```
 
-    In this case it should looks like that:
+    This is an example of the **Base URL** merged with the filename of the `index.html`:
 
     ```url
     https://minio.kyma.local/pages-1bjc0e7p0qdue/webpage/simple-page-for-asset-store-master/index.html
