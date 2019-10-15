@@ -11,7 +11,7 @@ This example illustrates how to use the [Asset Store](https://kyma-project.io/do
 
 ## Details
 
-By default minio store all resources on current cluster, but it works fine also on cloud storage systems. Read [asset-store tutorials](https://kyma-project.io/docs/components/asset-store#tutorials-tutorials) for more informations.
+By default, [Minio](https://min.io/) stores all resources on a cluster, but it also allows you to use different cloud providers. Read the Asset Store [tutorials](https://kyma-project.io/docs/components/asset-store#tutorials-tutorials) for more information.
 
 ### Installation
 
