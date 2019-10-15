@@ -1,7 +1,7 @@
 apiVersion: assetstore.kyma-project.io/v1alpha2
 kind: Asset
 metadata:
-  name: webside
+  name: webpage
   namespace: default
 spec:
   bucketRef:
