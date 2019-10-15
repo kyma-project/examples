@@ -4,14 +4,12 @@
 
 This example illustrates how to use the [Asset Store](https://kyma-project.io/docs/1.5/components/asset-store/) to store simple webpages.
 
+By default, [Minio](https://min.io/) stores all resources on a cluster, but it also allows you to use different cloud providers. Read the Asset Store [tutorials](https://kyma-project.io/docs/components/asset-store#tutorials-tutorials) for more information.
+
 ## Prerequisites
 
 - [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 - [Kyma](https://kyma-project.io/docs/) as the target deployment environment
-
-## Details
-
-By default, [Minio](https://min.io/) stores all resources on a cluster, but it also allows you to use different cloud providers. Read the Asset Store [tutorials](https://kyma-project.io/docs/components/asset-store#tutorials-tutorials) for more information.
 
 ## Installation
 
@@ -56,15 +54,13 @@ By default, [Minio](https://min.io/) stores all resources on a cluster, but it a
     EOF
     ```
 
-### Testing
-
-1. Describe asset CR:
+4. Describe asset CR:
 
     ```bash
     kubectl describe assets.assetstore.kyma-project.io webpage
     ```
 
-2. Find "Asset Ref" field and merge "Base URL" with file name of your index.html
+5. Find "Asset Ref" field and merge "Base URL" with file name of your index.html
 
     Example:
 
