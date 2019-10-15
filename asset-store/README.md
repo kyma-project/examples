@@ -95,7 +95,7 @@ By default, [Minio](https://min.io/) stores all resources on a cluster, but it a
     kubectl delete assets.assetstore.kyma-project.io webpage
     ```
 
-2. Delete bucket CR:
+2. Delete the Bucket CR:
 
     ```bash
     kubectl delete buckets.assetstore.kyma-project.io pages
