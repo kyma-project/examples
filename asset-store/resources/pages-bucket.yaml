@@ -1,7 +1,7 @@
 apiVersion: assetstore.kyma-project.io/v1alpha2
 kind: Bucket
 metadata:
-  name: pages
+  name: webpages
   namespace: default
 spec:
   region: "us-east-1"
