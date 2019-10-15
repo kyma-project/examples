@@ -65,6 +65,7 @@ By default, [Minio](https://min.io/) stores all resources on a cluster, but it a
     Example:
 
     ```yaml
+    ...
     Status:
       Asset Ref:
         Base URL:  https://minio.kyma.local/pages-1bjc0e7p0qdue/webpage
@@ -75,11 +76,12 @@ By default, [Minio](https://min.io/) stores all resources on a cluster, but it a
           Name:             simple-page-for-asset-store-master/jquery.js
           Name:             simple-page-for-asset-store-master/myscript.js
           Name:             simple-page-for-asset-store-master/style.css
+    ...
     ```
 
     This is an example of the **Base URL** merged with the filename of the `index.html`:
 
-    ```url
+    ```text
     https://minio.kyma.local/pages-1bjc0e7p0qdue/webpage/simple-page-for-asset-store-master/index.html
     ```
 
