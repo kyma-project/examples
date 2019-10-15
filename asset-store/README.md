@@ -89,7 +89,7 @@ By default, [Minio](https://min.io/) stores all resources on a cluster, but it a
 
 ### Creanup
 
-1. Delete asset CR:
+1. Delete the Asset CR:
 
     ```bash
     kubectl delete assets.assetstore.kyma-project.io webpage
