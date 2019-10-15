@@ -13,7 +13,7 @@ This example illustrates how to use the [Asset Store](https://kyma-project.io/do
 
 By default, [Minio](https://min.io/) stores all resources on a cluster, but it also allows you to use different cloud providers. Read the Asset Store [tutorials](https://kyma-project.io/docs/components/asset-store#tutorials-tutorials) for more information.
 
-### Installation
+## Installation
 
 1. Run the export GH_WEBPAGE_URL={value}, where value contain address to download webpage
 
