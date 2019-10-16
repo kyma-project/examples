@@ -55,19 +55,19 @@ By default, [Minio](https://min.io/) stores all resources on a cluster, but it a
     EOF
     ```
 
-4. Export value of baseUrl field from the Asset CR:
+4. Export the value of the **baseUrl** field from the Asset CR:
 
     ```bash
     export BASEURL=$(kubectl get assets.assetstore.kyma-project.io webpage -o jsonpath='{.status.assetRef.baseUrl}')
     ```
 
-5. Export path to `index.html` file from the Asset CR:
+5. Export the path to the `index.html` file from the Asset CR:
 
     ```bash
     export INDEXPATH=$(kubectl get assets.assetstore.kyma-project.io webpage -o jsonpath='{range .status.assetRef.files[*]}{.name}{"\n"}{end}' | grep index.html)
     ```
 
-6. Go to static page url:
+6. Go to the static webpage URL:
 
     ```bash
     open ${BASEURL}/${INDEXPATH}
