@@ -2,7 +2,7 @@
 
 ## Overview
 
-This example illustrates how to use the [Asset Store](https://kyma-project.io/docs/1.5/components/asset-store/) to store static webpages.
+This example illustrates how to use the [Asset Store](https://kyma-project.io/docs/components/asset-store) to store static webpages.
 
 By default, [Minio](https://min.io/) stores all resources on a cluster, but it also allows you to use different cloud providers. Read the Asset Store [tutorials](https://kyma-project.io/docs/components/asset-store#tutorials-tutorials) for more information.
 
@@ -18,7 +18,7 @@ By default, [Minio](https://min.io/) stores all resources on a cluster, but it a
     Example:
 
     ```bash
-    export GH_WEBPAGE_URL=https://github.com/pPrecel/simple-page-for-asset-store/archive/master.zip
+    export GH_WEBPAGE_URL=https://github.com/pprecel/examples/archive/master.zip
     ```
 
 2. Apply a Bucket custom resource (CR):
@@ -49,40 +49,28 @@ By default, [Minio](https://min.io/) stores all resources on a cluster, but it a
       source:
         url: ${GH_WEBPAGE_URL}
         mode: package
+        filter: (\/?asset-store\/webpage\/)(.*)$
       bucketRef:
         name: pages
     EOF
     ```
 
-4. Describe the Asset CR:
+4. Export value of baseUrl field from the Asset CR:
 
     ```bash
-    kubectl describe assets.assetstore.kyma-project.io webpage
+    export BASEURL=$(kubectl get assets.assetstore.kyma-project.io webpage -o jsonpath='{.status.assetRef.baseUrl}')
     ```
 
-5. Find the **Asset Ref** field and merge **Base URL** with the filename of your `index.html`.
+5. Export path to `index.html` file from the Asset CR:
 
-    Example:
-
-    ```yaml
-    ...
-    Status:
-      Asset Ref:
-        Base URL:  https://minio.kyma.local/pages-1bjc0e7p0qdue/webpage
-        Files:
-          Name:             simple-page-for-asset-store-master/LICENSE
-          Name:             simple-page-for-asset-store-master/README.md
-          Name:             simple-page-for-asset-store-master/index.html
-          Name:             simple-page-for-asset-store-master/jquery.js
-          Name:             simple-page-for-asset-store-master/myscript.js
-          Name:             simple-page-for-asset-store-master/style.css
-    ...
+    ```bash
+    export INDEXPATH=$(kubectl get assets.assetstore.kyma-project.io webpage -o jsonpath='{range .status.assetRef.files[*]}{.name}{"\n"}{end}' | grep index.html)
     ```
 
-    This is an example of the **Base URL** merged with the filename of the `index.html`:
+6. Go to static page url:
 
-    ```text
-    https://minio.kyma.local/pages-1bjc0e7p0qdue/webpage/simple-page-for-asset-store-master/index.html
+    ```bash
+    open ${BASEURL}/${INDEXPATH}
     ```
 
 ### Cleanup
