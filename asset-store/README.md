@@ -13,7 +13,7 @@ By default, [Minio](https://min.io/) stores all resources on a cluster, but it a
 
 ## Installation
 
-1. Export a GitHub webpage URL of a ready-to-use webpage.
+1. Export a GitHub webpage URL of a ready-to-use webpage sources.
 
     Example:
 
