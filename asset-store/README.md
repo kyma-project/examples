@@ -61,13 +61,13 @@ By default, [Minio](https://min.io/) stores all resources on a cluster, but it a
     kubectl get assets.assetstore.kyma-project.io webpage -o jsonpath='{.status.phase}'
     ```
 
-    You should get a exacly that result:
+    You should get a result exactly like this one:
 
     ```test
     Ready
     ```
 
-    >**Note:** if state equals `Pending`, please wait few secounds and try again
+    >**Note:** If the state is `Pending`, wait for a few seconds and try again.
 
 5. Export and merge the values of the **baseUrl** field and the path to the `index.html` file from the Asset CR, and then open it in default web browser:
 
