@@ -67,11 +67,7 @@ By default, [Minio](https://min.io/) stores all resources on a cluster, but it a
     Ready
     ```
 
-    >**Note:** if state equals `Pending`, please wait few secounds and try again, but if state equals `Failed`, something went wrong and then you should check reason of filure using extracting the value of the **reason** field from the Asset CR:
-
-    ```bash
-    kubectl get assets.assetstore.kyma-project.io webpage -o jsonpath='{.status.reason}'
-    ```
+    >**Note:** if state equals `Pending`, please wait few secounds and try again
 
 5. Export and merge the values of the **baseUrl** field and the path to the `index.html` file from the Asset CR, and then open it in default web browser:
 
