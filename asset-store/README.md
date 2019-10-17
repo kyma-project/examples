@@ -18,7 +18,7 @@ By default, [Minio](https://min.io/) stores all resources on a cluster, but it a
     Example:
 
     ```bash
-    export GH_WEBPAGE_URL=https://github.com/pprecel/examples/archive/master.zip
+    export GH_WEBPAGE_URL=https://github.com/kyma-project/examples/archive/master.zip
     ```
 
 2. Apply a Bucket custom resource (CR):
@@ -32,7 +32,7 @@ By default, [Minio](https://min.io/) stores all resources on a cluster, but it a
       namespace: default
     spec:
       region: "us-east-1"
-      policy: readwrite
+      policy: readonly
     EOF
     ```
 
@@ -49,28 +49,34 @@ By default, [Minio](https://min.io/) stores all resources on a cluster, but it a
       source:
         url: ${GH_WEBPAGE_URL}
         mode: package
-        filter: (\/?asset-store\/webpage\/)(.*)$
+        filter: /asset-store/webpage/
       bucketRef:
         name: pages
     EOF
     ```
 
-4. Export the value of the **baseUrl** field from the Asset CR:
+4. Check the value of the **phase** field:
 
     ```bash
-    export BASEURL=$(kubectl get assets.assetstore.kyma-project.io webpage -o jsonpath='{.status.assetRef.baseUrl}')
+    kubectl get assets.assetstore.kyma-project.io webpage -o jsonpath='{.status.phase}'
     ```
 
-5. Export the path to the `index.html` file from the Asset CR:
+    You should get a exacly that result:
 
-    ```bash
-    export INDEXPATH=$(kubectl get assets.assetstore.kyma-project.io webpage -o jsonpath='{range .status.assetRef.files[*]}{.name}{"\n"}{end}' | grep index.html)
+    ```test
+    Ready
     ```
 
-6. Go to the static webpage URL:
+    >**Note:** if state equals `Pending`, please wait few secounds and try again, but if state equals `Failed`, something went wrong and then you should check reason of filure using extracting the value of the **reason** field from the Asset CR:
 
     ```bash
-    open ${BASEURL}/${INDEXPATH}
+    kubectl get assets.assetstore.kyma-project.io webpage -o jsonpath='{.status.reason}'
+    ```
+
+5. Export and merge the values of the **baseUrl** field and the path to the `index.html` file from the Asset CR, and then open it in default web browser:
+
+    ```bash
+    open $(kubectl get assets.assetstore.kyma-project.io webpage -o jsonpath='{.status.assetRef.baseUrl}{"/"}{.status.assetRef.files[?(@.name=="examples-master/asset-store/webpage/index.html" )].name}')
     ```
 
 ### Cleanup
