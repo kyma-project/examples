@@ -72,7 +72,7 @@ By default, [Minio](https://min.io/) stores all resources on a cluster, but it a
 5. Export and merge the values of the **baseUrl** field and the path to the `index.html` file from the Asset CR, and then open it in default web browser:
 
     ```bash
-    open $(kubectl get assets.assetstore.kyma-project.io webpage -o jsonpath='{.status.assetRef.baseUrl}{"/"}{.status.assetRef.files[?(@.name=="examples-master/asset-store/webpage/index.html" )].name}')
+    open $(kubectl get assets.assetstore.kyma-project.io webpage -o jsonpath='{.status.assetRef.baseUrl}{"/examples-master/asset-store/webpage/index.html"}')
     ```
 
 ### Cleanup
