@@ -1,10 +1,10 @@
-# Asset Store
+# Rafter
 
 ## Overview
 
-This example illustrates how to use the [Asset Store](https://kyma-project.io/docs/components/asset-store) to store static webpages.
+This example illustrates how to use [Rafter](https://kyma-project.io/docs/components/content-management) to store static webpages.
 
-By default, [Minio](https://min.io/) stores all resources on a cluster, but it also allows you to use different cloud providers. Read the Asset Store [tutorials](https://kyma-project.io/docs/components/asset-store#tutorials-tutorials) for more information.
+By default, [Minio](https://min.io/) stores all resources on a cluster, but it also allows you to use different cloud providers. Read Rafter [tutorials](https://kyma-project.io/docs/components/content-management#tutorials-tutorials) for more information.
 
 ## Prerequisites
 
@@ -25,7 +25,7 @@ By default, [Minio](https://min.io/) stores all resources on a cluster, but it a
 
     ```bash
     cat <<EOF | kubectl apply -f -
-    apiVersion: assetstore.kyma-project.io/v1alpha2
+    apiVersion: rafter.kyma-project.io/v1beta1
     kind: Bucket
     metadata:
       name: pages
@@ -40,7 +40,7 @@ By default, [Minio](https://min.io/) stores all resources on a cluster, but it a
 
     ```bash
     cat <<EOF | kubectl apply -f -
-    apiVersion: assetstore.kyma-project.io/v1alpha2
+    apiVersion: rafter.kyma-project.io/v1beta1
     kind: Asset
     metadata:
       name: webpage
@@ -49,7 +49,7 @@ By default, [Minio](https://min.io/) stores all resources on a cluster, but it a
       source:
         url: ${GH_WEBPAGE_URL}
         mode: package
-        filter: /asset-store/webpage/
+        filter: /rafter/webpage/
       bucketRef:
         name: pages
     EOF
@@ -69,7 +69,7 @@ By default, [Minio](https://min.io/) stores all resources on a cluster, but it a
 
     >**Note:** If the state is `Pending`, wait for a few seconds and try again.
 
-5. Export and merge the values of the **baseUrl** field and the path to the `index.html` file from the Asset CR, and then open it in default web browser:
+5. Export and merge the values of the **baseUrl** field and the path to the `index.html` file from the Asset CR, and then open it in a default web browser:
 
     ```bash
     open $(kubectl get assets.assetstore.kyma-project.io webpage -o jsonpath='{.status.assetRef.baseUrl}{"/examples-master/asset-store/webpage/index.html"}')
@@ -80,11 +80,11 @@ By default, [Minio](https://min.io/) stores all resources on a cluster, but it a
 1. Delete the Asset CR:
 
     ```bash
-    kubectl delete assets.assetstore.kyma-project.io webpage
+    kubectl delete assets.rafter.kyma-project.io webpage
     ```
 
 2. Delete the Bucket CR:
 
     ```bash
-    kubectl delete buckets.assetstore.kyma-project.io pages
+    kubectl delete buckets.rafter.kyma-project.io pages
     ```
