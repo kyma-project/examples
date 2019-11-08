@@ -58,7 +58,7 @@ By default, [Minio](https://min.io/) stores all resources on a cluster, but it a
 4. Check the value of the **phase** field:
 
     ```bash
-    kubectl get assets.assetstore.kyma-project.io webpage -o jsonpath='{.status.phase}'
+    kubectl get assets.rafter.kyma-project.io webpage -o jsonpath='{.status.phase}'
     ```
 
     You should get a result exactly like this one:
@@ -72,7 +72,7 @@ By default, [Minio](https://min.io/) stores all resources on a cluster, but it a
 5. Export and merge the values of the **baseUrl** field and the path to the `index.html` file from the Asset CR, and then open it in a default web browser:
 
     ```bash
-    open $(kubectl get assets.assetstore.kyma-project.io webpage -o jsonpath='{.status.assetRef.baseUrl}{"/examples-master/asset-store/webpage/index.html"}')
+    open $(kubectl get assets.rafter.kyma-project.io webpage -o jsonpath='{.status.assetRef.baseUrl}{"/examples-master/rafter/webpage/index.html"}')
     ```
 
 ### Cleanup
