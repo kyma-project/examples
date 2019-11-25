@@ -2,9 +2,9 @@
 
 ## Overview
 
-This example illustrates how to use [Rafter](https://kyma-project.io/docs/components/content-management) to store static webpages.
+This example illustrates how to use [Rafter](https://kyma-project.io/docs/components/rafter) to store static webpages.
 
-By default, [Minio](https://min.io/) stores all resources on a cluster, but it also allows you to use different cloud providers. Read Rafter [tutorials](https://kyma-project.io/docs/components/content-management#tutorials-tutorials) for more information.
+By default, [Minio](https://min.io/) stores all resources on a cluster, but it also allows you to use different cloud providers. Read Rafter [tutorials](https://kyma-project.io/docs/components/rafter#tutorials-tutorials) for more information.
 
 ## Prerequisites
 
