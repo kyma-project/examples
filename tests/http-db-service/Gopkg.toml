@@ -1,7 +1,7 @@
 
 
 required = [
-  "github.com/golang/lint/golint"
+  "golang.org/x/lint/golint"
 ]
 
 [[constraint]]

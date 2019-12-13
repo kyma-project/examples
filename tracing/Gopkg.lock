@@ -28,6 +28,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  input-imports = ["github.com/golang/lint/golint"]
+  input-imports = ["golang.org/x/lint/golint"]
   solver-name = "gps-cdcl"
   solver-version = 1
