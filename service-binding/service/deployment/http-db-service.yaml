@@ -13,7 +13,7 @@ spec:
     example: service-binding-service
     app: http-db-service
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: http-db-service

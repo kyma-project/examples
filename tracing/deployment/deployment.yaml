@@ -26,7 +26,7 @@ spec:
   selector:
     app: order-front
 ---
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: order-front
@@ -76,7 +76,7 @@ spec:
   selector:
     app: db-service
 ---
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: db-service
