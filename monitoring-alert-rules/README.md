@@ -17,13 +17,13 @@ You need access to the `kyma-system` Namespace to execute the described steps.
 1. Create the PrometheusRule resource holding the configuration of your alerting rule. 
 
     ```bash
-    kubectl apply -f deployment/alert-rule.yaml -n kyma-system
+    kubectl apply -f deployment/alert-rule.yaml
     ```
 
 2. Run the `port-forward` command on the `monitoring-prometheus` service to access the Prometheus dashboard.
 
     ```bash
-    kubectl port-forward pod/prometheus-monitoring-0 -n kyma-system 9090:9090
+    kubectl port-forward -n kyma-system svc/monitoring-prometheus 9090:9090
     ```
 
 3. Go to `http://localhost:9090/rules` and find the **pod-not-running** rule.
@@ -59,4 +59,5 @@ Run the following commands to completely remove the example and all its resource
     ```bash
     kubectl delete all -l example=http-db-service -n $KYMA_EXAMPLE_NS
     ```
+
 For complete guidelines on how to define alerting rules, see [this](https://kyma-project.io/docs/components/monitoring#tutorials-define-alerting-rules) tutorial.
