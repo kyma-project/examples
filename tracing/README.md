@@ -11,6 +11,8 @@ To understand how traces are propagated, see the [Go application](src/order-fron
 - Kyma as the target deployment environment.
 - Helm for local installation.
 
+>**NOTE:** By default, the **PILOT_TRACE_SAMPLING** value in the [IstioControlPlane](https://istio.io/docs/reference/config/istio.operator.v1alpha12.pb/) is set to `1`, where `100` is the maximum value. This means that only 1 out of 100 requests is sent to Jaeger for trace recording which can affect the number of traces displayed for the service. To change this behavior, follow [these](https://kyma-project.io/docs/master/components/tracing/#troubleshooting-jaeger-shows-only-a-few-traces) instructions to increase the value.
+
 
 ## Installation
 

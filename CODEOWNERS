@@ -5,7 +5,7 @@
 # For more details, read the following article on GitHub: https://help.github.com/articles/about-codeowners/.
 
 # These are the default owners for the whole content of the `examples` repository. The default owners are automatically added as reviewers when you open a pull request, unless different owners are specified in the file.
-* @a-thaler @clebs @suleymanakbas91 @lilitgh @igor-karpukhin
+* @a-thaler @clebs @suleymanakbas91 @lilitgh @bszwarc @rakesh-garimella @hisarbalik
 
 # Event bus example
 /event-subscription/service/ @Abd4llA @joek @rakesh-garimella @venturasr @lilitgh @k15r @nachtmaar @anishj0shi @montaro @abbi-gaurav @marcobebway @radufa @sayanh
