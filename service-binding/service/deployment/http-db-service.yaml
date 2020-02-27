@@ -24,7 +24,7 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: order-front
+      app: http-db-service
       example: service-binding-service
   template:
     metadata:
