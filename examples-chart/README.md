@@ -22,7 +22,6 @@ Configure these options in the [`values.yaml`](values.yaml) file:
 | examples.httpDBService.deploy    | Deploy the [HTTP DB Service](../http-db-service) example. |
 | examples.httpDBService.deploymentImage | Deployment image for the HTTP DB Service. |
 | examples.httpDBService.testImage | Test image for the HTTP DB Service. |
-| examples.eventSubscription.lambda.deploy | Deploy the [Event Subscription lambda](../event-subscription/lambda) example. |
 | examples.eventEmailService.deploy | Deploy the [Event Email Service](../event-email-service) example. |
 | examples.eventEmailService.deploymentImage | Deployment image for the Event Email Service example. |
 | rbac.enabled  | Enable RBAC. |

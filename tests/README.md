@@ -2,7 +2,7 @@
 
 ## Overview
 
-This folder contains the acceptance tests for the examples that you can run as part of the Kyma testing process. The tests are written in Go. Run them as standard Go tests. Each example has a separate folder such as `http-db-example` or `event-bus`.
+This folder contains the acceptance tests for the examples that you can run as part of the Kyma testing process. The tests are written in Go. Run them as standard Go tests. Each example has a separate folder such as `http-db-example`.
 
 ## Usage
 
