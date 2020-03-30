@@ -1,8 +1,0 @@
-apiVersion: applicationconnector.kyma-project.io/v1alpha1
-kind: EventActivation
-metadata:
-  name: hello-with-data-activation
-  labels:
-    example: event-subscription-lambda
-spec:
-  sourceId: external-application

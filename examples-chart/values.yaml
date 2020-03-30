@@ -2,9 +2,6 @@ examples:
     image: eu.gcr.io/kyma-project/examples:0.1.70
     httpDBService:
         deploy: false
-    eventSubscription:
-        lambda:
-            deploy: false
     eventEmailService:
         deploy: false
     serviceBinding:

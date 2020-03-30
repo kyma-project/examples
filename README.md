@@ -24,8 +24,6 @@ The summary of the documentation in the `examples` repository lists all availabl
 | Example | Description | Technology |
 |---|---|---|
 | [HTTP DB Service](http-db-service/README.md) | Test the service that exposes an HTTP API to access a database on the cluster. | Go, MSSQL |
-| [Event Service Subscription](event-subscription/service/README.md) | Test the example that demonstrates the `publish` and `consume` features of the Event Bus. | Go |
-| [Event Lambda Subscription](event-subscription/lambda/README.md) | Create functions, trigger them on Events, and bind them to services.  | Kubeless |
 | [Gateway](gateway/README.md) | Expose APIs for functions or services.  | Kubeless |
 | [Service Binding](service-binding/lambda/README.md) | Bind a Redis service to a lambda function. | Kubeless, Redis, NodeJS |
 | [Alert Rules](monitoring-alert-rules/README.md) | Configure alert rules in Kyma.  | Prometheus |
