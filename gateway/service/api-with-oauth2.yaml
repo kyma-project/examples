@@ -2,7 +2,7 @@ apiVersion: gateway.kyma-project.io/v1alpha1
 kind: APIRule
 metadata:
   labels:
-    example: gateway
+    example: gateway-service
   name: http-db-service
 spec:
   gateway: kyma-gateway.kyma-system.svc.cluster.local
@@ -17,4 +17,4 @@ spec:
       accessStrategies:
         - handler: oauth2_introspection
           config:
-            required_scope: ["foo", "bar"]
+            required_scope: ["read", "write"]

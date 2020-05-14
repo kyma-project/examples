@@ -2,20 +2,25 @@ apiVersion: gateway.kyma-project.io/v1alpha1
 kind: APIRule
 metadata:
   labels:
-    example: gateway
+    example: gateway-service
   name: http-db-service
 spec:
   gateway: kyma-gateway.kyma-system.svc.cluster.local
+  rules:
+    - accessStrategies:
+        - config:
+            jwks_urls:
+              - http://dex-service.kyma-system.svc.cluster.local:5556/keys
+            trusted_issuers:
+              - https://dex.kyma.local
+          handler: jwt
+      methods:
+        - GET
+        - POST
+        - PUT
+        - DELETE
+      path: /.*
   service:
+    host: http-db-service.kyma.local
     name: http-db-service
     port: 8017
-    host: http-db-service
-  rules:
-    - path: /.*
-      methods: ["GET"]
-      mutators: []
-      accessStrategies:
-        - handler: jwt
-          config:
-            trusted_issuers: ["http://dex.kyma.local"]
-            required_scope: []

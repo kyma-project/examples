@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   labels:
-    example: gateway
+    example: gateway-service
   name: http-db-service
 data:
   client_id: ZXhhbXBsZS1pZA==
@@ -12,7 +12,7 @@ apiVersion: hydra.ory.sh/v1alpha1
 kind: OAuth2Client
 metadata:
   labels:
-    example: gateway
+    example: gateway-service
   name: http-db-service
 spec:
   grantTypes:

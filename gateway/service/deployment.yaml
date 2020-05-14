@@ -18,6 +18,7 @@ kind: Deployment
 metadata:
   name: http-db-service
   labels:
+    example: gateway-service
     app: http-db-service
 spec:
   replicas: 1
