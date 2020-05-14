@@ -252,13 +252,19 @@ kubectl delete oauth2clients.hydra.ory.sh -l example=gateway-service -n $KYMA_EX
 
 ## Troubleshooting
 
-The problem occurs when there is an Api resource with authentication enabled, but after making a request without a JWT token, the received response code is `200`.
+**Could not resolve host:** If you run Kyma locally, make sure you have added the hostnames used in this example to your hosts file.
 
-**Solution 1:** Wait. If the cluster is under high workload, it can take a while for authentication policies to apply. If you still have the problem after a few seconds, look at the Solution 2.
+**No healthy upstream:** Check if the Pod you created is running. Run:
 
-**Solution 2:** If you did not use the default settings, there can be something wrong with the JWKS URI you provided. If you use a local Deployment of Kyma on Minikube and the internal OIDC Identity Provider such as Dex, make sure that the JWKS URI is provided as FQDN, and that it points directly to the keys endpoint, for example, http://dex-service.kyma-system.svc.cluster.local:5556/keys. Envoy sidecars must be able to resolve a domain name to the proper inside-cluster or outside-cluster IP address.
+```bash
+kubectl get pods -n $KYMA_EXAMPLE_NS
+```
 
-**Solution 3:** Check if the Pod you created has the istio-proxy container injected. Run this command:
+Wait until all containers of the Pod are running.
+
+**Problems with the JWT authentication:** Make sure you have provided proper domain name in the **Expose a service with JWT authentication** step.
+
+**Upstream connect error or disconnect/reset before headers:** Check if the Pod you created has the istio-proxy container injected. Run this command:
 
 ```bash
 kubectl get pods -n $KYMA_EXAMPLE_NS
@@ -270,4 +276,4 @@ Find the Pod created with the `deployment.yaml` file and copy its name. Run this
 kc get pod {pod-name} -n $KYMA_EXAMPLE_NS -o json | jq '.spec.containers[].name'
 ```
 
-One of the returned strings should be the istio-proxy. If there is no such string, the Namespace probably does not have Istio injection enabled. Read the additional prerequisites at the beginning of the **Manual exposure using kubectl** section in this document to fix that.
+One of the returned strings should be the istio-proxy. If there is no such string, the Namespace probably does not have Istio injection enabled. For more information, read [this file](https://kyma-project.io/docs/components/service-mesh/#details-sidecar-proxy-injection).
