@@ -21,6 +21,6 @@ spec:
         - DELETE
       path: /.*
   service:
-    host: http-db-service.kyma.local
+    host: http-db-service
     name: http-db-service
     port: 8017

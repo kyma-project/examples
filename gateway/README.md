@@ -17,7 +17,7 @@ This section contains installation steps on how to expose a service through the 
 
 #### Create a service
 
-1. Open the [Kyma console](https://console.kyma.local/) and choose or create the Namespace in which you want to deploy the example.
+1. Open the Kyma console and choose or create the Namespace in which you want to deploy the example.
 2. Click the **Deploy new resource** button, select the `deployment.yaml` file from the `service` directory in this example, and click **Upload**.
 
 #### Expose a service without authentication
@@ -36,7 +36,7 @@ curl -ik https://{hostname}.{domain}/orders
 # > 200 []
 ```
 
->**NOTE:** If you are using the Kyma deployed locally, add the `{hostname}.kyma.local` to your hosts file.
+>**NOTE:** If you are using the Kyma deployed locally, add the `{hostname}.{domain}` to your hosts file.
 
 #### Expose a service with JWT authentication
 
@@ -53,7 +53,7 @@ curl -ik https://{hostname}.{domain}/orders
 
 1. On the main Kyma page, click on the **General Settings** button.
 2. In the **Kubeconfig** section, click the **Download config** button.
-3. Open the downloaded file in a text editor, select the **token** section and copy it to the clipboard.
+3. Open the downloaded file in a text editor, select the value in the **token** field and copy it to the clipboard.
 4. The token is later referred to as **\{jwt-token\}**.
 
 #### Test the APIs with JWT authentication
@@ -68,7 +68,7 @@ curl -ik https://{hostname}.{domain}/orders -H 'Authorization: Bearer {jwt-token
 # > 200 []
 ```
 
->**NOTE:** If you are using the Kyma deployed locally, add the `{hostname}.kyma.local` to your hosts file.
+>**NOTE:** If you are using the Kyma deployed locally, add the `{hostname}.{domain}` to your hosts file.
 
 #### Expose a service with OAuth2 authentication
 
@@ -102,13 +102,13 @@ curl -ik https://{hostname}.{domain}/orders -H 'Authorization: Bearer {oauth2-to
 # > 200 []
 ```
  
->**NOTE:** If you are using the Kyma deployed locally, add the `{hostname}.kyma.local` to your hosts file.
+>**NOTE:** If you are using the Kyma deployed locally, add the `{hostname}.{domain}` to your hosts file.
 
 ### Manual exposure using kubectl
 
 There are additional prerequisites to exposing a service manually using kubectl:
 
-- [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) in version specified in the [Kyma documentation](https://kyma-project.io/docs/1.12/root/kyma#installation-install-kyma-locally).
+- [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) in version specified in the [Kyma documentation](https://kyma-project.io/docs/#installation-install-kyma-locally). It needs to be configured to point to your Kyma cluster. For more info, see [this document](https://kyma-project.io/docs/components/security/#details-iam-kubeconfig-service-get-the-kubeconfig-file-and-configure-the-cli).
 - A JWT token fetched from the Console UI which is later referred to as **\{jwt-token\}**. For more details, see the **Fetch JWT token** section in the **Exposure through the console UI**.
 - If you run Kyma locally, add the `http-db-service.kyma.local` to your hosts file.
 
@@ -181,9 +181,10 @@ spec:
         - DELETE
       path: /.*
   service:
-    host: http-db-service.kyma.local
+    host: http-db-service
     name: http-db-service
     port: 8017
+EOF
 ```
 
 Or manually adjust the `https://dex.kyma.local` domain in the `trusted_issuers` section of the `api-with-jwt.yaml` file to fit your setup and run:
@@ -239,7 +240,6 @@ curl -ik https://http-db-service.$KYMA_EXAMPLE_DOMAIN/orders -H 'Authorization: 
 # > 200 []
 ```
 
-
 ### Cleanup
 
 Run the following command to completely remove the example and all its resources from the cluster:
@@ -270,10 +270,10 @@ Wait until all containers of the Pod are running.
 kubectl get pods -n $KYMA_EXAMPLE_NS
 ```
 
-Find the Pod created with the `deployment.yaml` file and copy its name. Run this command:
+Run this command:
 
 ```bash
-kc get pod {pod-name} -n $KYMA_EXAMPLE_NS -o json | jq '.spec.containers[].name'
+kubectl get pods -l example=gateway-service -n $KYMA_EXAMPLE_NS -o json | jq '.items[].spec.containers[].name'
 ```
 
 One of the returned strings should be the istio-proxy. If there is no such string, the Namespace probably does not have Istio injection enabled. For more information, read [this file](https://kyma-project.io/docs/components/service-mesh/#details-sidecar-proxy-injection).
