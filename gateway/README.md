@@ -2,7 +2,7 @@
 
 ## Overview
 
-This basic example demonstrates how to expose a service through an APIRule in a public or secure manner through the console UI, or manually using kubectl.
+This basic example demonstrates how to expose a service through an API Rule in a public or secure manner through the console UI, or manually using kubectl.
 
 ## Prerequisites
 
@@ -22,36 +22,36 @@ This section contains installation steps on how to expose a service through the 
 
 #### Expose a service without authentication
 
-1. Select the **Services** button and click on the name of the service you created. The name should be the same as the service name in the `deployment.yaml` file - **http-db-service**.
+1. Select the **Services** button and click the name of the service you created. The name should be the same as the service name in the `deployment.yaml` file - **http-db-service**.
 2. In the **API Rules for http-db-service** section, click the **Expose API** button.
 3. Fill the **Name** text box.
 4. Fill the **Hostname** text box and click **Create**. The name you entered is referred to as the **\{hostname\}**. The domain next to it is referred to as the **\{domain\}**.
 
->**NOTE:** There are two ways of exposing a service without authentication - `noop` (default) and `allow`. You can switch the method in the dropdown in the **Access strategies** section.
+>**NOTE:** There are two ways of exposing a service without authentication - `noop` (default) and `allow`. You can switch the method using the dropdown menu in the **Access strategies** section.
 
-#### Test the APIRule without authentication
+#### Test the API Rule without authentication
 
 ```bash
 curl -ik https://{hostname}.{domain}/orders
 # > 200 []
 ```
 
->**NOTE:** If you are using the Kyma deployed locally, add the `{hostname}.{domain}` to your hosts file.
+>**NOTE:** If you use Kyma locally, add the `{hostname}.{domain}` to your hosts file.
 
 #### Expose a service with JWT authentication
 
-1. If you **didn't** follow the steps in **Expose a service without authentication** section, go straight to step 2 of this instruction. If you did, you must delete the previously created APIRule. Select the **API Rules** button, click on the trash can icon next to the APIRule and confirm.
-2. Select the **Services** button and click on the name of the service you created. The name should be the same as the service name in the `deployment.yaml` file - **http-db-service**.
+1. If you **didn't** follow the steps in the **Expose a service without authentication** section, go straight to step 2 of this instruction. If you did, you must delete the previously created API Rule. Select the **API Rules** button, click on the trash can icon next to the API Rule and confirm.
+2. Select the **Services** button and click the name of the service you created. The name should be the same as the service name in the `deployment.yaml` file - **http-db-service**.
 3. In the **API Rules for http-db-service** section, click the **Expose API** button.
 4. Fill the **Name** text box.
 5. Fill the **Hostname** text box. The name you entered is referred to as the **\{hostname\}**. The domain next to it is referred to as the **\{domain\}**.
-6. In the **Access strategies** section, click on the dropdown and select the **JWT** field. 
-7. Click on the **Configure identity provider...** dropdown and select the **Default** configuration.
+6. In the **Access strategies** section, select the **JWT** field from the dropdown list. 
+7. Click the **Configure identity provider...** dropdown menu and select the **Default** configuration.
 8. Click the **Create** button.
 
-#### Fetch JWT token
+#### Fetch JWT
 
-1. On the main Kyma page, click on the **General Settings** button.
+1. On the main Kyma page, click the **General Settings** button.
 2. In the **Kubeconfig** section, click the **Download config** button.
 3. Open the downloaded file in a text editor, select the value in the **token** field and copy it to the clipboard.
 4. The token is later referred to as **\{jwt-token\}**.
@@ -68,23 +68,23 @@ curl -ik https://{hostname}.{domain}/orders -H 'Authorization: Bearer {jwt-token
 # > 200 []
 ```
 
->**NOTE:** If you are using the Kyma deployed locally, add the `{hostname}.{domain}` to your hosts file.
+>**NOTE:** If you use Kyma locally, add the `{hostname}.{domain}` to your hosts file.
 
 #### Expose a service with OAuth2 authentication
 
-1. If you **didn't** follow the steps in **Expose a service without authentication** or **Expose a service with JWT authentication** section, go straight to step 2 of this instruction. If you did, you must delete the previously created APIRule. Select the **API Rules** button, click on the trash can icon next to the APIRule and confirm.
-2. Select the **Services** button and click on the name of the service you created. The name should be the same as the service name in the `deployment.yaml` file - **http-db-service**.
+1. If you **didn't** follow the steps in the **Expose a service without authentication** or **Expose a service with JWT authentication** section, go straight to step 2 of this instruction. If you did, you must delete the previously created API Rule. Select the **API Rules** button, click on the trash can icon next to the API Rule and confirm.
+2. Select the **Services** button and click the name of the service you created. The name should be the same as the service name in the `deployment.yaml` file - **http-db-service**.
 3. In the **API Rules for http-db-service** section, click the **Expose API** button.
 4. Fill the **Name** text box.
 5. Fill the **Hostname** text box. The name you entered is referred to as the **\{hostname\}**. The domain next to it is referred to as the **\{domain\}**.
-6. In the **Access strategies** section, click on the dropdown and select the **OAuth2** field. 
+6. In the **Access strategies** section, select the **OAuth2** field from the dropdown list. . 
 7. Fill the **Required scope** text box with `read, write`.
 8. Click the **Create** button.
 
 #### Fetch OAuth2 token
 
-1. On the Namespace main page, click **Deploy new resource** button, select the `oauth2client.yaml` file from the `service` directory in this example, and click **Upload**.
-2. Fetch the access token with required scopes. The access token in the response is later referred to as **\{oauth2-token\}**. Run:
+1. On the Namespace main page, click the **Deploy new resource** button, select the `oauth2client.yaml` file from the `service` directory in this example, and click **Upload**.
+2. Fetch the access token with the required scopes. The access token in the response is later referred to as **\{oauth2-token\}**. Run:
 
     ```bash
     curl https://oauth2.{domain}/oauth2/token -H "Authorization: Basic ZXhhbXBsZS1pZDpleGFtcGxlLXNlY3JldA==" -F "grant_type=client_credentials" -F "scope=read write"
@@ -102,14 +102,14 @@ curl -ik https://{hostname}.{domain}/orders -H 'Authorization: Bearer {oauth2-to
 # > 200 []
 ```
  
->**NOTE:** If you are using the Kyma deployed locally, add the `{hostname}.{domain}` to your hosts file.
+>**NOTE:** If you use Kyma locally, add the `{hostname}.{domain}` to your hosts file.
 
 ### Manual exposure using kubectl
 
 There are additional prerequisites to exposing a service manually using kubectl:
 
-- [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) in version specified in the [Kyma documentation](https://kyma-project.io/docs/#installation-install-kyma-locally). It needs to be configured to point to your Kyma cluster. For more info, see [this document](https://kyma-project.io/docs/components/security/#details-iam-kubeconfig-service-get-the-kubeconfig-file-and-configure-the-cli).
-- A JWT token fetched from the Console UI which is later referred to as **\{jwt-token\}**. For more details, see the **Fetch JWT token** section in the **Exposure through the console UI**.
+- [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) in the version specified in the [Kyma documentation](https://kyma-project.io/docs/#installation-install-kyma-locally). It must be configured to point to your Kyma cluster. For more information, see the document about [getting the kubeconfig file](https://kyma-project.io/docs/components/security/#details-iam-kubeconfig-service-get-the-kubeconfig-file-and-configure-the-cli).
+- A JWT fetched from the Console UI which is later referred to as **\{jwt-token\}**. For more details, see the **Fetch JWT** section in the **Exposure through the console UI**.
 - If you run Kyma locally, add the `http-db-service.kyma.local` to your hosts file.
 
 #### Create a service
@@ -120,7 +120,7 @@ There are additional prerequisites to exposing a service manually using kubectl:
    export KYMA_EXAMPLE_NS="{namespace}"
    ```
    
-2. Export your Kyma domain as a variable. Replace the `{domain}` placeholder in the following command and run it::
+2. Export your Kyma domain as a variable. Replace the `{domain}` placeholder in the following command and run it:
 
     ```bash
    export KYMA_EXAMPLE_DOMAIN="{domain}"
@@ -134,13 +134,13 @@ There are additional prerequisites to exposing a service manually using kubectl:
 
 #### Expose a service without authentication
 
-Run this command to create an APIRule:
+Run this command to create an API Rule:
 
 ```bash
 kubectl apply -f ./service/api-without-auth.yaml -n $KYMA_EXAMPLE_NS
 ```
 
-#### Test the APIRules without authentication
+#### Test the API Rules without authentication
 
 To perform a test, use the following command:
 
@@ -151,9 +151,9 @@ curl -ik https://http-db-service.$KYMA_EXAMPLE_DOMAIN/orders
 
 #### Expose a service with JWT authentication
 
-> **NOTE:** If you followed the steps in **Expose a service without authentication** section, the previously created APIRule will be updated after applying the templates.
+> **NOTE:** If you followed the steps in the **Expose a service without authentication** section, the previously created API Rule will be updated after applying the templates.
 
-The JWT authentication settings require to provide a list of trusted issuers. To create an APIRule with the JWT authentication settings, run: 
+The JWT authentication settings require to provide a list of trusted issuers. To create an API Rule with the JWT authentication settings, run: 
 
 ```bash
 cat <<EOF | kubectl apply -f - 
@@ -187,7 +187,7 @@ spec:
 EOF
 ```
 
-Or manually adjust the `https://dex.kyma.local` domain in the `trusted_issuers` section of the `api-with-jwt.yaml` file to fit your setup and run:
+You can also manually adjust the `https://dex.kyma.local` domain in the `trusted_issuers` section of the `api-with-jwt.yaml` file to fit your setup. After adjusting the domain, run:
 
 ```bash
 kubectl apply -f ./service/api-with-jwt.yaml -n $KYMA_EXAMPLE_NS
@@ -207,16 +207,16 @@ curl -ik https://http-db-service.$KYMA_EXAMPLE_DOMAIN/orders -H 'Authorization: 
 
 #### Expose a service with Oauth2 authentication
 
-> **NOTE:** If you followed the steps in **Expose a service without authentication** or **Expose a service with JWT authentication** section, the previously created APIRule will be updated after applying the templates.
+> **NOTE:** If you followed the steps in the **Expose a service without authentication** or **Expose a service with JWT authentication** section, the previously created API Rule will be updated after applying the templates.
 
-Create an APIRule with the OAuth2 authentication settings:
+Create an API Rule with the OAuth2 authentication settings:
 ```bash
 kubectl apply -f ./service/api-with-oauth2.yaml -n $KYMA_EXAMPLE_NS
 ```
 
 #### Fetch the OAuth2 token
 
-1. Create an OAuth2Client:
+1. Create an OAuth2 client:
 
     ```bash
     kubectl apply -f ./service/oauth2client.yaml -n $KYMA_EXAMPLE_NS
@@ -270,4 +270,4 @@ Wait until all containers of the Pod are running.
 kubectl get pods -l example=gateway-service -n $KYMA_EXAMPLE_NS -o json | jq '.items[].spec.containers[].name'
 ```
 
-One of the returned strings should be the istio-proxy. If there is no such string, the Namespace probably does not have Istio injection enabled. For more information, read [this file](https://kyma-project.io/docs/components/service-mesh/#details-sidecar-proxy-injection).
+One of the returned strings should be the istio-proxy. If there is no such string, the Namespace probably does not have Istio injection enabled. For more information, read the document about the [sidecar proxy injection](https://kyma-project.io/docs/components/service-mesh/#details-sidecar-proxy-injection).
