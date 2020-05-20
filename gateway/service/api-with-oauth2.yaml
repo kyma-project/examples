@@ -1,4 +1,3 @@
----
 apiVersion: gateway.kyma-project.io/v1alpha1
 kind: APIRule
 metadata:
@@ -6,14 +5,16 @@ metadata:
     example: gateway-service
   name: http-db-service
 spec:
+  gateway: kyma-gateway.kyma-system.svc.cluster.local
   service:
     host: http-db-service
     name: http-db-service
     port: 8017
-  gateway: kyma-gateway.kyma-system.svc.cluster.local
   rules:
     - path: /.*
       methods: ["GET"]
-      accessStrategies:
-        - handler: noop
       mutators: []
+      accessStrategies:
+        - handler: oauth2_introspection
+          config:
+            required_scope: ["read", "write"]

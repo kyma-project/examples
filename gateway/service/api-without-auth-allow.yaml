@@ -15,5 +15,5 @@ spec:
     - path: /.*
       methods: ["GET"]
       accessStrategies:
-        - handler: noop
+        - handler: allow
       mutators: []
