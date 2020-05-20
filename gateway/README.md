@@ -36,7 +36,7 @@ curl -ik https://{hostname}.{domain}/orders
 # > 200 []
 ```
 
->**NOTE:** If you use Kyma locally, add the `{hostname}.{domain}` to your hosts file.
+>**NOTE:** If you use Kyma locally, add `{hostname}.{domain}` to your hosts file.
 
 #### Expose a service with JWT authentication
 
@@ -54,7 +54,7 @@ curl -ik https://{hostname}.{domain}/orders
 1. On the main Kyma page, click the **General Settings** button.
 2. In the **Kubeconfig** section, click the **Download config** button.
 3. Open the downloaded file in a text editor, select the value in the **token** field and copy it to the clipboard.
-4. The token is later referred to as **\{jwt-token\}**.
+4. The token is later referred to as **\{jwt\}**.
 
 #### Test the APIs with JWT authentication
 
@@ -64,11 +64,11 @@ curl https://{hostname}.{domain}/orders
 # > {"error":{"code":401,"status":"Unauthorized","request":"1915853b-9780-4751-b26d-903a179e2941","message":"The request could not be authorized"}}
 
 # To perform a test with the token, use the following command:
-curl -ik https://{hostname}.{domain}/orders -H 'Authorization: Bearer {jwt-token}'
+curl -ik https://{hostname}.{domain}/orders -H 'Authorization: Bearer {jwt}'
 # > 200 []
 ```
 
->**NOTE:** If you use Kyma locally, add the `{hostname}.{domain}` to your hosts file.
+>**NOTE:** If you use Kyma locally, add `{hostname}.{domain}` to your hosts file.
 
 #### Expose a service with OAuth2 authentication
 
@@ -102,14 +102,14 @@ curl -ik https://{hostname}.{domain}/orders -H 'Authorization: Bearer {oauth2-to
 # > 200 []
 ```
  
->**NOTE:** If you use Kyma locally, add the `{hostname}.{domain}` to your hosts file.
+>**NOTE:** If you use Kyma locally, add `{hostname}.{domain}` to your hosts file.
 
 ### Manual exposure using kubectl
 
 There are additional prerequisites to exposing a service manually using kubectl:
 
 - [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) in the version specified in the [Kyma documentation](https://kyma-project.io/docs/#installation-install-kyma-locally). It must be configured to point to your Kyma cluster. For more information, see the document about [getting the kubeconfig file](https://kyma-project.io/docs/components/security/#details-iam-kubeconfig-service-get-the-kubeconfig-file-and-configure-the-cli).
-- A JWT fetched from the Console UI which is later referred to as **\{jwt-token\}**. For more details, see the **Fetch JWT** section in the **Exposure through the console UI**.
+- A JWT fetched from the Console UI which is later referred to as **\{jwt\}**. For more details, see the **Fetch JWT** section in the **Exposure through the console UI**.
 - If you run Kyma locally, add the `http-db-service.kyma.local` to your hosts file.
 
 #### Create a service
@@ -201,7 +201,7 @@ curl -ik https://http-db-service.$KYMA_EXAMPLE_DOMAIN/orders
 # > {"error":{"code":401,"status":"Unauthorized","request":"530f300a-8269-4564-8d0c-9816c692e7c4","message":"The request could not be authorized"}}
 
 # To perform a test with the token, use the following command:
-curl -ik https://http-db-service.$KYMA_EXAMPLE_DOMAIN/orders -H 'Authorization: Bearer {jwt-token}'
+curl -ik https://http-db-service.$KYMA_EXAMPLE_DOMAIN/orders -H 'Authorization: Bearer {jwt}'
 # > 200 []
 ```
 
@@ -222,7 +222,7 @@ kubectl apply -f ./service/api-with-oauth2.yaml -n $KYMA_EXAMPLE_NS
     kubectl apply -f ./service/oauth2client.yaml -n $KYMA_EXAMPLE_NS
     ```
 
-2. Fetch the access token with required scopes. The access token in the response is referred to as the **\{oauth2-token\}**. Run:
+2. Fetch the access token with the required scopes. The access token in the response is referred to as the **\{oauth2-token\}**. Run:
 
     ```bash
     curl https://oauth2.$KYMA_EXAMPLE_DOMAIN/oauth2/token -H "Authorization: Basic ZXhhbXBsZS1pZDpleGFtcGxlLXNlY3JldA==" -F "grant_type=client_credentials" -F "scope=read write"
