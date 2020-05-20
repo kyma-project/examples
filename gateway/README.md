@@ -267,12 +267,6 @@ Wait until all containers of the Pod are running.
 **Upstream connect error or disconnect/reset before headers:** Check if the Pod you created has the istio-proxy container injected. Run this command:
 
 ```bash
-kubectl get pods -n $KYMA_EXAMPLE_NS
-```
-
-Run this command:
-
-```bash
 kubectl get pods -l example=gateway-service -n $KYMA_EXAMPLE_NS -o json | jq '.items[].spec.containers[].name'
 ```
 
