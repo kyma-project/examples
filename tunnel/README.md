@@ -19,9 +19,10 @@ Create exit node in Kyma cluster:
 export TOKEN="thesecretpasswordrequiredtoaccessthetunnel" 
 export NAMESPACE=test
 export PROXY_NAME=proxy
+export CHART=https://raw.githubusercontent.com/kyma-project/examples/master/tunnel/inlets-0.1.0.tgz
 
 kubectl create ns $NAMESPACE
-helm install $PROXY_NAME inlets -n $NAMESPACE --set token=$TOKEN
+helm install $PROXY_NAME $CHART -n $NAMESPACE --set token=$TOKEN
 ```
 
 Start local application (in separate terminal session):
@@ -49,4 +50,3 @@ Stop the inlets client and delete helm release and namespace:
 helm delete $PROXY_NAME -n $NAMESPACE
 kubectl delete ns $NAMESPACE
 ```
-
