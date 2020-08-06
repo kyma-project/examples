@@ -14,9 +14,9 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
 
-	"github.com/kyma-project/examples/order-service/internal/handler"
-	"github.com/kyma-project/examples/order-service/internal/service"
-	"github.com/kyma-project/examples/order-service/internal/store"
+	"github.com/kyma-project/examples/orders-service/internal/handler"
+	"github.com/kyma-project/examples/orders-service/internal/service"
+	"github.com/kyma-project/examples/orders-service/internal/store"
 )
 
 const (
@@ -35,15 +35,15 @@ func main() {
 		storage = store.NewMemory()
 	}
 
-	ordersSvc := service.NewOrders(storage)
+	orderSvc := service.NewOrders(storage)
 
 	r := mux.NewRouter()
 	r.Use(logRequest)
 
-	order := handler.NewOrder(ordersSvc)
-	order.RegisterAll("/order", r)
+	order := handler.NewOrder(orderSvc)
+	order.RegisterAll("/orders", r)
 
-	webhook := handler.NewWebhook(ordersSvc)
+	webhook := handler.NewWebhook(orderSvc)
 	webhook.RegisterAll("/webhook", r)
 
 	log.Println("List of registered endpoints:")

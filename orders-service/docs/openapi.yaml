@@ -1,16 +1,16 @@
 openapi: 3.0.1
 info:
-  title: Order service and Events API
+  title: Orders service and Events API
   version: 0.0.2
 tags:
-  - name: order
+  - name: orders
   - name: webhook
 paths:
-  /order:
+  /orders:
     post:
       description: Creates a new order in the system. Duplicates are not allowed.
       tags:
-        - order
+        - orders
       requestBody:
         content:
           application/json:
@@ -28,7 +28,7 @@ paths:
     get:
       description: Returns all orders from the system.
       tags:
-        - order
+        - orders
       responses:
         '200':
           description: Orders retrieved succesfully.
@@ -38,11 +38,11 @@ paths:
                 $ref: '#/components/schemas/OrderList'
         '500':
           description: Internal server error.
-  /order/{id}:
+  /orders/{id}:
     get:
       description: Returns an order with specified ID.
       tags:
-        - order
+        - orders
       parameters:
         - name: id
           in: path
@@ -64,7 +64,7 @@ paths:
     delete:
       description: Deletes an order with specified ID.
       tags:
-        - order
+        - orders
       parameters:
         - name: id
           in: path

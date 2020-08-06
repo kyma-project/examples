@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/kyma-project/examples/order-service/internal/service"
+	"github.com/kyma-project/examples/orders-service/internal/service"
 )
 
 type Webhook struct {

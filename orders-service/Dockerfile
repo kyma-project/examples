@@ -1,6 +1,6 @@
 FROM golang:1.14-alpine as builder
 
-ENV BASE_APP_DIR=/go/src/github.com/kyma-project/examples/order-service \
+ENV BASE_APP_DIR=/go/src/github.com/kyma-project/examples/orders-service \
     CGO_ENABLED=0 \
     GOOS=linux \
     GOARCH=amd64

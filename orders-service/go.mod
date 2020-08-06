@@ -1,4 +1,4 @@
-module github.com/kyma-project/examples/order-service
+module github.com/kyma-project/examples/orders-service
 
 go 1.14
 
