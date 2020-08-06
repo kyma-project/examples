@@ -1,0 +1,127 @@
+openapi: 3.0.1
+info:
+  title: Order service and Events API
+  version: 0.0.2
+tags:
+  - name: order
+  - name: webhook
+paths:
+  /order:
+    post:
+      description: Creates a new order in the system. Duplicates are not allowed.
+      tags:
+        - order
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+      responses:
+        '201':
+          description: Order created succesfully.
+        '400':
+          description: Bad request.
+        '409':
+          description: Order ID conflict.
+        '500':
+          description: Internal server error.
+    get:
+      description: Returns all orders from the system.
+      tags:
+        - order
+      responses:
+        '200':
+          description: Orders retrieved succesfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderList'
+        '500':
+          description: Internal server error.
+  /order/{id}:
+    get:
+      description: Returns an order with specified ID.
+      tags:
+        - order
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the order
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Orders retrieved succesfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderList'
+        '404':
+          description: Order not found.
+        '500':
+          description: Internal server error.
+    delete:
+      description: Deletes an order with specified ID.
+      tags:
+        - order
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the order
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Order deleted succesfully.
+        '404':
+          description: Order not found.
+        '500':
+          description: Internal server error.
+  /webhook:
+    post:
+      description: Handle order event
+      tags:
+        - webhook
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderEvent'
+      responses:
+        '200':
+          description: Order event handled successfully.
+        '400':
+          description: Bad request.
+        '500':
+          description: Internal Server error.
+components:
+  schemas:
+    Order:
+      type: object
+      properties:
+        orderId:
+          type: string
+          example: 11854638GU110615ELIN54ZQ
+          description: ID of the order
+        total:
+          type: number
+          example: 1234.56
+          description: Total amount of the order
+      required:
+        - orderId
+        - total
+    OrderList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Order'
+    OrderEvent:
+      type: object
+      properties:
+        example:
+          type: string
+          example: 76272727
+          description: "TODO: define it :)"
+      required:
+        - example
