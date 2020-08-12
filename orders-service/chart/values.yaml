@@ -1,0 +1,33 @@
+# Default values for 'orders-service'.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+fullnameOverride: "orders-service"
+
+image:
+  repository: "eu.gcr.io/kyma-project/function-controller"
+  tag: "e2e41336"
+  pullPolicy: IfNotPresent
+
+deployment:
+  replicas: 1
+
+pod:
+  resources:
+    limits:
+      cpu: 10m
+      memory: 16Mi
+    requests:
+      cpu: 16m
+      memory: 32Mi
+  env:
+    appPort: "8080"
+    redisPrefix: "REDIS_"
+    eventTypes: "orders.create"
+
+service:
+  type: ClusterIP
+  name: http
+  port: 8080
+  protocol: TCP
+  targerPort: 8080

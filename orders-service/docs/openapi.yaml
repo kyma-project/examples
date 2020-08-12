@@ -7,6 +7,19 @@ tags:
   - name: webhook
 paths:
   /orders:
+    get:
+      description: Returns all orders from the system.
+      tags:
+        - orders
+      responses:
+        '200':
+          description: Orders retrieved succesfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderList'
+        '500':
+          description: Internal server error.
     post:
       description: Creates a new order in the system. Duplicates are not allowed.
       tags:
@@ -25,17 +38,18 @@ paths:
           description: Order ID conflict.
         '500':
           description: Internal server error.
-    get:
-      description: Returns all orders from the system.
+    delete:
+      description: Delete an orders collection.
       tags:
         - orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
       responses:
         '200':
-          description: Orders retrieved succesfully.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/OrderList'
+          description: Collection cleared succesfully.
         '500':
           description: Internal server error.
   /orders/{id}:
@@ -94,6 +108,8 @@ paths:
           description: Order event handled successfully.
         '400':
           description: Bad request.
+        '406':
+          description: Not acceptable order type.
         '500':
           description: Internal Server error.
 components:

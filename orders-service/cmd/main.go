@@ -24,17 +24,7 @@ const (
 )
 
 func main() {
-	var storage store.Store
-	if os.Getenv("REDIS_HOST") != "" && os.Getenv("REDIS_PORT") != "" {
-		redisClient := redis.NewClient(&redis.Options{
-			Addr:     fmt.Sprintf("%s:%s", os.Getenv("REDIS_HOST"), os.Getenv("REDIS_PORT")),
-			Password: "",
-		})
-		storage = store.NewRedis(redisClient)
-	} else {
-		storage = store.NewMemory()
-	}
-
+	storage := checkStorage()
 	orderSvc := service.NewOrders(storage)
 
 	r := mux.NewRouter()
@@ -52,8 +42,13 @@ func main() {
 		log.Fatalf("Cannot print registered routes, because: %v", err)
 	}
 
+	addrs := os.Getenv("APP_PORT")
+	if addrs == "" {
+		log.Fatal("APP_PORT env is required")
+	}
+
 	srv := http.Server{
-		Addr:         ":8080",
+		Addr:         fmt.Sprintf(":%s", addrs),
 		Handler:      cors.AllowAll().Handler(r),
 		ReadTimeout:  timeout,
 		WriteTimeout: timeout,
@@ -66,8 +61,35 @@ func main() {
 	}()
 
 	log.Println(fmt.Sprintf("Listening on %s", srv.Addr))
-
 	onShutdown(srv, timeout)
+}
+
+func checkStorage() store.Store {
+	storage := checkRedisStorage()
+	if storage != nil {
+		return storage
+	}
+	return store.NewMemory()
+}
+
+func checkRedisStorage() store.Store {
+	redisPrefix := os.Getenv("APP_REDIS_PREFIX")
+	if redisPrefix == "" {
+		redisPrefix = "REDIS_"
+	}
+
+	host := os.Getenv(fmt.Sprintf("%sHOST", redisPrefix))
+	port := os.Getenv(fmt.Sprintf("%sPASSWORD", redisPrefix))
+	password := os.Getenv(fmt.Sprintf("%sREDIS_PASSWORD", redisPrefix))
+
+	if host != "" && port != "" && password != "" {
+		redisClient := redis.NewClient(&redis.Options{
+			Addr:     fmt.Sprintf("%s:%s", host, port),
+			Password: password,
+		})
+		return store.NewRedis(redisClient)
+	}
+	return nil
 }
 
 func logRequest(next http.Handler) http.Handler {
@@ -102,6 +124,6 @@ func onShutdown(srv http.Server, timeout time.Duration) {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 	srv.Shutdown(ctx)
-	log.Println("Shutting down, bye bye")
+	log.Println("Shutting down")
 	os.Exit(0)
 }

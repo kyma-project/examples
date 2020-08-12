@@ -69,3 +69,12 @@ func (m *Memory) Delete(_ context.Context, key string) error {
 	delete(m.store, key)
 	return nil
 }
+
+func (m *Memory) Clear(_ context.Context) error {
+	m.mutex.Lock()
+	defer m.mutex.Unlock()
+
+	m.store = make(map[string]string)
+
+	return nil
+}

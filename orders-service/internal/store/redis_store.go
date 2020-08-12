@@ -20,7 +20,6 @@ func (m *Redis) Add(ctx context.Context, key, value string) error {
 	if m.client.Get(ctx, key).Err() == nil {
 		return AlreadyExistsError
 	}
-
 	return m.client.Set(ctx, key, value, 0).Err()
 }
 
@@ -40,6 +39,12 @@ func (m *Redis) Delete(ctx context.Context, key string) error {
 	if m.client.Get(ctx, key).Err() == redis.Nil {
 		return NotFoundError
 	}
-
 	return m.client.Del(ctx, key).Err()
+}
+
+func (m *Redis) Clear(ctx context.Context) error {
+	if err := m.client.FlushDB(ctx).Err(); err != redis.Nil {
+		return err
+	}
+	return nil
 }

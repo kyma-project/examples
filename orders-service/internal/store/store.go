@@ -10,6 +10,7 @@ type Store interface {
 	Get(ctx context.Context, key string) (string, error)
 	Keys(ctx context.Context, pattern string) ([]string, error)
 	Delete(ctx context.Context, key string) error
+	Clear(ctx context.Context) error
 }
 
 var (

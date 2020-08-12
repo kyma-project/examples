@@ -23,6 +23,7 @@ The summary of the documentation in the `examples` repository lists all availabl
 
 | Example | Description | Technology |
 |---|---|---|
+| [Orders Service](orders-service/README.md) | Test the service that exposes an HTTP API to access a Redis on the cluster. | Go, Redis |
 | [HTTP DB Service](http-db-service/README.md) | Test the service that exposes an HTTP API to access a database on the cluster. | Go, MSSQL |
 | [Gateway](gateway/README.md) | Expose APIs for functions or services.  | Kubeless |
 | [Service Binding](service-binding/lambda/README.md) | Bind a Redis service to a lambda function. | Kubeless, Redis, NodeJS |

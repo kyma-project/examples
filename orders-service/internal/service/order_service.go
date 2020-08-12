@@ -18,19 +18,6 @@ func NewOrders(store store.Store) *Order {
 	return &Order{store: store}
 }
 
-func (o *Order) Create(ctx context.Context, order *model.Order) error {
-	if order == nil || order.ID == "" {
-		return errors.New("invalid object")
-	}
-
-	bytes, err := json.Marshal(order)
-	if err != nil {
-		return errors.New("cannot marshal orders")
-	}
-
-	return o.store.Add(ctx, fmt.Sprintf("order:%s", order.ID), string(bytes))
-}
-
 func (o *Order) Get(ctx context.Context, id string) (*model.Order, error) {
 	if id == "" {
 		return nil, errors.New("id cannot be empty")
@@ -67,7 +54,24 @@ func (o *Order) List(ctx context.Context) ([]model.Order, error) {
 	return orders, nil
 }
 
-func (o *Order) Delete(ctx context.Context, id string) error {
+func (o *Order) Create(ctx context.Context, order *model.Order) error {
+	if order == nil || order.ID == "" {
+		return errors.New("invalid object")
+	}
+
+	bytes, err := json.Marshal(order)
+	if err != nil {
+		return errors.New("cannot marshal orders")
+	}
+
+	return o.store.Add(ctx, fmt.Sprintf("order:%s", order.ID), string(bytes))
+}
+
+func (o *Order) DeleteAll(ctx context.Context) error {
+	return o.store.Clear(ctx)
+}
+
+func (o *Order) DeleteOne(ctx context.Context, id string) error {
 	return o.store.Delete(ctx, fmt.Sprintf("order:%s", id))
 }
 
