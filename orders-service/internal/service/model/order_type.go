@@ -1,6 +1,7 @@
 package model
 
 type Order struct {
-	ID    string  `json:"orderId"`
-	Body  string  `json:"body"`
+	Code    string  `json:"orderCode"`
+	ConsignmentCode  string  `json:"consignmentCode"`
+	ConsignmentStatus  string  `json:"consignmentStatus"`
 }

@@ -4,26 +4,24 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/kyma-project/examples/orders-service/internal/service"
 	"github.com/kyma-project/examples/orders-service/internal/service/model"
 	"github.com/kyma-project/examples/orders-service/internal/store"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
-	"strings"
-
-	"github.com/kyma-project/examples/orders-service/internal/service"
 )
 
 type Webhook struct {
 	svc *service.Order
-	eventTypes []string
+	orderType string
 }
 
 func NewWebhook(svc *service.Order) *Webhook {
 	return &Webhook{
 		svc: svc,
-		eventTypes: retrieveEventTypes(),
+		orderType: getEventType(),
 	}
 }
 
@@ -42,6 +40,8 @@ func (h *Webhook) onHook(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
+
+	log.Print(body)
 
 	order := new(model.Order)
 	if err := json.Unmarshal(body, order); err != nil {
@@ -62,19 +62,10 @@ func (h *Webhook) onHook(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-func (h *Webhook) containsEvent(event string) bool {
-	for _, e := range h.eventTypes {
-		if e == event {
-			return true
-		}
+func getEventType() string {
+	orderType := os.Getenv("APP_ORDER_TYPE")
+	if orderType == "" {
+		return "order.deliverysent"
 	}
-	return false
-}
-
-func retrieveEventTypes() []string {
-	events := os.Getenv("APP_EVENT_TYPES")
-	if events == "" {
-		return []string{"order.create"}
-	}
-	return strings.Split(events, ",")
+	return orderType
 }

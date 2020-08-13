@@ -55,7 +55,7 @@ func (o *Order) List(ctx context.Context) ([]model.Order, error) {
 }
 
 func (o *Order) Create(ctx context.Context, order *model.Order) error {
-	if order == nil || order.ID == "" {
+	if order == nil || order.Code == "" {
 		return errors.New("invalid object")
 	}
 
@@ -64,7 +64,7 @@ func (o *Order) Create(ctx context.Context, order *model.Order) error {
 		return errors.New("cannot marshal orders")
 	}
 
-	return o.store.Add(ctx, fmt.Sprintf("order:%s", order.ID), string(bytes))
+	return o.store.Add(ctx, fmt.Sprintf("order:%s", order.Code), string(bytes))
 }
 
 func (o *Order) DeleteAll(ctx context.Context) error {
