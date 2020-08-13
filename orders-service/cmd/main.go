@@ -42,13 +42,13 @@ func main() {
 		log.Fatalf("Cannot print registered routes, because: %v", err)
 	}
 
-	addrs := os.Getenv("APP_PORT")
-	if addrs == "" {
+	port := os.Getenv("APP_PORT")
+	if port == "" {
 		log.Fatal("APP_PORT env is required")
 	}
 
 	srv := http.Server{
-		Addr:         fmt.Sprintf(":%s", addrs),
+		Addr:         fmt.Sprintf(":%s", port),
 		Handler:      cors.AllowAll().Handler(r),
 		ReadTimeout:  timeout,
 		WriteTimeout: timeout,
@@ -79,7 +79,7 @@ func checkRedisStorage() store.Store {
 	}
 
 	host := os.Getenv(fmt.Sprintf("%sHOST", redisPrefix))
-	port := os.Getenv(fmt.Sprintf("%sPASSWORD", redisPrefix))
+	port := os.Getenv(fmt.Sprintf("%sPORT", redisPrefix))
 	password := os.Getenv(fmt.Sprintf("%sREDIS_PASSWORD", redisPrefix))
 
 	if host != "" && port != "" && password != "" {

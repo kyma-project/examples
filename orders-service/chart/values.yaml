@@ -15,11 +15,11 @@ deployment:
 pod:
   resources:
     limits:
-      cpu: 10m
-      memory: 16Mi
-    requests:
       cpu: 16m
       memory: 32Mi
+    requests:
+      cpu: 10m
+      memory: 16Mi
   env:
     appPort: "8080"
     redisPrefix: "REDIS_"
