@@ -34,5 +34,3 @@ spec:
               value: "{{ .Values.pod.env.appPort }}"
             - name: APP_REDIS_PREFIX
               value: "{{ .Values.pod.env.redisPrefix }}"
-            - name: APP_EVENT_TYPES
-              value: "{{ .Values.pod.env.eventTypes }}"

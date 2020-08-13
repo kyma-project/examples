@@ -5,7 +5,7 @@
 fullnameOverride: "orders-service"
 
 image:
-  repository: "eu.gcr.io/kyma-project/function-controller"
+  repository: "eu.gcr.io/kyma-project/examples/orders-service"
   tag: "e2e41336"
   pullPolicy: IfNotPresent
 
@@ -23,7 +23,6 @@ pod:
   env:
     appPort: "8080"
     redisPrefix: "REDIS_"
-    eventTypes: "orders.create"
 
 service:
   type: ClusterIP
