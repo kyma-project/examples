@@ -82,11 +82,16 @@ func checkRedisStorage() store.Store {
 	port := os.Getenv(fmt.Sprintf("%sPORT", redisPrefix))
 	password := os.Getenv(fmt.Sprintf("%sREDIS_PASSWORD", redisPrefix))
 
+	log.Println(host)
+	log.Println(port)
+	log.Println(password)
+
 	if host != "" && port != "" && password != "" {
 		redisClient := redis.NewClient(&redis.Options{
 			Addr:     fmt.Sprintf("%s:%s", host, port),
 			Password: password,
 		})
+		log.Println(redisClient)
 		return store.NewRedis(redisClient)
 	}
 	return nil
