@@ -24,7 +24,7 @@ const (
 )
 
 func main() {
-	storage := checkStorage()
+	storage := createStorage()
 	orderSvc := service.NewOrders(storage)
 
 	r := mux.NewRouter()
@@ -44,7 +44,7 @@ func main() {
 
 	port := os.Getenv("APP_PORT")
 	if port == "" {
-		log.Fatal("APP_PORT env is required")
+		port = "8080"
 	}
 
 	srv := http.Server{
@@ -64,15 +64,15 @@ func main() {
 	onShutdown(srv, timeout)
 }
 
-func checkStorage() store.Store {
-	storage := checkRedisStorage()
+func createStorage() store.Store {
+	storage := createRedisStorage()
 	if storage != nil {
 		return storage
 	}
 	return store.NewMemory()
 }
 
-func checkRedisStorage() store.Store {
+func createRedisStorage() store.Store {
 	redisPrefix := os.Getenv("APP_REDIS_PREFIX")
 	if redisPrefix == "" {
 		redisPrefix = "REDIS_"
@@ -81,10 +81,6 @@ func checkRedisStorage() store.Store {
 	host := os.Getenv(fmt.Sprintf("%sHOST", redisPrefix))
 	port := os.Getenv(fmt.Sprintf("%sPORT", redisPrefix))
 	password := os.Getenv(fmt.Sprintf("%sREDIS_PASSWORD", redisPrefix))
-
-	log.Println(host)
-	log.Println(port)
-	log.Println(password)
 
 	if host != "" && port != "" && password != "" {
 		redisClient := redis.NewClient(&redis.Options{

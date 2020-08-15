@@ -10,18 +10,15 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 )
 
 type Webhook struct {
 	svc *service.Order
-	orderType string
 }
 
 func NewWebhook(svc *service.Order) *Webhook {
 	return &Webhook{
 		svc: svc,
-		orderType: getEventType(),
 	}
 }
 
@@ -41,8 +38,6 @@ func (h *Webhook) onHook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Print(body)
-
 	order := new(model.Order)
 	if err := json.Unmarshal(body, order); err != nil {
 		log.Println(err)
@@ -60,12 +55,4 @@ func (h *Webhook) onHook(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-}
-
-func getEventType() string {
-	orderType := os.Getenv("APP_ORDER_TYPE")
-	if orderType == "" {
-		return "order.deliverysent"
-	}
-	return orderType
 }

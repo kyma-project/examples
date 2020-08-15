@@ -5,17 +5,20 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     app: {{ template "fullname" . }}
+    example: {{ template "fullname" . }}
     release: {{ .Release.Name }}
 spec:
   replicas: {{ .Values.deployment.replicas }}
   selector:
     matchLabels:
       app: {{ template "fullname" . }}
+      example: {{ template "fullname" . }}
       release: {{ .Release.Name }}
   template:
     metadata:
       labels:
         app: {{ template "fullname" . }}
+        example: {{ template "fullname" . }}
         release: {{ .Release.Name }}
     spec:
       containers:

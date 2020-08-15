@@ -15,7 +15,7 @@ deployment:
 pod:
   resources:
     limits:
-      cpu: 16m
+      cpu: 20m
       memory: 32Mi
     requests:
       cpu: 10m
@@ -27,6 +27,6 @@ pod:
 service:
   type: ClusterIP
   name: http
-  port: 8080
+  port: 80
   protocol: TCP
   targerPort: 8080

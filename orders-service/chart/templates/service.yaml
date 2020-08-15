@@ -5,6 +5,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     app: {{ template "fullname" . }}
+    example: {{ template "fullname" . }}
     release: {{ .Release.Name }}
 spec:
   type: {{ .Values.service.type }}
@@ -15,4 +16,5 @@ spec:
       targetPort: {{ .Values.service.targetPort }}
   selector:
     app: {{ template "fullname" . }}
+    example: {{ template "fullname" . }}
     release: {{ .Release.Name }}

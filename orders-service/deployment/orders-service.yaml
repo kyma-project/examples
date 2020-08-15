@@ -5,18 +5,18 @@ metadata:
   namespace: orders-service
   labels:
     app: orders-service
-    release: orders-service
+    example: orders-service
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: orders-service
-      release: orders-service
+      example: orders-service
   template:
     metadata:
       labels:
         app: orders-service
-        release: orders-service
+        example: orders-service
     spec:
       containers:
         - name: orders-service
@@ -24,7 +24,7 @@ spec:
           imagePullPolicy: IfNotPresent
           resources:
             limits:
-              cpu: 16m
+              cpu: 20m
               memory: 32Mi
             requests:
               cpu: 10m
@@ -34,8 +34,6 @@ spec:
               value: "8080"
             - name: APP_REDIS_PREFIX
               value: "REDIS_"
-            - name: APP_ORDER_TYPE
-              value: "order.deliverysent"
 ---
 apiVersion: v1
 kind: Service
@@ -44,14 +42,14 @@ metadata:
   namespace: orders-service
   labels:
     app: orders-service
-    release: orders-service
+    example: orders-service
 spec:
   type: ClusterIP
   ports:
     - name: http
-      port: 8080
+      port: 80
       protocol: TCP
       targetPort: 8080
   selector:
     app: orders-service
-    release: orders-service
+    example: orders-service
