@@ -34,7 +34,7 @@ func main() {
 	order.RegisterAll("/orders", r)
 
 	webhook := handler.NewWebhook(orderSvc)
-	webhook.RegisterAll("/", r)
+	webhook.RegisterAll("/webhook", r)
 
 	log.Println("List of registered endpoints:")
 	err := printEndpoints(r)

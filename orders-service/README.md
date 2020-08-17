@@ -52,7 +52,7 @@ To build and run the Orders Service locally with Docker Compose, run:
 make docker-compose
 ```
 
-### Cleanup
+## Cleanup
 
 ### By Kubectl
 
@@ -92,3 +92,9 @@ export R_HOST="abc.com"
 export R_PORT="8080"
 export R_REDIS_PASSWORD="xyz"
 ```
+
+## Testing
+
+### Microservice
+
+For ...
