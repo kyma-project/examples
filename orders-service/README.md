@@ -4,7 +4,7 @@
 
 This example demonstrates Kyma capabilities, such as HTTP endpoints that expose and bind a service to a database. The Orders Service is a sample application (microservice) written in [Go](http://golang.org). It can expose HTTP endpoints used to CR*D (create, read and delete) for basic order JSON entities, as described in the [service's OpenAPI specification](docs/openapi.yaml). The service can run with either an in-memory database that is enabled by default or an external, Redis database. The 
 
-Additionally, a similar [Serverless](https://kyma-project.io/docs/components/serverless/) Function was created, with the ability to read all records and write a single one. Like the microservice, function can run with either an in-memory database or an Redis instance. Source code of Function is [here](./deployment/function.yaml) in `spec.source` field.
+Additionally, a similar [Serverless](https://kyma-project.io/docs/components/serverless/) Function was created, with the ability to read all records and write a single one. Like the microservice, Function can run with either an in-memory database or an Redis instance. Source code of Function is [here](./deployment/function.yaml) in `spec.source` field.
 
 For more information about exposing by API Rule, binding Service Instance and binding event Triggers to microservice/Function, see [official Kyma's started guide](link do guida).
 
