@@ -34,8 +34,8 @@ paths:
           description: Order created succesfully.
         '400':
           description: Bad request.
-        '406':
-          description: Not acceptable order type.
+        '409':
+          description: Order ID conflict.
         '500':
           description: Internal server error.
     delete:
@@ -108,8 +108,8 @@ paths:
           description: Order event handled successfully.
         '400':
           description: Bad request.
-        '406':
-          description: Not acceptable order type.
+        '409':
+          description: Order ID conflict.
         '500':
           description: Internal Server error.
 components:
