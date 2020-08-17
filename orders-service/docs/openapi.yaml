@@ -34,8 +34,8 @@ paths:
           description: Order created succesfully.
         '400':
           description: Bad request.
-        '409':
-          description: Order ID conflict.
+        '406':
+          description: Not acceptable order type.
         '500':
           description: Internal server error.
     delete:
@@ -93,7 +93,7 @@ paths:
           description: Order not found.
         '500':
           description: Internal server error.
-  /webhook:
+  /:
     post:
       description: Handle order event
       tags:
@@ -117,14 +117,18 @@ components:
     Order:
       type: object
       properties:
-        orderId:
+        orderCode:
           type: string
-          example: 11854638GU110615ELIN54ZQ
+          example: "123456789"
           description: ID of the order
-        total:
-          type: number
-          example: 1234.56
-          description: Total amount of the order
+        consignmentCode:
+          type: string
+          example: "123456789"
+          description: ID of the consignment code of order
+        consignmentStatus:
+          type: string
+          example: "PICKUP_COMPLETE"
+          description: Consignment status of order
       required:
         - orderId
         - total
@@ -133,11 +137,4 @@ components:
       items:
         $ref: '#/components/schemas/Order'
     OrderEvent:
-      type: object
-      properties:
-        example:
-          type: string
-          example: 76272727
-          description: "TODO: define it :)"
-      required:
-        - example
+      $ref: '#/components/schemas/Order'
