@@ -2,69 +2,75 @@
 
 ## Overview
 
-This example demonstrates Kyma capabilities, such as HTTP endpoints that expose and bind a service to a database. The Orders Service is a sample application (microservice) written in [Go](http://golang.org). It can expose HTTP endpoints used to CR*D (create, read and delete) for basic order JSON entities, as described in the [service's OpenAPI specification](docs/openapi.yaml). The service can run with either an in-memory database that is enabled by default or an external, Redis database. The 
+This example demonstrates how you can use Kyma to expose microservices and Functions on HTTP endpoints and bind them to an external database.
 
-Additionally, a similar [Serverless](https://kyma-project.io/docs/components/serverless/) Function was created, with the ability to read all records and write a single one. Like the microservice, Function can run with either an in-memory database or an Redis instance. Source code of Function is [here](./deployment/function.yaml) in `spec.source` field.
+This example contains:
 
-For more information about exposing by API Rule, binding Service Instance and binding event Triggers to microservice/Function, see [official Kyma's started guide](link do guida).
+- A sample application (microservice) written in [Go](http://golang.org). It can expose HTTP endpoints used to create, read, and delete basic order JSON entities, as described in the [service's OpenAPI specification](docs/openapi.yaml). This service can run with either a default in-memory database or the external Redis database.
+
+- A [serverless](https://kyma-project.io/docs/components/serverless/) Function with the ability to expose HTTP endpoints to used to read all order records or post single orders. Just like the microservice, the Function can run with either the default in-memory database or the external Redis instance. See the source code of this Function in the [`function.yaml`](./deployment/function.yaml) file under the **spec.source** field.
+
+To see this microservice and Function in action, see [Kyma's getting started guides](link do guida) and learn more about exposing services and Functions through API Rule CRs, bindings their  instances to external application like Redis and subscribes their instances to events from a sample mock application.
 
 ## Prerequisites
 
-- Kyma 1.14 or higher. To deploy Function, [Serverless](https://kyma-project.io/docs/components/serverless/) must be installed on the cluster.
-- [Kubectl](https://kubernetes.io/docs/reference/kubectl/kubectl/) 1.16 or higher.
-- [Helm](https://helm.sh/) 3.0 or higher - not required.
-- [Docker Compose](https://docs.docker.com/compose/) 3.0 or higher - not required.
+- Kyma 1.14 or higher. To deploy the Function, [Serverless](https://kyma-project.io/docs/components/serverless/) must be installed on the cluster
+- [Kubectl](https://kubernetes.io/docs/reference/kubectl/kubectl/) 1.16 or higher
+- [Helm](https://helm.sh/) 3.0 or higher (optional)
 
 ## Installation
 
-### By Kubectl
+You can install Orders Service (microservice or Function) either through kubectl or Helm.
 
-To install Orders Service in Kyma cluster, run:
+### Use kubectl
+
+To install microservice on a Kyma cluster, run:
 
 ```bash
 kubectl create ns orders-service
 kubectl apply -f ./deployment/orders-service.yaml
 ```
 
-To install Serverless Function in Kyma cluster, run:
+To install the Function on a Kyma cluster, run:
 
 ```bash
 kubectl create ns orders-service
 kubectl apply -f ./deployment/function.yaml
 ```
 
-### By Helm
+### Use Helm
 
-To install Orders Service in Kyma cluster, run:
+To install microservice on a Kyma cluster, run:
 
 ```bash
 helm install orders-service --namespace orders-service --create-namespace --timeout 60s --wait ./chart
 ```
 
-Configuration for helm release is in [`values.yaml`](./chart/values.yaml) file.
-
-### By Docker Compose
-
-To build and run the Orders Service locally with Docker Compose, run:
-
-```bash
-make docker-compose
-```
+See the [`values.yaml`](./chart/values.yaml) file for the configuration of the Helm release.
 
 ## Cleanup
 
-### By Kubectl
+See how to remove the example from the cluster through kubectl and Helm.
 
-Run the following command to completely remove the example (Orders Service or Serverless Function) and all its resources from the cluster:
+### Use kubectl
+
+Run this command to completely remove the microservice and all its resources from the cluster:
 
 ```bash
 kubectl delete all -l app=orders-service -n orders-service
 kubectl delete ns orders-service
 ```
 
-### By Helm
+Run this command to completely remove the Function and all its resources from the cluster:
 
-Run the following command to completely remove the helm release with example and all its resources from the cluster:
+```bash
+kubectl delete all -l app=orders-function -n orders-service
+kubectl delete ns orders-service
+```
+
+### Use Helm
+
+Run this command to completely remove the Helm release with the example and all its resources from the cluster:
 
 ```bash
 helm delete orders-service -n orders-service
@@ -73,17 +79,17 @@ kubectl delete ns orders-service
 
 ## Configuration
 
-To configure the microservice/Function, override the default values of these environment variables:
+To configure the microservice or the Function, override the default values of these environment variables:
 
 | Environment variable | Description                                                                   | Required   | Default value |
 | ---------------------- | ----------------------------------------------------------------------------- | ------ | ------------- |
-| **APP_PORT**       | Specifies the port of running service. Function doesn't use this variable. | NO | `8080`           |
-| **APP_REDIS_PREFIX**       | Specifies the prefix for all related to Redis environment variables. See the variables below. | NO | `REDIS_`           |
-| **{APP_REDIS_PREFIX}HOST**       | Specifies the host of Redis instance.                       | NO | `nil`            |
-| **{APP_REDIS_PREFIX}PORT**       | Specifies the port of Redis instance.                       | NO | `nil`            |
-| **{APP_REDIS_PREFIX}REDIS_PASSWORD**       | Specifies the password of Redis instance to authorization.                       | NO | `nil`            |
+| **APP_PORT**       | Specifies the port of the running service. The function doesn't use this variable. | No | `8080`           |
+| **APP_REDIS_PREFIX**       | Specifies the prefix for all Redis environment variables. See the variables below. | No | `REDIS_`           |
+| **{APP_REDIS_PREFIX}HOST**       | Specifies the host of the Redis instance.                       | No | `nil`            |
+| **{APP_REDIS_PREFIX}PORT**       | Specifies the port of the Redis instance.                       | No | `nil`            |
+| **{APP_REDIS_PREFIX}REDIS_PASSWORD**       | Specifies the password to authorize access to the Redis instance.                       | No | `nil`            |
 
-Example:
+See the example:
 
 ```bash
 export APP_REDIS_PREFIX="R_"
@@ -92,14 +98,15 @@ export R_PORT="8080"
 export R_REDIS_PASSWORD="xyz"
 ```
 
-For communicate the microservice/Function with the Redis instance, the **{APP_REDIS_PREFIX}HOST**, **{APP_REDIS_PREFIX}PORT**, **{APP_REDIS_PREFIX}REDIS_PASSWORD** environments must be given. 
-Otherwise the microservice/Function will always use the in-memory storage.
+> **NOTE:** To allow the microservice and the Function to communicate with the Redis instance, you must provide the **{APP_REDIS_PREFIX}HOST**, **{APP_REDIS_PREFIX}PORT**, **{APP_REDIS_PREFIX}REDIS_PASSWORD** environments. Otherwise, the microservice and the Function will always use in-memory storage.
 
 ## Testing
 
+Learn how to test both the microservice and the Function.
+
 ### Microservice
 
-To create a simple order in microservice, run:
+To send a simple order to the microservice, run:
 
 ```bash
 curl -X POST ${APP_URL}/orders -k -d \
@@ -116,13 +123,14 @@ To retrieve all orders saved in storage, run:
 curl -X GET ${APP_URL}/orders -k
 ```
 
-where **APP_URL** is a URL of running microservice.
+**APP_URL** is the URL of the running microservice. See the [tutorial on exposing a application with an API Rule](https://kyma-project.io/docs/master/components/api-gateway/#tutorials-expose-and-secure-a-service) for reference.
 
-Available paths are described in [service's OpenAPI specification](docs/openapi.yaml).
+
+> **TIP:** See the [service's OpenAPI specification](docs/openapi.yaml) for details of all endpoints.
 
 ### Function
 
-To create a simple order in Function, run:
+To send a simple order to the Function, run:
 
 ```bash
 curl -X POST ${FUNCTION_URL} -k -d \
@@ -139,4 +147,4 @@ To retrieve all orders saved in storage, run:
 curl -X GET ${FUNCTION_URL} -k
 ```
 
-where **FUNCTION_URL** is a URL of running Function. Please see tutorial [how to expose Function with API Rule](https://kyma-project.io/docs/components/serverless/#tutorials-expose-a-function-with-an-api-rule).
+**FUNCTION_URL** is the URL of the running Function. See the [tutorial on exposing a Function with an API Rule](https://kyma-project.io/docs/components/serverless/#tutorials-expose-a-function-with-an-api-rule) for reference.

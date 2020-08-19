@@ -4,8 +4,8 @@ metadata:
   name: orders-service-function
   namespace: orders-service
   labels:
-    app: orders-service
-    example: orders-service
+    app: orders-function
+    example: orders-function
 spec:
   deps: |-
     { 
