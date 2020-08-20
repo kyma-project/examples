@@ -8,9 +8,9 @@ This example contains:
 
 - A sample application (microservice) written in [Go](http://golang.org). It can expose HTTP endpoints used to create, read, and delete basic order JSON entities, as described in the [service's OpenAPI specification](docs/openapi.yaml). This service can run with either a default in-memory database or the external Redis database.
 
-- A [serverless](https://kyma-project.io/docs/components/serverless/) Function with the ability to expose HTTP endpoints to used to read all order records or post single orders. Just like the microservice, the Function can run with either the default in-memory database or the external Redis instance. See the source code of this Function in the [`function.yaml`](./deployment/function.yaml) file under the **spec.source** field.
+- A [serverless](https://kyma-project.io/docs/components/serverless/) Function with the ability to expose HTTP endpoints used to read all order records or post single orders. Just like the microservice, the Function can run with either the default in-memory database or the external Redis instance. See the source code of this Function in the [`function.yaml`](./deployment/function.yaml) file under the **spec.source** field.
 
-To see this microservice and Function in action, see [Kyma's getting started guides](link do guida) and learn more about exposing services and Functions through API Rule CRs, bindings their  instances to external application like Redis and subscribes their instances to events from a sample mock application.
+To see this microservice and Function in action, see the [getting started guides](link do guida) and learn more about exposing services and Functions through API Rule CRs. You will also learn how to bind them to an external application like Redis and subscribe them to events from a sample mock application.
 
 ## Prerequisites
 
@@ -24,7 +24,7 @@ You can install Orders Service (microservice or Function) either through kubectl
 
 ### Use kubectl
 
-To install microservice on a Kyma cluster, run:
+To install the microservice on a Kyma cluster, run:
 
 ```bash
 kubectl create ns orders-service
@@ -40,7 +40,7 @@ kubectl apply -f ./deployment/function.yaml
 
 ### Use Helm
 
-To install microservice on a Kyma cluster, run:
+To install the microservice on a Kyma cluster, run:
 
 ```bash
 helm install orders-service --namespace orders-service --create-namespace --timeout 60s --wait ./chart
@@ -84,7 +84,7 @@ To configure the microservice or the Function, override the default values of th
 | Environment variable | Description                                                                   | Required   | Default value |
 | ---------------------- | ----------------------------------------------------------------------------- | ------ | ------------- |
 | **APP_PORT**       | Specifies the port of the running service. The function doesn't use this variable. | No | `8080`           |
-| **APP_REDIS_PREFIX**       | Specifies the prefix for all Redis environment variables. See the variables below. | No | `REDIS_`           |
+| **APP_REDIS_PREFIX**       | Specifies the prefix for all Redis environment variables. See the variables in other rows. | No | `REDIS_`           |
 | **{APP_REDIS_PREFIX}HOST**       | Specifies the host of the Redis instance.                       | No | `nil`            |
 | **{APP_REDIS_PREFIX}PORT**       | Specifies the port of the Redis instance.                       | No | `nil`            |
 | **{APP_REDIS_PREFIX}REDIS_PASSWORD**       | Specifies the password to authorize access to the Redis instance.                       | No | `nil`            |
@@ -106,7 +106,7 @@ Learn how to test both the microservice and the Function.
 
 ### Microservice
 
-To send a simple order to the microservice, run:
+To send a sample order to the microservice, run:
 
 ```bash
 curl -X POST ${APP_URL}/orders -k -d \
@@ -123,17 +123,18 @@ To retrieve all orders saved in storage, run:
 curl -X GET ${APP_URL}/orders -k
 ```
 
-**APP_URL** is the URL of the running microservice. See the [tutorial on exposing a application with an API Rule](https://kyma-project.io/docs/master/components/api-gateway/#tutorials-expose-and-secure-a-service) for reference.
+**APP_URL** is the URL of the running microservice. See the [tutorial on exposing an application with an API Rule](https://kyma-project.io/docs/master/components/api-gateway/#tutorials-expose-and-secure-a-service) for reference.
 
 
 > **TIP:** See the [service's OpenAPI specification](docs/openapi.yaml) for details of all endpoints.
 
 ### Function
 
-To send a simple order to the Function, run:
+To send a sample order to the Function, run:
 
 ```bash
-curl -X POST ${FUNCTION_URL} -k -d \
+curl -X POST ${FUNCTION_URL} -k \
+  -H "Content-Type: application/json" -d \
   '{
     "consignmentCode": "76272727",
     "orderCode": "76272725",
