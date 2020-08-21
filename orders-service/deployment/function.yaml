@@ -1,7 +1,7 @@
 apiVersion: serverless.kyma-project.io/v1alpha1
 kind: Function
 metadata:
-  name: orders-service-function
+  name: orders-function
   namespace: orders-service
   labels:
     app: orders-function
@@ -9,7 +9,7 @@ metadata:
 spec:
   deps: |-
     { 
-      "name": "orders-service",
+      "name": "orders-function",
       "version": "1.0.0",
       "dependencies": {
         "redis": "3.0.2"

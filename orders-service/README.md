@@ -35,7 +35,7 @@ To install the Function on a Kyma cluster, run:
 
 ```bash
 kubectl create ns orders-service
-kubectl apply -f ./deployment/function.yaml
+kubectl apply -f ./deployment/orders-function.yaml
 ```
 
 ### Use Helm
