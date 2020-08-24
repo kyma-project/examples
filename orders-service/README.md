@@ -28,7 +28,8 @@ To install the microservice on a Kyma cluster, run:
 
 ```bash
 kubectl create ns orders-service
-kubectl apply -f ./deployment/orders-service.yaml
+kubectl apply -f ./deployment/orders-service-deployment.yaml
+kubectl apply -f ./deployment/orders-service-service.yaml
 ```
 
 To install the Function on a Kyma cluster, run:
