@@ -10,7 +10,7 @@ This example contains:
 
 - A [serverless](https://kyma-project.io/docs/components/serverless/) Function with the ability to expose HTTP endpoints used to read all order records or post single orders. Just like the microservice, the Function can run with either the default in-memory database or the external Redis instance. See the source code of this Function in the [`function.yaml`](./deployment/function.yaml) file under the **spec.source** field.
 
-To see this microservice and Function in action, see the [getting started guides](link do guida) and learn more about exposing services and Functions through API Rule CRs. You will also learn how to bind them to an external application like Redis and subscribe them to events from a sample mock application.
+To see this microservice and Function in action, see the [getting started guides](https://kyma-project.io/docs/) and learn more about exposing services and Functions through API Rule CRs. You will also learn how to bind them to an external application like Redis and subscribe them to events from a sample mock application.
 
 ## Prerequisites
 
