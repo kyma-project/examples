@@ -110,7 +110,8 @@ Learn how to test both the microservice and the Function.
 To send a sample order to the microservice, run:
 
 ```bash
-curl -X POST ${APP_URL}/orders -k -d \
+curl -X POST ${APP_URL}/orders -k \
+  -H "Content-Type: application/json" -d \
   '{
     "consignmentCode": "76272727",
     "orderCode": "76272725",

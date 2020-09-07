@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: Orders service and Events API
-  version: 0.0.2
+  version: 0.1.0
 tags:
   - name: orders
   - name: webhook
@@ -130,8 +130,9 @@ components:
           example: "PICKUP_COMPLETE"
           description: Consignment status of order
       required:
-        - orderId
-        - total
+        - orderCode
+        - consignmentCode
+        - consignmentStatus
     OrderList:
       type: array
       items:
