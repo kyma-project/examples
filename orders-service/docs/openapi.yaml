@@ -1,6 +1,6 @@
 openapi: 3.0.1
 info:
-  title: Orders service and Events API
+  title: Orders service API
   version: 0.1.0
 tags:
   - name: orders
