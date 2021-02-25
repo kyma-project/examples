@@ -1,12 +1,17 @@
 white-list-external: ["localhost", "kyma.local", "kyma-system"]
+external-links-to-ignore: ["localhost", "kyma.local", "kyma-system"]
 black-list: ["/vendor/"]
+files-to-ignore: ["/vendor/"]
 timeout: 60
 request-repeats: 5
 files:
   - path: "./examples/.github/ISSUE_TEMPLATE/security-vulnerability.md"
     config:
       white-list-internal: ["{CVSS"]
+      internal-links-to-ignore: ["{CVSS"]
       white-list-external: ["https://www.first.org/cvss/calculator/3.0#CVSS:3.0/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N"]
+      external-links-to-ignore: ["https://www.first.org/cvss/calculator/3.0#CVSS:3.0/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:L/A:N"]
   - path: "./examples/tracing/README.md"
     config:
       white-list-external: ["https://jaeger.{YOUR_CLUSTER_DOMAIN"]
+      external-links-to-ignore: ["https://jaeger.{YOUR_CLUSTER_DOMAIN"]
