@@ -10,7 +10,7 @@ import (
 type Service struct {
 	Port   string `envconfig:"serviceport,default=8017" json:"Port"`
 	// DbType set to 'mssql' will start the service using an MsSql datbase
-	// and it will require extra configuration. See https://github.com/kyma-project/examples/blob/master/http-db-service/internal/mssqldb/config.go
+	// and it will require extra configuration. See https://github.com/kyma-project/examples/blob/main/http-db-service/internal/mssqldb/config.go
 	DbType string `envconfig:"dbtype,default=memory" json:"DBType"` // [memory | mssql]
 }
 

@@ -34,7 +34,7 @@ type dbQuerier interface {
 
 // NewOrderRepositoryDb is used to instantiate and return the DB implementation of the OrderRepository.
 // The connection to the database is created by initiating the configuration defined
-// in https://github.com/kyma-project/examples/blob/master/http-db-service/internal/mssqldb/config.go
+// in https://github.com/kyma-project/examples/blob/main/http-db-service/internal/mssqldb/config.go
 func NewOrderRepositoryDb() (OrderRepository, error) {
 	var (
 		dbCfg dbPkg.Config

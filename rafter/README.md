@@ -18,7 +18,7 @@ By default, [MinIO](https://min.io/) stores all resources on a cluster, but it a
     Example:
 
     ```bash
-    export GH_WEBPAGE_URL=https://github.com/kyma-project/examples/archive/master.zip
+    export GH_WEBPAGE_URL=https://github.com/kyma-project/examples/archive/main.zip
     ```
 
 2. Apply a Bucket custom resource (CR):
@@ -72,7 +72,7 @@ By default, [MinIO](https://min.io/) stores all resources on a cluster, but it a
 5. Export and merge the values of the **baseUrl** field and the path to the `index.html` file from the Asset CR, and then open it in a default web browser:
 
     ```bash
-    open $(kubectl get assets.rafter.kyma-project.io webpage -o jsonpath='{.status.assetRef.baseUrl}{"/examples-master/rafter/webpage/index.html"}')
+    open $(kubectl get assets.rafter.kyma-project.io webpage -o jsonpath='{.status.assetRef.baseUrl}{"/examples-main/rafter/webpage/index.html"}')
     ```
 
 ### Cleanup
