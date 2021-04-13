@@ -48,7 +48,7 @@ docker run -ti -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Password!123' -p 1433:1433 -d 
 The command starts a MSSQL database in a container.
 
 ```bash
-username=sa password='Password!123' database=master tablename='test_orders' host=localhost port=1433 dbtype=mssql go test ./... -v
+username=sa password='Password!123' database=main tablename='test_orders' host=localhost port=1433 dbtype=mssql go test ./... -v
 ```
 
 The command runs the specific unit tests for MSSQL databases with the environment information to connect to the previously started MSSQL database.

@@ -22,5 +22,5 @@ push-image:
 .PHONY: ci-pr
 ci-pr: resolve validate build-image push-image
 
-.PHONY: ci-master
-ci-master: resolve validate build-image push-image
+.PHONY: ci-main
+ci-main: resolve validate build-image push-image
