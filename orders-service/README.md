@@ -10,7 +10,7 @@ This example contains:
 
 - A [serverless](https://kyma-project.io/docs/components/serverless/) Function with the ability to expose HTTP endpoints used to read all order records or post single orders. Just like the microservice, the Function can run with either the default in-memory database or the external Redis instance. See the source code of this Function in the [`function.yaml`](./deployment/function.yaml) file under the **spec.source** field.
 
-To see this microservice and Function in action, see the [getting started guides](https://kyma-project.io/docs/master/root/getting-started/) and learn more about exposing services and Functions through API Rule CRs. You will also learn how to bind them to an external application like Redis and subscribe them to events from a sample mock application.
+To see this microservice and Function in action, see the [getting started guides](https://kyma-project.io/docs/root/getting-started/) and learn more about exposing services and Functions through API Rule CRs. You will also learn how to bind them to an external application like Redis and subscribe them to events from a sample mock application.
 
 ## Prerequisites
 
@@ -125,7 +125,7 @@ To retrieve all orders saved in storage, run:
 curl -X GET ${APP_URL}/orders -k
 ```
 
-**APP_URL** is the URL of the running microservice. See the [tutorial on exposing an application with an API Rule](https://kyma-project.io/docs/master/components/api-gateway/#tutorials-expose-and-secure-a-service) for reference.
+**APP_URL** is the URL of the running microservice. See the [tutorial on exposing an application with an API Rule](https://kyma-project.io/docs/components/api-gateway/#tutorials-expose-and-secure-a-service) for reference.
 
 
 > **TIP:** See the [service's OpenAPI specification](docs/openapi.yaml) for details of all endpoints.
