@@ -32,6 +32,7 @@ The summary of the documentation in the `examples` repository lists all availabl
 | [Event Email Service](event-email-service/README.md) | Send an automated email upon receiving an Event.  | NodeJS |
 | [Tracing](tracing/README.md) | Configure tracing for a service in Kyma. | Go |
 | [Rafter](rafter/README.md) | Store static webpages using Rafter | HTML, CSS |
+| [Secure Service Exposure](secure-service-exposure/README.md) | Secure service exposure using OAuth2 Proxy | OAuth2, Istio |
 
 ## Installation
 
