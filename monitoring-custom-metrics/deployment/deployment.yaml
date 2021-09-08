@@ -11,6 +11,7 @@ spec:
   selector:
     matchLabels:
       app: sample-metrics
+      k8s-app: metrics
       example: monitoring-custom-metrics
   template:
     metadata:
@@ -22,7 +23,8 @@ spec:
     spec:
       containers:
       - name: sample-metrics
-        image: eu.gcr.io/kyma-project/develop/monitoring-custom-metrics:e56d9645
+        # image: eu.gcr.io/kyma-project/develop/monitoring-custom-metrics:e56d9645
+        image: jaythedevil666/kyma-example:latest
         imagePullPolicy: IfNotPresent
         resources:
           limits:
@@ -35,29 +37,13 @@ apiVersion: v1
 metadata:
   name: sample-metrics-8080
   labels:
-    example: monitoring-custom-metrics
     app: sample-metrics
-spec:
-  selector:
-    app: sample-metrics
-  ports:
-  - name: web
-    port: 8080
-    protocol: TCP
-
----
-kind: Service
-apiVersion: v1
-metadata:
-  name: sample-metrics-8081
-  labels:
     k8s-app: metrics
-    app: sample-metrics
     example: monitoring-custom-metrics
 spec:
   selector:
     app: sample-metrics
   ports:
-  - name: web
-    port: 8081
+  - name: http
+    port: 8080
     protocol: TCP

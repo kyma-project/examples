@@ -44,12 +44,8 @@ func main() {
 	http.Handle("/metrics", promhttp.Handler())
 
 	http.DefaultClient.Timeout = 30 * time.Second
-	//Excluded port 8081, to be reached by Prometheus
-	go func() {
-		log.Fatal(http.ListenAndServe(":8081", nil))
-	}()
 
-	//Port 8080 to be redirected to Envoy proxy not reacheble by Prometheus
+	//Port 8080 to be redirected to Envoy proxy
 	log.Fatal(http.ListenAndServe(":8080", nil))
 
 }
