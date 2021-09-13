@@ -11,7 +11,6 @@ spec:
   selector:
     matchLabels:
       app: sample-metrics
-      k8s-app: metrics
       example: monitoring-custom-metrics
   template:
     metadata:
@@ -23,8 +22,7 @@ spec:
     spec:
       containers:
       - name: sample-metrics
-        # image: eu.gcr.io/kyma-project/develop/monitoring-custom-metrics:e56d9645
-        image: jaythedevil666/kyma-example:latest
+        image: eu.gcr.io/kyma-project/develop/monitoring-custom-metrics:e56d9645
         imagePullPolicy: IfNotPresent
         resources:
           limits:
@@ -38,7 +36,6 @@ metadata:
   name: sample-metrics-8080
   labels:
     app: sample-metrics
-    k8s-app: metrics
     example: monitoring-custom-metrics
 spec:
   selector:

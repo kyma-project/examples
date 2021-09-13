@@ -10,11 +10,9 @@ metadata:
 spec:
   selector:
     matchLabels:
-      k8s-app: metrics
-  targetLabels:
-    - k8s-app
+      app: sample-metrics
   endpoints:
-    - port: web
+    - port: http
       interval: 10s
       scheme: https
       tlsConfig: 
