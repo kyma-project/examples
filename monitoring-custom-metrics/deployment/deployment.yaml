@@ -33,7 +33,7 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
-  name: sample-metrics-8080
+  name: sample-metrics
   labels:
     app: sample-metrics
     example: monitoring-custom-metrics
