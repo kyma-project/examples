@@ -6,7 +6,7 @@ resolve:
 	dep ensure -vendor-only -v
 
 validate:
-	go build -o golint-vendored ./vendor/golang.org/x/lint/golint -mod=readonly
+	go build -mod=readonly -o golint-vendored ./vendor/golang.org/x/lint/golint
 	./golint-vendored
 	rm golint-vendored
 
