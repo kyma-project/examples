@@ -6,6 +6,7 @@ resolve:
 	dep ensure -vendor-only -v
 
 build:
+	go mod vendor
 	go generate ./...
 	CGO_ENABLED=0 go build -o ./bin/app $(buildpath)
 
