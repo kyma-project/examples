@@ -5,11 +5,6 @@ TAG = $(DOCKER_TAG)
 resolve: 
 	dep ensure -vendor-only -v
 
-validate:
-	go mod vendor
-	go build -o example-application
-	rm example-application
-
 build:
 	go generate ./...
 	CGO_ENABLED=0 go build -o ./bin/app $(buildpath)
@@ -24,10 +19,10 @@ push-image:
 	docker push $(IMG):$(TAG)
 
 .PHONY: ci-pr
-ci-pr: resolve validate build build-image push-image
+ci-pr: resolve build build-image push-image
 
 .PHONY: ci-main
-ci-main: resolve validate build build-image push-image
+ci-main: resolve build build-image push-image
 
 clean:
 	rm -f ./bin/app
