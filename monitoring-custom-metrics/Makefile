@@ -7,9 +7,8 @@ resolve:
 
 validate:
 	go mod vendor
-	go build -o golint-vendored
-	./golint-vendored
-	rm golint-vendored
+	go build -o example-application
+	rm example-application
 
 build:
 	go generate ./...
