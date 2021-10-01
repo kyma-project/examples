@@ -6,7 +6,7 @@ For additional guidelines, see other sections of this document.
 
 ## Naming guidelines
 
-In addition to the general [naming guidelines](https://github.com/kyma-project/community/blob/main/guidelines/technical-guidelines/01-naming.md), the `examples` repository has these conventions to follow:
+In addition to the general [naming guidelines](https://github.com/kyma-project/community/blob/main/docs/guidelines/technical-guidelines/01-naming.md), the `examples` repository has these conventions to follow:
 
 - Folders:
   - All folder names are lowercase and connected with a dash (`-`) when they are comprised of two or more words. For example, `http-db-service`.
@@ -23,7 +23,7 @@ In addition to the general [naming guidelines](https://github.com/kyma-project/c
 
 This file type contains information about what an example illustrates, and the instructions on how to run it. Each example in this repository requires a `README.md` document.
 
-To create new `README.md` documents for new examples, use the [template](https://github.com/kyma-project/community/blob/main/guidelines/templates/resources/example_README.md) provided.
+To create new `README.md` documents for new examples, use the [template](https://github.com/kyma-project/community/blob/main/templates/resources/example_README.md) provided.
 Do not change the names or the order of the main sections in the `README.md` documents. However, you can create subsections to adjust each `README.md` document to the example's specific requirements. See the example of a [README.md](http-db-service/README.md) document.
 
 Find all `README.md` documents listed in the **List of examples** section in the main [README.md](README.md) document. When you create a new `README.md` document, add a new entry to the **List of examples** table. Follow these steps:
@@ -72,7 +72,7 @@ For all examples, the main `README.md` documents include the build scripts and t
 
 All examples are deployable in the cloud. Follow these rules to achieve this and to keep the complexity to a minimum:
 
-- All examples have only one `Dockerfile` which generates a single Docker image. The Docker image follows the Docker image [naming conventions](https://github.com/kyma-project/community/blob/main/guidelines/technical-guidelines/01-naming.md).
+- All examples have only one `Dockerfile` which generates a single Docker image. The Docker image follows the Docker image [naming conventions](https://github.com/kyma-project/community/blob/main/docs/guidelines/technical-guidelines/01-naming.md).
 - Only example images that are completely built are accessible in the registry, so the examples can be deployed to the cloud without the user having to build and push a new image.
 - All `README.md` documents in the examples provide the scripts to build and deploy images locally, and the instructions on how to run them.
 - Provide Deployment configurations and descriptors in a user-friendly format such as a `yaml` file, and never in bundled formats such as Helm charts, unless the example itself illustrates the usage of bundled formats.
