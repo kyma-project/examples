@@ -150,4 +150,4 @@ To retrieve all orders saved in storage, run:
 curl -X GET ${FUNCTION_URL} -k
 ```
 
-**FUNCTION_URL** is the URL of the running Function. See the [tutorial on exposing a Function with an API Rule](https://kyma-project.io/docs/components/serverless/#tutorials-expose-a-function-with-an-api-rule) for reference.
+**FUNCTION_URL** is the URL of the running Function. See the [tutorial on exposing a Function with an API Rule](https://kyma-project.io/docs/kyma/latest/03-tutorials/00-serverless/svls-03-expose-function/) for reference.
