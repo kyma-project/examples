@@ -21,8 +21,6 @@ The examples project provides a central repository to showcase and illustrate fe
 
 The summary of the documentation in the `examples` repository lists all available examples organized by the feature or concept they showcase. This structure provides a quick overview and easy navigation.
 
-<!-- NOTE: The table with examples is also available in the "kyma" repository. Whenever you update the table, modify this document accordingly: https://kyma-project.io/docs/root/kyma#examples-kyma-features-and-concepts-in-practice . -->
-
 | Example | Description | Technology |
 |---|---|---|
 | [Orders Service](orders-service/README.md) | Test the service and function that expose HTTP APIs to collect simple orders either in the in-memory storage or the Redis database. | Go, NodeJS, Redis |
