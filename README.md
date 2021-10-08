@@ -28,7 +28,8 @@ The summary of the documentation in the `examples` repository lists all availabl
 | [Gateway](gateway/README.md) | Expose APIs for functions or services.  | Kubeless |
 | [Service Binding](service-binding/lambda/README.md) | Bind a Redis service to a lambda function. | Kubeless, Redis, NodeJS |
 | [Alert Rules](monitoring-alert-rules/README.md) | Configure alert rules in Kyma.  | Prometheus |
-| [Custom Metrics in Kyma](monitoring-custom-metrics/README.md) | Expose custom metrics in Kyma.  | Go, Prometheus |
+| [Custom Metrics in Kyma1](monitoring-custom-metrics-kyma1/README.md) | Expose custom metrics in Kyma1.  | Go, Prometheus |
+| [Custom Metrics in Kyma2](monitoring-custom-metrics-kyma2/README.md) | Expose custom metrics in Kyma2.  | Go, Prometheus |
 | [Event Email Service](event-email-service/README.md) | Send an automated email upon receiving an Event.  | NodeJS |
 | [Tracing](tracing/README.md) | Configure tracing for a service in Kyma. | Go |
 | [Rafter](rafter/README.md) | Store static webpages using Rafter | HTML, CSS |
