@@ -1,14 +1,9 @@
-APP_NAME = monitoring-custom-metrics
+APP_NAME = monitoring-custom-metrics-kyma1
 IMG = $(DOCKER_PUSH_REPOSITORY)$(DOCKER_PUSH_DIRECTORY)/$(APP_NAME)
 TAG = $(DOCKER_TAG)
 
 resolve: 
 	dep ensure -vendor-only -v
-
-validate:
-	go build -o golint-vendored ./vendor/golang.org/x/lint/golint
-	./golint-vendored
-	rm golint-vendored
 
 build:
 	go generate ./...
@@ -24,10 +19,10 @@ push-image:
 	docker push $(IMG):$(TAG)
 
 .PHONY: ci-pr
-ci-pr: resolve validate build build-image push-image
+ci-pr: resolve build build-image push-image
 
 .PHONY: ci-main
-ci-main: resolve validate build build-image push-image
+ci-main: resolve build build-image push-image
 
 clean:
 	rm -f ./bin/app

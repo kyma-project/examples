@@ -1,4 +1,4 @@
-module github.com/kyma-project/examples/monitoring-custom-metrics
+module github.com/kyma-project/examples/monitoring-custom-metrics-kyma2
 
 go 1.16
 

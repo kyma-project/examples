@@ -1,4 +1,4 @@
-APP_NAME = monitoring-custom-metrics
+APP_NAME = monitoring-custom-metrics-kyma-2
 IMG = $(DOCKER_PUSH_REPOSITORY)$(DOCKER_PUSH_DIRECTORY)/$(APP_NAME)
 TAG = $(DOCKER_TAG)
 
