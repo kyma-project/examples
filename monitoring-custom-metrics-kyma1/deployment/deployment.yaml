@@ -1,0 +1,63 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample-metrics
+  labels:
+    app: sample-metrics
+    example: monitoring-custom-metrics
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sample-metrics
+      example: monitoring-custom-metrics
+  template:
+    metadata:
+      annotations:
+        traffic.sidecar.istio.io/includeInboundPorts: "8080"  
+      labels:
+        app: sample-metrics
+        example: monitoring-custom-metrics
+    spec:
+      containers:
+      - name: sample-metrics
+        image: eu.gcr.io/kyma-project/develop/monitoring-custom-metrics:e56d9645
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            memory: 100Mi
+          requests:
+            memory: 32Mi
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: sample-metrics-8080
+  labels:
+    example: monitoring-custom-metrics
+    app: sample-metrics
+spec:
+  selector:
+    app: sample-metrics
+  ports:
+  - name: web
+    port: 8080
+    protocol: TCP
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: sample-metrics-8081
+  labels:
+    k8s-app: metrics
+    app: sample-metrics
+    example: monitoring-custom-metrics
+spec:
+  selector:
+    app: sample-metrics
+  ports:
+  - name: web
+    port: 8081
+    protocol: TCP
