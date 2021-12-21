@@ -3,3 +3,16 @@ namespace: default
 runtime: nodejs14
 source:
     sourceType: inline
+subscriptions:
+    - name: event-receiver
+      protocol: ""
+      filter:
+        filters:
+            - eventSource:
+                property: source
+                type: exact
+                value: ""
+              eventType:
+                property: type
+                type: exact
+                value: sap.kyma.custom.acme.payload.sanitised.v1
