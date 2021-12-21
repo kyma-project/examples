@@ -1,0 +1,5 @@
+name: event-receiver
+namespace: default
+runtime: nodejs14
+source:
+    sourceType: inline
