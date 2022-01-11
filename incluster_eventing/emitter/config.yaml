@@ -6,7 +6,7 @@ source:
 apiRules:
     - name: incomming-http-trigger
       service:
-        host: incomming.inclusterevent.wookiee.shoot.canary.k8s-hana.ondemand.com
+        host: incomming
       rules:
         - methods:
             - GET
