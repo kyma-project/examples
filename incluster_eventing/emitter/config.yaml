@@ -4,9 +4,9 @@ runtime: nodejs14
 source:
     sourceType: inline
 apiRules:
-    - name: incomming-http-trigger
+    - name: incoming-http-trigger
       service:
-        host: incomming
+        host: incoming
       rules:
         - methods:
             - GET
