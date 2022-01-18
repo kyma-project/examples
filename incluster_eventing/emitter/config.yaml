@@ -1,0 +1,14 @@
+name: event-emitter
+namespace: default
+runtime: nodejs14
+source:
+    sourceType: inline
+apiRules:
+    - name: incoming-http-trigger
+      service:
+        host: incoming
+      rules:
+        - methods:
+            - GET
+          accessStrategies:
+            - handler: allow

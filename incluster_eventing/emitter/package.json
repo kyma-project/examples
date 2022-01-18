@@ -1,0 +1,7 @@
+{
+  "name": "sanitise-fn",
+  "version": "0.0.1",
+  "dependencies": {
+    "uuidv4": "6.2.12"
+  }
+}
