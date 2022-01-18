@@ -14,7 +14,7 @@ The example covers these tasks:
 
 ## Prerequisites
 
-- Install the Kubeless CLI as described in the [Kubeless installation guide](https://kubeless.io/docs/quick-start/).
+- Install the Kubeless CLI as described in the [Kubeless installation guide](https://github.com/vmware-archive/kubeless/blob/master/docs/quick-start.md).
 
 
 ## Installation
