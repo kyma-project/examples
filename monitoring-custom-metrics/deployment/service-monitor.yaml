@@ -3,9 +3,8 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: metrics
-  namespace: kyma-system
   labels:
-    prometheus: monitoring
+    app: sample-metrics
     example: monitoring-custom-metrics
 spec:
   selector:
