@@ -8,13 +8,13 @@ This example contains:
 
 - A sample application (microservice) written in [Go](http://golang.org). It can expose HTTP endpoints used to create, read, and delete basic order JSON entities, as described in the [service's OpenAPI specification](docs/openapi.yaml). This service can run with either a default in-memory database or the external Redis database.
 
-- A [serverless](https://kyma-project.io/docs/components/serverless/) Function with the ability to expose HTTP endpoints used to read all order records or post single orders. Just like the microservice, the Function can run with either the default in-memory database or the external Redis instance. See the source code of this Function in the [`function.yaml`](./deployment/function.yaml) file under the **spec.source** field.
+- A [serverless](https://github.com/kyma-project/kyma/tree/release-1.24/docs/serverless) Function with the ability to expose HTTP endpoints used to read all order records or post single orders. Just like the microservice, the Function can run with either the default in-memory database or the external Redis instance. See the source code of this Function in the [`function.yaml`](./deployment/function.yaml) file under the **spec.source** field.
 
-To see this microservice and Function in action, see the [getting started guides](https://kyma-project.io/docs/root/getting-started/) and learn more about exposing services and Functions through API Rule CRs. You will also learn how to bind them to an external application like Redis and subscribe them to events from a sample mock application.
+To see this microservice and Function in action, see the [getting started guides](https://github.com/kyma-project/kyma/blob/release-1.24/docs/getting-started/01-overview.md) and learn more about exposing services and Functions through API Rule CRs. You will also learn how to bind them to an external application like Redis and subscribe them to events from a sample mock application.
 
 ## Prerequisites
 
-- Kyma 1.14 or higher. To deploy the Function, [Serverless](https://kyma-project.io/docs/components/serverless/) must be installed on the cluster
+- Kyma 1.14 or higher. To deploy the Function, [Serverless](https://github.com/kyma-project/kyma/tree/release-1.24/docs/serverless) must be installed on the cluster
 - [Kubectl](https://kubernetes.io/docs/reference/kubectl/kubectl/) 1.16 or higher
 - [Helm](https://helm.sh/) 3.0 or higher (optional)
 
@@ -125,7 +125,7 @@ To retrieve all orders saved in storage, run:
 curl -X GET ${APP_URL}/orders -k
 ```
 
-**APP_URL** is the URL of the running microservice. See the [tutorial on exposing an application with an API Rule](https://kyma-project.io/docs/kyma/latest/03-tutorials/00-api-exposure/apix-03-expose-and-secure-service/) for reference.
+**APP_URL** is the URL of the running microservice. See the [tutorial on exposing an application with an API Rule](https://github.com/kyma-project/kyma/blob/release-1.24/docs/api-gateway/08-02-exposesecure.md) for reference.
 
 
 > **TIP:** See the [service's OpenAPI specification](docs/openapi.yaml) for details of all endpoints.
@@ -150,4 +150,4 @@ To retrieve all orders saved in storage, run:
 curl -X GET ${FUNCTION_URL} -k
 ```
 
-**FUNCTION_URL** is the URL of the running Function. See the [tutorial on exposing a Function with an API Rule](https://kyma-project.io/docs/kyma/latest/03-tutorials/00-serverless/svls-03-expose-function/) for reference.
+**FUNCTION_URL** is the URL of the running Function. See the [tutorial on exposing a Function with an API Rule](https://github.com/kyma-project/kyma/blob/release-1.24/docs/serverless/08-02-expose-function.md) for reference.
