@@ -1,4 +1,5 @@
 const { v4: uuidv4 } = require('uuid');
+require('axios');
 module.exports = {
     main: function (event, context) {
         let sanitisedData = sanitise(event.data)
