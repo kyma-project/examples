@@ -23,7 +23,7 @@ In addition to the general [naming guidelines](https://github.com/kyma-project/c
 
 This file type contains information about what an example illustrates, and the instructions on how to run it. Each example in this repository requires a `README.md` document.
 
-To create new `README.md` documents for new examples, use the [template](https://github.com/kyma-project/community/blob/main/templates/repository-template/README.md) provided.
+To create new `README.md` documents for new examples, use the [template](https://github.com/kyma-project/template-repository/blob/main/README.md) provided.
 Do not change the names or the order of the main sections in the `README.md` documents. However, you can create subsections to adjust each `README.md` document to the example's specific requirements. See the example of a [README.md](http-db-service/README.md) document.
 
 Find all `README.md` documents listed in the **List of examples** section in the main [README.md](README.md) document. When you create a new `README.md` document, add a new entry to the **List of examples** table. Follow these steps:
