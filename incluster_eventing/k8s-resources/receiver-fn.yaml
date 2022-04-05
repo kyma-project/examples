@@ -5,7 +5,7 @@ metadata:
   name: kyma-examples-repo
   namespace: default
 spec:
-  url: https://github.com/kwiatekus/examples.git
+  url: https://github.com/kyma-project/examples.git
 
 ---
 apiVersion: serverless.kyma-project.io/v1alpha1
