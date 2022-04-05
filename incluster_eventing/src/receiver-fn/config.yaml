@@ -2,7 +2,11 @@ name: event-receiver
 namespace: default
 runtime: nodejs14
 source:
-    sourceType: inline
+    sourceType: git
+    url: https://github.com/kwiatekus/examples.git
+    repository: kyma-examples-repo
+    reference: function-cicd-example
+    baseDir: /incluster_eventing/src/receiver-fn/
 subscriptions:
     - name: event-receiver
       protocol: ""
