@@ -6,7 +6,7 @@ This example provides a very simple scenario of asynchronous communication betwe
 - The first Function accepts the incoming traffic via HTTP, sanitizes the payload, and publishes the content as an in-cluster event via [Kyma Eventing](https://kyma-project.io/docs/kyma/latest/01-overview/main-areas/eventing/).
 - The second Function is a message receiver. It subscribes to the given event type and stores the payload.
 
-This example also provides a template how a git project with kyma functions could be structured. Please refer to the `Deploy` section below.
+This example also provides a template how a git project with Kyma Functions can be structured. Please refer to the Deploy section below.
 
 ## Prerequisites
 
@@ -16,7 +16,7 @@ This example also provides a template how a git project with kyma functions coul
 ## Deploy
 ### Deploy via Kyma CLI
 
-Use your favourite IDE to change the logic in handler.js files.
+Use your favorite IDE to change the logic in the handler.js files.
 Run and test changes locally using Kyma CLI.
 You can deploy to a test kyma runtime using Kyma CLI 
 
@@ -28,9 +28,9 @@ Changes pushed to the `handler.js` files should be automatically pulled by Kyma 
 
 ### Deploy via kubectl
 
-Render k8s manifests via `make render` target. This outputs k8s manifests to the k8s-resources folder.
+Render Kubernetes manifests using the `make render` target. This outputs Kubernetes manifests to the k8s-resources folder.
 
-Deploy to kyma runtime manualy via kubectl or `make deploy`.
+Deploy to Kyma runtime manually using kubectl or `make deploy`.
 There is also a github workflow included which you can use as a template to come up with own automated CI/CD.
 
 
