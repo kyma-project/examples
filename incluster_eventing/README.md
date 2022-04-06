@@ -17,8 +17,9 @@ This example also provides a template how a git project with Kyma Functions can 
 ### Deploy via Kyma CLI
 
 Use your favorite IDE to change the logic in the handler.js files.
-Run and test changes locally using Kyma CLI.
-You can deploy to a test kyma runtime using Kyma CLI 
+Use kyma CLI from the function directory ( e.g. `incluster_eventing/src/emitter-fn`) to:
+ - Run the function locally ( via `kyma run function`) 
+ - Deploy the function to a Kyma runtime ( via `kyma apply function` )
 
 You can find all installation steps in the [Set asynchronous communication between Functions](https://github.com/kyma-project/kyma/blob/b783d9e6dffc47c0e3c31923aff62371b0a46779/docs/03-tutorials/00-serverless/svls-11-set-asynchronous-connection-of-functions.md) tutorial.
 
@@ -28,7 +29,7 @@ Changes pushed to the `handler.js` files should be automatically pulled by Kyma 
 
 ### Deploy via kubectl
 
-Render Kubernetes manifests using the `make render` target. This outputs Kubernetes manifests to the k8s-resources folder.
+Render Kubernetes manifests using the `make render` target. This outputs Kubernetes manifests to the `k8s-resources` folder.
 
 Deploy to Kyma runtime manually using kubectl or `make deploy`.
 There is also a github workflow included which you can use as a template to come up with own automated CI/CD.
