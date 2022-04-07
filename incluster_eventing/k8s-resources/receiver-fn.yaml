@@ -1,0 +1,45 @@
+apiVersion: serverless.kyma-project.io/v1alpha1
+kind: GitRepository
+metadata:
+  creationTimestamp: null
+  name: kyma-examples-repo
+  namespace: default
+spec:
+  url: https://github.com/kyma-project/examples.git
+
+---
+apiVersion: serverless.kyma-project.io/v1alpha1
+kind: Function
+metadata:
+  creationTimestamp: null
+  name: event-receiver
+  namespace: default
+spec:
+  baseDir: /incluster_eventing/src/receiver-fn/
+  reference: function-cicd-example
+  runtime: nodejs14
+  source: kyma-examples-repo
+  type: git
+
+---
+apiVersion: eventing.kyma-project.io/v1alpha1
+kind: Subscription
+metadata:
+  creationTimestamp: null
+  name: event-receiver
+  namespace: default
+spec:
+  filter:
+    filters:
+    - eventSource:
+        property: source
+        type: exact
+        value: ""
+      eventType:
+        property: type
+        type: exact
+        value: sap.kyma.custom.acme.payload.sanitised.v1
+  protocol: ""
+  protocolsettings: {}
+  sink: http://event-receiver.default.svc.cluster.local
+

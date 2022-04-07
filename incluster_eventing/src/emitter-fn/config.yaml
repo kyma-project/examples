@@ -2,7 +2,11 @@ name: event-emitter
 namespace: default
 runtime: nodejs14
 source:
-    sourceType: inline
+    sourceType: git
+    url: https://github.com/kyma-project/examples.git
+    repository: kyma-examples-repo
+    reference: function-cicd-example
+    baseDir: /incluster_eventing/src/emitter-fn/
 apiRules:
     - name: incoming-http-trigger
       service:
