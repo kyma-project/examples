@@ -21,7 +21,7 @@ Use Kyma CLI from the Function directory (for example, `incluster_eventing/src/e
  - Run the Function locally (using `kyma run function`) 
  - Deploy the Function to Kyma runtime (using `kyma apply function` )
 
-You can find all installation steps in the [Set asynchronous communication between Functions](https://github.com/kyma-project/kyma/blob/b783d9e6dffc47c0e3c31923aff62371b0a46779/docs/03-tutorials/00-serverless/svls-11-set-asynchronous-connection-of-functions.md) tutorial.
+You can find all installation steps in the [Set asynchronous communication between Functions](https://kyma-project.io/docs/kyma/latest/03-tutorials/00-serverless/svls-11-set-asynchronous-connection-of-functions/) tutorial.
 
 
 ### Auto-deploy code changes
@@ -32,7 +32,7 @@ Changes pushed to the `handler.js` files should be automatically pulled by Kyma 
 Render Kubernetes manifests using the `make render` target. This outputs Kubernetes manifests to the `k8s-resources` folder.
 
 Deploy to Kyma runtime manually using kubectl or `make deploy`.
-There is also a github workflow included which you can use as a template to come up with own automated CI/CD.
+There is also a [github workflow](.github/workflows/deploy.yml) included which you can use as a template to come up with own automated CI/CD.
 
 
 
