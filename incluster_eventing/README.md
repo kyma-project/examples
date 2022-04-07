@@ -6,7 +6,7 @@ This example provides a very simple scenario of asynchronous communication betwe
 - The first Function accepts the incoming traffic via HTTP, sanitizes the payload, and publishes the content as an in-cluster event via [Kyma Eventing](https://kyma-project.io/docs/kyma/latest/01-overview/main-areas/eventing/).
 - The second Function is a message receiver. It subscribes to the given event type and stores the payload.
 
-This example also provides a template how a git project with Kyma Functions can be structured. Please refer to the Deploy section below.
+This example also provides a template for a git project with Kyma Functions. Please refer to the Deploy section below.
 
 ## Prerequisites
 
@@ -17,15 +17,15 @@ This example also provides a template how a git project with Kyma Functions can 
 ### Deploy via Kyma CLI
 
 Use your favorite IDE to change the logic in the handler.js files.
-Use kyma CLI from the function directory ( e.g. `incluster_eventing/src/emitter-fn`) to:
- - Run the function locally ( via `kyma run function`) 
- - Deploy the function to a Kyma runtime ( via `kyma apply function` )
+Use Kyma CLI from the Function directory (for example, `incluster_eventing/src/emitter-fn`) to:
+ - Run the Function locally (using `kyma run function`) 
+ - Deploy the Function to Kyma runtime (using `kyma apply function` )
 
 You can find all installation steps in the [Set asynchronous communication between Functions](https://github.com/kyma-project/kyma/blob/b783d9e6dffc47c0e3c31923aff62371b0a46779/docs/03-tutorials/00-serverless/svls-11-set-asynchronous-connection-of-functions.md) tutorial.
 
 
 ### Auto-deploy code changes
-Changes pushed to the `handler.js` files should be automatically pulled by Kyma Serverless as both functions are of `git` type and reference this git repository as the source.
+Changes pushed to the `handler.js` files should be automatically pulled by Kyma Serverless as both Functions are of git type and reference this git repository as the source.
 
 ### Deploy via kubectl
 
