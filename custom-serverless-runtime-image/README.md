@@ -1,4 +1,4 @@
-# Custom runtime
+# Custom serverless runtime image
 
 ## Overview
 
@@ -23,3 +23,5 @@ This example shows how to create own custom runtime for a Serverless Function ba
     docker build -t "${IMAGE_NAME}/${IMAGE_TAG}" .
     docker push "${IMAGE_NAME}/${IMAGE_TAG}"
     ```
+
+    > **Note:** You can use it when defining your functions in kyma. Read [this article](https://kyma-project.io/docs/kyma/latest/05-technical-reference/svls-08-function-specification#override-runtime-image) to learn more about overriding runtime image.
