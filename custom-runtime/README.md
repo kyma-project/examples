@@ -1,8 +1,8 @@
-# Custom Runtime
+# Custom runtime
 
 ## Overview
 
-This example shows how to create own custom runtime for a serverless function based on python runtime and `debian:bullseye-slim` base image to provide support for glibc.
+This example shows how to create own custom runtime for a Serverless Function based on the Python runtime and `debian:bullseye-slim` base image to provide support for glibc.
 
 ## Prerequisites
 
@@ -10,7 +10,7 @@ This example shows how to create own custom runtime for a serverless function ba
 
 ## Build an example runtime
 
-1. Export following environments:
+1. Export the following environments:
 
     ```bash
     export IMAGE_NAME=<image_name>
