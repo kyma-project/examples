@@ -28,7 +28,7 @@ FROM alpine:latest as certs
 RUN apk --update add ca-certificates
 
 # result container
-FROM scratch
+FROM alpine:latest
 
 LABEL source = git@github.com:kyma-project/examples.git
 
