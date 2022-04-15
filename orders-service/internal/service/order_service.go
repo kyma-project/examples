@@ -84,3 +84,7 @@ func (o *Order) toOrder(value string) (*model.Order, error) {
 
 	return order, nil
 }
+
+func (o *Order) GetStorageType(ctx context.Context) string {
+	return o.store.GetStoreType(ctx)
+}
