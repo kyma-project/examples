@@ -35,7 +35,7 @@ func (o *Order) RegisterAll(root string, router Router) {
 	router.HandleFunc(fmt.Sprintf("%s", root), o.OnCreate).Methods(http.MethodPost)
 	router.HandleFunc(fmt.Sprintf("%s", root), o.OnDeleteAll).Methods(http.MethodDelete)
 	router.HandleFunc(fmt.Sprintf("%s/{id}", root), o.OnDeleteOne).Methods(http.MethodDelete)
-	router.HandleFunc(fmt.Sprintf("%s/storage_type", root), o.OnGetStorageType).Methods(http.MethodGet)
+	router.HandleFunc("storagetype", o.OnGetStorageType).Methods(http.MethodGet)
 }
 
 func (o *Order) OnList(w http.ResponseWriter, r *http.Request) {
