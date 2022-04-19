@@ -48,3 +48,7 @@ func (m *Redis) Clear(ctx context.Context) error {
 	}
 	return nil
 }
+
+func (m *Redis) GetStoreType(ctx context.Context) string {
+	return "REDIS"
+}

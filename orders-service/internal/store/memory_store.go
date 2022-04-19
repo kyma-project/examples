@@ -78,3 +78,7 @@ func (m *Memory) Clear(_ context.Context) error {
 
 	return nil
 }
+
+func (m *Memory) GetStoreType(ctx context.Context) string {
+	return "IN_MEMORY"
+}
