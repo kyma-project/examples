@@ -31,7 +31,6 @@ The summary of the documentation in the `examples` repository lists all availabl
 | [Custom Metrics in Kyma](monitoring-custom-metrics/README.md) | Expose custom metrics in Kyma.  | Go, Prometheus |
 | [Event Email Service](event-email-service/README.md) | Send an automated email upon receiving an Event.  | NodeJS |
 | [Tracing](tracing/README.md) | Configure tracing for a service in Kyma. | Go |
-| [Rafter](rafter/README.md) | Store static webpages using Rafter. | HTML, CSS |
 | [Custom serverless runtime image](custom-serverless-runtime-image/README.md) | Build custom runtime image. | Python |
 
 ## Installation
