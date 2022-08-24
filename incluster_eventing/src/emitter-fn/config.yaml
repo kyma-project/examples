@@ -5,7 +5,7 @@ source:
     sourceType: git
     url: https://github.com/kyma-project/examples.git
     repository: kyma-examples-repo
-    reference: function-cicd-example
+    reference: main
     baseDir: /incluster_eventing/src/emitter-fn/
 apiRules:
     - name: incoming-http-trigger

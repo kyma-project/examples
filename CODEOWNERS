@@ -11,7 +11,13 @@
 /service-binding/ @Abd4llA @joek @rakesh-garimella @venturasr @lilitgh @k15r @nachtmaar @anishj0shi @montaro @abbi-gaurav @marcobebway @radufa @sayanh
 
 # Orders service example
-/orders-service/ @m00g3n @aerfio @pPrecel @magicmatatjahu
+/orders-service/ @m00g3n @pPrecel 
+
+# In-cluster eventing using function example
+/incluster_eventing/ @m00g3n @pPrecel @dbadura @kwiatekus @moelsayed @cortey
+
+# Custom function runtime image example
+/custom-serverless-runtime-image/ @m00g3n @pPrecel @dbadura @kwiatekus @moelsayed @cortey
 
 # All .md files
 *.md @klaudiagrz @mmitoraj @majakurcius @alexandra-simeonova @NHingerl @grego952
