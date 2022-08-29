@@ -270,4 +270,4 @@ Wait until all containers of the Pod are running.
 kubectl get pods -l example=gateway-service -n $KYMA_EXAMPLE_NS -o json | jq '.items[].spec.containers[].name'
 ```
 
-One of the returned strings should be the istio-proxy. If there is no such string, the Namespace probably does not have Istio injection enabled. For more information, read the document about the [sidecar proxy injection](https://kyma-project.io/docs/kyma/latest/04-operation-guides/operations/smsh-01-istio-disable-sidecar-injection/).
+One of the returned strings should be the istio-proxy. If there is no such string, the Namespace probably does not have Istio injection enabled. For more information, read the document about the [sidecar proxy injection](https://kyma-project.io/docs/kyma/2.5/04-operation-guides/operations/smsh-01-istio-disable-sidecar-injection/).
