@@ -1,6 +1,6 @@
 name: event-emitter
 namespace: default
-runtime: nodejs14
+runtime: nodejs16
 source:
     sourceType: git
     url: https://github.com/kyma-project/examples.git
