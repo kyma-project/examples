@@ -1,0 +1,62 @@
+apiVersion: serverless.kyma-project.io/v1alpha2
+kind: Function
+metadata:
+  labels:
+    app.kubernetes.io/name: scalable-worker-fn
+  name: scalable-worker-fn
+spec:
+  resourceConfiguration:
+    build:
+      resources: {}
+    function:
+      resources: {}
+  runtime: nodejs16
+  replicas: 1
+  source:
+    gitRepository:
+      url: https://github.com/kwiatekus/examples.git
+      baseDir: /scale-to-zero-with-keda/src/scalable-worker-fn
+      reference: scale-with-keda
+---
+apiVersion: eventing.kyma-project.io/v1alpha1
+kind: Subscription
+metadata:
+  creationTimestamp: null
+  name: scalable-worker-sub
+  namespace: default
+spec:
+  filter:
+    filters:
+    - eventSource:
+        property: source
+        type: exact
+        value: ""
+      eventType:
+        property: type
+        type: exact
+        value: sap.kyma.custom.acme.payload.received.v1
+  protocol: ""
+  protocolsettings: {}
+  sink: http://scalable-worker-fn.default.svc.cluster.local
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: worker-fn-scaled-object
+spec:
+  scaleTargetRef:
+    apiVersion:    serverless.kyma-project.io/v1alpha2
+    kind:          Function
+    name:          scalable-worker-fn
+  minReplicaCount:  0
+  maxReplicaCount:  5
+  cooldownPeriod: 30
+  pollingInterval: 10
+  triggers:
+  - type: prometheus
+    metadata:
+      serverAddress: http://prometheus-operated.kyma-system.svc.cluster.local:9090
+      metricName: requests_per_sec
+      query: round(sum(irate(istio_requests_total{reporter=~"source",destination_service=~"scalable-worker-fn.default.svc.cluster.local"}[1m])), 0.001)
+      threshold: '2'
+
