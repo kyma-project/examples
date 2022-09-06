@@ -3,9 +3,9 @@ namespace: default
 runtime: nodejs16
 source:
     sourceType: git
-    url: https://github.com/kyma-project/examples.git
+    url: https://github.com/kwiatekus/examples.git
     repository: kyma-examples-repo
-    reference: main
+    reference: improve-eventing-example
     baseDir: /incluster_eventing/src/emitter-fn/
 apiRules:
     - name: incoming-http-trigger

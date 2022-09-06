@@ -16,23 +16,39 @@ This example also provides a template for a git project with Kyma Functions. Ple
 ## Deploy
 ### Deploy via Kyma CLI
 
-Use your favorite IDE to change the logic in the handler.js files.
-Use Kyma CLI from the Function directory (for example, `incluster_eventing/src/emitter-fn`) to:
- - Run the Function locally (using `kyma run function`) 
- - Deploy the Function to Kyma runtime (using `kyma apply function` )
+You can deploy each  Function separately using Kyma CLI by running `kyma apply function` in each of the functions source folders.
 
 You can find all installation steps in the [Set asynchronous communication between Functions](https://kyma-project.io/docs/kyma/latest/03-tutorials/00-serverless/svls-11-set-asynchronous-connection-of-functions/) tutorial.
+
+### Deploy via kubectl
+
+Deploy to Kyma runtime manually using `kubectl apply`  or `make deploy` target.
+There is also a [github workflow](.github/workflows/deploy.yml) included which you can use as a template to come up with own automated CI/CD.
 
 
 ### Auto-deploy code changes
 Changes pushed to the `handler.js` files should be automatically pulled by Kyma Serverless as both Functions are of git type and reference this git repository as the source.
 
-### Deploy via kubectl
-
-Render Kubernetes manifests using the `make render` target. This outputs Kubernetes manifests to the `k8s-resources` folder.
-
-Deploy to Kyma runtime manually using kubectl or `make deploy`.
-There is also a [github workflow](.github/workflows/deploy.yml) included which you can use as a template to come up with own automated CI/CD.
 
 
+### Test the application
+
+Send an HTTP request to the emitter function
+
+```bash
+curl -H "Content-Type: application/cloudevents+json" -X POST  https://incoming.{your cluster domain} -d '{"foo":"bar"}'
+Event sent%
+```
+
+Fetch the logs of the receiver function to observe the message arrived.
+
+```bash
+
+> nodejs16-runtime@0.1.0 start
+> node server.js
+
+user code loaded in 0sec 0.649274ms
+storing data...
+{"foo":"bar"}
+```
 
