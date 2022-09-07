@@ -27,7 +27,13 @@ Run the following against your kyma runtime to install KEDA:
 kubectl apply -f https://github.com/kedacore/keda/releases/download/v2.8.0/keda-2.8.0.yaml
 ```
 
-Apply the example resources from `./k8s-resources` directory
+Make sure istio sidecar injection is enabled in the target namesapce:
+
+```bash
+kubectl label ns default istio-injection=enabled
+```
+
+Apply the example resources from `./k8s-resources` directory:
 ```bash
 kubectl apply -f ./k8s-resources`
 ```
