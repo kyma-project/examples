@@ -1,31 +1,29 @@
 apiVersion: serverless.kyma-project.io/v1alpha1
 kind: GitRepository
 metadata:
-  creationTimestamp: null
-  name: kyma-examples-repo
-  namespace: default
+    creationTimestamp: null
+    name: kyma-examples-repo
+    namespace: default
 spec:
-  url: https://github.com/kyma-project/examples.git
-
+    url: https://github.com/kwiatekus/examples.git
 ---
 apiVersion: serverless.kyma-project.io/v1alpha1
 kind: Function
 metadata:
-  creationTimestamp: null
-  name: event-emitter
-  namespace: default
+    labels:
+        app.kubernetes.io/name: event-emitter
+    name: event-emitter
+    namespace: default
 spec:
-  baseDir: /incluster_eventing/src/emitter-fn/
-  reference: function-cicd-example
-  runtime: nodejs14
-  source: kyma-examples-repo
-  type: git
-
+    baseDir: /incluster_eventing/src/emitter-fn/
+    reference: improve-eventing-example
+    runtime: nodejs16
+    source: kyma-examples-repo
+    type: git
 ---
 apiVersion: gateway.kyma-project.io/v1alpha1
 kind: APIRule
 metadata:
-  creationTimestamp: null
   name: incoming-http-trigger
   namespace: default
 spec:
@@ -40,4 +38,3 @@ spec:
     host: incoming
     name: event-emitter
     port: 80
-
