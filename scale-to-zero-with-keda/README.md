@@ -1,8 +1,9 @@
 ## Overview
 This example demostrates a very useful setup utilising 
- - Functions,
- - in-cluster eventing,
- - [Keda](https://keda.sh/) for Function scaling.
+ - Functions to deploy workloads directly from git repository,
+ - In-cluster Eventing to enable event-driven communication, 
+ - [Keda](https://keda.sh/) to drive Function scaling,
+ - Prometheus and Istio to deliver metrics essential for scaling decisions.
 
 It realises the following scenario:
 
