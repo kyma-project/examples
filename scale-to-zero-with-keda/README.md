@@ -56,7 +56,7 @@ NAME                                   READY   STATUS      RESTARTS   AGE
 scalable-worker-fn-build-7s4rf-wjhvt   0/1     Completed   0          2m16s
  ```
 
-Once you generate a load ( even a single request ) the non-zero request ratio for the worker Function will trigger scaling up of the worker Function's runtime Pods
+Once you generate a load ( even a single request ) the non-zero request rate targeting the worker Function will trigger scaling up of the worker Function's runtime Pods.
 
  Call the http proxy Function once 
 
