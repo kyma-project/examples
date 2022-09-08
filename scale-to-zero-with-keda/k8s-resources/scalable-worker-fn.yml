@@ -23,7 +23,6 @@ kind: Subscription
 metadata:
   creationTimestamp: null
   name: scalable-worker-sub
-  namespace: default
 spec:
   filter:
     filters:

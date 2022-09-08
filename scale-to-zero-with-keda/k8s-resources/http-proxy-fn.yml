@@ -29,7 +29,6 @@ apiVersion: gateway.kyma-project.io/v1beta1
 kind: APIRule
 metadata:
   name: http-proxy-fn
-  namespace: default
 spec:
   gateway: kyma-gateway.kyma-system.svc.cluster.local
   host: incoming
