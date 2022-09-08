@@ -1,5 +1,5 @@
 ## Overview
-This example demonstrates event-driven aproach that allows to decouple functional parts of an application and apply consumption based scaling.
+This example demonstrates an event-driven approach that allows you to decouple functional parts of an application and apply consumption-based scaling.
 It uses: 
  - Functions to deploy workloads directly from a Git repository,
  - In-cluster Eventing to enable event-driven communication, 
