@@ -19,6 +19,9 @@
 # Custom function runtime image example
 /custom-serverless-runtime-image/ @m00g3n @pPrecel @dbadura @kwiatekus @moelsayed @cortey
 
+# Scaling functions to zero with KEDA
+/scale-to-zero-with-kedam @m00g3n @pPrecel @dbadura @kwiatekus @moelsayed @cortey
+
 # All .md files
 *.md @klaudiagrz @mmitoraj @majakurcius @alexandra-simeonova @NHingerl @grego952
 
