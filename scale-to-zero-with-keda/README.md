@@ -1,5 +1,6 @@
 ## Overview
-This example demonstrates a handy setup utilizing: 
+This example demonstrates event-driven aproach that allows to decouple functional parts of an application and apply consumption based scaling.
+It uses: 
  - Functions to deploy workloads directly from a Git repository,
  - In-cluster Eventing to enable event-driven communication, 
  - [Keda](https://keda.sh/) to drive the Function's scaling,
