@@ -32,7 +32,7 @@ kubectl apply -f https://github.com/kedacore/keda/releases/download/v2.8.0/keda-
 Make sure istio sidecar injection is enabled in the target Namesapce:
 
 ```bash
-kubectl label ns default istio-injection=enabled
+kubectl label namespace default istio-injection=enabled
 ```
 
 Apply the example resources from `./k8s-resources` directory:
