@@ -1,0 +1,57 @@
+####### This block is required to run in parallel with a Kyma monitoring stack
+prometheusOperator:
+  # exclude the kyma-system namespace from watching to not conflict with the kyma monitoring stack
+  denyNamespaces:
+    - kyma-system
+kubeletService:
+  # re-use the kublet service definition of the kyma monitoring stack.
+  enabled: false
+prometheus-node-exporter:
+  # change the port of the node-export to be different from the one used by the kyma monitoring stack
+  service:
+    port: 9101
+    targetPort: 9101
+
+####### This block is disabling ETCD as it is not available in the data plane
+
+kubeEtcd:
+  enabled: false
+
+####### This block is needed to also use ServiceMonitors which are not deployed as part of the chart
+prometheus:
+  prometheusSpec:
+    # Disable requires helm release labels on ServiceMonitors
+    serviceMonitorSelectorNilUsesHelmValues: false
+    # Disable requires helm release labels on PodMonitors
+    podMonitorSelectorNilUsesHelmValues: false
+    # Disable requires helm release labels on Probes
+    probeSelectorNilUsesHelmValues: false
+    # Disable requires helm release labels on Rules
+    ruleSelectorNilUsesHelmValues: false
+
+####### This block is required to enable scraping of endpoints with Istio strict mTLS, see also https://istio.io/latest/docs/ops/integrations/prometheus/#tls-settings
+    podMetadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
+        traffic.sidecar.istio.io/includeInboundPorts: ""   # do not intercept any inbound ports
+        traffic.sidecar.istio.io/includeOutboundIPRanges: ""  # do not intercept any outbound traffic
+        proxy.istio.io/config: |
+          # configure an env variable `OUTPUT_CERTS` to write certificates to the given folder
+          proxyMetadata:
+            OUTPUT_CERTS: /etc/istio-output-certs
+        sidecar.istio.io/userVolumeMount: '[{"name": "istio-certs", "mountPath": "/etc/istio-output-certs"}]' # mount the shared volume at sidecar proxy
+    # Additional volumes on the output StatefulSet definition.
+    volumes:
+      - emptyDir:
+          medium: Memory
+        name: istio-certs
+
+    # Additional VolumeMounts on the output StatefulSet definition.
+    volumeMounts:
+      - mountPath: /etc/prometheus/secrets/istio.default/
+        name: istio-certs
+
+####### This block configures Grafana
+grafana:
+  adminUser: admin
+  #adminPassword: strongpassword
