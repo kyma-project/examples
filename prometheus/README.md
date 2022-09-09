@@ -38,10 +38,13 @@ An alternative can be a parallel installation of the upstream chart offering all
 
 1. Run the Helm upgrade command which will install the chart if not present yet. Change the grafana admin password (at the end of the command) to some value of your choice
     ```bash
-    helm upgrade --install -n ${KYMA_EXAMPLE_NS} ${HELM_RELEASE_NAME} prometheus-community/kube-prometheus-stack -f values.yaml --set grafana.adminPassword=myPwd
+    helm upgrade --install -n ${KYMA_EXAMPLE_NS} ${HELM_RELEASE_NAME} prometheus-community/kube-prometheus-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/prometheus/values.yaml --set grafana.adminPassword=myPwd
     ```
 
-Hereby, use the [values.yaml](./values.yaml) provided with this tutorial which contains customized settings derivating from the default settings.
+Hereby, use the [values.yaml](./values.yaml) provided with this tutorial which contains customized settings deviating from the default settings, or create your own one.
+The provided values.yaml covers the following adjustments:
+- Support parallel operation to a Kyma monitoring stack
+- Scraping of Istio strict mTLS workloads
 
 ### Verify the installation
 
@@ -57,36 +60,7 @@ Hereby, use the [values.yaml](./values.yaml) provided with this tutorial which c
 
 ### Deploy a custom workload and scrape it
 
-1. Deploy a custom application which exposes metrics:
-  ```bash
-  kubectl create namespace myapp
-  kubectl label namespace myapp istio-injection=enabled
-  kubectl apply -n myapp -f https://raw.githubusercontent.com/kyma-project/examples/main/monitoring-custom-metrics/deployment/deployment.yaml
-  ```
-
-2. Configure prometheus to scrape the new target by defining a ServiceMonitor:
-  ```bash
-  kubectl apply -n myapp -f - <<EOF
-  apiVersion: monitoring.coreos.com/v1
-  kind: ServiceMonitor
-  metadata:
-    name: metrics
-  spec:
-    selector:
-      matchLabels:
-        app: sample-metrics
-    endpoints:
-      - port: http
-        scheme: https
-        tlsConfig: 
-        caFile: /etc/prometheus/secrets/istio.default/root-cert.pem
-        certFile: /etc/prometheus/secrets/istio.default/cert-chain.pem
-        keyFile: /etc/prometheus/secrets/istio.default/key.pem
-        insecureSkipVerify: true  # Prometheus does not support Istio security naming, thus skip verifying target Pod certificate
-  EOF
-  ```
-
-3. Wait a while and check that metric `cpu_temperature_celsius` is explorable in Grafana
+1. Follow the tutorial [monitoring-custom-metrics](./../monitoring-custom-metrics/) but use the steps above for verifying that the metrics are collected.
 
 ### Cleanup
 
@@ -97,7 +71,3 @@ Run the following commands to completely remove the example and all its resource
     ```bash
     helm delete -n ${KYMA_EXAMPLE_NS} ${HELM_RELEASE_NAME}
     ```
-2. Remove the sample application:
-   
-   ```bash
-   kubectl delete namespace myapp

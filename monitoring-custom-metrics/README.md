@@ -21,13 +21,17 @@ This example shows how to expose custom metrics to Prometheus with a Golang serv
     export KYMA_EXAMPLE_NS="{namespace}"
     ```
 
-2. Deploy the service:
+2. Ensure that your namespace is having Istio sidecar injection enabled, the example will assume that the metrics are exposed ina strict mTLS mode:
+   ````
+   kubectl label namespace ${KYMA_EXAMPLE_NS} istio-injection=enabled
+
+3. Deploy the service:
 
     ```bash
     kubectl apply -f deployment/deployment.yaml -n $KYMA_EXAMPLE_NS
     ```
 
-3. Deploy the ServiceMonitor:
+4. Deploy the ServiceMonitor:
 
     ```bash
     kubectl apply -f deployment/service-monitor.yaml
