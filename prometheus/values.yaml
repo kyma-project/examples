@@ -12,9 +12,15 @@ prometheus-node-exporter:
     port: 9101
     targetPort: 9101
 
-####### This block is disabling ETCD as it is not available in the data plane
+####### This block is disabling control plane components which are not available in the Gardener data plane
 
 kubeEtcd:
+  enabled: false
+kubeControllerManager:
+  enabled: false
+kubeProxy:
+  enabled: false
+kubeScheduler:
   enabled: false
 
 ####### This block is needed to also use ServiceMonitors which are not deployed as part of the chart
