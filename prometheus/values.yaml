@@ -50,8 +50,3 @@ prometheus:
     volumeMounts:
       - mountPath: /etc/prometheus/secrets/istio.default/
         name: istio-certs
-
-####### This block configures Grafana
-grafana:
-  adminUser: admin
-  #adminPassword: strongpassword

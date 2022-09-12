@@ -53,7 +53,7 @@ The provided values.yaml covers the following adjustments:
    ```bash
    kubectl -n ${KYMA_EXAMPLE_NS} port-forward svc/${HELM_RELEASE_NAME}-kube-prometheus-stack-prometheus 9090
    ```
-2. Browse the grafana dashboard and verify that the dashboards are showing data. The user `admin` is pre-configured in the provided values.yaml, the password was provided in your helm install command. Following command will expose the dashboard on `http://localhost:3000`:
+2. Browse the grafana dashboard and verify that the dashboards are showing data. The user `admin` is pre-configured in the helm chart, the password was provided in your helm install command. Following command will expose the dashboard on `http://localhost:3000`:
    ```bash
    kubectl -n ${KYMA_EXAMPLE_NS} port-forward svc/${HELM_RELEASE_NAME}-grafana 3000:80
    ```
