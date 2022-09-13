@@ -6,11 +6,13 @@ The Kyma monitoring stack often brings limited configuration options in contrast
 
 An alternative can be a parallel installation of the upstream chart offering all customization options. This tutorial outlines how to achieve such installation in co-existent to the Kyma monitoring stack.
 
+Be aware of that this tutorial describes a basic setup which is not to be used in production. Further configuration is usually required like optimizations in regards to the amount of data to scrape and the required resource footprint of the installation. Even a different setup might be required to achieve qualities like high availability, scalability or durable long-term storage.
+
 ## Prerequisites
 
 - Kyma as the target deployment environment.
-- kubectl > 1.22.x
-- helm 3.x
+- Kubectl > 1.22.x
+- Helm 3.x
 
 ## Installation
 
