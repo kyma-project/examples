@@ -1,13 +1,13 @@
 ####### This block is required to run in parallel with a Kyma monitoring stack
 prometheusOperator:
-  # exclude the kyma-system namespace from watching to not conflict with the kyma monitoring stack
+  # exclude the kyma-system Namespace from watching to avoid conflict with the Kyma monitoring stack
   denyNamespaces:
     - kyma-system
 kubeletService:
-  # re-use the kublet service definition of the kyma monitoring stack.
+  # re-use the kublet service definition of the Kyma monitoring stack.
   enabled: false
 prometheus-node-exporter:
-  # change the port of the node-export to be different from the one used by the kyma monitoring stack
+  # change the port of the node-export to be different from the one used by the Kyma monitoring stack
   service:
     port: 9101
     targetPort: 9101
@@ -23,16 +23,16 @@ kubeProxy:
 kubeScheduler:
   enabled: false
 
-####### This block is needed to also use ServiceMonitors which are not deployed as part of the chart
+####### This block is needed to also use ServiceMonitors, which are not deployed as part of the chart
 prometheus:
   prometheusSpec:
-    # Disable requires helm release labels on ServiceMonitors
+    # Disable required Helm release labels on ServiceMonitors
     serviceMonitorSelectorNilUsesHelmValues: false
-    # Disable requires helm release labels on PodMonitors
+    # Disable required Helm release labels on PodMonitors
     podMonitorSelectorNilUsesHelmValues: false
-    # Disable requires helm release labels on Probes
+    # Disable required Helm release labels on Probes
     probeSelectorNilUsesHelmValues: false
-    # Disable requires helm release labels on Rules
+    # Disable required Helm release labels on Rules
     ruleSelectorNilUsesHelmValues: false
 
 ####### This block is required to enable scraping of endpoints with Istio strict mTLS, see also https://istio.io/latest/docs/ops/integrations/prometheus/#tls-settings

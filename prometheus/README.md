@@ -2,9 +2,9 @@
 
 ## Overview
 
-The Kyma monitoring stack often brings limited configuration options in contrast to the upstream [`kube-prometheus-stack`](https://github.com/prometheus-community/helm-charts/blob/main/charts/kube-prometheus-stack) chart. Modifications might be resetted at next upgrade cycle.
+The Kyma monitoring stack often brings limited configuration options in contrast to the upstream [`kube-prometheus-stack`](https://github.com/prometheus-community/helm-charts/blob/main/charts/kube-prometheus-stack) chart. Modifications might be reset at the next upgrade cycle.
 
-An alternative can be a parallel installation of the upstream chart offering all customization options. This tutorial outlines how to achieve such installation in co-existent to the Kyma monitoring stack.
+As an alternative, you can install the upstream chart with all customization options parallel. This tutorial outlines how to set up such installation in co-existence to the Kyma monitoring stack.
 
 Be aware of that this tutorial describes a basic setup which is not to be used in production. Further configuration is usually required like optimizations in regards to the amount of data to scrape and the required resource footprint of the installation. Even a different setup might be required to achieve qualities like high availability, scalability or durable long-term storage.
 
@@ -24,12 +24,12 @@ Be aware of that this tutorial describes a basic setup which is not to be used i
     export KYMA_EXAMPLE_NS="{namespace}"
     ```
 
-1. Export the Helm release name which you want to use. It can be any name,, be aware that all resources in the cluster will be prefixed with that name. Replace the `{release-name}` placeholder in the following command and run it:
+2. Export the Helm release name that you want to use. It can be any name, but be aware that all resources in the cluster will be prefixed with that name. Replace the `{release-name}` placeholder in the following command and run it:
     ```bash
     export HELM_RELEASE_NAME="{release-name}"
     ```
 
-2. Update your helm installation with the required helm repository:
+3. Update your Helm installation with the required Helm repository:
 
     ```bash
     helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
@@ -38,37 +38,37 @@ Be aware of that this tutorial describes a basic setup which is not to be used i
 
 ### Install the kube-prometheus-stack
 
-1. Run the Helm upgrade command which will install the chart if not present yet. Change the grafana admin password (at the end of the command) to some value of your choice
+1. Run the Helm upgrade command, which installs the chart if it's not present yet. At the end of the command, change the Grafana admin password to some value of your choice.
     ```bash
     helm upgrade --install -n ${KYMA_EXAMPLE_NS} ${HELM_RELEASE_NAME} prometheus-community/kube-prometheus-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/prometheus/values.yaml --set grafana.adminPassword=myPwd
     ```
 
-Hereby, use the [values.yaml](./values.yaml) provided with this tutorial which contains customized settings deviating from the default settings, or create your own one.
-The provided values.yaml covers the following adjustments:
+You can use the [values.yaml](./values.yaml) provided with this tutorial, which contains customized settings deviating from the default settings, or create your own one.
+The provided `values.yaml` covers the following adjustments:
 - Support parallel operation to a Kyma monitoring stack
-- Scraping of Istio strict mTLS workloads
+- Support the scraping of workload secured with Istio strict mTLS
 
 ### Verify the installation
 
-1. You should see several pods coming up in the namespace, especially prometheus and alertmanager. Assure that all pods are ending in a "Running" state.
-2. Browse the prometheus dashboard and verify that all "Status->Targets" are healthy. Following command will expose the dashboard on `http://localhost:9090`
+1. You should see several Pods coming up in the Namespace, especially Prometheus and Alertmanager. Assure that all Pods have the "Running" state.
+2. Browse the Prometheus dashboard and verify that all "Status->Targets" are healthy. The following command exposes the dashboard on `http://localhost:9090`:
    ```bash
    kubectl -n ${KYMA_EXAMPLE_NS} port-forward svc/${HELM_RELEASE_NAME}-kube-prometheus-stack-prometheus 9090
    ```
-2. Browse the grafana dashboard and verify that the dashboards are showing data. The user `admin` is pre-configured in the helm chart, the password was provided in your helm install command. Following command will expose the dashboard on `http://localhost:3000`:
+3. Browse the Grafana dashboard and verify that the dashboards are showing data. The user `admin` is pre-configured in the Helm chart; the password was provided in your `helm install` command. The following command exposes the dashboard on `http://localhost:3000`:
    ```bash
    kubectl -n ${KYMA_EXAMPLE_NS} port-forward svc/${HELM_RELEASE_NAME}-grafana 3000:80
    ```
 
 ### Deploy a custom workload and scrape it
 
-1. Follow the tutorial [monitoring-custom-metrics](./../monitoring-custom-metrics/) but use the steps above for verifying that the metrics are collected.
+1. Follow the tutorial [monitoring-custom-metrics](./../monitoring-custom-metrics/), but use the steps above to verify that the metrics are collected.
 
 ### Cleanup
 
-Run the following commands to completely remove the example and all its resources from the cluster:
+Run the following command to remove the installation from the cluster:
 
-1. Remove the stack by calling helm:
+1. Remove the stack by calling Helm:
 
     ```bash
     helm delete -n ${KYMA_EXAMPLE_NS} ${HELM_RELEASE_NAME}
