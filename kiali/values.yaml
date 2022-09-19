@@ -1,0 +1,18 @@
+
+
+cr:
+  create: true
+  name: kiali-server
+  spec:
+    deployment:
+      instance_name: "kiali-server"
+      accessible_namespaces:
+      - '**'
+    istio_namespace: "istio-system" # default is where Kiali is installed
+    external_services:
+      grafana:
+        enabled: true
+        in_cluster_url: "http://monitoring-grafana.kyma-system:80"
+        url: ""
+      prometheus:
+        url: "http://monitoring-prometheus.kyma-system:9090"
