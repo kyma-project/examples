@@ -1,12 +1,4 @@
-apiVersion: serverless.kyma-project.io/v1alpha1
-kind: GitRepository
-metadata:
-    name: kyma-examples-repo
-    namespace: default
-spec:
-    url: https://github.com/kwiatekus/examples.git
----
-apiVersion: serverless.kyma-project.io/v1alpha1
+apiVersion: serverless.kyma-project.io/v1alpha2
 kind: Function
 metadata:
     labels:
@@ -14,11 +6,12 @@ metadata:
     name: event-receiver
     namespace: default
 spec:
-    baseDir: /incluster_eventing/src/receiver-fn/
-    reference: improve-eventing-example
     runtime: nodejs16
-    source: kyma-examples-repo
-    type: git
+    source:
+      gitRepository: 
+        url: https://github.com/kyma-project/examples.git
+        baseDir: /incluster_eventing/src/receiver-fn/
+        reference: main
 ---
 apiVersion: eventing.kyma-project.io/v1alpha1
 kind: Subscription
