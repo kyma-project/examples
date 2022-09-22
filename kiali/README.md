@@ -63,6 +63,10 @@ Hereby, use the [values.yaml](./values.yaml) provided with this tutorial which c
 
 If you use [Jaeger](https://www.jaegertracing.io/) for distributed tracing, Kiali can utilize your Jaeger instance to [provide traces](https://kiali.io/docs/features/tracing/). Follow the [Jaeger configuration](https://kiali.io/docs/configuration/p8s-jaeger-grafana/jaeger/) guide for integration.
 
+### Integrate Grafana
+
+Kiali can provide links to Istio dashboards in Grafana. The [Grafana configuration](https://kiali.io/docs/configuration/p8s-jaeger-grafana/grafana/) page of the Kiali documentation describes how to integrate Grafana.
+
 ### Expose Kiali
 
 Kiali supports different authentication strategies. When exposing the Kiali server, we recommend to use an external OpenID Connect compatible identity provider.
