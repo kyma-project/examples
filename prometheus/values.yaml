@@ -3,39 +3,37 @@ prometheusOperator:
   # exclude the kyma-system Namespace from watching to avoid conflict with the Kyma monitoring stack
   denyNamespaces:
     - kyma-system
-kubeletService:
   # re-use the kublet service definition of the Kyma monitoring stack.
-  enabled: false
+  kubeletService:
+    enabled: false
+
+# change the port of the node-export to be different from the one used by the Kyma monitoring stack
 prometheus-node-exporter:
-  # change the port of the node-export to be different from the one used by the Kyma monitoring stack
   service:
     port: 9101
     targetPort: 9101
 
 ####### This block is disabling control plane components which are not available in the Gardener data plane
 
+# Disable scraping of etcd
 kubeEtcd:
   enabled: false
+
+# Disable scraping of kubeControllerManager
 kubeControllerManager:
   enabled: false
+
+# Disable scraping of kubeProxy
 kubeProxy:
   enabled: false
+
+# Disable scraping of kubeScheduler
 kubeScheduler:
   enabled: false
 
-####### This block is needed to also use ServiceMonitors, which are not deployed as part of the chart
+####### This block is required to enable scraping of endpoints with Istio strict mTLS, see also https://istio.io/latest/docs/ops/integrations/prometheus/#tls-settings
 prometheus:
   prometheusSpec:
-    # Disable required Helm release labels on ServiceMonitors
-    serviceMonitorSelectorNilUsesHelmValues: false
-    # Disable required Helm release labels on PodMonitors
-    podMonitorSelectorNilUsesHelmValues: false
-    # Disable required Helm release labels on Probes
-    probeSelectorNilUsesHelmValues: false
-    # Disable required Helm release labels on Rules
-    ruleSelectorNilUsesHelmValues: false
-
-####### This block is required to enable scraping of endpoints with Istio strict mTLS, see also https://istio.io/latest/docs/ops/integrations/prometheus/#tls-settings
     podMetadata:
       annotations:
         sidecar.istio.io/inject: "true"
@@ -46,6 +44,7 @@ prometheus:
           proxyMetadata:
             OUTPUT_CERTS: /etc/istio-output-certs
         sidecar.istio.io/userVolumeMount: '[{"name": "istio-certs", "mountPath": "/etc/istio-output-certs"}]' # mount the shared volume at sidecar proxy
+
     # Additional volumes on the output StatefulSet definition.
     volumes:
       - emptyDir:
@@ -56,3 +55,113 @@ prometheus:
     volumeMounts:
       - mountPath: /etc/prometheus/secrets/istio.default/
         name: istio-certs
+
+####### This block is needed to also use ServiceMonitors, which are not deployed as part of the chart
+
+    # Disable required Helm release labels on ServiceMonitors
+    serviceMonitorSelectorNilUsesHelmValues: false
+    # Disable required Helm release labels on PodMonitors
+    podMonitorSelectorNilUsesHelmValues: false
+    # Disable required Helm release labels on Probes
+    probeSelectorNilUsesHelmValues: false
+    # Disable required Helm release labels on Rules
+    ruleSelectorNilUsesHelmValues: false
+
+####### This block enabled scrape discovery based on typical prometheus annotations
+
+    additionalScrapeConfigs:
+      # Scrape config for service endpoints.
+      #
+      # The relabeling allows the actual service scrape endpoint to be configured
+      # via the following annotations:
+      #
+      # * `prometheus.io/scrape`: Only scrape services that have a value of `true`
+      # * `prometheus.io/scheme`: If the metrics endpoint is secured then you will need
+      # to set this to `https` & most likely set the `tls_config` of the scrape config.
+      # * `prometheus.io/path`: If the metrics path is not `/metrics` override this.
+      # * `prometheus.io/port`: If the metrics are exposed on a different port to the
+      # service then set this appropriately.
+      - job_name: 'kubernetes-service-endpoints'
+
+        kubernetes_sd_configs:
+          - role: endpoints
+
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scrape]
+            action: keep
+            regex: true
+          - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scheme]
+            action: replace
+            target_label: __scheme__
+            regex: (https?)
+          - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_path]
+            action: replace
+            target_label: __metrics_path__
+            regex: (.+)
+          - source_labels: [__address__, __meta_kubernetes_service_annotation_prometheus_io_port]
+            action: replace
+            target_label: __address__
+            regex: ([^:]+)(?::\d+)?;(\d+)
+            replacement: $1:$2
+          - action: labelmap
+            regex: __meta_kubernetes_service_label_(.+)
+          - source_labels: [__meta_kubernetes_namespace]
+            action: replace
+            target_label: kubernetes_namespace
+          - source_labels: [__meta_kubernetes_service_name]
+            action: replace
+            target_label: kubernetes_name
+          - source_labels: [__meta_kubernetes_service_name]
+            action: drop
+            regex: 'node-exporter'
+        tls_config:
+          ca_file: /etc/prometheus/secrets/istio.default/root-cert.pem
+          cert_file: /etc/prometheus/secrets/istio.default/cert-chain.pem
+          insecure_skip_verify: true
+          key_file: /etc/prometheus/secrets/istio.default/key.pem
+
+      # Example scrape config for pods
+      #
+      # The relabeling allows the actual pod scrape endpoint to be configured via the
+      # following annotations:
+      #
+      # * `prometheus.io/scrape`: Only scrape pods that have a value of `true`
+      # * `prometheus.io/scheme`: If the metrics endpoint is secured then you will need
+      # to set this to `https` & most likely set the `tls_config` of the scrape config.
+      # * `prometheus.io/path`: If the metrics path is not `/metrics` override this.
+      # * `prometheus.io/port`: Scrape the pod on the indicated port instead of the default of `9102`.
+      - job_name: 'kubernetes-pods'
+
+        kubernetes_sd_configs:
+          - role: pod
+
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+            action: keep
+            regex: true
+          - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scheme]
+            action: replace
+            target_label: __scheme__
+            regex: (https?)
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+            action: replace
+            target_label: __metrics_path__
+            regex: (.+)
+          - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+            action: replace
+            regex: ([^:]+)(?::\d+)?;(\d+)
+            replacement: $1:$2
+            target_label: __address__
+          - action: labelmap
+            regex: __meta_kubernetes_pod_label_(.+)
+          - source_labels: [__meta_kubernetes_namespace]
+            action: replace
+            target_label: kubernetes_namespace
+          - source_labels: [__meta_kubernetes_pod_name]
+            action: replace
+            target_label: kubernetes_pod_name
+        tls_config:
+          ca_file: /etc/prometheus/secrets/istio.default/root-cert.pem
+          cert_file: /etc/prometheus/secrets/istio.default/cert-chain.pem
+          insecure_skip_verify: true
+          key_file: /etc/prometheus/secrets/istio.default/key.pem

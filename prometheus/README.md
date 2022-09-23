@@ -48,6 +48,28 @@ The provided `values.yaml` covers the following adjustments:
 - Support parallel operation to a Kyma monitoring stack
 - Support the scraping of workload secured with Istio strict mTLS
 
+### Install Istio Support
+
+To configure Prometheus for scraping of the istio specific metrics from any istio-proxy running in the cluster, deploy a PodMonitor which scrapes any pod having a port with name `.*-envoy-prom` exposed.
+
+```bash
+kubectl -n ${KYMA_EXAMPLE_NS} apply -f https://raw.githubusercontent.com/kyma-project/examples/main/prometheus/istio/podmonitor-istio-proxy.yaml
+```
+
+Also deploy a ServiceMonitor definition for the central metrics of the `istiod` deployment.
+```bash
+kubectl -n ${KYMA_EXAMPLE_NS} apply -f https://raw.githubusercontent.com/kyma-project/examples/main/prometheus/istio/servicemonitor-istiod.yaml
+```
+
+As Grafana is configured to load dashboards dynamically from ConfigMaps in the cluster, Istio specific dashboards can be applied as well. To get the latest versions you can follow the official [instructions](https://istio.io/latest/docs/ops/integrations/grafana/#option-1-quick-start) or you take the prepared ones by calling:
+
+```bash
+kubectl -n ${KYMA_EXAMPLE_NS} apply -f https://raw.githubusercontent.com/kyma-project/examples/main/prometheus/istio/configmap-istio-grafana-dashboards.yaml
+kubectl -n ${KYMA_EXAMPLE_NS} apply -f https://raw.githubusercontent.com/kyma-project/examples/main/prometheus/istio/configmap-istio-services-grafana-dashboards.yaml
+```
+
+Please have in mind that this setup will collect all istio metrics on a pod level. As this can lead to cardinality issues and metrics are only needed on service level, it is recommended to use an improved setup based on federation as described in the [istio documentation](https://istio.io/latest/docs/ops/best-practices/observability/#using-prometheus-for-production-scale-monitoring).
+
 ### Verify the installation
 
 1. You should see several Pods coming up in the Namespace, especially Prometheus and Alertmanager. Assure that all Pods have the "Running" state.
@@ -63,6 +85,19 @@ The provided `values.yaml` covers the following adjustments:
 ### Deploy a custom workload and scrape it
 
 1. Follow the tutorial [monitoring-custom-metrics](./../monitoring-custom-metrics/), but use the steps above to verify that the metrics are collected.
+
+### Scrape workload via annotations
+
+Instead of defining a ServiceMonitor per workload for setting up custom metric scraping, you can use a simplified way based on annotations. The used [values.yaml](./values.yaml) defines an `additionalScrapeConfig` which will scrape all pods and services having these annotations:
+
+```yaml
+prometheus.io/scrape: "true"   # mandatory to enable automatic scraping
+prometheus.io/scheme: https    # optional, default is http. Use "https" to scrape using istio client certificates
+prometheus.io/port: "1234"     # optional, configure the port under which the metrics are exposed
+prometheus.io/path: /myMetrics # optional, configure the path under which the metrics are exposed
+```
+
+You can try it out by removing the ServiceMonitor of the example used above and instead providing the annotations to the Service manifest.
 
 ### Cleanup
 

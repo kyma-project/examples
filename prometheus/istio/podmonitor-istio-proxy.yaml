@@ -1,0 +1,13 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: istio-proxy
+spec:
+  selector:
+    matchLabels:
+      security.istio.io/tlsMode: 'istio'
+  namespaceSelector:
+    any: true
+  podMetricsEndpoints:
+    - port: http-envoy-prom
+      path: /stats/prometheus
