@@ -106,6 +106,9 @@ prometheus:
           - action: labelmap
             regex: __meta_kubernetes_service_label_(.+)
           - source_labels: [__meta_kubernetes_namespace]
+            action: drop
+            regex: kyma-system
+          - source_labels: [__meta_kubernetes_namespace]
             action: replace
             target_label: kubernetes_namespace
           - source_labels: [__meta_kubernetes_service_name]
@@ -154,6 +157,9 @@ prometheus:
             target_label: __address__
           - action: labelmap
             regex: __meta_kubernetes_pod_label_(.+)
+          - source_labels: [__meta_kubernetes_namespace]
+            action: drop
+            regex: kyma-system
           - source_labels: [__meta_kubernetes_namespace]
             action: replace
             target_label: kubernetes_namespace
