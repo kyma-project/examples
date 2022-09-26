@@ -19,10 +19,10 @@ An alternative can be a parallel installation of the upstream chart offering all
 1. Export your Namespace as a variable. Replace the `{namespace}` placeholder in the following command and run it:
 
     ```bash
-    export KYMA_EXAMPLE_NS="{namespace}"
+    export KYMA_KIALI_NS="{namespace}"
     ```
 
-1. Export the Helm release name which you want to use. It can be any name, be aware that all resources in the cluster will be prefixed with that name. Replace the `{release-name}` placeholder in the following command and run it:
+1. Export the Helm release name which you want to use. The release name has to be unique for the chosen namespace. Be aware that all resources in the cluster will be prefixed with that name. Replace the `{release-name}` placeholder in the following command and run it:
     ```bash
     export HELM_RELEASE_NAME="{release-name}"
     ```
@@ -40,7 +40,7 @@ Kiali recommends to install Kiali via the kiali-operator always. So this tutoria
 
 1. Run the Helm upgrade command which will install the chart if not present yet.
     ```bash
-    helm upgrade --install --create-namespace -n ${KYMA_EXAMPLE_NS} ${HELM_RELEASE_NAME} kiali/kiali-operator --set cr.spec.auth.strategy=anonymous -f https://raw.githubusercontent.com/kyma-project/examples/main/kiali/values.yaml
+    helm upgrade --install --create-namespace -n ${KYMA_KIALI_NS} ${HELM_RELEASE_NAME} kiali/kiali-operator --set cr.spec.auth.strategy=anonymous -f https://raw.githubusercontent.com/kyma-project/examples/main/kiali/values.yaml
     ```
 
 Hereby, use the [values.yaml](./values.yaml) provided with this tutorial which contains customized settings deviating from the default settings, or create your own one.
@@ -48,12 +48,12 @@ Hereby, use the [values.yaml](./values.yaml) provided with this tutorial which c
 ### Verify the installation
 
 1. You should see the kiali-operator and kiali pod coming up in the namespace. Assure that all pods are ending in a "Running" state.
-1. Browse the Kiali dashboard. Following command will expose the dashboard on `http://localhost:9090`
+1. Browse the Kiali dashboard. Following command will expose the dashboard on `http://localhost:20001`
    ```bash
-   kubectl -n ${KYMA_EXAMPLE_NS} port-forward svc/kiali-server 20001
+   kubectl -n ${KYMA_KIALI_NS} port-forward svc/kiali-server 20001
    ```
 
-### Deploy a custom workload and call it
+### Deploy a custom workload and invoke
 
 1. Follow the tutorial [orders-service](./../orders-service/) and see the service communication visualized in Kiali.
 
@@ -81,5 +81,5 @@ Run the following commands to completely remove the example and all its resource
 1. Remove the stack by calling helm:
 
     ```bash
-    helm delete -n ${KYMA_EXAMPLE_NS} ${HELM_RELEASE_NAME}
+    helm delete -n ${KYMA_KIALI_NS} ${HELM_RELEASE_NAME}
     ```
