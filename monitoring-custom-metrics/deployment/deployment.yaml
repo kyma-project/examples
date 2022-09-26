@@ -14,8 +14,6 @@ spec:
       example: monitoring-custom-metrics
   template:
     metadata:
-      annotations:
-        traffic.sidecar.istio.io/includeInboundPorts: "8080"  
       labels:
         app: sample-metrics
         example: monitoring-custom-metrics
@@ -29,6 +27,9 @@ spec:
             memory: 100Mi
           requests:
             memory: 32Mi
+        ports:
+        - name: http
+          containerPort: 8080
 ---
 kind: Service
 apiVersion: v1

@@ -12,6 +12,12 @@ prometheus-node-exporter:
   service:
     port: 9101
     targetPort: 9101
+    annotations:
+####### This block disables prometheus annotations on monitoring components in order to be able to enable scraping via annotation for all workloads
+      prometheus.io/scrape: "false"
+
+kube-state-metrics:
+  prometheusScrape: false
 
 ####### This block is disabling control plane components which are not available in the Gardener data plane
 
@@ -35,8 +41,9 @@ kubeScheduler:
 prometheus:
   prometheusSpec:
     podMetadata:
-      annotations:
+      labels:
         sidecar.istio.io/inject: "true"
+      annotations:
         traffic.sidecar.istio.io/includeInboundPorts: ""   # do not intercept any inbound ports
         traffic.sidecar.istio.io/includeOutboundIPRanges: ""  # do not intercept any outbound traffic
         proxy.istio.io/config: |
@@ -68,7 +75,7 @@ prometheus:
     ruleSelectorNilUsesHelmValues: false
 
 ####### This block enabled scrape discovery based on typical prometheus annotations
-
+  
     additionalScrapeConfigs:
       # Scrape config for service endpoints.
       #
@@ -107,7 +114,7 @@ prometheus:
             regex: __meta_kubernetes_service_label_(.+)
           - source_labels: [__meta_kubernetes_namespace]
             action: drop
-            regex: kyma-system
+            regex: kyma-system|kube-system
           - source_labels: [__meta_kubernetes_namespace]
             action: replace
             target_label: kubernetes_namespace
@@ -159,15 +166,10 @@ prometheus:
             regex: __meta_kubernetes_pod_label_(.+)
           - source_labels: [__meta_kubernetes_namespace]
             action: drop
-            regex: kyma-system
+            regex: kyma-system|kube-system
           - source_labels: [__meta_kubernetes_namespace]
             action: replace
             target_label: kubernetes_namespace
           - source_labels: [__meta_kubernetes_pod_name]
             action: replace
             target_label: kubernetes_pod_name
-        tls_config:
-          ca_file: /etc/prometheus/secrets/istio.default/root-cert.pem
-          cert_file: /etc/prometheus/secrets/istio.default/cert-chain.pem
-          insecure_skip_verify: true
-          key_file: /etc/prometheus/secrets/istio.default/key.pem

@@ -23,6 +23,7 @@ Be aware of that this tutorial describes a basic setup which is not to be used i
     ```bash
     export KYMA_EXAMPLE_NS="{namespace}"
     ```
+    >Note: Please assure that this namespace has no Istio sidecar injection enabled. The helm chart will deploy jobs which will not succeed having sidecar injection enabled by default.
 
 2. Export the Helm release name that you want to use. It can be any name, but be aware that all resources in the cluster will be prefixed with that name. Replace the `{release-name}` placeholder in the following command and run it:
     ```bash
@@ -92,7 +93,7 @@ Instead of defining a ServiceMonitor per workload for setting up custom metric s
 
 ```yaml
 prometheus.io/scrape: "true"   # mandatory to enable automatic scraping
-prometheus.io/scheme: https    # optional, default is http. Use "https" to scrape using istio client certificates
+prometheus.io/scheme: https    # optional, default is http. Use "https" to scrape using istio client certificates. Will only work for services (not pods)
 prometheus.io/port: "1234"     # optional, configure the port under which the metrics are exposed
 prometheus.io/path: /myMetrics # optional, configure the path under which the metrics are exposed
 ```
