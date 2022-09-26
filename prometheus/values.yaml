@@ -19,7 +19,7 @@ prometheus-node-exporter:
 kube-state-metrics:
   prometheusScrape: false
 
-####### This block is disabling control plane components which are not available in the Gardener data plane
+####### This block disables control plane components which are not reachable from within the Gardener data plane
 
 # Disable scraping of etcd
 kubeEtcd:

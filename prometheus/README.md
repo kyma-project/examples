@@ -6,7 +6,7 @@ The Kyma monitoring stack often brings limited configuration options in contrast
 
 As an alternative, you can install the upstream chart with all customization options parallel. This tutorial outlines how to set up such installation in co-existence to the Kyma monitoring stack.
 
-Be aware of that this tutorial describes a basic setup which is not to be used in production. Further configuration is usually required like optimizations in regards to the amount of data to scrape and the required resource footprint of the installation. Even a different setup might be required to achieve qualities like high availability, scalability or durable long-term storage.
+> **CAUTION:** This tutorial describes a basic setup that you should not use in production. Typically, a production setup needs further configuration, like optimizing the amount of data to scrape and the required resource footprint of the installation. To achieve qualities like high availability, scalability, or durable long-term storage, you might need an even more advanced setup.
 
 ## Prerequisites
 
