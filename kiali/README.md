@@ -48,7 +48,7 @@ You can either use the `[values.yaml](./values.yaml)` provided in this `kiali` f
 ### Verify the installation
 
 1. You should see the `kiali-operator` and `kiali` Pod coming up in the Namespace. All Pods must eventually be in a "Running" state.
-1. Browse the Kiali dashboard. Following command will expose the dashboard on `http://localhost:20001`
+1. Browse the Kiali dashboard. The following command exposes the dashboard on `http://localhost:20001`:
    ```bash
    kubectl -n ${KYMA_KIALI_NS} port-forward svc/kiali-server 20001
    ```
