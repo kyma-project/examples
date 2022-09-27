@@ -4,7 +4,7 @@
 
 The Kyma Kiali component brings limited configuration options in contrast to the upstream [`kiali-operator`](https://github.com/kiali/helm-charts/tree/master/kiali-operator) chart. Modifications might be reset at next upgrade cycle.
 
-An alternative can be a parallel installation of the upstream chart offering all customization options. The following instructions outline how to achieve such installation in co-existent to the Kyma stack.
+An alternative can be a parallel installation of the upstream chart offering all customization options. The following instructions outline how to achieve such installation in co-existence to the Kyma stack.
 
 ## Prerequisites
 
