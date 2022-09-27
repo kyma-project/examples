@@ -1,0 +1,42 @@
+cr:
+  create: true
+  name: kiali-server
+  spec:
+    server:
+      observability:
+        tracing:
+          collector_url: ""
+          enabled: false
+    deployment:
+      instance_name: "kiali-server"
+      accessible_namespaces:
+      - '**'
+      pod_labels:
+        sidecar.istio.io/inject: "true" # for Jaeger access
+      resources:
+        limits:
+          cpu: 250m
+          memory: 256Mi
+        requests:
+          cpu: 10m
+          memory: 64Mi
+    istio_namespace: "istio-system" # default is where Kiali is installed
+    external_services:
+      istio:
+        component_status:
+          components:
+          - app_label: istiod
+            is_core: true
+            is_proxy: false
+          - app_label: istio-ingressgateway
+            is_core: true
+            is_proxy: true
+      grafana:
+        enabled: false
+      prometheus:
+        url: "http://monitoring-prometheus.kyma-system:9090"
+      tracing:
+        enabled: false
+    kiali_feature_flags:
+      ui_defaults:
+        metrics_per_refresh: "10m"
