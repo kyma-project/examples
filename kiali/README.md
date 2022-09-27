@@ -55,7 +55,7 @@ You can either use the `[values.yaml](./values.yaml)` provided in this `kiali` f
 
 ### Deploy a custom workload and invoke
 
-1. To see the service communication visualized in Kiali, follow the tutorial [orders-service](./../orders-service/).
+1. To see the service communication visualized in Kiali, follow the instructions in [orders-service](./../orders-service/).
 
 ## Advanced Topics
 
@@ -63,7 +63,7 @@ You can either use the `[values.yaml](./values.yaml)` provided in this `kiali` f
 
 If you use [Jaeger](https://www.jaegertracing.io/) for distributed tracing, Kiali can use your Jaeger instance to [provide traces](https://kiali.io/docs/features/tracing/).
 
-For integration instructions, read [Jaeger configuration](https://kiali.io/docs/configuration/p8s-jaeger-grafana/jaeger/).
+For integration instructions, read [Kiali: Jaeger configuration](https://kiali.io/docs/configuration/p8s-jaeger-grafana/jaeger/).
 
 ### Integrate Grafana
 
