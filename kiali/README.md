@@ -40,22 +40,38 @@ An alternative can be a parallel installation of the upstream chart offering all
 
 1. Run the Helm upgrade command, which installs the chart if not present yet.
     ```bash
-    helm upgrade --install --create-namespace -n ${KYMA_KIALI_NS} ${HELM_RELEASE_NAME} kiali/kiali-operator --set cr.spec.auth.strategy=anonymous -f https://raw.githubusercontent.com/kyma-project/examples/main/kiali/values.yaml
+    helm upgrade --install --create-namespace -n ${KYMA_KIALI_NS} ${HELM_RELEASE_NAME} kiali/kiali-operator -f https://raw.githubusercontent.com/kyma-project/examples/main/kiali/values.yaml
     ```
 
 You can either use the `[values.yaml](./values.yaml)` provided in this `kiali` folder, which contains customized settings deviating from the default settings, or create your own `values.yaml` file.
 
 ### Verify the installation
 
-1. You should see the `kiali-operator` and `kiali` Pod coming up in the Namespace. All Pods must eventually be in a "Running" state.
-1. Browse the Kiali dashboard. The following command exposes the dashboard on `http://localhost:20001`:
-   ```bash
-   kubectl -n ${KYMA_KIALI_NS} port-forward svc/kiali-server 20001
-   ```
+You should see the `kiali-operator` and `kiali-server` Pod coming up in the Namespace. All Pods must eventually be in a "Running" state.
+
+### Access Kiali
+
+To access Kiali, you can either use kubectl port-forwarding or expose it over the Kyma ingress gateway.
+
+* To access Kiali using port-forwarding run:
+  ```bash
+  kubectl -n ${KYMA_KIALI_NS} port-forward svc/kiali-server 20001
+  ```
+
+  Open Kiali in your browser under [http://localhost:20001](http://localhost:20001).
+
+* To expose Kiali over the Kyma ingress gateway, create an APIRule:
+  ```bash
+  kubectl -n ${KYMA_KIALI_NS} apply -f https://raw.githubusercontent.com/kyma-project/examples/main/kiali/apirule.yaml
+  ```
+  Get the public URL of your Kiali server:
+  ```bash
+  kubectl -n ${KYMA_KIALI_NS} get virtualservices.networking.istio.io -ojsonpath='{.items[*].spec.hosts[*]}'
+  ```
 
 ### Deploy a custom workload and invoke
 
-1. To see the service communication visualized in Kiali, follow the instructions in [orders-service](./../orders-service/).
+To see the service communication visualized in Kiali, follow the instructions in [orders-service](./../orders-service/).
 
 ## Advanced Topics
 
@@ -65,18 +81,28 @@ If you use [Jaeger](https://www.jaegertracing.io/) for distributed tracing, Kial
 
 For integration instructions, read [Kiali: Jaeger configuration](https://kiali.io/docs/configuration/p8s-jaeger-grafana/jaeger/).
 
+To integrate with the Kyma tracing component run:
+
+```bash
+export JAEGER_URL=`kubectl -n kyma-system get virtualservices.networking.istio.io tracing -ojsonpath='{.spec.hosts[0]}'`
+helm upgrade --install --create-namespace -n ${KYMA_KIALI_NS} ${HELM_RELEASE_NAME} kiali/kiali-operator --set cr.spec.external_services.tracing.enabled=true --set cr.spec.external_services.tracing.url=https://${JAEGER_URL} --set cr.spec.external_services.tracing.in_cluster_url=http://tracing-jaeger-query.kyma-system:16686 --set cr.spec.external_services.tracing.use_grpc=false -f https://raw.githubusercontent.com/kyma-project/examples/main/kiali/values.yaml
+```
+
 ### Integrate Grafana
 
-Kiali can provide links to Istio dashboards in Grafana. 
+Kiali can provide links to Istio dashboards in Grafana.
 
 For integration instructions, read [Kiali: Grafana configuration](https://kiali.io/docs/configuration/p8s-jaeger-grafana/grafana/).
 
-### Expose Kiali
+### Authentication
 
-Kiali supports different authentication strategies. When exposing the Kiali server, we recommend to use an external identity provider compatible with OpenID Connect (OIDC).
+Kiali supports different authentication strategies. The default authentication strategy uses a Kubernetes Service Account Token. If you use a kubeconfig file with a static token, you can use this token to authenticate. Depending on the chosen way to access Kiali, different authentication strategies might be suitable. To learn more about Kiali authentication strategies, read [Kiali: Authentication Strategies](https://kiali.io/docs/configuration/authentication/).
 
-1. Set up Kiali with the [OpenID Connect strategy](https://kiali.io/docs/configuration/authentication/openid/).
-1. To expose Kiali, follow the [Expose a workload](https://kyma-project.io/docs/kyma/latest/03-tutorials/00-api-exposure/apix-03-expose-workload-apigateway/) instructions.
+* For Kiali access by port-forwarding, no additional authentication is required and the [anonymous strategy](https://kiali.io/docs/configuration/authentication/anonymous/) can be activated:
+  ```bash
+  helm upgrade --install --create-namespace -n ${KYMA_KIALI_NS} ${HELM_RELEASE_NAME} kiali/kiali-operator --set cr.spec.auth.strategy=anonymous -f https://raw.githubusercontent.com/kyma-project/examples/main/kiali/values.yaml
+  ```
+* When exposing the Kiali server over the ingress gateway, we recommend to use an external identity provider compatible with OpenID Connect (OIDC). Find the required settings at [Kiali: OpenID Connect strategy](https://kiali.io/docs/configuration/authentication/openid/).
 
 ## Cleanup
 
@@ -86,4 +112,5 @@ When you're done, you can remove the example and all its resources from the clus
 
     ```bash
     helm delete -n ${KYMA_KIALI_NS} ${HELM_RELEASE_NAME}
+    kubectl -n ${KYMA_KIALI_NS} delete -f https://raw.githubusercontent.com/kyma-project/examples/main/kiali/apirule.yaml
     ```
