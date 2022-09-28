@@ -32,6 +32,7 @@ The summary of the documentation in the `examples` repository lists all availabl
 | [Event Email Service](event-email-service/README.md) | Send an automated email upon receiving an Event.  | NodeJS |
 | [Tracing](tracing/README.md) | Configure tracing for a service in Kyma. | Go |
 | [Custom serverless runtime image](custom-serverless-runtime-image/README.md) | Build custom runtime image. | Python |
+| [Kiali](kiali/README.md) | Deploy Kiali to Kyma. | Kiali, Istio, Prometheus |
 
 ## Installation
 
