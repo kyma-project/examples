@@ -51,16 +51,16 @@ You should see the `kiali-operator` and `kiali-server` Pod coming up in the Name
 
 ### Access Kiali
 
-To access Kiali, you can either use kubectl port-forwarding or expose it over the Kyma ingress gateway.
+To access Kiali, you can either use kubectl port forwarding, or expose it using the Kyma ingress gateway.
 
-* To access Kiali using port-forwarding run:
+* To access Kiali using port forwarding, run:
   ```bash
   kubectl -n ${KYMA_KIALI_NS} port-forward svc/kiali-server 20001
   ```
 
   Open Kiali in your browser under [http://localhost:20001](http://localhost:20001).
 
-* To expose Kiali over the Kyma ingress gateway, create an APIRule:
+* To expose Kiali using the Kyma ingress gateway, create an APIRule:
   ```bash
   kubectl -n ${KYMA_KIALI_NS} apply -f https://raw.githubusercontent.com/kyma-project/examples/main/kiali/apirule.yaml
   ```
@@ -81,14 +81,15 @@ If you use [Jaeger](https://www.jaegertracing.io/) for distributed tracing, Kial
 
 For integration instructions, read [Kiali: Jaeger configuration](https://kiali.io/docs/configuration/p8s-jaeger-grafana/jaeger/).
 
-To integrate with the Kyma tracing component run:
+To connect with the Kyma Tracing component, run:
 
 ```bash
 export JAEGER_URL=`kubectl -n kyma-system get virtualservices.networking.istio.io tracing -ojsonpath='{.spec.hosts[0]}'`
 helm upgrade --install --create-namespace -n ${KYMA_KIALI_NS} ${HELM_RELEASE_NAME} kiali/kiali-operator --set cr.spec.external_services.tracing.enabled=true --set cr.spec.external_services.tracing.url=https://${JAEGER_URL} --set cr.spec.external_services.tracing.in_cluster_url=http://tracing-jaeger-query.kyma-system:16686 --set cr.spec.external_services.tracing.use_grpc=false -f https://raw.githubusercontent.com/kyma-project/examples/main/kiali/values.yaml
 ```
 
-Ensure that access to the Jaeger query service from the Kiali pod is allowed by the active Istio Authorization Policies. For the Kyma tracing component, use the override values in [tracing-values.yaml](tracing-values.yaml) and adapt the namespace for the used principal.
+Access to the Jaeger query service from the Kiali Pod must be allowed by the active Istio Authorization Policies. 
+For the Kyma Tracing component, use the override values in [tracing-values.yaml](tracing-values.yaml) and adapt the Namespace for the used principal.
 
 ### Integrate Grafana
 
@@ -98,9 +99,9 @@ For integration instructions, read [Kiali: Grafana configuration](https://kiali.
 
 ### Authentication
 
-Kiali supports different authentication strategies. The default authentication strategy uses a Kubernetes Service Account Token. If you use a kubeconfig file with a static token, you can use this token to authenticate. Depending on the chosen way to access Kiali, different authentication strategies might be suitable. To learn more about Kiali authentication strategies, read [Kiali: Authentication Strategies](https://kiali.io/docs/configuration/authentication/).
+Kiali supports different authentication strategies. The default authentication strategy uses a Kubernetes Service Account Token. If you use a kubeconfig file with a static token, you can use this token to authenticate. Depending on your preferred way to access Kiali, different authentication strategies might be suitable. To learn more about Kiali authentication strategies, read [Kiali: Authentication Strategies](https://kiali.io/docs/configuration/authentication/).
 
-* For Kiali access by port-forwarding, no additional authentication is required and the [anonymous strategy](https://kiali.io/docs/configuration/authentication/anonymous/) can be activated:
+* For Kiali access by port forwarding, you need no additional authentication, and you can activate the [anonymous strategy](https://kiali.io/docs/configuration/authentication/anonymous/):
   ```bash
   helm upgrade --install --create-namespace -n ${KYMA_KIALI_NS} ${HELM_RELEASE_NAME} kiali/kiali-operator --set cr.spec.auth.strategy=anonymous -f https://raw.githubusercontent.com/kyma-project/examples/main/kiali/values.yaml
   ```
