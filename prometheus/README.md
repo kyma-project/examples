@@ -76,7 +76,7 @@ Please have in mind that this setup will collect all istio metrics on a pod leve
 1. You should see several Pods coming up in the Namespace, especially Prometheus and Alertmanager. Assure that all Pods have the "Running" state.
 2. Browse the Prometheus dashboard and verify that all "Status->Targets" are healthy. The following command exposes the dashboard on `http://localhost:9090`:
    ```bash
-   kubectl -n ${KYMA_EXAMPLE_NS} port-forward svc/${HELM_RELEASE_NAME}-kube-prometheus-stack-prometheus 9090
+   kubectl -n ${KYMA_EXAMPLE_NS} port-forward svc/${HELM_RELEASE_NAME}-kube-prometh-prometheus 9090
    ```
 3. Browse the Grafana dashboard and verify that the dashboards are showing data. The user `admin` is pre-configured in the Helm chart; the password was provided in your `helm install` command. The following command exposes the dashboard on `http://localhost:3000`:
    ```bash
