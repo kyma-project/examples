@@ -60,7 +60,7 @@ To access Kiali, you can either use kubectl port forwarding, or expose it using 
 
   Open Kiali in your browser under [http://localhost:20001](http://localhost:20001).
 
-* To expose Kiali using the Kyma ingress gateway, create an APIRule:
+* To expose Kiali using the Kyma API gateway, create an APIRule:
   ```bash
   kubectl -n ${KYMA_KIALI_NS} apply -f https://raw.githubusercontent.com/kyma-project/examples/main/kiali/apirule.yaml
   ```
