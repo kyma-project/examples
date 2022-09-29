@@ -88,6 +88,8 @@ export JAEGER_URL=`kubectl -n kyma-system get virtualservices.networking.istio.i
 helm upgrade --install --create-namespace -n ${KYMA_KIALI_NS} ${HELM_RELEASE_NAME} kiali/kiali-operator --set cr.spec.external_services.tracing.enabled=true --set cr.spec.external_services.tracing.url=https://${JAEGER_URL} --set cr.spec.external_services.tracing.in_cluster_url=http://tracing-jaeger-query.kyma-system:16686 --set cr.spec.external_services.tracing.use_grpc=false -f https://raw.githubusercontent.com/kyma-project/examples/main/kiali/values.yaml
 ```
 
+Ensure that access to the Jaeger query service from the Kiali pod is allowed by the active Istio Authorization Policies. For the Kyma tracing component, use the override values in [tracing-values.yaml](tracing-values.yaml) and adapt the namespace for the used principal.
+
 ### Integrate Grafana
 
 Kiali can provide links to Istio dashboards in Grafana.
