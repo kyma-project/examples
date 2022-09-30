@@ -81,16 +81,6 @@ If you use [Jaeger](https://www.jaegertracing.io/) for distributed tracing, Kial
 
 For integration instructions, read [Kiali: Jaeger configuration](https://kiali.io/docs/configuration/p8s-jaeger-grafana/jaeger/).
 
-To connect with the Kyma Tracing component, run:
-
-```bash
-export JAEGER_URL=`kubectl -n kyma-system get virtualservices.networking.istio.io tracing -ojsonpath='{.spec.hosts[0]}'`
-helm upgrade --install --create-namespace -n ${KYMA_KIALI_NS} ${HELM_RELEASE_NAME} kiali/kiali-operator --set cr.spec.external_services.tracing.enabled=true --set cr.spec.external_services.tracing.url=https://${JAEGER_URL} --set cr.spec.external_services.tracing.in_cluster_url=http://tracing-jaeger-query.kyma-system:16686 --set cr.spec.external_services.tracing.use_grpc=false -f https://raw.githubusercontent.com/kyma-project/examples/main/kiali/values.yaml
-```
-
-Access to the Jaeger query service from the Kiali Pod must be allowed by the active Istio Authorization Policies. 
-For the Kyma Tracing component, use the override values in [tracing-values.yaml](tracing-values.yaml) and adapt the Namespace for the used principal.
-
 ### Integrate Grafana
 
 Kiali can provide links to Istio dashboards in Grafana.

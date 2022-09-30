@@ -1,5 +1,0 @@
-tracing:
-  authorizationPolicy:
-    query:
-      extraPrincipals:
-        - cluster.local/ns/kiali/sa/kiali-server-service-account
