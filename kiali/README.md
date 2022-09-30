@@ -40,29 +40,29 @@ An alternative can be a parallel installation of the upstream chart offering all
 
 1. Run the Helm upgrade command, which installs the chart if not present yet.
     ```bash
-    helm upgrade --install --create-namespace -n ${KYMA_KIALI_NS} ${HELM_RELEASE_NAME} kiali/kiali-operator -f https://raw.githubusercontent.com/kyma-project/examples/main/kiali/values.yaml
+    helm upgrade --install --create-namespace -n $KYMA_KIALI_NS $HELM_RELEASE_NAME kiali/kiali-operator -f https://raw.githubusercontent.com/kyma-project/examples/main/kiali/values.yaml
     ```
 
-You can either use the `[values.yaml](./values.yaml)` provided in this `kiali` folder, which contains customized settings deviating from the default settings, or create your own `values.yaml` file.
+You can either use the [`values.yaml`](./values.yaml) provided in this `kiali` folder, which contains customized settings deviating from the default settings, or create your own `values.yaml` file.
 
 ### Verify the installation
 
-You should see the `kiali-operator` and `kiali-server` Pod coming up in the Namespace. All Pods must eventually be in a "Running" state.
+Check that you see the `kiali-operator` and `kiali-server` Pod coming up in the Namespace. All Pods must eventually be in the `Running` state.
 
 ### Access Kiali
 
-To access Kiali, you can either use kubectl port forwarding, or expose it using the Kyma ingress gateway.
+To access Kiali, either use kubectl port forwarding, or expose it using the Kyma Ingress Gateway.
 
 * To access Kiali using port forwarding, run:
   ```bash
-  kubectl -n ${KYMA_KIALI_NS} port-forward svc/kiali-server 20001
+ kubectl -n $KYMA_KIALI_NS port-forward svc/kiali-server 20001
   ```
 
-  Open Kiali in your browser under [http://localhost:20001](http://localhost:20001) and login with a [Kubernetes service account token](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#service-account-tokens), for instance from your kubeconfig file.
+  Open Kiali in your browser under [http://localhost:20001](http://localhost:20001) and log in with a [Kubernetes service account token](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#service-account-tokens), for instance, from your kubeconfig file.
 
-* To expose Kiali using the Kyma API gateway, create an APIRule:
+* To expose Kiali using the Kyma API Gateway, create an APIRule:
   ```bash
-  kubectl -n ${KYMA_KIALI_NS} apply -f https://raw.githubusercontent.com/kyma-project/examples/main/kiali/apirule.yaml
+  kubectl -n $KYMA_KIALI_NS apply -f https://raw.githubusercontent.com/kyma-project/examples/main/kiali/apirule.yaml
   ```
   Get the public URL of your Kiali server:
   ```bash
@@ -93,7 +93,7 @@ Kiali supports different authentication strategies. The default authentication s
 
 * For Kiali access by port forwarding, you need no additional authentication, and you can activate the [anonymous strategy](https://kiali.io/docs/configuration/authentication/anonymous/):
   ```bash
-  helm upgrade --install --create-namespace -n ${KYMA_KIALI_NS} ${HELM_RELEASE_NAME} kiali/kiali-operator --set cr.spec.auth.strategy=anonymous -f https://raw.githubusercontent.com/kyma-project/examples/main/kiali/values.yaml
+  helm upgrade --install --create-namespace -n $KYMA_KIALI_NS $HELM_RELEASE_NAME kiali/kiali-operator --set cr.spec.auth.strategy=anonymous -f https://raw.githubusercontent.com/kyma-project/examples/main/kiali/values.yaml
   ```
 * When exposing the Kiali server over the ingress gateway, we recommend to use an external identity provider compatible with OpenID Connect (OIDC). Find the required settings at [Kiali: OpenID Connect strategy](https://kiali.io/docs/configuration/authentication/openid/).
 
@@ -105,5 +105,5 @@ When you're done, you can remove the example and all its resources from the clus
 
     ```bash
     helm delete -n ${KYMA_KIALI_NS} ${HELM_RELEASE_NAME}
-    kubectl -n ${KYMA_KIALI_NS} delete -f https://raw.githubusercontent.com/kyma-project/examples/main/kiali/apirule.yaml
+    kubectl -n $KYMA_KIALI_NS delete -f https://raw.githubusercontent.com/kyma-project/examples/main/kiali/apirule.yaml
     ```
