@@ -106,6 +106,11 @@ When you're done, you can remove the example and all its resources from the clus
 1. Remove the stack by calling Helm:
 
     ```bash
-    helm delete -n ${KYMA_KIALI_NS} ${HELM_RELEASE_NAME}
+    helm delete -n $KYMA_KIALI_NS $HELM_RELEASE_NAME
     kubectl -n $KYMA_KIALI_NS delete -f https://raw.githubusercontent.com/kyma-project/examples/main/kiali/apirule.yaml
     ```
+
+2. (Optional) If you created the `$KYMA_KIALI_NS` Namespace specifically for this tutorial, remove the Namespace:
+  ```bash
+  kubectl delete namespace $KYMA_KIALI_NS
+  ``` 
