@@ -47,15 +47,17 @@ You can either use the [`values.yaml`](./values.yaml) provided in this `kiali` f
 
 ### Verify the installation
 
-Check that you see the `kiali-operator` and `kiali-server` Pod coming up in the Namespace. All Pods must eventually be in the `Running` state.
-
+Check that the `kiali-operator` and `kiali-server` Pods have been created in the Namespace and are in the `Running` state:
+```bash
+kubectl wait --for=condition=Ready pod $(kubectl -n $KYMA_KIALI_NS get pods --no-headers -o custom-columns=":metadata.name" | grep kiali) -n $KYMA_KIALI_NS
+```
 ### Access Kiali
 
 To access Kiali, either use kubectl port forwarding, or expose it using the Kyma Ingress Gateway.
 
 * To access Kiali using port forwarding, run:
   ```bash
- kubectl -n $KYMA_KIALI_NS port-forward svc/kiali-server 20001
+  kubectl -n $KYMA_KIALI_NS port-forward svc/kiali-server 20001
   ```
 
   Open Kiali in your browser under [http://localhost:20001](http://localhost:20001) and log in with a [Kubernetes service account token](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#service-account-tokens), for instance, from your kubeconfig file.
@@ -71,7 +73,7 @@ To access Kiali, either use kubectl port forwarding, or expose it using the Kyma
 
 ### Deploy a custom workload and invoke
 
-To see the service communication visualized in Kiali, follow the instructions in [orders-service](./../orders-service/).
+To see the service communication visualized in Kiali, follow the instructions in [`orders-service`](./../orders-service/).
 
 ## Advanced Topics
 
