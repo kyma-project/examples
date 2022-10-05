@@ -38,10 +38,10 @@ An alternative can be a parallel installation of the upstream chart offering all
 
 > **NOTE:** Kiali recommends to install Kiali always with the Kiali operator; that's why the following step uses the Kiali operator Helm chart.
 
-1. Run the Helm upgrade command, which installs the chart if not present yet.
-    ```bash
-    helm upgrade --install --create-namespace -n $KYMA_KIALI_NS $HELM_RELEASE_NAME kiali/kiali-operator -f https://raw.githubusercontent.com/kyma-project/examples/main/kiali/values.yaml
-    ```
+Run the Helm upgrade command, which installs the chart if not present yet.
+```bash
+helm upgrade --install --create-namespace -n $KYMA_KIALI_NS $HELM_RELEASE_NAME kiali/kiali-operator -f https://raw.githubusercontent.com/kyma-project/examples/main/kiali/values.yaml
+```
 
 You can either use the [`values.yaml`](./values.yaml) provided in this `kiali` folder, which contains customized settings deviating from the default settings, or create your own `values.yaml` file.
 
@@ -49,7 +49,7 @@ You can either use the [`values.yaml`](./values.yaml) provided in this `kiali` f
 
 Check that the `kiali-operator` and `kiali-server` Pods have been created in the Namespace and are in the `Running` state:
 ```bash
-kubectl wait --for=condition=Ready pod $(kubectl -n $KYMA_KIALI_NS get pods --no-headers -o custom-columns=":metadata.name" | grep kiali) -n $KYMA_KIALI_NS
+kubectl -n $KYMA_KIALI_NS rollout status deploy $HELM_RELEASE_NAME-kiali-operator && kubectl -n $KYMA_KIALI_NS rollout status deploy kiali-server
 ```
 ### Access Kiali
 
@@ -68,7 +68,7 @@ To access Kiali, either use kubectl port forwarding, or expose it using the Kyma
   ```
   Get the public URL of your Kiali server:
   ```bash
-  kubectl -n ${KYMA_KIALI_NS} get virtualservices.networking.istio.io -ojsonpath='{.items[*].spec.hosts[*]}'
+  kubectl -n $KYMA_KIALI_NS get vs -l apirule.gateway.kyma-project.io/v1beta1=kiali.$KYMA_KIALI_NS -ojsonpath='{.items[*].spec.hosts[*]}'
   ```
 
 ### Deploy a custom workload and invoke
@@ -111,6 +111,6 @@ When you're done, you can remove the example and all its resources from the clus
     ```
 
 2. (Optional) If you created the `$KYMA_KIALI_NS` Namespace specifically for this tutorial, remove the Namespace:
-  ```bash
-  kubectl delete namespace $KYMA_KIALI_NS
-  ``` 
+    ```bash
+    kubectl delete namespace $KYMA_KIALI_NS
+    ``` 
