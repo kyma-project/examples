@@ -146,6 +146,10 @@ def exception_handler():
 @app.route('/<:re:.*>', method=['GET', 'POST', 'PATCH', 'DELETE'])
 def handler():
     req = bottle.request
+    req_content_type = req.content_type
+    if req_content_type:
+        bottle.response.content_type = req_content_type
+
     event = Event(req)
     method = req.method
     func_calls.labels(method).inc()
