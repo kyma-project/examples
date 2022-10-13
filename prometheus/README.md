@@ -8,6 +8,8 @@ As an alternative, you can install the upstream chart with all customization opt
 
 > **CAUTION:** This tutorial describes a basic setup that you should not use in production. Typically, a production setup needs further configuration, like optimizing the amount of data to scrape and the required resource footprint of the installation. To achieve qualities like high availability, scalability, or durable long-term storage, you might need an even more advanced setup.
 
+> **CAUTION:** This example will use the latest Grafana version which is under AGPL-3.0 and might not be free of charge for commercial usage.
+
 ## Prerequisites
 
 - Kyma as the target deployment environment.
@@ -53,23 +55,24 @@ The provided `values.yaml` covers the following adjustments:
 
 1. To configure Prometheus for scraping of the Istio-specific metrics from any istio-proxy running in the cluster, deploy a PodMonitor, which scrapes any Pod that has a port with name `.*-envoy-prom` exposed.
 
-```bash
-kubectl -n ${KYMA_EXAMPLE_NS} apply -f https://raw.githubusercontent.com/kyma-project/examples/main/prometheus/istio/podmonitor-istio-proxy.yaml
-```
+    ```bash
+    kubectl -n ${KYMA_EXAMPLE_NS} apply -f https://raw.githubusercontent.com/kyma-project/examples/main/prometheus/istio/podmonitor-istio-proxy.yaml
+    ```
 
 2. Deploy a ServiceMonitor definition for the central metrics of the `istiod` deployment:
-```bash
-kubectl -n ${KYMA_EXAMPLE_NS} apply -f https://raw.githubusercontent.com/kyma-project/examples/main/prometheus/istio/servicemonitor-istiod.yaml
-```
+
+    ```bash
+    kubectl -n ${KYMA_EXAMPLE_NS} apply -f https://raw.githubusercontent.com/kyma-project/examples/main/prometheus/istio/servicemonitor-istiod.yaml
+    ```
 
 3. Get the latest versions of the Istio-specific dashboards.
    Grafana is configured to load dashboards dynamically from ConfigMaps in the cluster, so Istio-specific dashboards can be applied as well. 
    Either follow the [Istio quick start instructions](https://istio.io/latest/docs/ops/integrations/grafana/#option-1-quick-start), or take the prepared ones with the following command:
 
-```bash
-kubectl -n ${KYMA_EXAMPLE_NS} apply -f https://raw.githubusercontent.com/kyma-project/examples/main/prometheus/istio/configmap-istio-grafana-dashboards.yaml
-kubectl -n ${KYMA_EXAMPLE_NS} apply -f https://raw.githubusercontent.com/kyma-project/examples/main/prometheus/istio/configmap-istio-services-grafana-dashboards.yaml
-```
+    ```bash
+    kubectl -n ${KYMA_EXAMPLE_NS} apply -f https://raw.githubusercontent.com/kyma-project/examples/main/prometheus/istio/configmap-istio-grafana-dashboards.yaml
+    kubectl -n ${KYMA_EXAMPLE_NS} apply -f https://raw.githubusercontent.com/kyma-project/examples/main/prometheus/istio/configmap-istio-services-grafana-dashboards.yaml
+    ```
 
    > **NOTE:** This setup collects all Istio metrics on a Pod level, which can lead to cardinality issues. Because  metrics are only needed on service level, for setups having a bigger amount of workloads deployed, it is recommended to use a setup based on federation as described in the [Istio documentation](https://istio.io/latest/docs/ops/best-practices/observability/#using-prometheus-for-production-scale-monitoring).
 
