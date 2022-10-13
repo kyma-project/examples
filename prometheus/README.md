@@ -98,7 +98,7 @@ Instead of defining a ServiceMonitor per workload for setting up custom metric s
 
 ```yaml
 prometheus.io/scrape: "true"   # mandatory to enable automatic scraping
-prometheus.io/scheme: https    # optional, default is http. Use "https" to scrape using istio client certificates. Will only work for services (not pods)
+prometheus.io/scheme: https    # optional, default is http when no istio sidecar is used. When using a sidecar (pod has label security.istio.io/tlsMode=istio) the default will be "https". Use "https" to scrape workloads using istio client certificates. Will only work for annotated services (not pods)
 prometheus.io/port: "1234"     # optional, configure the port under which the metrics are exposed
 prometheus.io/path: /myMetrics # optional, configure the path under which the metrics are exposed
 ```
