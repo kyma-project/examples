@@ -23,7 +23,7 @@ As an alternative, you can install the upstream chart with all customization opt
     ```bash
     export KYMA_EXAMPLE_NS="{namespace}"
     ```
-    >Note: Please assure that this namespace has no Istio sidecar injection enabled. The helm chart will deploy jobs which will not succeed having sidecar injection enabled by default.
+    >Note: This Namespace must have **no** Istio sidecar injection enabled. The Helm chart deploys jobs that will not succeed when sidecar injection is enabled by default.
 
 2. Export the Helm release name that you want to use. It can be any name, but be aware that all resources in the cluster will be prefixed with that name. Replace the `{release-name}` placeholder in the following command and run it:
     ```bash
@@ -51,25 +51,27 @@ The provided `values.yaml` covers the following adjustments:
 
 ### Install Istio Support
 
-To configure Prometheus for scraping of the istio specific metrics from any istio-proxy running in the cluster, deploy a PodMonitor which scrapes any pod having a port with name `.*-envoy-prom` exposed.
+1. To configure Prometheus for scraping of the Istio-specific metrics from any istio-proxy running in the cluster, deploy a PodMonitor, which scrapes any Pod that has a port with name `.*-envoy-prom` exposed.
 
 ```bash
 kubectl -n ${KYMA_EXAMPLE_NS} apply -f https://raw.githubusercontent.com/kyma-project/examples/main/prometheus/istio/podmonitor-istio-proxy.yaml
 ```
 
-Also deploy a ServiceMonitor definition for the central metrics of the `istiod` deployment.
+2. Deploy a ServiceMonitor definition for the central metrics of the `istiod` deployment:
 ```bash
 kubectl -n ${KYMA_EXAMPLE_NS} apply -f https://raw.githubusercontent.com/kyma-project/examples/main/prometheus/istio/servicemonitor-istiod.yaml
 ```
 
-As Grafana is configured to load dashboards dynamically from ConfigMaps in the cluster, Istio specific dashboards can be applied as well. To get the latest versions you can follow the official [instructions](https://istio.io/latest/docs/ops/integrations/grafana/#option-1-quick-start) or you take the prepared ones by calling:
+3. Get the latest versions of the Istio-specific dashboards.
+   Grafana is configured to load dashboards dynamically from ConfigMaps in the cluster, so Istio-specific dashboards can be applied as well. 
+   Either follow the [Istio quick start instructions](https://istio.io/latest/docs/ops/integrations/grafana/#option-1-quick-start), or take the prepared ones with the following command:
 
 ```bash
 kubectl -n ${KYMA_EXAMPLE_NS} apply -f https://raw.githubusercontent.com/kyma-project/examples/main/prometheus/istio/configmap-istio-grafana-dashboards.yaml
 kubectl -n ${KYMA_EXAMPLE_NS} apply -f https://raw.githubusercontent.com/kyma-project/examples/main/prometheus/istio/configmap-istio-services-grafana-dashboards.yaml
 ```
 
-Please have in mind that this setup will collect all istio metrics on a pod level. As this can lead to cardinality issues and metrics are only needed on service level, it is recommended to use an improved setup based on federation as described in the [istio documentation](https://istio.io/latest/docs/ops/best-practices/observability/#using-prometheus-for-production-scale-monitoring).
+   > **NOTE:** This setup collects all Istio metrics on a Pod level, which can lead to cardinality issues. Because  metrics are only needed on service level, for setups having a bigger amount of workloads deployed, it is recommended to use a setup based on federation as described in the [Istio documentation](https://istio.io/latest/docs/ops/best-practices/observability/#using-prometheus-for-production-scale-monitoring).
 
 ### Verify the installation
 
@@ -89,7 +91,7 @@ Please have in mind that this setup will collect all istio metrics on a pod leve
 
 ### Scrape workload via annotations
 
-Instead of defining a ServiceMonitor per workload for setting up custom metric scraping, you can use a simplified way based on annotations. The used [values.yaml](./values.yaml) defines an `additionalScrapeConfig` which will scrape all pods and services having these annotations:
+Instead of defining a ServiceMonitor per workload for setting up custom metric scraping, you can use a simplified way based on annotations. The used [values.yaml](./values.yaml) defines an `additionalScrapeConfig`, which  scrapes all Pods and services that have these annotations:
 
 ```yaml
 prometheus.io/scrape: "true"   # mandatory to enable automatic scraping
@@ -98,13 +100,12 @@ prometheus.io/port: "1234"     # optional, configure the port under which the me
 prometheus.io/path: /myMetrics # optional, configure the path under which the metrics are exposed
 ```
 
-You can try it out by removing the ServiceMonitor of the example used above and instead providing the annotations to the Service manifest.
+You can try it out by removing the ServiceMonitor from the previous example and instead providing the annotations to the Service manifest.
 
 ### Cleanup
 
-Run the following command to remove the installation from the cluster:
+1. To remove the installation from the cluster, call Helm:
 
-1. Remove the stack by calling Helm:
 
     ```bash
     helm delete -n ${KYMA_EXAMPLE_NS} ${HELM_RELEASE_NAME}
