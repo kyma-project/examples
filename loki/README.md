@@ -121,4 +121,4 @@ promtail:
   enabled: true
 ```
 
-This example demonstrate basic installation and capabilities of loki with Kyma, for more stable and production grade setup please consult [here]('https://grafana.com/docs/loki/latest/best-practices/')
+> **NOTE:** Following the described instructions will install Loki in a very lightweight setup which will not fullfill production-grade criterias. Please consider to use a scalable setup based on an object storage backend as described in this [guide](https://grafana.com/docs/loki/latest/installation/simple-scalable-helm/).
