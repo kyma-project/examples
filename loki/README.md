@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Kyma Loki component brings limited configuration options in contrast to the upstream [loki-stack]('https://github.com/grafana/helm-charts/tree/main/charts/loki-stack') chart. Modifications might be reset at next upgrade cycle.
+The Kyma Loki component brings limited configuration options in contrast to the upstream [loki-stack](https://github.com/grafana/helm-charts/tree/main/charts/loki-stack) chart. Modifications might be reset at next upgrade cycle.
 
 An alternative can be a parallel installation of the upstream chart offering all customization options. The following instructions outline how to achieve such installation in co-existence to the Kyma stack.
 
