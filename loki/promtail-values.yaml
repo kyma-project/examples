@@ -1,0 +1,3 @@
+# promtail log collector configuration
+promtail:
+  enabled: true

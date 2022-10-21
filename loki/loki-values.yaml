@@ -1,0 +1,63 @@
+loki:
+  # Loki pod resource configuration
+  resources:
+    limits:
+      cpu: 200m
+      memory: 300Mi
+    requests:
+      cpu: 10m
+      memory: 128Mi
+
+  # enable persistence volume
+  persistence:
+    enabled: true
+    accessModes:
+      - ReadWriteOnce
+    size: 10Gi
+
+  config:
+    auth_enabled: false
+    # Loki ingester configuration, check https://grafana.com/docs/loki/latest/configuration/#ingester for more info how to configure ingester.
+    ingester:
+      chunk_idle_period: 3m
+      chunk_block_size: 262144
+      chunk_target_size: 1572864
+      chunk_retain_period: 1m
+      max_chunk_age: 2h
+      max_transfer_retries: 0
+      lifecycler:
+        ring:
+          kvstore:
+            store: inmemory
+          replication_factor: 1
+    # Check https://grafana.com/docs/loki/latest/configuration/#limits_config for more info how to configure limits
+    limits_config:
+      enforce_metric_name: false
+      ingestion_rate_mb: 3
+      reject_old_samples: true
+      reject_old_samples_max_age: 168h
+    # Check https://grafana.com/docs/loki/latest/configuration/#schema_config for more info on how to configure schemas
+    schema_config:
+      configs:
+        - from: 2022-10-20
+          store: boltdb
+          object_store: filesystem
+          schema: v9
+          index:
+            prefix: index_
+            period: 24h
+
+    # Additional storage config, check https://grafana.com/docs/loki/latest/configuration/#storage_config for more info on how to configure storage.
+    storage_config:
+      boltdb:
+        directory: /data/loki/index
+      filesystem:
+        directory: /data/loki/chunks
+    chunk_store_config:
+      max_look_back_period: 120h
+    table_manager:
+      retention_deletes_enabled: true
+      retention_period: 120h
+    compactor:
+      working_directory: /data/loki/boltdb-shipper-compactor
+      shared_store: filesystem

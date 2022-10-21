@@ -1,0 +1,9 @@
+grafana:
+  enabled: true
+  sidecar:
+    datasources:
+      enabled: true
+      access: proxy
+      maxLines: 1000
+  image:
+    tag: 8.3.5
