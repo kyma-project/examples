@@ -115,7 +115,7 @@ grafana:
   enabled: true
 ```
 
-An alternative to LogPipeline to collect logs and push to the loki, Loki Helm chart deliver log collector `promtail`, promtail disabled in this example, to enable it change [values.yaml]('values.yaml') as
+The proposed approach is based Kyma's LogPipeline API which will configure a managed Fluentbit accordingly. Loki itself promotes an own log collector called `promtail` which could be used alternatively. A ready to use setup can be enabled easily by adjusting the used [values.yaml]('values.yaml') fileas following:
 ```yaml
 promtail:
   enabled: true
