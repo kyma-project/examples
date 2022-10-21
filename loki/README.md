@@ -108,7 +108,7 @@ curl -G -s  "http://localhost:3100/loki/api/v1/query" \
 
 ### Additional
 
-Loki Helm chart provide configuration to accessing logs via Grafana, which by default disabled. To install Grafana to access logs add following configuration parameters to the [values.yaml]('values.yaml') and install Loki with Helm.
+The used helm chart provides configuration for accessing logs via Grafana, which is disabled by default. To enable Grafana add following configuration parameters to the used [values.yaml]('values.yaml').
 
 ```yaml
 grafana:
