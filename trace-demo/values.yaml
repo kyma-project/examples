@@ -1,0 +1,210 @@
+observability:
+  otelcol:
+    enabled: false
+  jaeger:
+    enabled: false
+
+components:
+  redis:
+    enabled: true
+
+  adService:
+    enabled: true
+    env:
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: 'http://telemetry-trace-collector.kyma-system:4317'
+      - name: AD_SERVICE_PORT
+        value: "8080"
+
+  cartService:
+    enabled: true
+    env:
+      - name: ASPNETCORE_URLS
+        value: http://*:8080
+      - name: REDIS_ADDR
+        value: '{{ include "otel-demo.name" . }}-redis:6379'
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: 'http://telemetry-trace-collector.kyma-system:4317'
+      - name: CART_SERVICE_PORT
+        value: "8080"
+
+  checkoutService:
+    enabled: true
+    env:
+      - name: CART_SERVICE_ADDR
+        value: '{{ include "otel-demo.name" . }}-cartservice:8080'
+      - name: CURRENCY_SERVICE_ADDR
+        value: '{{ include "otel-demo.name" . }}-currencyservice:8080'
+      - name: PAYMENT_SERVICE_ADDR
+        value: '{{ include "otel-demo.name" . }}-paymentservice:8080'
+      - name: PRODUCT_CATALOG_SERVICE_ADDR
+        value: '{{ include "otel-demo.name" . }}-productcatalogservice:8080'
+      - name: SHIPPING_SERVICE_ADDR
+        value: '{{ include "otel-demo.name" . }}-shippingservice:8080'
+      - name: EMAIL_SERVICE_ADDR
+        value: 'http://{{ include "otel-demo.name" . }}-emailservice:8080'
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: 'http://telemetry-trace-collector.kyma-system:4317'
+      - name: CHECKOUT_SERVICE_PORT
+        value: "8080"
+
+  currencyService:
+    enabled: true
+    env:
+      - name: PORT
+        value: "8080"
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: 'http://telemetry-trace-collector.kyma-system:4317'
+      - name: CURRENCY_SERVICE_PORT
+        value: "8080"
+
+
+  emailService:
+    enabled: true
+    env:
+      - name: APP_ENV
+        value: production
+      - name: PORT
+        value: "8080"
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: 'http://telemetry-trace-collector.kyma-system:4317'
+      - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
+        value: 'http://telemetry-trace-collector.kyma-system:4318/v1/traces'
+      - name: EMAIL_SERVICE_PORT
+        value: "8080"
+
+  featureflagService:
+    enabled: true
+    env:
+      - name: FEATURE_FLAG_GRPC_SERVICE_PORT
+        value: "50053"
+      - name: FEATURE_FLAG_SERVICE_PORT
+        value: "8081"
+      - name: OTEL_EXPORTER_OTLP_TRACES_PROTOCOL
+        value: grpc
+      - name: DATABASE_URL
+        value: 'ecto://ffs:ffs@{{ include "otel-demo.name" . }}-ffspostgres:5432/ffs'
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: 'http://telemetry-trace-collector.kyma-system:4317'
+
+  ffsPostgres:
+    enabled: true
+    env:
+      - name: POSTGRES_DB
+        value: ffs
+      - name: POSTGRES_PASSWORD
+        value: ffs
+      - name: POSTGRES_USER
+        value: ffs
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: 'http://telemetry-trace-collector.kyma-system:4317'
+
+  frontend:
+    enabled: true
+    env:
+      - name: FRONTEND_ADDR
+        value: :8080
+      - name: AD_SERVICE_ADDR
+        value: '{{ include "otel-demo.name" . }}-adservice:8080'
+      - name: CART_SERVICE_ADDR
+        value: '{{ include "otel-demo.name" . }}-cartservice:8080'
+      - name: CHECKOUT_SERVICE_ADDR
+        value: '{{ include "otel-demo.name" . }}-checkoutservice:8080'
+      - name: CURRENCY_SERVICE_ADDR
+        value: '{{ include "otel-demo.name" . }}-currencyservice:8080'
+      - name: PRODUCT_CATALOG_SERVICE_ADDR
+        value: '{{ include "otel-demo.name" . }}-productcatalogservice:8080'
+      - name: RECOMMENDATION_SERVICE_ADDR
+        value: '{{ include "otel-demo.name" . }}-recommendationservice:8080'
+      - name: SHIPPING_SERVICE_ADDR
+        value: '{{ include "otel-demo.name" . }}-shippingservice:8080'
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: 'http://telemetry-trace-collector.kyma-system:4317'
+      - name: FRONTEND_PORT
+        value: "8080"
+
+  loadgenerator:
+    enabled: true
+    env:
+      - name: FRONTEND_ADDR
+        value: '{{ include "otel-demo.name" . }}-frontend:8080'
+      - name: LOCUST_WEB_PORT
+        value: "8089"
+      - name: LOCUST_USERS
+        value: "10"
+      - name: LOCUST_HOST
+        value: "http://$(FRONTEND_ADDR)"
+      - name: LOCUST_HEADLESS
+        value: "false"
+      - name: LOCUST_AUTOSTART
+        value: "true"
+      - name: PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION
+        value: python
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: 'http://telemetry-trace-collector.kyma-system:4317'
+      - name: LOADGENERATOR_PORT
+        value: "8089"
+
+  paymentService:
+    enabled: true
+    env:
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: 'http://telemetry-trace-collector.kyma-system:4317'
+      - name: PAYMENT_SERVICE_PORT
+        value: "8080"
+
+  productCatalogService:
+    enabled: true
+    env:
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: 'http://telemetry-trace-collector.kyma-system:4317'
+      - name: PRODUCT_CATALOG_SERVICE_PORT
+        value: "8080"
+      - name: FEATURE_FLAG_GRPC_SERVICE_ADDR
+        value: '{{ include "otel-demo.name" . }}-featureflagservice:50053'
+
+  recommendationService:
+    enabled: true
+    env:
+      - name: OTEL_PYTHON_LOG_CORRELATION
+        value: "true"
+      - name: PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION
+        value: python
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: 'http://telemetry-trace-collector.kyma-system:4317'
+      - name: FEATURE_FLAG_GRPC_SERVICE_ADDR
+        value: '{{ include "otel-demo.name" . }}-featureflagservice:50053'
+      - name: RECOMMENDATION_SERVICE_PORT
+        value: "8080"
+      - name: PRODUCT_CATALOG_SERVICE_ADDR
+        value: '{{ include "otel-demo.name" . }}-productcatalogservice:8080'
+
+  shippingService:
+    enabled: true
+    env:
+      - name: PORT
+        value: "8080"
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: 'http://telemetry-trace-collector.kyma-system:4317'
+      - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
+        value: 'http://telemetry-trace-collector.kyma-system:4317'
+      - name: SHIPPING_SERVICE_PORT
+        value: "8080"
+      - name: QUOTE_SERVICE_ADDR
+        value: 'http://{{ include "otel-demo.name" . }}-quoteservice:8080'
+
+  quoteService:
+    enabled: true
+    env:
+      - name: OTEL_TRACES_SAMPLER
+        value: "parentbased_always_on"
+      - name: OTEL_TRACES_EXPORTER
+        value: "otlp"
+      - name: OTEL_EXPORTER_OTLP_TRACES_PROTOCOL
+        value: "grpc"
+      - name: OTEL_PHP_TRACES_PROCESSOR
+        value: "simple"
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: 'telemetry-trace-collector.kyma-system:4317'
+      - name: QUOTE_SERVICE_PORT
+        value: "8080"
