@@ -10,7 +10,7 @@ spec:
   output:
     custom: |
       name   loki
-      host   loki-example-headless.loki-example.svc.cluster.local
+      host   {release-name}-headless.{namespace}.svc.cluster.local
       port   3100
       labels job=fluentbit
       auto_kubernetes_labels on

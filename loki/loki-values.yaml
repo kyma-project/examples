@@ -1,4 +1,12 @@
 loki:
+  ## Pod Annotations
+  podLabels:
+    sidecar.istio.io/inject: "true"
+
+  ## Pod Annotations
+  podAnnotations:
+    sidecar.istio.io/inject: "true"
+
   # Loki pod resource configuration
   resources:
     limits:

@@ -5,3 +5,11 @@ grafana:
       enabled: true
       access: proxy
       maxLines: 1000
+
+  ## Pod Annotations
+  podLabels:
+    sidecar.istio.io/inject: "true"
+
+  ## Pod Annotations
+  podAnnotations:
+    sidecar.istio.io/inject: "true"
