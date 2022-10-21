@@ -43,7 +43,7 @@ Run the Helm upgrade command, which installs the chart if not present yet.
 helm upgrade --install --create-namespace -n ${KYMA_LOKI_EXAMPLE_NS} ${HELM_RELEASE_NAME} grafana/loki-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/loki-values.yaml --set promtail.enabled=false --set grafana.enabled=false
 ```
 
-You can either use the [loki-values.yaml]('loki-values.yaml') provided in this loki folder, which contains customized settings deviating from the default settings, or create your own values.yaml file.
+You can either use the [loki-values.yaml]('./loki-values.yaml') provided in this loki folder, which contains customized settings deviating from the default settings, or create your own values.yaml file.
 
 
 ### Verify the installation
