@@ -2,16 +2,13 @@
 
 ## Overview
 
-https://github.com/open-telemetry/opentelemetry-helm-charts/tree/main/charts/opentelemetry-demo
-https://github.com/open-telemetry/opentelemetry-demo
+This instructions will install the OpenTelemetry [demo app](https://github.com/open-telemetry/opentelemetry-demo) on a Kyma OpenSource installation. It will reconfigure Istio and the demo app to use the configurable tracing feature which is under development. The demo app is based on the related [helm chart](https://github.com/open-telemetry/opentelemetry-helm-charts/tree/main/charts/opentelemetry-demo)
 
 ## Prerequisites
 
-- Kyma as the target deployment environment
+- Kyma OSS installed from main branch (`kyma deploy -s main`)
 - kubectl > 1.22.x
 - Helm 3.x
-
-## Installation
 
 ### Preparation
 
@@ -42,7 +39,7 @@ https://github.com/open-telemetry/opentelemetry-demo
     helm repo update
     ```
 
-### Activate Kyma Tracing
+### Activate Kyma Tracing Preview feature
 
 1. (Temporary) Enable tracing feature in operator
 
@@ -51,13 +48,13 @@ https://github.com/open-telemetry/opentelemetry-demo
     kyma deploy -s main --component telemetry --value telemetry.operator.controllers.tracing.enabled=true
     ```
 
-1. (Temporary) Activate Istio tracing
+1. (Temporary) Activate Istio tracing based on w3c-tracecontext and OTLP
     ```bash
     kyma deploy -s main --component istio -f istio-values.yaml
     ```
     Potentially, you need to restart the relevant workloads
 
-1. Enable Jaeger backend
+1. Enable Jaeger backend via new tracing feature
    ```bash
    kubectl apply -f tracepipeline.yaml
    ```
@@ -69,7 +66,7 @@ Run the Helm upgrade command, which installs the chart if not present yet.
 helm upgrade --version 0.9.6 --install --create-namespace -n $KYMA_NS $HELM_RELEASE open-telemetry/opentelemetry-demo -f values.yaml
 ```
 
-You can either use the [`values.yaml`](./values.yaml) provided in this `kiali` folder, which contains customized settings deviating from the default settings, or create your own `values.yaml` file.
+You can either use the [`values.yaml`](./values.yaml) provided in this `trace-demo` folder, which contains customized settings deviating from the default settings, or create your own `values.yaml` file.
 
 ### Verify the application
 
@@ -96,7 +93,6 @@ You can either use the [`values.yaml`](./values.yaml) provided in this `kiali` f
    kubectl port-forward svc/demo2-loadgenerator 8089
    ````
    and calling `http://localhost:8089`
-
 
 
 ## Cleanup
