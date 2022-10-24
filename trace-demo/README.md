@@ -2,7 +2,9 @@
 
 ## Overview
 
-This instructions will install the OpenTelemetry [demo app](https://github.com/open-telemetry/opentelemetry-demo) on a Kyma OpenSource installation. It will reconfigure Istio and the demo app to use the configurable tracing feature which is under development. The demo app is based on the related [helm chart](https://github.com/open-telemetry/opentelemetry-helm-charts/tree/main/charts/opentelemetry-demo)
+This instructions will install the OpenTelemetry [demo app](https://github.com/open-telemetry/opentelemetry-demo) on a Kyma cluster. The demo app is based on the related [helm chart](https://github.com/open-telemetry/opentelemetry-helm-charts/tree/main/charts/opentelemetry-demo)
+
+**CAUTION:** This instructions are under development and are relying on a prelimary state of the [Configurable Tracing](https://github.com/kyma-project/kyma/issues/11231) story. The goal is to have early with an E2E scenario for that feature. The instructions for now require to reconfigure the Istio and telemetry installation which is only possible using a custom Kyma OpenSource installation. In the final state, this reconfiguration will not be required anymore.
 
 ## Prerequisites
 
@@ -72,25 +74,25 @@ You can either use the [`values.yaml`](./values.yaml) provided in this `trace-de
 
 1. Browse in the frontend by:
    ```bash
-   kubectl port-forward svc/$KYMA_NS-frontend 8080:8080
+   kubectl -n $KYMA_NS port-forward svc/$HELM_RELEASE-frontend 8080
    ````
    and calling `http://localhost:8080`
 
 1. Verify that traces arrive in the Jaeger backend:
    ```bash
-   kubectl port-forward -n kyma-system svc/tracing-jaeger-query 16686
+   kubectl -n kyma-system port-forward svc/tracing-jaeger-query 16686
    ````
    and calling `http://localhost:16686`
 
 1. Enable failures via the feature flag service:
    ```bash
-   kubectl port-forward svc/demo2-featureflagservice 8081
+   kubectl -n $KYMA_NS port-forward svc/$HELM_RELEASE-featureflagservice 8081
    ````
    and calling `http://localhost:8081`
 
 1. Generate load via the load generator:
    ```bash
-   kubectl port-forward svc/demo2-loadgenerator 8089
+   kubectl -n $KYMA_NS port-forward svc/$HELM_RELEASE-loadgenerator 8089
    ````
    and calling `http://localhost:8089`
 
