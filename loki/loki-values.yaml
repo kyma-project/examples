@@ -69,3 +69,8 @@ loki:
     compactor:
       working_directory: /data/loki/boltdb-shipper-compactor
       shared_store: filesystem
+      shared_store: filesystem
+grafana:
+  enabled: false
+promtail:
+  enabled: false

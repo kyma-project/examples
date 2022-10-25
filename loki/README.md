@@ -7,6 +7,7 @@ The Kyma Loki component brings limited configuration options in contrast to the 
 An alternative can be a parallel installation of the upstream chart offering all customization options. The following instructions outline how to achieve such installation in co-existence to the Kyma stack.
 
 **CAUTION:** This example uses the Grafana Loki version, which is distributed under AGPL-3.0 only and might not be free of charge for commercial usage.
+> **CAUTION:** These instructions install Loki in a lightweight setup that does not fulfil production-grade qualities. Consider using a scalable setup based on an object storage backend instead (see [Simple scalable deployment of Grafana Loki with Helm](https://grafana.com/docs/loki/latest/installation/simple-scalable-helm/)).
 
 ## Prerequisites
 
@@ -72,27 +73,21 @@ When the status of the applied LogPipeline resource turned into `Running`, the u
    ```bash
    kubectl -n ${KYMA_LOKI_EXAMPLE_NS} port-forward svc/${HELM_RELEASE_NAME} 3100
 
-### Alternative installation options
+## Alternative installation options
 
-The used Helm chart provides configuration for accessing logs with Grafana, which is disabled by default. 
-To enable Grafana, run:
+## Installation together with Grafana
+The used Helm chart supports the deployment of Grafana as well, but is disabled by default. As Grafana provides a very good Loki integration, you might want to install it as well.
+
+To deploy Grafana alongside to Loki and having Loki pre-configured as a datasource, run the following command instead of the original command from the Installation section:
 
 ```bash
-helm upgrade --install --create-namespace -n ${KYMA_LOKI_EXAMPLE_NS} ${HELM_RELEASE_NAME} grafana/loki-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/loki-values.yaml -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/grafana-values.yaml --set grafana.adminPassword=myPwd --set promtail.enabled=false
-```
+helm upgrade --install --create-namespace -n ${KYMA_LOKI_EXAMPLE_NS} ${HELM_RELEASE_NAME} grafana/loki-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/loki-values.yaml -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/grafana-values.yaml --set grafana.adminPassword=myPwd
 
-To access Grafana, use kubectl port forwarding. Run:
-```bash
-kubectl -n ${KYMA_LOKI_EXAMPLE_NS} port-forward svc/${HELM_RELEASE_NAME}-grafana 3000:80
-```
-Open Grafana in your browser under http://localhost:3000 and log in with `admin` as password `myPwd`. Password can be easly changed by installation parameter `grafana.adminPassword=myPwd` from command above. 
-
-The proposed approach is based Kyma's LogPipeline API which will configure a managed Fluentbit accordingly. Loki itself promotes an own log collector called `promtail` which could be used alternatively. A ready to use setup can be enabled easily by using following Helm command:
+The proposed approach is based Kyma's LogPipeline API, which configures a managed Fluent Bit accordingly. Loki itself promotes its own log collector called `promtail`, which you can use alternatively. You can enable a ready-to-use setup with the following Helm command:
 ```bash
 helm upgrade --install --create-namespace -n ${KYMA_LOKI_EXAMPLE_NS} ${HELM_RELEASE_NAME} grafana/loki-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/loki-values.yaml -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/promtail-values.yaml --set grafana.enabled=false
 ```
 
-> **NOTE:** Following the described instructions will install Loki in a very lightweight setup which will not fullfill production-grade criterias. Please consider to use a scalable setup based on an object storage backend as described in this [guide](https://grafana.com/docs/loki/latest/installation/simple-scalable-helm/).
 
 
 ### Cleanup
