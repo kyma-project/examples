@@ -83,10 +83,13 @@ To deploy Grafana alongside to Loki and having Loki pre-configured as a datasour
 ```bash
 helm upgrade --install --create-namespace -n ${KYMA_LOKI_EXAMPLE_NS} ${HELM_RELEASE_NAME} grafana/loki-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/loki-values.yaml -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/grafana-values.yaml --set grafana.adminPassword=myPwd
 
-The proposed approach is based Kyma's LogPipeline API, which configures a managed Fluent Bit accordingly. Loki itself promotes its own log collector called `promtail`, which you can use alternatively. You can enable a ready-to-use setup with the following Helm command:
+### Installation based on Promtail
+Promtail is the recommended log collector to be used for feeding logs to Loki. The instructions provided her are using Kyma's LogPipeline feature based on Fluentbit.
+If you prefer to use promtail, you can enable the deployment of it via the Helm chart as well.
+The proposed approach is based Kyma's LogPipeline API, which configures a managed Fluent Bit accordingly. Loki itself promotes its own log collector called `promtail`, which you can use alternatively. You can enable a ready-to-use setup with the following Helm command instead of using the one outlined in the installation instructions above:
 ```bash
-helm upgrade --install --create-namespace -n ${KYMA_LOKI_EXAMPLE_NS} ${HELM_RELEASE_NAME} grafana/loki-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/loki-values.yaml -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/promtail-values.yaml --set grafana.enabled=false
-```
+helm upgrade --install --create-namespace -n ${KYMA_LOKI_EXAMPLE_NS} ${HELM_RELEASE_NAME} grafana/loki-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/loki-values.yaml -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/promtail-values.yaml
+```a
 
 
 
