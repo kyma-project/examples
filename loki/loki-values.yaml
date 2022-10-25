@@ -23,7 +23,7 @@ loki:
     # disable multi-tenancy
     auth_enabled: false
     limits_config:
-      # reduce the ingestion rate to not crash that lightweight setup easily
+      # reduce the ingestion rate to avoid crashing the lightweight setup
       ingestion_rate_mb: 3
 
     # increase retention time to 5 days
