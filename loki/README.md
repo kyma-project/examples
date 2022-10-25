@@ -99,7 +99,7 @@ helm upgrade --install --create-namespace -n ${KYMA_LOKI_EXAMPLE_NS} ${HELM_RELE
 
 
 
-### Cleanup
+## Cleanup
 
 1. To remove the installation from cluster, run:
 
