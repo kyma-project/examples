@@ -76,13 +76,19 @@ When the status of the applied LogPipeline resource turned into `Running`, the u
 
 ## Alternative installation options
 
-## Installation together with Grafana
+### Installation together with Grafana
 The used Helm chart supports the deployment of Grafana as well, but is disabled by default. As Grafana provides a very good Loki integration, you might want to install it as well.
 
 To deploy Grafana alongside to Loki and having Loki pre-configured as a datasource, run the following command instead of the original command from the Installation section:
 
 ```bash
 helm upgrade --install --create-namespace -n ${KYMA_LOKI_EXAMPLE_NS} ${HELM_RELEASE_NAME} grafana/loki-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/loki-values.yaml -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/grafana-values.yaml --set grafana.adminPassword=myPwd
+```a
+For accessing the Grafana UI via kubectl port forwarding, run:
+```bash
+kubectl -n ${KYMA_LOKI_EXAMPLE_NS} port-forward svc/${HELM_RELEASE_NAME}-grafana 3000:80
+```a
+Open Grafana in your browser under http://localhost:3000 and log in with user admin and the password taken from the above helm command.
 
 ### Installation based on Promtail
 Promtail is the recommended log collector to be used for feeding logs to Loki. The instructions provided her are using Kyma's LogPipeline feature based on Fluentbit.
