@@ -90,7 +90,7 @@ When the status of the applied LogPipeline resource turned into `Running`, the u
    ```bash
    curl -G -s  "http://localhost:3100/loki/api/v1/query" \
      --data-urlencode \
-     'query={job="fluentbit"}'
+     'query={job="fluentbit"}' \
      --data-urlencode \
      'time={NANOSECONDS}'
    ```
