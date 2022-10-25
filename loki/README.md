@@ -54,39 +54,23 @@ Check that the `loki` Pod has been created in the Namespace and is in the `Runni
 kubectl -n ${KYMA_LOKI_EXAMPLE_NS} get pod ${HELM_RELEASE_NAME}-0
 ```
 
-### Install LogPipeline with custom plugin
+### Activate log shipment using a LogPipeline
 
-> **NOTE:** Before applying following command, `{release-name}` and `{namespace}` placeholder should be replaced.  
+1. Download the [logpipeline](https://raw.githubusercontent.com/kyma-project/examples/main/loki/logpipeline-custom.yaml) and replace the `{release-name}` and `{namespace}` placeholder.
 
-2. To deploy a custom LogPipeline to emit logs to the deployed Loki instance, run the kubectl `apply` command.
+2. Apply the modified LogPipeline:
 
 
    ```bash
-   kubectl apply -f  https://raw.githubusercontent.com/kyma-project/examples/main/loki/logpipeline-custom.yaml
+   kubectl apply -f logpipeline-custom.yaml
+When the status of the applied LogPipeline resource turned into `Running`, the underlying Fluentbit is reconfigured and log shipment to your Loki instance should be active
+> **NOTE:** The used output plugin configuration is using all labels of a Pod to label the Loki log streams. That segregation of the log streams might be not optimal performance wise. Follow [Loki's labelling best practices](https://grafana.com/docs/loki/latest/best-practices/) for a tailormade setup fitting to your workload configuration.
 
-> **NOTE:** Installed LogPipeline by default will collect all kubernetes labels for collected logs. Please consider to use best practices described in this [guide](https://grafana.com/docs/loki/latest/best-practices/) for best experience with Loki.
+### Verify the setup by accessing logs via the Loki API
 
-### Accessing Loki and Logs
-
-1. To access Loki, use kubectl port forwarding. Run:
+1. To access the Loki API, use kubectl port forwarding. Run:
    ```bash
    kubectl -n ${KYMA_LOKI_EXAMPLE_NS} port-forward svc/${HELM_RELEASE_NAME} 3100
-
-   Now you can access Loki over `localhost` and query the collected logs.
-
-2. Loki queries need a query parameter `time` in nano second resolution. To get the current nano seconds in Linux or MacOS, run:
-
-   ```bash
-   date +%s
-
-3. To get the latest logs from Loki, replace the `{nanoseconds}` placeholder with the result of the previous command, and run:
-
-   ```bash
-   curl -G -s  "http://localhost:3100/loki/api/v1/query" \
-     --data-urlencode \
-     'query={job="fluentbit"}'
-     --data-urlencode \
-     'time={nanoseconds}'
 
 ### Alternative installation options
 
