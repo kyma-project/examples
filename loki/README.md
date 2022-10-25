@@ -41,12 +41,11 @@ An alternative can be a parallel installation of the upstream chart offering all
 ### Install the Loki stack
 
 Run the Helm upgrade command, which installs the chart if not present yet.
- ```bash
+```bash
 helm upgrade --install --create-namespace -n ${KYMA_LOKI_EXAMPLE_NS} ${HELM_RELEASE_NAME} grafana/loki-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/loki-values.yaml --set promtail.enabled=false --set grafana.enabled=false
 ```
 
 You can either use the [loki-values.yaml](./loki-values.yaml) provided in this `loki` folder, which contains customized settings deviating from the default settings, or create your own `values.yaml` file.
-
 
 ### Verify the installation
 
@@ -62,10 +61,12 @@ kubectl -n ${KYMA_LOKI_EXAMPLE_NS} get pod ${HELM_RELEASE_NAME}-0
 
 2. Apply the modified LogPipeline:
 
-
    ```bash
    kubectl apply -f logpipeline-custom.yaml
+   ```
+   
 When the status of the applied LogPipeline resource turned into `Running`, the underlying Fluentbit is reconfigured and log shipment to your Loki instance should be active
+
 > **NOTE:** The used output plugin configuration is using all labels of a Pod to label the Loki log streams. That segregation of the log streams might be not optimal performance wise. Follow [Loki's labelling best practices](https://grafana.com/docs/loki/latest/best-practices/) for a tailormade setup fitting to your workload configuration.
 
 ### Verify the setup by accessing logs via the Loki API
@@ -73,6 +74,19 @@ When the status of the applied LogPipeline resource turned into `Running`, the u
 1. To access the Loki API, use kubectl port forwarding. Run:
    ```bash
    kubectl -n ${KYMA_LOKI_EXAMPLE_NS} port-forward svc/${HELM_RELEASE_NAME} 3100
+   ```
+1. Loki queries need a query parameter `time` in nano second resolution. To get the current nano seconds in Linux or MacOS, run:
+   ```bash
+   date +%s
+   ```
+1. To get the latest logs from Loki, replace the `{nanoseconds}` placeholder with the result of the previous command, and run:
+   ```bash
+   curl -G -s  "http://localhost:3100/loki/api/v1/query" \
+     --data-urlencode \
+     'query={job="fluentbit"}'
+     --data-urlencode \
+     'time={nanoseconds}'
+   ```
 
 ## Alternative installation options
 
@@ -83,21 +97,21 @@ To deploy Grafana alongside to Loki and having Loki pre-configured as a datasour
 
 ```bash
 helm upgrade --install --create-namespace -n ${KYMA_LOKI_EXAMPLE_NS} ${HELM_RELEASE_NAME} grafana/loki-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/loki-values.yaml -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/grafana-values.yaml --set grafana.adminPassword=myPwd
-```a
+```
 For accessing the Grafana UI via kubectl port forwarding, run:
 ```bash
 kubectl -n ${KYMA_LOKI_EXAMPLE_NS} port-forward svc/${HELM_RELEASE_NAME}-grafana 3000:80
-```a
+```
 Open Grafana in your browser under http://localhost:3000 and log in with user admin and the password taken from the above helm command.
 
 ### Installation based on Promtail
 Promtail is the recommended log collector to be used for feeding logs to Loki. The instructions provided her are using Kyma's LogPipeline feature based on Fluentbit.
 If you prefer to use promtail, you can enable the deployment of it via the Helm chart as well.
 The proposed approach is based Kyma's LogPipeline API, which configures a managed Fluent Bit accordingly. Loki itself promotes its own log collector called `promtail`, which you can use alternatively. You can enable a ready-to-use setup with the following Helm command instead of using the one outlined in the installation instructions above:
+
 ```bash
 helm upgrade --install --create-namespace -n ${KYMA_LOKI_EXAMPLE_NS} ${HELM_RELEASE_NAME} grafana/loki-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/loki-values.yaml -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/promtail-values.yaml
-
-
+```
 
 ## Cleanup
 
