@@ -1,8 +1,8 @@
-# Install OpenTelemtry Demo Application in Kyma
+# Install OpenTelemetry Demo Application in Kyma
 
 ## Overview
 
-This instructions will install the OpenTelemetry [demo app](https://github.com/open-telemetry/opentelemetry-demo) on a Kyma cluster. The demo app is based on the related [helm chart](https://github.com/open-telemetry/opentelemetry-helm-charts/tree/main/charts/opentelemetry-demo)
+These instructions will install the OpenTelemetry [demo application](https://github.com/open-telemetry/opentelemetry-demo) on a Kyma cluster using this [helm chart](https://github.com/open-telemetry/opentelemetry-helm-charts/tree/main/charts/opentelemetry-demo).
 
 **CAUTION:** This instructions are under development and are relying on a prelimary state of the [Configurable Tracing](https://github.com/kyma-project/kyma/issues/11231) story. The goal is to have early with an E2E scenario for that feature. The instructions for now require to reconfigure the Istio and telemetry installation which is only possible using a custom Kyma OpenSource installation. In the final state, this reconfiguration will not be required anymore.
 
@@ -52,20 +52,20 @@ This instructions will install the OpenTelemetry [demo app](https://github.com/o
 
 1. (Temporary) Activate Istio tracing based on w3c-tracecontext and OTLP
     ```bash
-    kyma deploy -s main --component istio -f istio-values.yaml
+    kyma deploy -s main --component istio -f https://raw.githubusercontent.com/kyma-project/examples/main/trace-demo/istio-values.yaml
     ```
     Potentially, you need to restart the relevant workloads
 
-1. Enable Jaeger backend via new tracing feature
+1. Enable Jaeger backend by creating a new TracePipeline
    ```bash
-   kubectl apply -f tracepipeline.yaml
+   kubectl apply -f https://raw.githubusercontent.com/kyma-project/examples/main/trace-demo/tracepipeline.yaml
    ```
 
 ### Install the application
 
 Run the Helm upgrade command, which installs the chart if not present yet.
 ```bash
-helm upgrade --version 0.9.6 --install --create-namespace -n $KYMA_NS $HELM_RELEASE open-telemetry/opentelemetry-demo -f values.yaml
+helm upgrade --version 0.9.6 --install --create-namespace -n $KYMA_NS $HELM_RELEASE open-telemetry/opentelemetry-demo -f https://raw.githubusercontent.com/kyma-project/examples/main/trace-demo/values.yaml
 ```
 
 You can either use the [`values.yaml`](./values.yaml) provided in this `trace-demo` folder, which contains customized settings deviating from the default settings, or create your own `values.yaml` file.
