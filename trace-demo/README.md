@@ -19,12 +19,12 @@ This instructions will install the OpenTelemetry [demo app](https://github.com/o
     ```bash
     export KYMA_NS="{namespace}"
     ```
-1. If you don't have it created yet, now is the time to do sog:
+1. If you don't have it created yet, now is the time to do so:
     ```bash
     kubectl create namespace $KYMA_NS
     ```
 
-1. Assure that your namespace has istio-onjection enabled by having the proper label in place
+1. Assure that your namespace has istio-injection enabled by having the proper label in place
     ```bash
     kubectl label namespace $KYMA_NS istio-injection=enabled
     ```
