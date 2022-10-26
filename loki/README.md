@@ -75,7 +75,7 @@ helm upgrade --install --create-namespace -n ${KYMA_LOKI_EXAMPLE_NS} ${HELM_RELE
    helm upgrade --install --create-namespace -n ${KYMA_LOKI_EXAMPLE_NS} ${HELM_RELEASE_NAME} grafana/loki-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/loki-values.yaml --set promtail.enabled=false
    ```
 
-2. Download the [logpipeline](logpipeline-custom.yaml) and replace the `{HELM_RELEASE_NAME}` and `{NAMESPACE}` placeholder.
+2. Download the [LogPipeline](logpipeline-custom.yaml) and replace the `{HELM_RELEASE_NAME}` and `{NAMESPACE}` placeholder.
 
 3. Apply the modified LogPipeline:
 
@@ -83,9 +83,9 @@ helm upgrade --install --create-namespace -n ${KYMA_LOKI_EXAMPLE_NS} ${HELM_RELE
    kubectl apply -f logpipeline-custom.yaml
    ```
 
-   When the status of the applied LogPipeline resource turned into `Running`, the underlying Fluentbit is reconfigured and log shipment to your Loki instance is active.
+When the status of the applied LogPipeline resource turned into `Running`, the underlying Fluentbit is reconfigured and log shipment to your Loki instance is active.
 
-   > **TIP:** The used output plugin configuration uses all labels of a Pod to label the Loki log streams. Performancewise, such segregation of the log streams might be not optimal. Follow [Loki's labelling best practices](https://grafana.com/docs/loki/latest/best-practices/) for a tailormade setup that fits your workload configuration.
+> **TIP:** The used output plugin configuration uses all labels of a Pod to label the Loki log streams. Performancewise, such segregation of the log streams might be not optimal. Follow [Loki's labelling best practices](https://grafana.com/docs/loki/latest/best-practices/) for a tailormade setup that fits your workload configuration.
 
   </details>
   <details>
