@@ -19,7 +19,7 @@ The following instructions install the OpenTelemetry [demo application](https://
     ```bash
     export KYMA_NS="{namespace}"
     ```
-1. If you don't have it created yet, now is the time to do so:
+1. If you don't have created a Namespace yet, do it now:
     ```bash
     kubectl create namespace $KYMA_NS
     ```
