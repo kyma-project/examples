@@ -59,7 +59,7 @@ kubectl -n ${KYMA_LOKI_EXAMPLE_NS} get pod ${HELM_RELEASE_NAME}-0
 
 ### Activate log shipment using a LogPipeline
 
-1. Download the logpipeline and replace the `{HELM_RELEASE_NAME}` and `{NAMESPACE}` placeholder.
+1. Download the logpipeline https://raw.githubusercontent.com/kyma-project/examples/main/loki/logpipeline-custom.yaml and replace the `{HELM_RELEASE_NAME}` and `{NAMESPACE}` placeholder.
 
 2. Apply the modified LogPipeline:
 
