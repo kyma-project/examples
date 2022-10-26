@@ -6,7 +6,7 @@ The Kyma monitoring stack often brings limited configuration options in contrast
 
 As an alternative, you can install the upstream chart with all customization options parallel. This tutorial outlines how to set up such installation in co-existence to the Kyma monitoring stack.
 
-> **CAUTION:** This tutorial describes a basic setup that you should not use in production. Typically, a production setup needs further configuration, like optimizing the amount of data to scrape and the required resource footprint of the installation. To achieve qualities like high availability, scalability, or durable long-term storage, you might need an even more advanced setup.
+> **CAUTION:** This tutorial describes a basic setup that you should not use in production. Typically, a production setup needs further configuration, like optimizing the amount of data to scrape and the required resource footprint of the installation. To achieve qualities like [high availability](https://prometheus.io/docs/introduction/faq/#can-prometheus-be-made-highly-available), [scalability](https://prometheus.io/docs/introduction/faq/#i-was-told-prometheus-doesnt-scale), or [durable long-term storage](https://prometheus.io/docs/operating/integrations/#remote-endpoints-and-storage), you need a more advanced setup.
 
 > **CAUTION:** This example will use the latest Grafana version which is under AGPL-3.0 and might not be free of charge for commercial usage.
 
