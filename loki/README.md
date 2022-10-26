@@ -41,13 +41,54 @@ To get all the customization options, follow the instructions to set up a parall
 
 ### Install the Loki stack
 
-Run the Helm upgrade command, which installs the chart if not present yet.
+You install the Loki stack with a Helm upgrade command, which installs the chart if not present yet.
 
-You can either use the [loki-values.yaml](./loki-values.yaml) provided in this `loki` folder, which contains customized settings deviating from the default settings, or create your own `values.yaml` file.
+You can choose between an installation based on [Promtail](https://grafana.com/docs/loki/latest/clients/promtail/), which is the log collector recommended by Loki and provides a ready-to-use setup.
+Alternatively, you can use Kyma's LogPipeline feature based on Fluent Bit.
+
+The Helm chart supports the deployment of Grafana as well, but is disabled by default. Because Grafana provides a very good Loki integration, you might want to install it as well.
+
+In any case, you can either use the [loki-values.yaml](./loki-values.yaml) provided in this `loki` folder, which contains customized settings deviating from the default settings, or create your own `values.yaml` file.
+
+<div tabs name="default-settings" group="configuration">
+  <details>
+  <summary label="promtail-installation">
+  Promtail installation
+  </summary>
 
 ```bash
+helm upgrade --install --create-namespace -n ${KYMA_LOKI_EXAMPLE_NS} ${HELM_RELEASE_NAME} grafana/loki-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/loki-values.yaml -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/promtail-values.yaml
+```
+  </details>
+  <details>
+  <summary label="fluent-bit-installation">
+  Fluent Bit installation
+  </summary>
+  ```bash
 helm upgrade --install --create-namespace -n ${KYMA_LOKI_EXAMPLE_NS} ${HELM_RELEASE_NAME} grafana/loki-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/loki-values.yaml --set promtail.enabled=false --set grafana.enabled=false
 ```
+  </details>
+  <details>
+  <summary label="installation-with-grafana">
+  Installation with Grafana
+  </summary>
+  The used Helm chart supports the deployment of Grafana as well, but is disabled by default. Because Grafana provides a very good Loki integration, you might want to install it as well.
+  
+  1. To deploy Grafana alongside Loki with Loki pre-configured as a datasource, run the following command instead of the original command from the Installation section:
+
+     ```bash
+     helm upgrade --install --create-namespace -n ${KYMA_LOKI_EXAMPLE_NS} ${HELM_RELEASE_NAME} grafana/loki-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/loki-values.yaml -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/grafana-values.yaml --set grafana.adminPassword=myPwd
+     ```
+  
+  2. To access the Grafana UI with kubectl port forwarding, run:
+
+     ```bash
+     kubectl -n ${KYMA_LOKI_EXAMPLE_NS} port-forward svc/${HELM_RELEASE_NAME}-grafana 3000:80
+     ```
+  
+  3. Open Grafana in your browser under http://localhost:3000 and log in with user admin and the password taken from the previous Helm command.
+  </details>
+</div>
 
 ### Verify the installation
 
@@ -94,37 +135,6 @@ When the status of the applied LogPipeline resource turned into `Running`, the u
      --data-urlencode \
      'time={NANOSECONDS}'
    ```
-
-## Alternative installation options
-
-### Installation together with Grafana
-
-The used Helm chart supports the deployment of Grafana as well, but is disabled by default. Because Grafana provides a very good Loki integration, you might want to install it as well.
-
-1. To deploy Grafana alongside to Loki with Loki pre-configured as a datasource, run the following command instead of the original command from the Installation section:
-
-   ```bash
-   helm upgrade --install --create-namespace -n ${KYMA_LOKI_EXAMPLE_NS} ${HELM_RELEASE_NAME} grafana/loki-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/loki-values.yaml -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/grafana-values.yaml --set grafana.adminPassword=myPwd
-   ```
-
-2. To access the Grafana UI with kubectl port forwarding, run:
-
-   ```bash
-   kubectl -n ${KYMA_LOKI_EXAMPLE_NS} port-forward svc/${HELM_RELEASE_NAME}-grafana 3000:80
-   ```
-
-3. Open Grafana in your browser under http://localhost:3000 and log in with user admin and the password taken from the previous Helm command.
-
-### Installation based on Promtail
-
-The previous instructions use Kyma's LogPipeline feature based on Fluent Bit. Loki itself promotes its own log collector called [Promtail](https://grafana.com/docs/loki/latest/clients/promtail/), which you can use alternatively.
-
-If you prefer to use Promtail, you can deploy it using the Helm chart as well.
-To enable a ready-to-use setup, run the following Helm command instead of using the one outlined in the instructions.
-
-```bash
-helm upgrade --install --create-namespace -n ${KYMA_LOKI_EXAMPLE_NS} ${HELM_RELEASE_NAME} grafana/loki-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/loki-values.yaml -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/promtail-values.yaml
-```
 
 ## Cleanup
 
