@@ -23,16 +23,25 @@ As an alternative, you can install the upstream chart with all customization opt
 1. Export your Namespace as a variable. Replace the `{namespace}` placeholder in the following command and run it:
 
     ```bash
-    export KYMA_EXAMPLE_NS="{namespace}"
+    export KYMA_NS="{namespace}"
     ```
-    >Note: This Namespace must have **no** Istio sidecar injection enabled. The Helm chart deploys jobs that will not succeed when sidecar injection is enabled by default.
-
-2. Export the Helm release name that you want to use. It can be any name, but be aware that all resources in the cluster will be prefixed with that name. Replace the `{release-name}` placeholder in the following command and run it:
+1. If you don't have it created yet, now is the time to do so:
     ```bash
-    export HELM_RELEASE_NAME="{release-name}"
+    kubectl create namespace $KYMA_NS
     ```
 
-3. Update your Helm installation with the required Helm repository:
+1. Assure that your namespace has istio-injection disabled by having the proper label in place
+    ```bash
+    kubectl label namespace $KYMA_NS istio-injection=disabled
+    ```
+    >**Note**: This Namespace must have **no** Istio sidecar injection enabled. The Helm chart deploys jobs that will not succeed when sidecar injection is enabled by default.
+
+1. Export the Helm release name that you want to use. It can be any name, but be aware that all resources in the cluster will be prefixed with that name. Replace the `{release-name}` placeholder in the following command and run it:
+   ```bash
+    export HELM_RELEASE="{release-name}"
+    ```
+
+1. Update your Helm installation with the required Helm repository:
 
     ```bash
     helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
@@ -43,26 +52,27 @@ As an alternative, you can install the upstream chart with all customization opt
 
 1. Run the Helm upgrade command, which installs the chart if it's not present yet. At the end of the command, change the Grafana admin password to some value of your choice.
     ```bash
-    helm upgrade --install -n ${KYMA_EXAMPLE_NS} ${HELM_RELEASE_NAME} prometheus-community/kube-prometheus-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/prometheus/values.yaml --set grafana.adminPassword=myPwd
+    helm upgrade --install -n ${KYMA_NS} ${HELM_RELEASE} prometheus-community/kube-prometheus-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/prometheus/values.yaml --set grafana.adminPassword=myPwd
     ```
 
 You can use the [values.yaml](./values.yaml) provided with this tutorial, which contains customized settings deviating from the default settings, or create your own one.
 The provided `values.yaml` covers the following adjustments:
-- Support parallel operation to a Kyma monitoring stack
-- Support the scraping of workload secured with Istio strict mTLS
+- Parallel operation to a Kyma monitoring stack
+- Client certificate injection to support scraping of workload secured with Istio strict mTLS
+- Active scraping of workload annotated with @prometheus.io/scrape
 
-### Install Istio Support
+### Activate scraping of Istio metrics & Grafana dashboards
 
 1. To configure Prometheus for scraping of the Istio-specific metrics from any istio-proxy running in the cluster, deploy a PodMonitor, which scrapes any Pod that has a port with name `.*-envoy-prom` exposed.
 
     ```bash
-    kubectl -n ${KYMA_EXAMPLE_NS} apply -f https://raw.githubusercontent.com/kyma-project/examples/main/prometheus/istio/podmonitor-istio-proxy.yaml
+    kubectl -n ${KYMA_NS} apply -f https://raw.githubusercontent.com/kyma-project/examples/main/prometheus/istio/podmonitor-istio-proxy.yaml
     ```
 
 2. Deploy a ServiceMonitor definition for the central metrics of the `istiod` deployment:
 
     ```bash
-    kubectl -n ${KYMA_EXAMPLE_NS} apply -f https://raw.githubusercontent.com/kyma-project/examples/main/prometheus/istio/servicemonitor-istiod.yaml
+    kubectl -n ${KYMA_NS} apply -f https://raw.githubusercontent.com/kyma-project/examples/main/prometheus/istio/servicemonitor-istiod.yaml
     ```
 
 3. Get the latest versions of the Istio-specific dashboards.
@@ -70,8 +80,8 @@ The provided `values.yaml` covers the following adjustments:
    Either follow the [Istio quick start instructions](https://istio.io/latest/docs/ops/integrations/grafana/#option-1-quick-start), or take the prepared ones with the following command:
 
     ```bash
-    kubectl -n ${KYMA_EXAMPLE_NS} apply -f https://raw.githubusercontent.com/kyma-project/examples/main/prometheus/istio/configmap-istio-grafana-dashboards.yaml
-    kubectl -n ${KYMA_EXAMPLE_NS} apply -f https://raw.githubusercontent.com/kyma-project/examples/main/prometheus/istio/configmap-istio-services-grafana-dashboards.yaml
+    kubectl -n ${KYMA_NS} apply -f https://raw.githubusercontent.com/kyma-project/examples/main/prometheus/istio/configmap-istio-grafana-dashboards.yaml
+    kubectl -n ${KYMA_NS} apply -f https://raw.githubusercontent.com/kyma-project/examples/main/prometheus/istio/configmap-istio-services-grafana-dashboards.yaml
     ```
 
    > **NOTE:** This setup collects all Istio metrics on a Pod level, which can lead to cardinality issues. Because  metrics are only needed on service level, for setups having a bigger amount of workloads deployed, it is recommended to use a setup based on federation as described in the [Istio documentation](https://istio.io/latest/docs/ops/best-practices/observability/#using-prometheus-for-production-scale-monitoring).
@@ -81,11 +91,11 @@ The provided `values.yaml` covers the following adjustments:
 1. You should see several Pods coming up in the Namespace, especially Prometheus and Alertmanager. Assure that all Pods have the "Running" state.
 2. Browse the Prometheus dashboard and verify that all "Status->Targets" are healthy. The following command exposes the dashboard on `http://localhost:9090`:
    ```bash
-   kubectl -n ${KYMA_EXAMPLE_NS} port-forward svc/${HELM_RELEASE_NAME}-kube-prometh-prometheus 9090
+   kubectl -n ${KYMA_NS} port-forward svc/${HELM_RELEASE}-kube-prometh-prometheus 9090
    ```
 3. Browse the Grafana dashboard and verify that the dashboards are showing data. The user `admin` is pre-configured in the Helm chart; the password was provided in your `helm install` command. The following command exposes the dashboard on `http://localhost:3000`:
    ```bash
-   kubectl -n ${KYMA_EXAMPLE_NS} port-forward svc/${HELM_RELEASE_NAME}-grafana 3000:80
+   kubectl -n ${KYMA_NS} port-forward svc/${HELM_RELEASE}-grafana 3000:80
    ```
 
 ### Deploy a custom workload and scrape it
@@ -109,7 +119,6 @@ You can try it out by removing the ServiceMonitor from the previous example and 
 
 1. To remove the installation from the cluster, call Helm:
 
-
     ```bash
-    helm delete -n ${KYMA_EXAMPLE_NS} ${HELM_RELEASE_NAME}
+    helm delete -n ${KYMA_NS} ${HELM_RELEASE}
     ```
