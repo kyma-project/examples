@@ -53,25 +53,39 @@ In any case, you can either use the [loki-values.yaml](./loki-values.yaml) provi
 <div tabs name="default-settings" group="configuration">
   <details>
   <summary label="promtail-installation">
-  Promtail installation
+  Installation with Promtail
   </summary>
 
 To install the Loki stack based on Promtail, run:
 
 ```bash
-helm upgrade --install --create-namespace -n ${KYMA_LOKI_EXAMPLE_NS} ${HELM_RELEASE_NAME} grafana/loki-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/loki-values.yaml -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/promtail-values.yaml
+helm upgrade --install --create-namespace -n ${KYMA_LOKI_EXAMPLE_NS} ${HELM_RELEASE_NAME} grafana/loki-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/loki-values.yaml
 ```
   </details>
   <details>
   <summary label="fluent-bit-installation">
-  Fluent Bit installation
+  Installation with Kyma's LogPipeline
   </summary>
 
-To install the Loki stack with Kyma's LogPipeline feature based on Fluent Bit, run:
+>**CAUTION:** This setup uses an unsupported output plugin for the LogPipline. Support for this might be removed in future.
 
-  ```bash
-helm upgrade --install --create-namespace -n ${KYMA_LOKI_EXAMPLE_NS} ${HELM_RELEASE_NAME} grafana/loki-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/loki-values.yaml --set promtail.enabled=false --set grafana.enabled=false
-```
+1. To install the Loki stack with Kyma's LogPipeline feature based on Fluent Bit, run:
+
+   ```bash
+   helm upgrade --install --create-namespace -n ${KYMA_LOKI_EXAMPLE_NS} ${HELM_RELEASE_NAME} grafana/loki-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/loki-values.yaml --set promtail.enabled=false
+   ```
+
+2. Download the [logpipeline](logpipeline-custom.yaml) and replace the `{HELM_RELEASE_NAME}` and `{NAMESPACE}` placeholder.
+
+3. Apply the modified LogPipeline:
+
+   ```bash
+   kubectl apply -f logpipeline-custom.yaml
+   ```
+
+   When the status of the applied LogPipeline resource turned into `Running`, the underlying Fluentbit is reconfigured and log shipment to your Loki instance is active.
+
+   > **TIP:** The used output plugin configuration uses all labels of a Pod to label the Loki log streams. Performancewise, such segregation of the log streams might be not optimal. Follow [Loki's labelling best practices](https://grafana.com/docs/loki/latest/best-practices/) for a tailormade setup that fits your workload configuration.
 
   </details>
   <details>
@@ -80,19 +94,19 @@ helm upgrade --install --create-namespace -n ${KYMA_LOKI_EXAMPLE_NS} ${HELM_RELE
   </summary>
 
   The used Helm chart supports the deployment of Grafana as well, but is disabled by default. Because Grafana provides a very good Loki integration, you might want to install it as well.
-  
+
   1. To deploy Grafana alongside Loki with Loki pre-configured as a datasource, run the following command instead of the original command from the Installation section:
 
      ```bash
      helm upgrade --install --create-namespace -n ${KYMA_LOKI_EXAMPLE_NS} ${HELM_RELEASE_NAME} grafana/loki-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/loki-values.yaml -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/grafana-values.yaml --set grafana.adminPassword=myPwd
      ```
-  
+
   2. To access the Grafana UI with kubectl port forwarding, run:
 
      ```bash
      kubectl -n ${KYMA_LOKI_EXAMPLE_NS} port-forward svc/${HELM_RELEASE_NAME}-grafana 3000:80
      ```
-  
+
   3. Open Grafana in your browser under http://localhost:3000 and log in with user admin and the password taken from the previous Helm command.
   </details>
 </div>
@@ -104,20 +118,6 @@ Check that the `loki` Pod has been created in the Namespace and is in the `Runni
 ```bash
 kubectl -n ${KYMA_LOKI_EXAMPLE_NS} get pod ${HELM_RELEASE_NAME}-0
 ```
-
-### Activate log shipment using a LogPipeline
-
-1. Download the [logpipeline](logpipeline-custom.yaml) and replace the `{HELM_RELEASE_NAME}` and `{NAMESPACE}` placeholder.
-
-2. Apply the modified LogPipeline:
-
-   ```bash
-   kubectl apply -f logpipeline-custom.yaml
-   ```
-
-When the status of the applied LogPipeline resource turned into `Running`, the underlying Fluentbit is reconfigured and log shipment to your Loki instance is active.
-
-> **TIP:** The used output plugin configuration uses all labels of a Pod to label the Loki log streams. Performancewise, such segregation of the log streams might be not optimal. Follow [Loki's labelling best practices](https://grafana.com/docs/loki/latest/best-practices/) for a tailormade setup that fits your workload configuration.
 
 ### Verify the setup by accessing logs via the Loki API
 

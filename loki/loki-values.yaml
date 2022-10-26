@@ -1,4 +1,7 @@
 loki:
+  # Do not use Loki as the default Grafana datasource to avoid breaking existing Grafana instances
+  isDefault: false
+
   podLabels:
     # enable istio sidecar injection
     sidecar.istio.io/inject: "true"
@@ -32,7 +35,12 @@ loki:
     table_manager:
       retention_deletes_enabled: true
       retention_period: 120h
+
 grafana:
   enabled: false
+
 promtail:
-  enabled: false
+  enabled: true
+
+  podLabels:
+    sidecar.istio.io/inject: "true"

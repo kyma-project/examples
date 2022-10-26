@@ -1,6 +1,0 @@
-# promtail log collector configuration
-promtail:
-  enabled: true
-
-  podLabels:
-    sidecar.istio.io/inject: "true"
