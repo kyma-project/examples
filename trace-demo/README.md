@@ -2,14 +2,14 @@
 
 ## Overview
 
-These instructions will install the OpenTelemetry [demo application](https://github.com/open-telemetry/opentelemetry-demo) on a Kyma cluster using this [helm chart](https://github.com/open-telemetry/opentelemetry-helm-charts/tree/main/charts/opentelemetry-demo).
+The following instructions install the OpenTelemetry [demo application](https://github.com/open-telemetry/opentelemetry-demo) on a Kyma cluster using a provided [Helm chart](https://github.com/open-telemetry/opentelemetry-helm-charts/tree/main/charts/opentelemetry-demo).
 
-**CAUTION:** This instructions are under development and are relying on a prelimary state of the [Configurable Tracing](https://github.com/kyma-project/kyma/issues/11231) story. The goal is to have early with an E2E scenario for that feature. The instructions for now require to reconfigure the Istio and telemetry installation which is only possible using a custom Kyma OpenSource installation. In the final state, this reconfiguration will not be required anymore.
+**CAUTION:** The following instructions are under development and rely on a preliminary state of the [Configurable Tracing](https://github.com/kyma-project/kyma/issues/11231) feature. The goal is to have an early E2E scenario for that feature. For now, you must reconfigure the Istio and Telemetry installation, which is only possible using a custom Kyma OpenSource installation. In the final state, this reconfiguration will not be required anymore.
 
 ## Prerequisites
 
 - Kyma OSS installed from main branch (`kyma deploy -s main`)
-- kubectl > 1.22.x
+- kubectl version 1.22.x or higher
 - Helm 3.x
 
 ### Preparation
@@ -24,7 +24,7 @@ These instructions will install the OpenTelemetry [demo application](https://git
     kubectl create namespace $KYMA_NS
     ```
 
-1. Assure that your namespace has istio-injection enabled by having the proper label in place
+1. To enable Istio injection in your Namespace, set the following label:
     ```bash
     kubectl label namespace $KYMA_NS istio-injection=enabled
     ```
@@ -41,22 +41,22 @@ These instructions will install the OpenTelemetry [demo application](https://git
     helm repo update
     ```
 
-### Activate Kyma Tracing Preview feature
+### Activate Kyma Tracing preview
 
-1. (Temporary) Enable tracing feature in operator
+1. (Temporary) In the Telemetry operator, enable the tracing feature:
 
     ```bash
     kubectl apply -f https://raw.githubusercontent.com/kyma-project/kyma/main/components/telemetry-operator/config/crd/bases/telemetry.kyma-project.io_tracepipelines.yaml
     kyma deploy -s main --component telemetry --value telemetry.operator.controllers.tracing.enabled=true
     ```
 
-1. (Temporary) Activate Istio tracing based on w3c-tracecontext and OTLP
+1. (Temporary) Activate Istio tracing based on w3c-tracecontext and OTLP:
     ```bash
     kyma deploy -s main --component istio -f https://raw.githubusercontent.com/kyma-project/examples/main/trace-demo/istio-values.yaml
     ```
-    Potentially, you need to restart the relevant workloads
+ 1. If necessary, restart the relevant workloads.
 
-1. Enable Jaeger backend by creating a new TracePipeline
+1. To enable the Jaeger backend, create a new TracePipeline:
    ```bash
    kubectl apply -f https://raw.githubusercontent.com/kyma-project/examples/main/trace-demo/tracepipeline.yaml
    ```
@@ -84,13 +84,13 @@ You can either use the [`values.yaml`](./values.yaml) provided in this `trace-de
    ````
    and calling `http://localhost:16686`
 
-1. Enable failures via the feature flag service:
+1. Enable failures with the feature flag service:
    ```bash
    kubectl -n $KYMA_NS port-forward svc/$HELM_RELEASE-featureflagservice 8081
    ````
    and calling `http://localhost:8081`
 
-1. Generate load via the load generator:
+1. Generate load with the load generator:
    ```bash
    kubectl -n $KYMA_NS port-forward svc/$HELM_RELEASE-loadgenerator 8089
    ````
