@@ -56,6 +56,8 @@ In any case, you can either use the [loki-values.yaml](./loki-values.yaml) provi
   Promtail installation
   </summary>
 
+To install the Loki stack based on Promtail, run:
+
 ```bash
 helm upgrade --install --create-namespace -n ${KYMA_LOKI_EXAMPLE_NS} ${HELM_RELEASE_NAME} grafana/loki-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/loki-values.yaml -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/promtail-values.yaml
 ```
@@ -64,14 +66,19 @@ helm upgrade --install --create-namespace -n ${KYMA_LOKI_EXAMPLE_NS} ${HELM_RELE
   <summary label="fluent-bit-installation">
   Fluent Bit installation
   </summary>
+
+To install the Loki stack with Kyma's LogPipeline feature based on Fluent Bit, run:
+
   ```bash
 helm upgrade --install --create-namespace -n ${KYMA_LOKI_EXAMPLE_NS} ${HELM_RELEASE_NAME} grafana/loki-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/loki-values.yaml --set promtail.enabled=false --set grafana.enabled=false
 ```
+
   </details>
   <details>
   <summary label="installation-with-grafana">
   Installation with Grafana
   </summary>
+
   The used Helm chart supports the deployment of Grafana as well, but is disabled by default. Because Grafana provides a very good Loki integration, you might want to install it as well.
   
   1. To deploy Grafana alongside Loki with Loki pre-configured as a datasource, run the following command instead of the original command from the Installation section:
