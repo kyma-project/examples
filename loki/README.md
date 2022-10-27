@@ -144,6 +144,30 @@ kubectl -n ${KYMA_LOKI_EXAMPLE_NS} get pod -l app=loki,release=${HELM_RELEASE_NA
      'time={NANOSECONDS}'
    ```
 
+### Access Grafana
+
+To access Grafana, either use kubectl port forwarding, or expose it using the Kyma Ingress Gateway.
+
+* To access Grafana using port forwarding, run:
+  ```bash
+  kubectl -n ${KYMA_LOKI_EXAMPLE_NS} port-forward svc/${HELM_RELEASE_NAME}-grafana 3000:80
+  ```
+
+  Open Grafana in your browser under `http://localhost:3000`
+
+* To expose Grafana using the Kyma API Gateway, download the api rule file and replace the `{release-name}` to the name of Helm release:
+  ```bash
+  curl https://raw.githubusercontent.com/kyma-project/examples/main/loki/apirule.yaml -o apirule.yaml
+  ```
+  Create an APIRule:
+  ```bash
+  kubectl -n ${KYMA_LOKI_EXAMPLE_NS} apply -f apirule.yaml 
+  ```
+  Get the public URL of your Kiali server:
+  ```bash
+  kubectl -n ${KYMA_LOKI_EXAMPLE_NS} get vs -l apirule.gateway.kyma-project.io/v1beta1=grafana.${KYMA_LOKI_EXAMPLE_NS} -ojsonpath='{.items[*].spec.hosts[*]}'
+  ```
+
 ## Cleanup
 
 1. To remove the installation from the cluster, run:
