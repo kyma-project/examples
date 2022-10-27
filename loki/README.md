@@ -107,9 +107,10 @@ When the status of the applied LogPipeline resource turns into `Running`, the un
   </details>
 </div>
 
->**TIP:** The used output plugin configuration uses all labels of a Pod to label the Loki log streams. Performancewise, such segregation of the log streams might be not optimal. Follow [Loki's labelling best practices](https://grafana.com/docs/loki/latest/best-practices/) for a tailormade setup that fits your workload configuration.
+>**NOTE:**
+>- The used output plugin configuration uses all labels of a Pod to label the Loki log streams. Performance-wise, such segregation of the log streams might be not optimal. Follow [Loki's labelling best practices](https://grafana.com/docs/loki/latest/best-practices/) for a tailor-made setup that fits your workload configuration.
+>- These instructions install Loki in a lightweight setup that does not fulfil production-grade qualities. Consider using a scalable setup based on an object storage backend instead (see [Simple scalable deployment of Grafana Loki with Helm](https://grafana.com/docs/loki/latest/installation/simple-scalable-helm/)).
 
->**NOTE:** These instructions install Loki in a lightweight setup that does not fulfil production-grade qualities. Consider using a scalable setup based on an object storage backend instead (see [Simple scalable deployment of Grafana Loki with Helm](https://grafana.com/docs/loki/latest/installation/simple-scalable-helm/)).
 
 ### Verify the installation
 
