@@ -2,7 +2,7 @@
 
 ## Overview
 
-In contrast to the upstream [loki-stack chart](https://github.com/grafana/helm-charts/tree/main/charts/loki-stack), Kyma's Loki component offers limited configuration options. Furthermore, any modifications you make might be reset at next upgrade cycle.
+>**NOTE:** In contrast to the upstream [loki-stack chart](https://github.com/grafana/helm-charts/tree/main/charts/loki-stack), Kyma's Loki component offers limited configuration options. Furthermore, any modifications you make might be reset at the next upgrade cycle.
 
 To get all the customization options, follow the instructions to set up a parallel installation of the upstream chart, co-existing with the Kyma stack.
 
@@ -83,7 +83,7 @@ helm upgrade --install --create-namespace -n ${KYMA_LOKI_EXAMPLE_NS} ${HELM_RELE
    kubectl apply -f logpipeline-custom.yaml
    ```
 
-When the status of the applied LogPipeline resource turned into `Running`, the underlying Fluent Bit is reconfigured and log shipment to your Loki instance is active.
+When the status of the applied LogPipeline resource turns into `Running`, the underlying Fluent Bit is reconfigured and log shipment to your Loki instance is active.
 
 > **TIP:** The used output plugin configuration uses all labels of a Pod to label the Loki log streams. Performancewise, such segregation of the log streams might be not optimal. Follow [Loki's labelling best practices](https://grafana.com/docs/loki/latest/best-practices/) for a tailormade setup that fits your workload configuration.
 
@@ -128,7 +128,7 @@ kubectl -n ${KYMA_LOKI_EXAMPLE_NS} get pod -l app=loki,release=${HELM_RELEASE_NA
    kubectl -n ${KYMA_LOKI_EXAMPLE_NS} port-forward svc/$(kubectl  get svc -n ${KYMA_LOKI_EXAMPLE_NS} -l app=loki,release=${HELM_RELEASE_NAME},variant=headless -ojsonpath='{.items[0].metadata.name}') 3100
    ```
 
-1. Loki queries need a query parameter `time`, provided in nano seconds. To get the current nano seconds in Linux or MacOS, run:
+1. Loki queries need a query parameter **time**, provided in nanoseconds. To get the current nanoseconds in Linux or macOS, run:
 
    ```bash
    date +%s
