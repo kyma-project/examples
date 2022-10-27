@@ -117,7 +117,7 @@ When the status of the applied LogPipeline resource turned into `Running`, the u
 Check that the `loki` Pod has been created in the Namespace and is in the `Running` state:
 
 ```bash
-kubectl -n ${KYMA_LOKI_EXAMPLE_NS} get pod ${HELM_RELEASE_NAME}-0
+kubectl -n ${KYMA_LOKI_EXAMPLE_NS} get pod -l app=loki,release=${HELM_RELEASE_NAME}
 ```
 
 ### Verify the setup by accessing logs using the Loki API
