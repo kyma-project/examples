@@ -72,30 +72,39 @@ You can either use the [`values.yaml`](./values.yaml) provided in this `trace-de
 
 ### Verify the application
 
-1. Browse in the frontend by:
+To verify that the application is running properly, set up port forwarding and call the respective local hosts.
+
+1. To verify the frontend:
    ```bash
    kubectl -n $KYMA_NS port-forward svc/$HELM_RELEASE-frontend 8080
+   ```
+   ```bash
+   open http://localhost:8080
    ````
-   and calling `http://localhost:8080`
 
-1. Verify that traces arrive in the Jaeger backend:
+2. To verify that traces arrive in the Jaeger backend:
    ```bash
    kubectl -n kyma-system port-forward svc/tracing-jaeger-query 16686
-   ````
-   and calling `http://localhost:16686`
+   ```
+   ```bash
+   open http://localhost:16686
+   ```
 
-1. Enable failures with the feature flag service:
+3. Enable failures with the feature flag service:
    ```bash
    kubectl -n $KYMA_NS port-forward svc/$HELM_RELEASE-featureflagservice 8081
-   ````
-   and calling `http://localhost:8081`
+   ```
+   ```bash
+   open http://localhost:8081
+   ```
 
-1. Generate load with the load generator:
+4. Generate load with the load generator:
    ```bash
    kubectl -n $KYMA_NS port-forward svc/$HELM_RELEASE-loadgenerator 8089
-   ````
-   and calling `http://localhost:8089`
-
+   ```
+   ```bash
+   open http://localhost:8089
+   ```
 
 ## Cleanup
 
