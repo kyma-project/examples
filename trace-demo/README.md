@@ -85,7 +85,7 @@ To verify that the application is running properly, set up port forwarding and c
 2. To verify that traces arrive in the Jaeger backend:
    ```bash
    kubectl -n kyma-system port-forward svc/tracing-jaeger-query 16686
-   ````
+   ```
    ```bash
    open http://localhost:16686
    ````
@@ -93,7 +93,7 @@ To verify that the application is running properly, set up port forwarding and c
 3. Enable failures with the feature flag service:
    ```bash
    kubectl -n $KYMA_NS port-forward svc/$HELM_RELEASE-featureflagservice 8081
-   ````
+   ```
    ```bash
    open http://localhost:8081
    ````
@@ -108,10 +108,8 @@ To verify that the application is running properly, set up port forwarding and c
 
 ## Cleanup
 
-When you're done, you can remove the example and all its resources from the cluster.
+When you're done, you can remove the example and all its resources from the cluster by calling Helm:
 
-1. Remove the stack by calling Helm:
-
-    ```bash
-    helm delete -n $KYMA_NS $HELM_RELEASE
-    ```
+```bash
+helm delete -n $KYMA_NS $HELM_RELEASE
+```
