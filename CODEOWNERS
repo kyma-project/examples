@@ -5,7 +5,7 @@
 # For more details, read the following article on GitHub: https://help.github.com/articles/about-codeowners/.
 
 # These are the default owners for the whole content of the `examples` repository. The default owners are automatically added as reviewers when you open a pull request, unless different owners are specified in the file.
-* @a-thaler @clebs @suleymanakbas91 @lilitgh @rakesh-garimella @hisarbalik
+* @a-thaler @lilitgh @rakesh-garimella @hisarbalik
 
 # Service binding example
 /service-binding/ @Abd4llA @joek @rakesh-garimella @venturasr @lilitgh @k15r @nachtmaar @anishj0shi @montaro @abbi-gaurav @marcobebway @radufa @sayanh
