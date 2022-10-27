@@ -2,7 +2,7 @@
 
 ## Overview
 
-In contrast to the upstream [loki-stack](https://github.com/grafana/helm-charts/tree/main/charts/loki-stack) chart, Kyma's Loki component offers limited configuration options. Furthermore, any modifications you make might be reset at next upgrade cycle.
+In contrast to the upstream [loki-stack chart](https://github.com/grafana/helm-charts/tree/main/charts/loki-stack), Kyma's Loki component offers limited configuration options. Furthermore, any modifications you make might be reset at next upgrade cycle.
 
 To get all the customization options, follow the instructions to set up a parallel installation of the upstream chart, co-existing with the Kyma stack.
 
@@ -43,10 +43,10 @@ To get all the customization options, follow the instructions to set up a parall
 
 You install the Loki stack with a Helm upgrade command, which installs the chart if not present yet.
 
-You can choose between an installation based on [Promtail](https://grafana.com/docs/loki/latest/clients/promtail/), which is the log collector recommended by Loki and provides a ready-to-use setup.
+You can either choose an installation based on [Promtail](https://grafana.com/docs/loki/latest/clients/promtail/), which is the log collector recommended by Loki and provides a ready-to-use setup.
 Alternatively, you can use Kyma's LogPipeline feature based on Fluent Bit.
 
-The Helm chart supports the deployment of Grafana as well, but is disabled by default. Because Grafana provides a very good Loki integration, you might want to install it as well.
+The Helm chart supports the deployment of Grafana as well, but it's disabled by default. Because Grafana provides a very good Loki integration, you might want to install it as well.
 
 In any case, you can either use the [loki-values.yaml](./loki-values.yaml) provided in this `loki` folder, which contains customized settings deviating from the default settings, or create your own `values.yaml` file.
 
@@ -83,7 +83,7 @@ helm upgrade --install --create-namespace -n ${KYMA_LOKI_EXAMPLE_NS} ${HELM_RELE
    kubectl apply -f logpipeline-custom.yaml
    ```
 
-When the status of the applied LogPipeline resource turned into `Running`, the underlying Fluentbit is reconfigured and log shipment to your Loki instance is active.
+When the status of the applied LogPipeline resource turned into `Running`, the underlying Fluent Bit is reconfigured and log shipment to your Loki instance is active.
 
 > **TIP:** The used output plugin configuration uses all labels of a Pod to label the Loki log streams. Performancewise, such segregation of the log streams might be not optimal. Follow [Loki's labelling best practices](https://grafana.com/docs/loki/latest/best-practices/) for a tailormade setup that fits your workload configuration.
 
@@ -95,7 +95,7 @@ When the status of the applied LogPipeline resource turned into `Running`, the u
 
   The used Helm chart supports the deployment of Grafana as well, but is disabled by default. Because Grafana provides a very good Loki integration, you might want to install it as well.
 
-  1. To deploy Grafana alongside Loki with Loki pre-configured as a datasource, run the following command instead of the original command from the Installation section:
+  1. To deploy Grafana alongside Loki, with Loki pre-configured as a datasource, run:
 
      ```bash
      helm upgrade --install --create-namespace -n ${KYMA_LOKI_EXAMPLE_NS} ${HELM_RELEASE_NAME} grafana/loki-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/loki-values.yaml -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/grafana-values.yaml --set grafana.adminPassword=myPwd
@@ -107,7 +107,8 @@ When the status of the applied LogPipeline resource turned into `Running`, the u
      kubectl -n ${KYMA_LOKI_EXAMPLE_NS} port-forward svc/${HELM_RELEASE_NAME}-grafana 3000:80
      ```
 
-  3. Open Grafana in your browser under http://localhost:3000 and log in with user admin and the password taken from the previous Helm command.
+  3. Open Grafana in your browser under `http://localhost:3000` and log in with user admin and the password taken from the previous Helm command.
+  
   </details>
 </div>
 
@@ -119,7 +120,7 @@ Check that the `loki` Pod has been created in the Namespace and is in the `Runni
 kubectl -n ${KYMA_LOKI_EXAMPLE_NS} get pod ${HELM_RELEASE_NAME}-0
 ```
 
-### Verify the setup by accessing logs via the Loki API
+### Verify the setup by accessing logs using the Loki API
 
 1. To access the Loki API, use kubectl port forwarding. Run:
 
