@@ -125,7 +125,7 @@ kubectl -n ${KYMA_LOKI_EXAMPLE_NS} get pod -l app=loki,release=${HELM_RELEASE_NA
 1. To access the Loki API, use kubectl port forwarding. Run:
 
    ```bash
-   kubectl -n ${KYMA_LOKI_EXAMPLE_NS} port-forward svc/${HELM_RELEASE_NAME} 3100
+   kubectl -n ${KYMA_LOKI_EXAMPLE_NS} port-forward svc/$(kubectl  get svc -n ${KYMA_LOKI_EXAMPLE_NS} -l app=loki,release=${HELM_RELEASE_NAME},variant=headless -ojsonpath='{.items[0].metadata.name}') 3100
    ```
 
 1. Loki queries need a query parameter `time`, provided in nano seconds. To get the current nano seconds in Linux or MacOS, run:
