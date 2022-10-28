@@ -101,8 +101,21 @@ When the status of the applied LogPipeline resource turns into `Running`, the un
      ```bash
      kubectl -n ${KYMA_LOKI_EXAMPLE_NS} port-forward svc/${HELM_RELEASE_NAME}-grafana 3000:80
      ```
-
-  3. Open Grafana in your browser under `http://localhost:3000` and log in with user admin and the password taken from the previous Helm command.
+     
+     Open Grafana in your browser under `http://localhost:3000` and log in with user admin and the password taken from the previous Helm command.
+  
+  3. To expose Grafana using the Kyma API Gateway, download the api rule file and replace the `{release-name}` to the name of Helm release:
+     ```bash
+     curl https://raw.githubusercontent.com/kyma-project/examples/main/loki/apirule.yaml -o apirule.yaml
+     ```
+     Create an APIRule:
+     ```bash
+     kubectl -n ${KYMA_LOKI_EXAMPLE_NS} apply -f apirule.yaml 
+     ```
+     Get the public URL of your Kiali server:
+     ```bash
+     kubectl -n ${KYMA_LOKI_EXAMPLE_NS} get vs -l apirule.gateway.kyma-project.io/v1beta1=grafana.${KYMA_LOKI_EXAMPLE_NS} -ojsonpath='{.items[*].spec.hosts[*]}'
+     ```
   
   </details>
 </div>
