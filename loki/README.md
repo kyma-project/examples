@@ -2,13 +2,10 @@
 
 ## Overview
 
->**NOTE:** In contrast to the upstream [loki-stack chart](https://github.com/grafana/helm-charts/tree/main/charts/loki-stack), Kyma's Loki component offers limited configuration options. Furthermore, any modifications you make might be reset at the next upgrade cycle.
-
-To get all the customization options, follow the instructions to set up a parallel installation of the upstream chart, co-existing with the Kyma stack.
+In contrast to the upstream [loki-stack chart](https://github.com/grafana/helm-charts/tree/main/charts/loki-stack), Kyma's Loki component offers limited configuration options. Furthermore, any modifications you make might be reset at the next upgrade cycle.
+To get all the customization options, follow this instructions to set up a parallel installation of the upstream chart, co-existing with the Kyma stack.
 
 >**CAUTION:** This example uses the Grafana Loki version, which is distributed under AGPL-3.0 only and might not be free of charge for commercial usage.
-
->**NOTE:** These instructions install Loki in a lightweight setup that does not fulfil production-grade qualities. Consider using a scalable setup based on an object storage backend instead (see [Simple scalable deployment of Grafana Loki with Helm](https://grafana.com/docs/loki/latest/installation/simple-scalable-helm/)).
 
 ## Prerequisites
 
@@ -75,17 +72,15 @@ helm upgrade --install --create-namespace -n ${KYMA_LOKI_EXAMPLE_NS} ${HELM_RELE
    helm upgrade --install --create-namespace -n ${KYMA_LOKI_EXAMPLE_NS} ${HELM_RELEASE_NAME} grafana/loki-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/loki-values.yaml --set promtail.enabled=false
    ```
 
-2. Download the [LogPipeline](logpipeline-custom.yaml) and replace the `{HELM_RELEASE_NAME}` and `{NAMESPACE}` placeholder.
+2. Download the [LogPipeline](logpipeline.yaml) and replace the `{HELM_RELEASE_NAME}` and `{NAMESPACE}` placeholder.
 
 3. Apply the modified LogPipeline:
 
    ```bash
-   kubectl apply -f logpipeline-custom.yaml
+   kubectl apply -f logpipeline.yaml
    ```
 
 When the status of the applied LogPipeline resource turns into `Running`, the underlying Fluent Bit is reconfigured and log shipment to your Loki instance is active.
-
-> **TIP:** The used output plugin configuration uses all labels of a Pod to label the Loki log streams. Performancewise, such segregation of the log streams might be not optimal. Follow [Loki's labelling best practices](https://grafana.com/docs/loki/latest/best-practices/) for a tailormade setup that fits your workload configuration.
 
   </details>
   <details>
@@ -111,6 +106,11 @@ When the status of the applied LogPipeline resource turns into `Running`, the un
   
   </details>
 </div>
+
+>**NOTE:**
+>- The used output plugin configuration uses all labels of a Pod to label the Loki log streams. Performance-wise, such segregation of the log streams might be not optimal. Follow [Loki's labelling best practices](https://grafana.com/docs/loki/latest/best-practices/) for a tailor-made setup that fits your workload configuration.
+>- These instructions install Loki in a lightweight setup that does not fulfil production-grade qualities. Consider using a scalable setup based on an object storage backend instead (see [Simple scalable deployment of Grafana Loki with Helm](https://grafana.com/docs/loki/latest/installation/simple-scalable-helm/)).
+
 
 ### Verify the installation
 
