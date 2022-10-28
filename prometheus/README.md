@@ -19,6 +19,11 @@ As an alternative, you can install the upstream chart with all customization opt
 ## Installation
 
 ### Preparation
+1. Assure that the Kyma monitoring stack running in your cluster is limited to detection of kubernetes resources in the kyma-system namespace only, so that there can be no side-effects with the additional custom stack:
+> **NOTE**: That step is only needed for clusters installed manually via the Kyma CLI
+    ```bash
+    kyma deploy --component monitoring --value monitoring.prometheusOperator.namespaces.releaseNamespace=true
+    ```
 
 1. Export your Namespace as a variable. Replace the `{namespace}` placeholder in the following command and run it:
 
@@ -29,12 +34,7 @@ As an alternative, you can install the upstream chart with all customization opt
     ```bash
     kubectl create namespace $KYMA_NS
     ```
-
-1. Assure that your namespace has istio-injection disabled by having the proper label in place
-    ```bash
-    kubectl label namespace $KYMA_NS istio-injection=disabled
-    ```
-    >**Note**: This Namespace must have **no** Istio sidecar injection enabled. The Helm chart deploys jobs that will not succeed when sidecar injection is enabled by default.
+>**Note**: This Namespace must have **no** Istio sidecar injection enabled so no `istio-injection` label present on the namespace. The Helm chart deploys jobs that will not succeed when sidecar injection is enabled by default.
 
 1. Export the Helm release name that you want to use. It can be any name, but be aware that all resources in the cluster will be prefixed with that name. Replace the `{release-name}` placeholder in the following command and run it:
    ```bash
