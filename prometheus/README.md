@@ -6,9 +6,9 @@ The Kyma monitoring stack often brings limited configuration options in contrast
 
 As an alternative, you can install the upstream chart with all customization options parallel. This tutorial outlines how to set up such installation in co-existence to the Kyma monitoring stack.
 
-> **CAUTION:** This tutorial describes a basic setup that you should not use in production. Typically, a production setup needs further configuration, like optimizing the amount of data to scrape and the required resource footprint of the installation. To achieve qualities like [high availability](https://prometheus.io/docs/introduction/faq/#can-prometheus-be-made-highly-available), [scalability](https://prometheus.io/docs/introduction/faq/#i-was-told-prometheus-doesnt-scale), or [durable long-term storage](https://prometheus.io/docs/operating/integrations/#remote-endpoints-and-storage), you need a more advanced setup.
-
-> **CAUTION:** This example will use the latest Grafana version which is under AGPL-3.0 and might not be free of charge for commercial usage.
+> **CAUTION:**
+- This tutorial describes a basic setup that you should not use in production. Typically, a production setup needs further configuration, like optimizing the amount of data to scrape and the required resource footprint of the installation. To achieve qualities like [high availability](https://prometheus.io/docs/introduction/faq/#can-prometheus-be-made-highly-available), [scalability](https://prometheus.io/docs/introduction/faq/#i-was-told-prometheus-doesnt-scale), or [durable long-term storage](https://prometheus.io/docs/operating/integrations/#remote-endpoints-and-storage), you need a more advanced setup.
+- This example uses the latest Grafana version, which is under AGPL-3.0 and might not be free of charge for commercial usage.
 
 ## Prerequisites
 
@@ -30,7 +30,7 @@ As an alternative, you can install the upstream chart with all customization opt
     ```bash
     export KYMA_NS="{namespace}"
     ```
-1. If you don't have it created yet, now is the time to do so:
+1. If you haven't created the Namespace yet, now is the time to do so:
     ```bash
     kubectl create namespace $KYMA_NS
     ```
@@ -108,7 +108,7 @@ Instead of defining a ServiceMonitor per workload for setting up custom metric s
 
 ```yaml
 prometheus.io/scrape: "true"   # mandatory to enable automatic scraping
-prometheus.io/scheme: https    # optional, default is http when no istio sidecar is used. When using a sidecar (pod has label security.istio.io/tlsMode=istio) the default will be "https". Use "https" to scrape workloads using istio client certificates. Will only work for annotated services (not pods)
+prometheus.io/scheme: https    # optional, default is "http" if no Istio sidecar is used. When using a sidecar (Pod has label `security.istio.io/tlsMode=istio`), the default is "https". Use "https" to scrape workloads using Istio client certificates. Will only work for annotated services (not Pods)
 prometheus.io/port: "1234"     # optional, configure the port under which the metrics are exposed
 prometheus.io/path: /myMetrics # optional, configure the path under which the metrics are exposed
 ```
