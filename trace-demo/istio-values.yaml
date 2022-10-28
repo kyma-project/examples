@@ -1,0 +1,15 @@
+
+istio:
+  meshConfig:
+    enableTracing: true
+    defaultConfig:
+      tracing:
+        sampling: 100
+        openCensusAgent:
+          address: "dns:telemetry-trace-collector.kyma-system:55678"
+          context:
+          - W3C_TRACE_CONTEXT
+  helmValues:
+    global:
+      proxy:
+        tracer: openCensusAgent
