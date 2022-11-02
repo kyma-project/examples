@@ -8,7 +8,7 @@
 * @a-thaler @lilitgh @rakesh-garimella @hisarbalik @skhalash @chrkl @lindnerby
 
 # Service binding example
-/service-binding/ @Abd4llA @joek @rakesh-garimella @venturasr @lilitgh @k15r @nachtmaar @anishj0shi @montaro @abbi-gaurav @marcobebway @radufa @sayanh
+/service-binding/ @rakesh-garimella @lilitgh @k15r @nachtmaar @marcobebway
 
 # Orders service example
 /orders-service/ @m00g3n @pPrecel 
@@ -19,11 +19,19 @@
 # Custom function runtime image example
 /custom-serverless-runtime-image/ @m00g3n @pPrecel @dbadura @kwiatekus @moelsayed @cortey
 
+# Observability
+/prometheus/ @a-thaler @rakesh-garimella @skhalash @chrkl @lindnerby @dennis-ge @lilitgh
+/kiali/ @a-thaler @rakesh-garimella @skhalash @chrkl @lindnerby @dennis-ge @lilitgh
+/loki/ @a-thaler @rakesh-garimella @skhalash @chrkl @lindnerby @dennis-ge @lilitgh
+/trace-demo/ @a-thaler @rakesh-garimella @skhalash @chrkl @lindnerby @dennis-ge @lilitgh
+/monitoring-custom-metrics/ @a-thaler @rakesh-garimella @skhalash @chrkl @lindnerby @dennis-ge @lilitgh
+/monitoring-custom-alerts/ @a-thaler @rakesh-garimella @skhalash @chrkl @lindnerby @dennis-ge @lilitgh
+
 # Scaling functions to zero with KEDA
 /scale-to-zero-with-kedam @m00g3n @pPrecel @dbadura @kwiatekus @moelsayed @cortey
 
 # All .md files
-*.md @klaudiagrz @mmitoraj @majakurcius @alexandra-simeonova @NHingerl @grego952
+*.md @mmitoraj @majakurcius @NHingerl @grego952
 
 # Config file for MILV - milv.config.yaml
-milv.config.yaml @m00g3n @aerfio @pPrecel @magicmatatjahu
+milv.config.yaml @m00g3n @pPrecel

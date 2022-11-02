@@ -21,13 +21,19 @@ This example shows how to expose custom metrics to Prometheus with a Golang serv
     export KYMA_EXAMPLE_NS="{namespace}"
     ```
 
-2. Deploy the service:
+2. Ensure that your Namespace has Istio sidecar injection enabled. This example assumes that the metrics are exposed in a strict mTLS mode:
+
+   ```bash
+   kubectl label namespace ${KYMA_EXAMPLE_NS} istio-injection=enabled
+   ```
+
+3. Deploy the service:
 
     ```bash
     kubectl apply -f deployment/deployment.yaml -n $KYMA_EXAMPLE_NS
     ```
 
-3. Deploy the ServiceMonitor:
+4. Deploy the ServiceMonitor:
 
     ```bash
     kubectl apply -f deployment/service-monitor.yaml
@@ -44,7 +50,7 @@ This example shows how to expose custom metrics to Prometheus with a Golang serv
 All the **sample-metrics** endpoints appear as the [`Targets`](http://localhost:9090/targets#job-sample-metrics) list.
 
 2. Use either `cpu_temperature_celsius` or `hd_errors_total` in the **expression** field [here](http://localhost:9090/graph).
-3. Click the **Execute** button to check the values scrapped by Prometheus.
+3. Click the **Execute** button to check the values scraped by Prometheus.
 
 ### Cleanup
 
