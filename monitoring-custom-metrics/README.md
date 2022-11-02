@@ -23,8 +23,9 @@ This example shows how to expose custom metrics to Prometheus with a Golang serv
 
 2. Ensure that your Namespace has Istio sidecar injection enabled. This example assumes that the metrics are exposed in a strict mTLS mode:
 
-   ````
+   ```bash
    kubectl label namespace ${KYMA_EXAMPLE_NS} istio-injection=enabled
+   
 
 3. Deploy the service:
 
