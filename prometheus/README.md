@@ -2,9 +2,9 @@
 
 ## Overview
 
-The Kyma monitoring stack often brings limited configuration options in contrast to the upstream [`kube-prometheus-stack`](https://github.com/prometheus-community/helm-charts/blob/main/charts/kube-prometheus-stack) chart. Modifications might be reset at the next upgrade cycle.
+The Kyma monitoring stack brings limited configuration options in contrast to the upstream [`kube-prometheus-stack`](https://github.com/prometheus-community/helm-charts/blob/main/charts/kube-prometheus-stack) chart. Modifications might be reset at the next upgrade cycle.
 
-As an alternative, you can install the upstream chart with all customization options parallel. This tutorial outlines how to set up such installation in co-existence to the Kyma monitoring stack.
+As an alternative, you can install the upstream chart with all customization options in parallel. This tutorial outlines how to set up such installation in co-existence to the Kyma monitoring stack.
 
 > **CAUTION:**
 - This tutorial describes a basic setup that you should not use in production. Typically, a production setup needs further configuration, like optimizing the amount of data to scrape and the required resource footprint of the installation. To achieve qualities like [high availability](https://prometheus.io/docs/introduction/faq/#can-prometheus-be-made-highly-available), [scalability](https://prometheus.io/docs/introduction/faq/#i-was-told-prometheus-doesnt-scale), or [durable long-term storage](https://prometheus.io/docs/operating/integrations/#remote-endpoints-and-storage), you need a more advanced setup.
@@ -19,8 +19,7 @@ As an alternative, you can install the upstream chart with all customization opt
 ## Installation
 
 ### Preparation
-1. Assure that the Kyma monitoring stack running in your cluster is limited to detection of kubernetes resources in the kyma-system namespace only, so that there can be no side-effects with the additional custom stack:
-> **NOTE**: That step is only needed for clusters installed manually via the Kyma CLI
+1. If you cluster was installed manually using the Kyma CLI, you must assure that the Kyma monitoring stack running in your cluster is limited to detection of Kubernetes resources only in the `kyma-system` Namespace. To rule out that there are any side effects with the additional custom stack, run:
     ```bash
     kyma deploy --component monitoring --value monitoring.prometheusOperator.namespaces.releaseNamespace=true
     ```
@@ -34,7 +33,7 @@ As an alternative, you can install the upstream chart with all customization opt
     ```bash
     kubectl create namespace $KYMA_NS
     ```
->**Note**: This Namespace must have **no** Istio sidecar injection enabled so no `istio-injection` label present on the namespace. The Helm chart deploys jobs that will not succeed when sidecar injection is enabled by default.
+   >**Note**: This Namespace must have **no** Istio sidecar injection enabled; that is, there must be no `istio-injection` label present on the Namespace. The Helm chart deploys jobs that will not succeed when Isto sidecar injection is enabled.
 
 1. Export the Helm release name that you want to use. It can be any name, but be aware that all resources in the cluster will be prefixed with that name. Replace the `{release-name}` placeholder in the following command and run it:
    ```bash
@@ -55,7 +54,7 @@ As an alternative, you can install the upstream chart with all customization opt
     helm upgrade --install -n ${KYMA_NS} ${HELM_RELEASE} prometheus-community/kube-prometheus-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/prometheus/values.yaml --set grafana.adminPassword=myPwd
     ```
 
-You can use the [values.yaml](./values.yaml) provided with this tutorial, which contains customized settings deviating from the default settings, or create your own one.
+2. You can use the [values.yaml](./values.yaml) provided with this tutorial, which contains customized settings deviating from the default settings, or create your own one.
 The provided `values.yaml` covers the following adjustments:
 - Parallel operation to a Kyma monitoring stack
 - Client certificate injection to support scraping of workload secured with Istio strict mTLS
@@ -93,18 +92,18 @@ The provided `values.yaml` covers the following adjustments:
    ```bash
    kubectl -n ${KYMA_NS} port-forward $(kubectl -n ${KYMA_NS} get service -l app=kube-prometheus-stack-prometheus -oname) 9090
    ```
-3. Browse the Grafana dashboard and verify that the dashboards are showing data. The user `admin` is pre-configured in the Helm chart; the password was provided in your `helm install` command. The following command exposes the dashboard on `http://localhost:3000`:
+3. Browse the Grafana dashboard and verify that the dashboards are showing data. The user `admin` is preconfigured in the Helm chart; the password was provided in your `helm install` command. The following command exposes the dashboard on `http://localhost:3000`:
    ```bash
    kubectl -n ${KYMA_NS} port-forward svc/${HELM_RELEASE}-grafana 3000:80
    ```
 
 ### Deploy a custom workload and scrape it
 
-1. Follow the tutorial [monitoring-custom-metrics](./../monitoring-custom-metrics/), but use the steps above to verify that the metrics are collected.
+Follow the tutorial [monitoring-custom-metrics](./../monitoring-custom-metrics/), but use the steps above to verify that the metrics are collected.
 
 ### Scrape workload via annotations
 
-Instead of defining a ServiceMonitor per workload for setting up custom metric scraping, you can use a simplified way based on annotations. The used [values.yaml](./values.yaml) defines an `additionalScrapeConfig`, which  scrapes all Pods and services that have these annotations:
+Instead of defining a ServiceMonitor per workload for setting up custom metric scraping, you can use a simplified way based on annotations. The used [values.yaml](./values.yaml) defines an `additionalScrapeConfig`, which  scrapes all Pods and services that have the following annotations:
 
 ```yaml
 prometheus.io/scrape: "true"   # mandatory to enable automatic scraping
@@ -117,8 +116,7 @@ You can try it out by removing the ServiceMonitor from the previous example and 
 
 ### Cleanup
 
-1. To remove the installation from the cluster, call Helm:
+To remove the installation from the cluster, call Helm:
 
-    ```bash
-    helm delete -n ${KYMA_NS} ${HELM_RELEASE}
-    ```
+```bash
+helm delete -n ${KYMA_NS} ${HELM_RELEASE}
