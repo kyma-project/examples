@@ -120,3 +120,4 @@ To remove the installation from the cluster, call Helm:
 
 ```bash
 helm delete -n ${KYMA_NS} ${HELM_RELEASE}
+```
