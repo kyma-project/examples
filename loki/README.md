@@ -108,7 +108,7 @@ When the status of the applied LogPipeline resource turns into `Running`, the un
      ```bash
      curl https://raw.githubusercontent.com/kyma-project/examples/main/loki/apirule.yaml -o apirule.yaml
      ```
-     Create an APIRule:
+4. Create an APIRule:
      ```bash
      kubectl -n ${KYMA_LOKI_EXAMPLE_NS} apply -f apirule.yaml 
      ```
