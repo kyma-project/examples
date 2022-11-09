@@ -117,7 +117,7 @@ When the status of the applied LogPipeline resource turns into `Running`, the un
      kubectl -n ${KYMA_LOKI_EXAMPLE_NS} get vs -l apirule.gateway.kyma-project.io/v1beta1=grafana.${KYMA_LOKI_EXAMPLE_NS} -ojsonpath='{.items[*].spec.hosts[*]}'
      ```
 
-  4. To add the link to exposed Grafana to busola dashboard, we should edit the `busola-config.yaml` and change the `{grafana-link}` to the text you retrieved from the previous step. You can change `label` field if you wish to change the name of the tab, but also the `category` tab if you wish to move it to another category. After, apply this `ConfigMap`, go to the busola dashboard, and you will see your newely exposed Grafana under Observability section:
+  4. To add the link to exposed Grafana to kyma dashboard, we should edit the `dashboard-configmap.yaml` and change the `{grafana-link}` to the text you retrieved from the previous step. You can change `label` field if you wish to change the name of the tab, but also the `category` tab if you wish to move it to another category. After, apply this `ConfigMap`, go to the busola dashboard, and you will see your newely exposed Grafana under Observability section:
      ```bash
      kubectl apply -f busola-config.yaml 
      ```
