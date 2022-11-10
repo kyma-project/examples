@@ -125,7 +125,7 @@ When the status of the applied LogPipeline resource turns into `Running`, the un
      ```bash
        curl https://raw.githubusercontent.com/kyma-project/examples/main/loki/dashboard-configmap.yaml -o dashboard-configmap.yaml
      ```
-     NOTE: You can change the label field to change the name of the tab, and the category tab if you wish to move it to another category.
+     You can change the label field to change the name of the tab, and the category tab if you wish to move it to another category.
 
   1. Apply the ConfigMap, and go to Kyma Dashboard. You should see a Link to the newly exposed Grafana under the Observability section. If you already have a busola-config, merge it with the existing one:
      ```bash
