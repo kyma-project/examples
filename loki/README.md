@@ -115,7 +115,7 @@ When the status of the applied LogPipeline resource turns into `Running`, the un
      ```bash
      kubectl -n ${KYMA_LOKI_EXAMPLE_NS} apply -f apirule.yaml 
      ```
-  1. Get the public URL of your Kiali server:
+  1. Get the public URL of your Loki instance:
      ```bash
      kubectl -n ${KYMA_LOKI_EXAMPLE_NS} get vs -l apirule.gateway.kyma-project.io/v1beta1=grafana.${KYMA_LOKI_EXAMPLE_NS} -ojsonpath='{.items[*].spec.hosts[*]}'
      ```
