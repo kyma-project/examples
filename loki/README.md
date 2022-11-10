@@ -90,13 +90,15 @@ When the status of the applied LogPipeline resource turns into `Running`, the un
 
   The used Helm chart supports the deployment of Grafana as well, but is disabled by default. Because Grafana provides a very good Loki integration, you might want to install it as well.
 
+  ### Install Loki with Grafana
   1. To deploy Grafana alongside Loki, with Loki pre-configured as a datasource, run:
 
      ```bash
      helm upgrade --install --create-namespace -n ${KYMA_LOKI_EXAMPLE_NS} ${HELM_RELEASE_NAME} grafana/loki-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/loki-values.yaml -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/grafana-values.yaml --set grafana.adminPassword=myPwd
      ```
 
-  2. To access the Grafana UI with kubectl port forwarding, run:
+  ### Verify the Installation
+  1. To access the Grafana UI with kubectl port forwarding, run:
 
      ```bash
      kubectl -n ${KYMA_LOKI_EXAMPLE_NS} port-forward svc/${HELM_RELEASE_NAME}-grafana 3000:80
@@ -104,22 +106,30 @@ When the status of the applied LogPipeline resource turns into `Running`, the un
      
      Open Grafana in your browser under `http://localhost:3000` and log in with user admin and the password taken from the previous Helm command.
   
-  3. To expose Grafana using the Kyma API Gateway, download the APIRule file and replace the `{release-name}` variable with the name of Helm release:
+  ### Expose Grafana
+  1. To expose Grafana using the Kyma API Gateway, download the APIRule file and replace the `{release-name}` variable with the name of Helm release:
      ```bash
      curl https://raw.githubusercontent.com/kyma-project/examples/main/loki/apirule.yaml -o apirule.yaml
      ```
-4. Create an APIRule:
+  1. Create an APIRule:
      ```bash
      kubectl -n ${KYMA_LOKI_EXAMPLE_NS} apply -f apirule.yaml 
      ```
-5. Get the public URL of your Kiali server:
+  1. Get the public URL of your Kiali server:
      ```bash
      kubectl -n ${KYMA_LOKI_EXAMPLE_NS} get vs -l apirule.gateway.kyma-project.io/v1beta1=grafana.${KYMA_LOKI_EXAMPLE_NS} -ojsonpath='{.items[*].spec.hosts[*]}'
      ```
 
-  4. To add the link to exposed Grafana to kyma dashboard, we should edit the `dashboard-configmap.yaml` and change the `{grafana-link}` to the text you retrieved from the previous step. You can change `label` field if you wish to change the name of the tab, but also the `category` tab if you wish to move it to another category. After, apply this `ConfigMap`, go to the busola dashboard, and you will see your newely exposed Grafana under Observability section. If you already have some `busola-config`, you should merge it with existing one:
+  ### Add a Link for Grafana to the Kyma Dashboard
+  1. Download the `dashboard-configmap.yaml` file and change `{GRAFANA_LINK}` to the text you retrieved in the previous step.
      ```bash
-     kubectl apply -f busola-config.yaml 
+       curl https://raw.githubusercontent.com/kyma-project/examples/main/loki/dashboard-configmap.yaml -o dashboard-configmap.yaml
+     ```
+     NOTE: You can change the label field to change the name of the tab, and the category tab if you wish to move it to another category.
+
+  1. Apply the ConfigMap, and go to Kyma Dashboard. You should see a Link to the newly exposed Grafana under the Observability section. If you already have a busola-config, merge it with the existing one:
+     ```bash
+     kubectl apply -f dashboard-configmap.yaml 
      ```
 
   </details>
