@@ -1,0 +1,18 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: busola-config
+  namespace: kube-public
+data:
+  config: |
+    config:
+      features:
+        EXTERNAL_NODES:
+          isEnabled: true
+          stage: SECONDARY
+          nodes:
+          - category: Observability
+            icon: course-book
+            children:
+            - label: My Grafana
+              link: https://{grafana-link}
