@@ -2,10 +2,11 @@ name: event-emitter
 namespace: default
 runtime: nodejs16
 source:
-  url: https://github.com/kwiatekus/examples.git
-  repository: kyma-examples-repo
-  reference: reflect-changes-in-cloudevents-api
-  baseDir: /incluster_eventing/src/emitter-fn/
+    sourceType: git
+    url: https://github.com/kwiatekus/examples.git
+    repository: kyma-examples-repo
+    reference: reflect-changes-in-cloudevents-api
+    baseDir: /incluster_eventing/src/emitter-fn/
 apiRules:
     - name: incoming-http-trigger
       service:
