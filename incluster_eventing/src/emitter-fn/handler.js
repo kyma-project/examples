@@ -18,9 +18,7 @@ module.exports = {
         
         return await event.emitCloudEvent(eventType, eventSource, sanitisedData)
             .then(resp => {
-                if(resp.status!==204){
-                    throw new Error("Unexpected response from eventing proxy");
-                }
+                console.log(resp.status);
                 span.addEvent("Event sent");
                 span.setAttribute("event-type", eventType);
                 span.setAttribute("event-source", eventSource);
