@@ -7,10 +7,9 @@ This example shows how to deploy and view alerting rules in Kyma.
 ## Prerequisites
 
 * Kyma as the target deployment environment.
+* Deployed custom kube-prometheus-stack as described in the [prometheus](../) example.
 
 ## Installation
-
-You need access to the `kyma-system` Namespace to execute the described steps.
 
 ### Add a new alerting rule
 
@@ -23,7 +22,7 @@ You need access to the `kyma-system` Namespace to execute the described steps.
 2. Run the `port-forward` command on the `monitoring-prometheus` service to access the Prometheus dashboard.
 
     ```bash
-    kubectl port-forward -n kyma-system svc/monitoring-prometheus 9090:9090
+    kubectl -n ${KYMA_NS} port-forward $(kubectl -n ${KYMA_NS} get service -l app=kube-prometheus-stack-prometheus -oname) 9090
     ```
 
 3. Go to `http://localhost:9090/rules` and find the **pod-not-running** rule.

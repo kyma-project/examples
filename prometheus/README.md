@@ -58,7 +58,7 @@ As an alternative, you can install the upstream chart with all customization opt
 The provided `values.yaml` covers the following adjustments:
 - Parallel operation to a Kyma monitoring stack
 - Client certificate injection to support scraping of workload secured with Istio strict mTLS
-- Active scraping of workload annotated with @prometheus.io/scrape
+- Active scraping of workload annotated with prometheus.io/scrape
 
 ### Activate scraping of Istio metrics & Grafana dashboards
 
@@ -99,7 +99,7 @@ The provided `values.yaml` covers the following adjustments:
 
 ### Deploy a custom workload and scrape it
 
-Follow the tutorial [monitoring-custom-metrics](./../monitoring-custom-metrics/), but use the steps above to verify that the metrics are collected.
+Follow the tutorial [monitoring-custom-metrics](./monitoring-custom-metrics/), but use the steps above to verify that the metrics are collected.
 
 ### Scrape workload via annotations
 
@@ -113,6 +113,10 @@ prometheus.io/path: /myMetrics # optional, configure the path under which the me
 ```
 
 You can try it out by removing the ServiceMonitor from the previous example and instead providing the annotations to the Service manifest.
+
+### Setup alerting rules
+
+Follow the tutorial [monitoring-alert-rules](./monitoring-alert-rules/) to set up an alerting rule on Prometheus.
 
 ### Cleanup
 
