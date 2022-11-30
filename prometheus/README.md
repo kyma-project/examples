@@ -75,7 +75,7 @@ The provided `values.yaml` covers the following adjustments:
     ```
 
 3. Get the latest versions of the Istio-specific dashboards.
-   Grafana is configured to load dashboards dynamically from ConfigMaps in the cluster, so Istio-specific dashboards can be applied as well. 
+   Grafana is configured to load dashboards dynamically from ConfigMaps in the cluster, so Istio-specific dashboards can be applied as well.
    Either follow the [Istio quick start instructions](https://istio.io/latest/docs/ops/integrations/grafana/#option-1-quick-start), or take the prepared ones with the following command:
 
     ```bash
@@ -117,6 +117,10 @@ You can try it out by removing the ServiceMonitor from the previous example and 
 ### Setup alerting rules
 
 Follow the tutorial [monitoring-alert-rules](./monitoring-alert-rules/) to set up an alerting rule on Prometheus.
+
+### Setup Grafana dashboards
+
+Follow the tutorial [monitoring-grafana-dashboard](./monitoring-grafana-dashboard) to learn how to visualize your metrics in a Grafana dashboard.
 
 ### Cleanup
 
