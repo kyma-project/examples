@@ -67,8 +67,3 @@ When you create a dashboard to monitor one of your applications (Function, micro
    ```bash
    kubectl -n ${KYMA_NS} rollout restart deployment ${HELM_RELEASE}-grafana
    ```
-
-## Next steps
-
-- Follow the tutorial to [Define alerting rules](obsv-03-define-alerting-rules-monitor.md).
-- If you don't want to proceed with the following tutorial, [clean up the configuration](obsv-05-clean-up-configuration.md).
