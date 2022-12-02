@@ -50,13 +50,13 @@ The following instructions install the OpenTelemetry [demo application](https://
     kyma deploy -s main --component telemetry --value telemetry.operator.controllers.tracing.enabled=true
     ```
 
-1. (Temporary) Activate Istio tracing based on w3c-tracecontext and OTLP:
+2. (Temporary) Activate Istio tracing based on w3c-tracecontext and OTLP:
     ```bash
     kyma deploy -s main --component istio -f https://raw.githubusercontent.com/kyma-project/examples/main/trace-demo/istio-values.yaml
     ```
- 1. If necessary, restart the relevant workloads.
+3. If necessary, restart the relevant workloads.
 
-1. To enable the Jaeger backend, create a new TracePipeline:
+4. To enable the Jaeger backend, create a new TracePipeline:
    ```bash
    kubectl apply -f https://raw.githubusercontent.com/kyma-project/examples/main/trace-demo/tracepipeline.yaml
    ```

@@ -16,86 +16,86 @@ components:
     enabled: true
     envOverrides:
       - name: OTEL_EXPORTER_OTLP_ENDPOINT
-        value: 'http://telemetry-trace-collector.kyma-system:4317'
+        value: 'http://telemetry-otlp-traces.kyma-system:4317'
 
   cartService:
     enabled: true
     envOverrides:
       - name: OTEL_EXPORTER_OTLP_ENDPOINT
-        value: 'http://telemetry-trace-collector.kyma-system:4317'
+        value: 'http://telemetry-otlp-traces.kyma-system:4317'
 
   checkoutService:
     enabled: true
     envOverrides:
       - name: OTEL_EXPORTER_OTLP_ENDPOINT
-        value: 'http://telemetry-trace-collector.kyma-system:4317'
+        value: 'http://telemetry-otlp-traces.kyma-system:4317'
 
   currencyService:
     enabled: true
     envOverrides:
       - name: OTEL_EXPORTER_OTLP_ENDPOINT
-        value: 'http://telemetry-trace-collector.kyma-system:4317'
+        value: 'http://telemetry-otlp-traces.kyma-system:4317'
 
   emailService:
     enabled: true
     envOverrides:
       - name: OTEL_EXPORTER_OTLP_ENDPOINT
-        value: 'http://telemetry-trace-collector.kyma-system:4317'
+        value: 'http://telemetry-otlp-traces.kyma-system:4317'
       - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
-        value: 'http://telemetry-trace-collector.kyma-system:4318/v1/traces'
+        value: 'http://telemetry-otlp-traces.kyma-system:4318/v1/traces'
 
   featureflagService:
     enabled: true
     envOverrides:
       - name: OTEL_EXPORTER_OTLP_ENDPOINT
-        value: 'http://telemetry-trace-collector.kyma-system:4317'
+        value: 'http://telemetry-otlp-traces.kyma-system:4317'
 
   ffsPostgres:
     enabled: true
     envOverrides:
       - name: OTEL_EXPORTER_OTLP_ENDPOINT
-        value: 'http://telemetry-trace-collector.kyma-system:4317'
+        value: 'http://telemetry-otlp-traces.kyma-system:4317'
 
   frontend:
     enabled: true
     envOverrides:
       - name: OTEL_EXPORTER_OTLP_ENDPOINT
-        value: 'http://telemetry-trace-collector.kyma-system:4317'
+        value: 'http://telemetry-otlp-traces.kyma-system:4317'
 
   loadgenerator:
     enabled: true
     envOverrides:
       - name: OTEL_EXPORTER_OTLP_ENDPOINT
-        value: 'http://telemetry-trace-collector.kyma-system:4317'
+        value: 'http://telemetry-otlp-traces.kyma-system:4317'
 
   paymentService:
     enabled: true
     envOverrides:
       - name: OTEL_EXPORTER_OTLP_ENDPOINT
-        value: 'http://telemetry-trace-collector.kyma-system:4317'
+        value: 'http://telemetry-otlp-traces.kyma-system:4317'
 
   productCatalogService:
     enabled: true
     envOverrides:
       - name: OTEL_EXPORTER_OTLP_ENDPOINT
-        value: 'http://telemetry-trace-collector.kyma-system:4317'
+        value: 'http://telemetry-otlp-traces.kyma-system:4317'
 
   recommendationService:
     enabled: true
     envOverrides:
       - name: OTEL_EXPORTER_OTLP_ENDPOINT
-        value: 'http://telemetry-trace-collector.kyma-system:4317'
+        value: 'http://telemetry-otlp-traces.kyma-system:4317'
 
   shippingService:
     enabled: true
     envOverrides:
       - name: OTEL_EXPORTER_OTLP_ENDPOINT
-        value: 'http://telemetry-trace-collector.kyma-system:4317'
+        value: 'http://telemetry-otlp-traces.kyma-system:4317'
       - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
-        value: 'http://telemetry-trace-collector.kyma-system:4317'
+        value: 'http://telemetry-otlp-traces.kyma-system:4317'
 
   quoteService:
     enabled: true
     envOverrides:
       - name: OTEL_EXPORTER_OTLP_ENDPOINT
-        value: 'telemetry-trace-collector.kyma-system:4317'
+        value: 'telemetry-otlp-traces.kyma-system:4317'
