@@ -31,13 +31,13 @@ This example shows how to expose custom metrics to Prometheus with a Golang serv
 3. Deploy the service:
 
     ```bash
-    kubectl apply -f https://raw.githubusercontent.com/kyma-project/examples/main/prometheus/monitoring-custom-metrics/deployment/deployment.yaml -n $KYMA_APPLICATION_NS
+    kubectl apply -f ./deployment/deployment.yaml -n $KYMA_APPLICATION_NS
     ```
 
 4. Deploy the ServiceMonitor:
 
     ```bash
-    kubectl apply -f https://raw.githubusercontent.com/kyma-project/examples/main/prometheus/monitoring-custom-metrics/deployment/service-monitor.yaml
+    kubectl apply -f ./deployment/service-monitor.yaml
     ```
 
 ### Access the exposed metrics in Prometheus
