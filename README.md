@@ -27,12 +27,12 @@ The summary of the documentation in the `examples` repository lists all availabl
 | [HTTP DB Service](http-db-service/README.md) | Test the service that exposes an HTTP API to access a database on the cluster. | Go, MSSQL |
 | [Gateway](gateway/README.md) | Expose APIs for functions or services.  | Kubeless |
 | [Service Binding](service-binding/lambda/README.md) | Bind a Redis service to a lambda function. | Kubeless, Redis, NodeJS |
-| [Alert Rules](monitoring-alert-rules/README.md) | Configure alert rules in Kyma.  | Prometheus |
-| [Custom Metrics in Kyma](monitoring-custom-metrics/README.md) | Expose custom metrics in Kyma.  | Go, Prometheus |
 | [Event Email Service](event-email-service/README.md) | Send an automated email upon receiving an Event.  | NodeJS |
 | [Tracing](tracing/README.md) | Configure tracing for a service in Kyma. | Go |
 | [Custom serverless runtime image](custom-serverless-runtime-image/README.md) | Build custom runtime image. | Python |
 | [Kiali](kiali/README.md) | Deploy Kiali to Kyma. | Kiali, Istio, Prometheus |
+| [Prometheus](prometheus/README.md) | Deploy a Prometheus stack to monitor custom metrics. | Prometheus, Grafana |
+| [Loki](loki/README.md) | Deploy Loki to store Pod logs. | Loki, Grafana |
 
 ## Installation
 

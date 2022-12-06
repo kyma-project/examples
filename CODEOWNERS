@@ -24,8 +24,6 @@
 /kiali/ @a-thaler @rakesh-garimella @skhalash @chrkl @lindnerby @dennis-ge @lilitgh
 /loki/ @a-thaler @rakesh-garimella @skhalash @chrkl @lindnerby @dennis-ge @lilitgh
 /trace-demo/ @a-thaler @rakesh-garimella @skhalash @chrkl @lindnerby @dennis-ge @lilitgh
-/monitoring-custom-metrics/ @a-thaler @rakesh-garimella @skhalash @chrkl @lindnerby @dennis-ge @lilitgh
-/monitoring-custom-alerts/ @a-thaler @rakesh-garimella @skhalash @chrkl @lindnerby @dennis-ge @lilitgh
 
 # Scaling functions to zero with KEDA
 /scale-to-zero-with-kedam @m00g3n @pPrecel @dbadura @kwiatekus @moelsayed @cortey

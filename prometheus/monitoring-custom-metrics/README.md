@@ -10,6 +10,7 @@ This example shows how to expose custom metrics to Prometheus with a Golang serv
 ## Prerequisites
 
 - Kyma as the target deployment environment.
+- Deployed custom kube-prometheus-stack as described in the [prometheus](../) example.
 
 ## Installation
 
@@ -18,25 +19,25 @@ This example shows how to expose custom metrics to Prometheus with a Golang serv
 1. Export your Namespace as a variable. Replace the `{namespace}` placeholder in the following command and run it:
 
     ```bash
-    export KYMA_EXAMPLE_NS="{namespace}"
+    export KYMA_APPLICATION_NS="{namespace}"
     ```
 
 2. Ensure that your Namespace has Istio sidecar injection enabled. This example assumes that the metrics are exposed in a strict mTLS mode:
 
    ```bash
-   kubectl label namespace ${KYMA_EXAMPLE_NS} istio-injection=enabled
+   kubectl label namespace ${KYMA_APPLICATION_NS} istio-injection=enabled
    ```
 
 3. Deploy the service:
 
     ```bash
-    kubectl apply -f deployment/deployment.yaml -n $KYMA_EXAMPLE_NS
+    kubectl apply -f ./deployment/deployment.yaml -n $KYMA_APPLICATION_NS
     ```
 
 4. Deploy the ServiceMonitor:
 
     ```bash
-    kubectl apply -f deployment/service-monitor.yaml
+    kubectl apply -f ./deployment/service-monitor.yaml
     ```
 
 ### Access the exposed metrics in Prometheus
@@ -44,7 +45,7 @@ This example shows how to expose custom metrics to Prometheus with a Golang serv
 1. Run the `port-forward` command on the `monitoring-prometheus` service:
 
     ```bash
-    kubectl port-forward -n kyma-system svc/monitoring-prometheus 9090:9090
+    kubectl -n ${KYMA_NS} port-forward $(kubectl -n ${KYMA_NS} get service -l app=kube-prometheus-stack-prometheus -oname) 9090
     ```
 
 All the **sample-metrics** endpoints appear as the [`Targets`](http://localhost:9090/targets#job-sample-metrics) list.
@@ -65,5 +66,5 @@ Run the following commands to completely remove the example and all its resource
 2. Run the following command to completely remove the example service and all its resources from the cluster:
 
     ```bash
-    kubectl delete all -l example=monitoring-custom-metrics -n $KYMA_EXAMPLE_NS
+    kubectl delete all -l example=monitoring-custom-metrics -n $KYMA_APPLICATION_NS
     ```
