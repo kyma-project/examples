@@ -114,11 +114,11 @@ prometheus.io/path: /myMetrics # optional, configure the path under which the me
 
 You can try it out by removing the ServiceMonitor from the previous example and instead providing the annotations to the Service manifest.
 
-### Setup alerting rules
+### Set up alerting rules
 
 Follow the tutorial [monitoring-alert-rules](./monitoring-alert-rules/) to set up an alerting rule on Prometheus.
 
-### Setup Grafana dashboards
+### Set up Grafana dashboards
 
 Follow the tutorial [monitoring-grafana-dashboard](./monitoring-grafana-dashboard) to learn how to visualize your metrics in a Grafana dashboard.
 
