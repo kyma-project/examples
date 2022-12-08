@@ -60,6 +60,13 @@ The provided `values.yaml` covers the following adjustments:
 - Client certificate injection to support scraping of workload secured with Istio strict mTLS
 - Active scraping of workload annotated with prometheus.io/scrape
 
+3. You can connect the Alertmanager to your notification channel (for instance, Slack or VictorOps) by providing an [Alertmanager configuration](https://prometheus.io/docs/alerting/latest/configuration/#configuration-file) to the `alertmanager.config` value.
+
+   The [alertmanager-values.yaml](./alertmanager-values.yaml) example provides a configuration that sends notifications for alerts with high severity to a Slack channel. To deploy it, download the file, adapt `<channel-name>`, `<api-url>` and `<cluster-domain>` to your environment, and run the Helm upgrade command to deploy the configuration:
+   ```bash
+    helm upgrade --install -n ${KYMA_NS} ${HELM_RELEASE} prometheus-community/kube-prometheus-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/prometheus/values.yaml -f ./alertmanager-values.yaml --set grafana.adminPassword=myPwd
+   ```
+
 ### Activate scraping of Istio metrics & Grafana dashboards
 
 1. To configure Prometheus for scraping of the Istio-specific metrics from any istio-proxy running in the cluster, deploy a PodMonitor, which scrapes any Pod that has a port with name `.*-envoy-prom` exposed.
