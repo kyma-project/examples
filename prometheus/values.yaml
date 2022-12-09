@@ -75,7 +75,7 @@ prometheus:
     ruleSelectorNilUsesHelmValues: false
 
 ####### This block enabled scrape discovery based on typical prometheus annotations
-  
+
     additionalScrapeConfigs:
       # Scrape config for service endpoints.
       #
@@ -174,3 +174,12 @@ prometheus:
           - source_labels: [__meta_kubernetes_pod_name]
             action: replace
             target_label: kubernetes_pod_name
+
+grafana:
+  additionalDataSources:
+    - name: Alertmanager
+      type: alertmanager
+      url: http://{{ printf "%s-kube-prometh-alertmanager.%s" .Release.Name .Release.Namespace }}:9093
+      access: proxy
+      jsonData:
+        implementation: prometheus
