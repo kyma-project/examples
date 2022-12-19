@@ -29,7 +29,7 @@
 /scale-to-zero-with-kedam @m00g3n @pPrecel @dbadura @kwiatekus @moelsayed @cortey
 
 # All .md files
-*.md @mmitoraj @NHingerl @grego952 @IwonaLanger
+*.md @mmitoraj @NHingerl @grego952 @IwonaLanger @nataliasitko
 
 # Config file for MILV - milv.config.yaml
 milv.config.yaml @m00g3n @pPrecel
