@@ -20,13 +20,13 @@ To get all the customization options, follow this instructions to set up a paral
 1. Export your Namespace as a variable. Replace the `{NAMESPACE}` placeholder in the following command and run it:
 
     ```bash
-    export KYMA_LOKI_EXAMPLE_NS="{NAMESPACE}"
+    export KYMA_NS="{NAMESPACE}"
     ```
 
-2. Export the Helm release name that you want to use. It can be any name, but be aware that all resources in the cluster will be prefixed with that name. Replace the `{HELM_RELEASE_NAME}` placeholder in the following command and run it:
+2. Export the Helm release name that you want to use. It can be any name, but be aware that all resources in the cluster will be prefixed with that name. Replace the `{HELM_LOKI_RELEASE}` placeholder in the following command and run it:
 
     ```bash
-    export HELM_RELEASE_NAME="{HELM_RELEASE_NAME}"
+    export HELM_LOKI_RELEASE="{HELM_LOKI_RELEASE}"
     ```
 
 3. Update your Helm installation with the required Helm repository:
@@ -56,7 +56,7 @@ In any case, you can either use the [loki-values.yaml](./loki-values.yaml) provi
 To install the Loki stack based on Promtail, run:
 
 ```bash
-helm upgrade --install --create-namespace -n ${KYMA_LOKI_EXAMPLE_NS} ${HELM_RELEASE_NAME} grafana/loki-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/loki-values.yaml
+helm upgrade --install --create-namespace -n ${KYMA_NS} ${HELM_LOKI_RELEASE} grafana/loki-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/loki-values.yaml
 ```
   </details>
   <details>
@@ -69,10 +69,10 @@ helm upgrade --install --create-namespace -n ${KYMA_LOKI_EXAMPLE_NS} ${HELM_RELE
 1. To install the Loki stack with Kyma's LogPipeline feature based on Fluent Bit, run:
 
    ```bash
-   helm upgrade --install --create-namespace -n ${KYMA_LOKI_EXAMPLE_NS} ${HELM_RELEASE_NAME} grafana/loki-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/loki-values.yaml --set promtail.enabled=false
+   helm upgrade --install --create-namespace -n ${KYMA_NS} ${HELM_LOKI_RELEASE} grafana/loki-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/loki-values.yaml --set promtail.enabled=false
    ```
 
-2. Download the [LogPipeline](logpipeline.yaml) and replace the `{HELM_RELEASE_NAME}` and `{NAMESPACE}` placeholder.
+2. Download the [LogPipeline](logpipeline.yaml) and replace the `{HELM_LOKI_RELEASE}` and `{NAMESPACE}` placeholder.
 
 3. Apply the modified LogPipeline:
 
@@ -94,14 +94,14 @@ When the status of the applied LogPipeline resource turns into `Running`, the un
   1. To deploy Grafana alongside Loki, with Loki pre-configured as a datasource, run:
 
      ```bash
-     helm upgrade --install --create-namespace -n ${KYMA_LOKI_EXAMPLE_NS} ${HELM_RELEASE_NAME} grafana/loki-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/loki-values.yaml -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/grafana-values.yaml --set grafana.adminPassword=myPwd
+     helm upgrade --install --create-namespace -n ${KYMA_NS} ${HELM_LOKI_RELEASE} grafana/loki-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/loki-values.yaml -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/grafana-values.yaml --set grafana.adminPassword=myPwd
      ```
 
   ### Verify the Installation
   1. To access the Grafana UI with kubectl port forwarding, run:
 
      ```bash
-     kubectl -n ${KYMA_LOKI_EXAMPLE_NS} port-forward svc/${HELM_RELEASE_NAME}-grafana 3000:80
+     kubectl -n ${KYMA_NS} port-forward svc/${HELM_LOKI_RELEASE}-grafana 3000:80
      ```
      
      Open Grafana in your browser under `http://localhost:3000` and log in with user admin and the password taken from the previous Helm command.
@@ -113,11 +113,11 @@ When the status of the applied LogPipeline resource turns into `Running`, the un
      ```
   1. Create an APIRule:
      ```bash
-     kubectl -n ${KYMA_LOKI_EXAMPLE_NS} apply -f apirule.yaml 
+     kubectl -n ${KYMA_NS} apply -f apirule.yaml 
      ```
   1. Get the public URL of your Loki instance:
      ```bash
-     kubectl -n ${KYMA_LOKI_EXAMPLE_NS} get vs -l apirule.gateway.kyma-project.io/v1beta1=grafana.${KYMA_LOKI_EXAMPLE_NS} -ojsonpath='{.items[*].spec.hosts[*]}'
+     kubectl -n ${KYMA_NS} get vs -l apirule.gateway.kyma-project.io/v1beta1=grafana.${KYMA_NS} -ojsonpath='{.items[*].spec.hosts[*]}'
      ```
 
   ### Add a Link for Grafana to the Kyma Dashboard
@@ -145,7 +145,7 @@ When the status of the applied LogPipeline resource turns into `Running`, the un
 Check that the `loki` Pod has been created in the Namespace and is in the `Running` state:
 
 ```bash
-kubectl -n ${KYMA_LOKI_EXAMPLE_NS} get pod -l app=loki,release=${HELM_RELEASE_NAME}
+kubectl -n ${KYMA_NS} get pod -l app=loki,release=${HELM_LOKI_RELEASE}
 ```
 
 ### Verify the setup by accessing logs using the Loki API
@@ -153,7 +153,7 @@ kubectl -n ${KYMA_LOKI_EXAMPLE_NS} get pod -l app=loki,release=${HELM_RELEASE_NA
 1. To access the Loki API, use kubectl port forwarding. Run:
 
    ```bash
-   kubectl -n ${KYMA_LOKI_EXAMPLE_NS} port-forward svc/$(kubectl  get svc -n ${KYMA_LOKI_EXAMPLE_NS} -l app=loki,release=${HELM_RELEASE_NAME},variant=headless -ojsonpath='{.items[0].metadata.name}') 3100
+   kubectl -n ${KYMA_NS} port-forward svc/$(kubectl  get svc -n ${KYMA_NS} -l app=loki,release=${HELM_LOKI_RELEASE},variant=headless -ojsonpath='{.items[0].metadata.name}') 3100
    ```
 
 1. Loki queries need a query parameter **time**, provided in nanoseconds. To get the current nanoseconds in Linux or macOS, run:
@@ -177,7 +177,7 @@ kubectl -n ${KYMA_LOKI_EXAMPLE_NS} get pod -l app=loki,release=${HELM_RELEASE_NA
 1. To remove the installation from the cluster, run:
 
    ```bash
-   helm delete -n ${KYMA_LOKI_EXAMPLE_NS} ${HELM_RELEASE_NAME}
+   helm delete -n ${KYMA_NS} ${HELM_LOKI_RELEASE}
    ```
 
 2. To remove the deployed LogPipeline instance from cluster, run:

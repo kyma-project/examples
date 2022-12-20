@@ -31,7 +31,7 @@ The following instructions install the OpenTelemetry [demo application](https://
 
 1. Export the Helm release name that you want to use. The release name must be unique for the chosen Namespace. Be aware that all resources in the cluster will be prefixed with that name. Replace the `{release-name}` placeholder in the following command and run it:
     ```bash
-    export HELM_RELEASE="{release-name}"
+    export HELM_OTEL_RELEASE="{release-name}"
     ```
 
 1. Update your Helm installation with the required Helm repository:
@@ -41,31 +41,31 @@ The following instructions install the OpenTelemetry [demo application](https://
     helm repo update
     ```
 
-### Activate Kyma Tracing preview
+### Activate a Kyma TracePipeline
 
-1. (Temporary) In the Telemetry operator, enable the tracing feature:
-
-    ```bash
-    kubectl apply -f https://raw.githubusercontent.com/kyma-project/kyma/main/components/telemetry-operator/config/crd/bases/telemetry.kyma-project.io_tracepipelines.yaml
-    kyma deploy -s main --component telemetry --value telemetry.operator.controllers.tracing.enabled=true
-    ```
-
-2. (Temporary) Activate Istio tracing based on w3c-tracecontext and OTLP:
-    ```bash
-    kyma deploy -s main --component istio -f https://raw.githubusercontent.com/kyma-project/examples/main/trace-demo/istio-values.yaml
-    ```
-3. If necessary, restart the relevant workloads.
-
-4. To enable the Jaeger backend, create a new TracePipeline:
+1. Provide a tracing backend
+   Install a [Jaeger server in-cluster](./../jaeger/) or provide a custom backend supporting the OTLP protocol
+1. To integrate the backend, create a new TracePipeline:
    ```bash
-   kubectl apply -f https://raw.githubusercontent.com/kyma-project/examples/main/trace-demo/tracepipeline.yaml
+   cat <<EOF | kubectl -n $KYMA_NS apply -f -
+   apiVersion: telemetry.kyma-project.io/v1alpha1
+   kind: TracePipeline
+   metadata:
+     name: jaeger
+   spec:
+     output:
+       otlp:
+         protocol: http
+         endpoint:
+           value: http://$HELM_OTEL_RELEASE-jaeger-collector.$KYMA_NS.svc.cluster.local:4318
+   EOF
    ```
 
 ### Install the application
 
 Run the Helm upgrade command, which installs the chart if not present yet.
 ```bash
-helm upgrade --version 0.11.1 --install --create-namespace -n $KYMA_NS $HELM_RELEASE open-telemetry/opentelemetry-demo -f https://raw.githubusercontent.com/kyma-project/examples/main/trace-demo/values.yaml
+helm upgrade --version 0.15.2 --install --create-namespace -n $KYMA_NS $HELM_OTEL_RELEASE open-telemetry/opentelemetry-demo -f https://raw.githubusercontent.com/kyma-project/examples/main/trace-demo/values.yaml
 ```
 
 You can either use the [`values.yaml`](./values.yaml) provided in this `trace-demo` folder, which contains customized settings deviating from the default settings, or create your own `values.yaml` file.
@@ -76,7 +76,7 @@ To verify that the application is running properly, set up port forwarding and c
 
 1. To verify the frontend:
    ```bash
-   kubectl -n $KYMA_NS port-forward svc/$HELM_RELEASE-frontend 8080
+   kubectl -n $KYMA_NS port-forward svc/$HELM_OTEL_RELEASE-frontend 8080
    ```
    ```bash
    open http://localhost:8080
@@ -92,7 +92,7 @@ To verify that the application is running properly, set up port forwarding and c
 
 3. Enable failures with the feature flag service:
    ```bash
-   kubectl -n $KYMA_NS port-forward svc/$HELM_RELEASE-featureflagservice 8081
+   kubectl -n $KYMA_NS port-forward svc/$HELM_OTEL_RELEASE-featureflagservice 8081
    ```
    ```bash
    open http://localhost:8081
@@ -100,7 +100,7 @@ To verify that the application is running properly, set up port forwarding and c
 
 4. Generate load with the load generator:
    ```bash
-   kubectl -n $KYMA_NS port-forward svc/$HELM_RELEASE-loadgenerator 8089
+   kubectl -n $KYMA_NS port-forward svc/$HELM_OTEL_RELEASE-loadgenerator 8089
    ```
    ```bash
    open http://localhost:8089
@@ -111,5 +111,5 @@ To verify that the application is running properly, set up port forwarding and c
 When you're done, you can remove the example and all its resources from the cluster by calling Helm:
 
 ```bash
-helm delete -n $KYMA_NS $HELM_RELEASE
+helm delete -n $KYMA_NS $HELM_OTEL_RELEASE
 ```
