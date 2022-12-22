@@ -29,9 +29,9 @@ The following instructions install the OpenTelemetry [demo application](https://
     kubectl label namespace $KYMA_NS istio-injection=enabled
     ```
 
-1. Export the Helm release name that you want to use. The release name must be unique for the chosen Namespace. Be aware that all resources in the cluster will be prefixed with that name. Replace the `{release-name}` placeholder in the following command and run it:
+1. Export the Helm release name that you want to use. The release name must be unique for the chosen Namespace. Be aware that all resources in the cluster will be prefixed with that name. Run the following command:
     ```bash
-    export HELM_OTEL_RELEASE="{release-name}"
+    export HELM_OTEL_RELEASE="otel"
     ```
 
 1. Update your Helm installation with the required Helm repository:
@@ -43,22 +43,21 @@ The following instructions install the OpenTelemetry [demo application](https://
 
 ### Activate a Kyma TracePipeline
 
-1. Provide a tracing backend
-   Install a [Jaeger server in-cluster](./../jaeger/) or provide a custom backend supporting the OTLP protocol
-1. To integrate the backend, create a new TracePipeline:
-   ```bash
-   cat <<EOF | kubectl -n $KYMA_NS apply -f -
-   apiVersion: telemetry.kyma-project.io/v1alpha1
-   kind: TracePipeline
+1. Provide a tracing backend and activate it
+   Install [Jaeger in-cluster](./../jaeger/) or provide a custom backend supporting the OTLP protocol
+2. Activate the Istio tracing feature
+   To [activate Istio](https://kyma-project.io/docs/kyma/main/01-overview/main-areas/telemetry/telemetry-03-traces#step-2-enable-istio-tracing) to report span data, an Istio telemetry resource needs to get applied, setting the sampling rate to 100% (not recommended for production).
+   ```yaml
+   apiVersion: telemetry.istio.io/v1alpha1
+   kind: Telemetry
    metadata:
-     name: jaeger
+   name: tracing-default
+   namespace: istio-system
    spec:
-     output:
-       otlp:
-         protocol: http
-         endpoint:
-           value: http://$HELM_OTEL_RELEASE-jaeger-collector.$KYMA_NS.svc.cluster.local:4318
-   EOF
+   tracing:
+   - providers:
+      - name: "kyma-traces"
+   randomSamplingPercentage: 100.00
    ```
 
 ### Install the application

@@ -22,9 +22,9 @@ An alternative can be a parallel installation of the upstream chart offering all
     export KYMA_NS="{namespace}"
     ```
 
-1. Export the Helm release name that you want to use. The release name must be unique for the chosen Namespace. Be aware that all resources in the cluster will be prefixed with that name. Replace the `{release-name}` placeholder in the following command and run it:
+1. Export the Helm release name that you want to use. The release name must be unique for the chosen Namespace. Be aware that all resources in the cluster will be prefixed with that name. Run the following command:
     ```bash
-    export HELM_KIALI_RELEASE="{release-name}"
+    export HELM_KIALI_RELEASE="kiali"
     ```
 
 1. Update your Helm installation with the required Helm repository:

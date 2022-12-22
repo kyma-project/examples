@@ -8,8 +8,8 @@ An alternative can be a parallel installation of the upstream chart offering all
 
 ## Prerequisites
 
-- Kyma as the target deployment environment
-- kubectl > 1.22.x
+- Kyma >= 2.10 as the target deployment environment
+- kubectl >= 1.22.x
 - Helm 3.x
 
 ## Installation
@@ -22,9 +22,9 @@ An alternative can be a parallel installation of the upstream chart offering all
     export KYMA_NS="{namespace}"
     ```
 
-1. Export the Helm release name that you want to use. The release name must be unique for the chosen Namespace. Be aware that all resources in the cluster will be prefixed with that name. Replace the `{release-name}` placeholder in the following command and run it:
+1. Export the Helm release name that you want to use. The release name must be unique for the chosen Namespace. Be aware that all resources in the cluster will be prefixed with that name. Run the following command:
     ```bash
-    export HELM_JAEGER_RELEASE="{release-name}"
+    export HELM_JAEGER_RELEASE="jaeger"
     ```
 
 1. Update your Helm installation with the required Helm repository:
@@ -49,46 +49,53 @@ You can either use the [`values.yaml`](./values.yaml) provided in this `jaeger` 
 
 Check that the `jaeger` Pod has been created in the Namespace and is in the `Running` state:
 ```bash
-kubectl -n $KYMA_NS rollout status deploy $HELM_JAEGER_RELEASE-jaeger
+kubectl -n $KYMA_NS rollout status deploy $HELM_JAEGER_RELEASE
 ```
+
+### Activate a TracePipeline
+
+To configure the Kyma trace collector with the deployed Jaeger instance as backend, create a new [TracePipeline](https://kyma-project.io/docs/kyma/main/01-overview/main-areas/telemetry/telemetry-03-traces/) by 
+executing the following command.
+   ```bash
+   cat <<EOF | kubectl -n $KYMA_NS apply -f -
+   apiVersion: telemetry.kyma-project.io/v1alpha1
+   kind: TracePipeline
+   metadata:
+     name: jaeger
+   spec:
+     output:
+       otlp:
+         protocol: http
+         endpoint:
+           value: http://$HELM_JAEGER_RELEASE-collector.$KYMA_NS.svc.cluster.local:4318
+   EOF
+   ```
+  
+### Activate Istio Tracing
+
+To [activate Istio](https://kyma-project.io/docs/kyma/main/01-overview/main-areas/telemetry/telemetry-03-traces#step-2-enable-istio-tracing) to report span data, an Istio telemetry resource needs to get applied, setting the sampling rate to 100% (not recommended for production).
+
+```yaml
+apiVersion: telemetry.istio.io/v1alpha1
+kind: Telemetry
+metadata:
+  name: tracing-default
+  namespace: istio-system
+spec:
+  tracing:
+  - providers:
+    - name: "kyma-traces"
+  randomSamplingPercentage: 100.00
+```
+
 ### Access Jaeger
 
-To access Jaeger, either use kubectl port forwarding, or expose it using the Kyma Ingress Gateway.
+To access Jaeger using port forwarding, run:
+```bash
+kubectl -n $KYMA_NS port-forward svc/$HELM_JAEGER_RELEASE-query 16686
+```
 
-* To access Kiali using port forwarding, run:
-  ```bash
-  kubectl -n $KYMA_NS port-forward svc/$HELM_JAEGER_RELEASE-jaeger-query 16686
-  ```
-
-  Open the Jaeger UI in your browser under [http://localhost:16686](http://localhost:16686).
-
-* To expose Jaeger using the Kyma API Gateway, create an APIRule:
-  ```bash
-  cat <<EOF | kubectl -n $KYMA_NS apply -f -
-  apiVersion: gateway.kyma-project.io/v1beta1
-  kind: APIRule
-  metadata:
-    name: jaeger
-  spec:
-    host: jaeger-ui
-    service:
-      name: $HELM_JAEGER_RELEASE-jaeger-query
-      port: 16686
-    gateway: kyma-system/kyma-gateway
-    rules:
-      - path: /.*
-        methods: ["GET", "POST"]
-        accessStrategies:
-          - handler: noop
-        mutators:
-          - handler: noop
-  EOF
-  ```
-
-  Get the public URL of your Jaeger instance:
-  ```bash
-  kubectl -n $KYMA_NS get vs -l apirule.gateway.kyma-project.io/v1beta1=jaeger.$KYMA_NS -ojsonpath='{.items[*].spec.hosts[*]}'
-  ```
+Open the Jaeger UI in your browser under [http://localhost:16686](http://localhost:16686).
 
 ### Deploy a workload and activate Kymas TracePipeline feature
 
@@ -109,13 +116,13 @@ metadata:
   labels:
     grafana_datasource: "1"
 data:
-    jaeger-datasource.yaml: |-
+    jaeger-grafana-datasource.yaml: |-
       apiVersion: 1
       datasources:
-      - name: Jaeger
+      - name: Jaeger-Tracing
         type: jaeger
         access: proxy
-        url: http://$HELM_JAEGER_RELEASE-jaeger-query.$KYMA_NS:16686
+        url: http://$HELM_JAEGER_RELEASE-query.$KYMA_NS:16686
         editable: true
 EOF
 ```
@@ -126,6 +133,37 @@ You will need to restart the Grafana instance. Afterwards, the Jaeger datasource
 Jaeger does not provide authentication mechanisms by itself. To secure Jaeger please follow the instructions provided at the [Jaeger documentation
 ](https://www.jaegertracing.io/docs/latest/security/#browser-to-ui)
 
+### Exposure
+>**CAUTION**: The described approach will expose the Jaeger instance as it is without employing ways of authentication.
+
+To expose Jaeger using the Kyma API Gateway, create an APIRule:
+```bash
+cat <<EOF | kubectl -n $KYMA_NS apply -f -
+apiVersion: gateway.kyma-project.io/v1beta1
+kind: APIRule
+metadata:
+  name: jaeger
+spec:
+  host: jaeger-ui
+  service:
+    name: $HELM_JAEGER_RELEASE-query
+    port: 16686
+  gateway: kyma-system/kyma-gateway
+  rules:
+    - path: /.*
+      methods: ["GET", "POST"]
+      accessStrategies:
+        - handler: noop
+      mutators:
+        - handler: noop
+EOF
+```
+
+Get the public URL of your Jaeger instance:
+```bash
+kubectl -n $KYMA_NS get vs -l apirule.gateway.kyma-project.io/v1beta1=jaeger.$KYMA_NS -ojsonpath='{.items[*].spec.hosts[*]}'
+```
+
 ## Cleanup
 
 When you're done, you can remove the example and all its resources from the cluster.
@@ -134,7 +172,6 @@ When you're done, you can remove the example and all its resources from the clus
 
     ```bash
     helm delete -n $KYMA_NS $HELM_JAEGER_RELEASE
-    kubectl -n $KYMA_NS delete -f https://raw.githubusercontent.com/kyma-project/examples/main/jaeger/apirule.yaml
     ```
 
 2. (Optional) If you created the `$KYMA_NS` Namespace specifically for this tutorial, remove the Namespace:

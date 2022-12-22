@@ -35,9 +35,9 @@ As an alternative, you can install the upstream chart with all customization opt
     ```
    >**Note**: This Namespace must have **no** Istio sidecar injection enabled; that is, there must be no `istio-injection` label present on the Namespace. The Helm chart deploys jobs that will not succeed when Isto sidecar injection is enabled.
 
-1. Export the Helm release name that you want to use. It can be any name, but be aware that all resources in the cluster will be prefixed with that name. Replace the `{release-name}` placeholder in the following command and run it:
+1. Export the Helm release name that you want to use. It can be any name, but be aware that all resources in the cluster will be prefixed with that name. Run the following command:
     ```bash
-    export HELM_PROM_RELEASE="{release-name}"
+    export HELM_PROM_RELEASE="prometheus"
     ```
 
 1. Update your Helm installation with the required Helm repository:

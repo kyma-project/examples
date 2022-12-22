@@ -6,6 +6,8 @@ allInOne:
   resources:
     limits:
       memory: 275Mi
+  podLabels:
+    sidecar.istio.io/inject: "false"
 storage:
   type: none
 agent:
@@ -14,3 +16,4 @@ collector:
   enabled: false
 query:
   enabled: false
+

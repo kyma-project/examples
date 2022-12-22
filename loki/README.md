@@ -23,10 +23,10 @@ To get all the customization options, follow this instructions to set up a paral
     export KYMA_NS="{NAMESPACE}"
     ```
 
-2. Export the Helm release name that you want to use. It can be any name, but be aware that all resources in the cluster will be prefixed with that name. Replace the `{HELM_LOKI_RELEASE}` placeholder in the following command and run it:
+2. Export the Helm release name that you want to use. It can be any name, but be aware that all resources in the cluster will be prefixed with that name. Run the following command:
 
     ```bash
-    export HELM_LOKI_RELEASE="{HELM_LOKI_RELEASE}"
+    export HELM_LOKI_RELEASE="loki"
     ```
 
 3. Update your Helm installation with the required Helm repository:
