@@ -57,7 +57,7 @@ The following instructions install the OpenTelemetry [demo application](https://
    tracing:
    - providers:
       - name: "kyma-traces"
-   randomSamplingPercentage: 100.00
+     randomSamplingPercentage: 100.00
    ```
 
 ### Install the application

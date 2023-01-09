@@ -85,7 +85,7 @@ spec:
   tracing:
   - providers:
     - name: "kyma-traces"
-  randomSamplingPercentage: 100.00
+    randomSamplingPercentage: 100.00
 ```
 
 ### Access Jaeger
