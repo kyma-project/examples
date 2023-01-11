@@ -75,7 +75,8 @@ executing the following command.
 
 To [activate Istio](https://kyma-project.io/docs/kyma/main/01-overview/main-areas/telemetry/telemetry-03-traces#step-2-enable-istio-tracing) to report span data, an Istio telemetry resource needs to get applied, setting the sampling rate to 100% (not recommended for production).
 
-```yaml
+```bash
+cat <<EOF | kubectl apply -f -
 apiVersion: telemetry.istio.io/v1alpha1
 kind: Telemetry
 metadata:
@@ -86,6 +87,7 @@ spec:
   - providers:
     - name: "kyma-traces"
     randomSamplingPercentage: 100.00
+EOF
 ```
 
 ### Access Jaeger

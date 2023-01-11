@@ -8,7 +8,7 @@ The following instructions install the OpenTelemetry [demo application](https://
 
 ## Prerequisites
 
-- Kyma OSS installed from main branch (`kyma deploy -s main`)
+- Kyma Open Source >= 2.10.x
 - kubectl version 1.22.x or higher
 - Helm 3.x
 
@@ -47,7 +47,8 @@ The following instructions install the OpenTelemetry [demo application](https://
    Install [Jaeger in-cluster](./../jaeger/) or provide a custom backend supporting the OTLP protocol
 2. Activate the Istio tracing feature
    To [activate Istio](https://kyma-project.io/docs/kyma/main/01-overview/main-areas/telemetry/telemetry-03-traces#step-2-enable-istio-tracing) to report span data, an Istio telemetry resource needs to get applied, setting the sampling rate to 100% (not recommended for production).
-   ```yaml
+   ```bash
+   cat <<EOF | kubectl apply -f -
    apiVersion: telemetry.istio.io/v1alpha1
    kind: Telemetry
    metadata:
@@ -58,13 +59,14 @@ The following instructions install the OpenTelemetry [demo application](https://
    - providers:
       - name: "kyma-traces"
      randomSamplingPercentage: 100.00
+   EOF
    ```
 
 ### Install the application
 
 Run the Helm upgrade command, which installs the chart if not present yet.
 ```bash
-helm upgrade --version 0.15.2 --install --create-namespace -n $KYMA_NS $HELM_OTEL_RELEASE open-telemetry/opentelemetry-demo -f https://raw.githubusercontent.com/kyma-project/examples/main/trace-demo/values.yaml
+helm upgrade --version 0.15.4 --install --create-namespace -n $KYMA_NS $HELM_OTEL_RELEASE open-telemetry/opentelemetry-demo -f https://raw.githubusercontent.com/kyma-project/examples/main/trace-demo/values.yaml
 ```
 
 You can either use the [`values.yaml`](./values.yaml) provided in this `trace-demo` folder, which contains customized settings deviating from the default settings, or create your own `values.yaml` file.
@@ -105,6 +107,63 @@ To verify that the application is running properly, set up port forwarding and c
    open http://localhost:8089
    ```
 
+## Advanced
+
+### Browser Instrumentation and missing root spans
+
+The frontend application of the demo uses [browser instrumentation] and with that the root span of a trace is being created external to the cluster and will not be captured with the described setup. In Jaeger you can see a warning at the first span indicating that there is a parent span not being captured.
+
+In order to capture the spans reported by the browser you need to expose the trace endpoint of the collector and configure the frontend to report the spans to that exposed endpoint.
+
+To expose the frontend webapp and the relevant trace endpoint you can define an Istio Virtualservice as in the following.
+>**CAUTION** the example is exposing the trace endpoint in an insecure way, do not use that on production
+```bash
+export CLUSTER_DOMAIN={my-domain}
+
+cat <<EOF | kubectl -n $KYMA_NS apply -f -
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: frontend
+spec:
+  gateways:
+  - kyma-system/kyma-gateway
+  hosts:
+  - frontend.$CLUSTER_DOMAIN
+  http:
+  - route:
+    - destination:
+        host: telemetry-otlp-traces.kyma-system.svc.cluster.local
+        port:
+          number: 4318
+    match:
+    - uri:
+        prefix: "/v1/traces"
+    corsPolicy:
+      allowOrigins:
+      - prefix: https://frontend.$CLUSTER_DOMAIN
+      allowHeaders:
+      - Content-Type
+      allowMethods:
+      - POST
+      allowCredentials: true
+  - route:
+    - destination:
+        host: $HELM_OTEL_RELEASE-frontend.$KYMA_NS.svc.cluster.local
+        port:
+          number: 8080
+EOF
+```
+
+Furthermore you need to update the frontend configuration. For that you can repeat the helm command with setting the additional configuration:
+```bash
+helm upgrade --version 0.15.4 --install --create-namespace -n $KYMA_NS $HELM_OTEL_RELEASE open-telemetry/opentelemetry-demo \
+-f https://raw.githubusercontent.com/kyma-project/examples/main/trace-demo/values.yaml \
+--set 'components.frontend.envOverrides[1].name=PUBLIC_OTEL_EXPORTER_OTLP_TRACES_ENDPOINT' \
+--set "components.frontend.envOverrides[1].value=https://frontend.$CLUSTER_DOMAIN/v1/traces"
+```
+
+Afterwards the web application will be accessible in your browser at `https://frontend.$CLUSTER_DOMAIN`. Using the developer tools of the browser you should see that requests to the traces endpoint are successful. Now every trace should have a proper root span recorded.
 ## Cleanup
 
 When you're done, you can remove the example and all its resources from the cluster by calling Helm:

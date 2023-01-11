@@ -12,6 +12,12 @@ components:
   redis:
     enabled: true
 
+  accountingService:
+    enabled: true
+    envOverrides:
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: 'http://telemetry-otlp-traces.kyma-system:4317'
+
   adService:
     enabled: true
     envOverrides:
