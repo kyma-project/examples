@@ -60,33 +60,33 @@ The provided `values.yaml` covers the following adjustments:
 - Client certificate injection to support scraping of workload secured with Istio strict mTLS
 - Active scraping of workload annotated with prometheus.io/scrape
 
-3. If the `adminssion webhooks` are also being installed then these webhooks should exclude resources being installed in the `kyma-system` namespace. This can be done in the following way:
-  -  Add exclusion of `kyma-system` namespace to `mutatingwebhook`
-     ```bash
-        kubectl -n kyma-system edit mutatingwebhookconfigurations ${HELM_RELEASE}-kube-prometheus-admission
-     ```
-     Exclude `kyma-system` namespace by adding `namespaceSelector`
-     ```yaml
-         namespaceSelector:
-           matchExpressions:
-            - key: kubernetes.io/metadata.name
-              operator: NotIn
-              values:
-                - "kyma-system"
-     ```
-  - Add exclusion of `kyma-system` namespace to `validationgwebhook`
-    ```bash
-        kubectl -n kyma-system edit validatingwebhookconfigurations ${HELM_RELEASE}-kube-prometheus-admission
-     ```
-     Exclude `kyma-system` namespace by adding `namespaceSelector`
-     ```yaml
-         namespaceSelector:
-           matchExpressions:
-            - key: kubernetes.io/metadata.name
-              operator: NotIn
-              values:
-                - "kyma-system"
-     ```
+    >**Note** If the `adminssion webhooks` are also being installed then these webhooks should exclude resources being installed in the `kyma-system` namespace. This can be done in the following way:
+        -  Add exclusion of `kyma-system` namespace to `mutatingwebhook`
+            ```bash
+                kubectl -n kyma-system edit mutatingwebhookconfigurations ${HELM_RELEASE}-kube-prometheus-admission
+            ```
+            Exclude `kyma-system` namespace by adding `namespaceSelector`
+            ```yaml
+                namespaceSelector:
+                matchExpressions:
+                    - key: kubernetes.io/metadata.name
+                    operator: NotIn
+                    values:
+                        - "kyma-system"
+            ```
+        - Add exclusion of `kyma-system` namespace to `validationgwebhook`
+            ```bash
+                kubectl -n kyma-system edit validatingwebhookconfigurations ${HELM_RELEASE}-kube-prometheus-admission
+            ```
+            Exclude `kyma-system` namespace by adding `namespaceSelector`
+            ```yaml
+                namespaceSelector:
+                matchExpressions:
+                    - key: kubernetes.io/metadata.name
+                    operator: NotIn
+                    values:
+                        - "kyma-system"
+            ```
         
 ### Activate scraping of Istio metrics & Grafana dashboards
 
