@@ -68,11 +68,11 @@ The provided `values.yaml` covers the following adjustments:
     >        Exclude `kyma-system` namespace by adding `namespaceSelector`
     >        ```yaml
     >            namespaceSelector:
-    >            matchExpressions:
-    >                - key: kubernetes.io/metadata.name
+    >              matchExpressions:
+    >              - key: kubernetes.io/metadata.name
     >                operator: NotIn
     >                values:
-    >                    - "kyma-system"
+    >                  - "kyma-system"
     >        ```
     >   - Add exclusion of `kyma-system` namespace to `validationgwebhook`
     >        ```bash
@@ -81,11 +81,11 @@ The provided `values.yaml` covers the following adjustments:
     >        Exclude `kyma-system` namespace by adding `namespaceSelector`
     >        ```yaml
     >            namespaceSelector:
-    >            matchExpressions:
-    >                - key: kubernetes.io/metadata.name
+    >              matchExpressions:
+    >              - key: kubernetes.io/metadata.name
     >                operator: NotIn
     >                values:
-    >                    - "kyma-system"
+    >                  - "kyma-system"
     >        ```  
 
        
