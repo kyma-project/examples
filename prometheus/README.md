@@ -60,6 +60,35 @@ The provided `values.yaml` covers the following adjustments:
 - Client certificate injection to support scraping of workload secured with Istio strict mTLS
 - Active scraping of workload annotated with prometheus.io/scrape
 
+    >**Note:** If the admission webhooks are also being installed, then these webhooks must exclude resources being installed in the `kyma-system` Namespace. This can be done in the following way:
+    >    -  Add exclusion of the `kyma-system` Namespace to mutating webhook:
+    >        ```bash
+    >           kubectl -n kyma-system edit mutatingwebhookconfigurations ${HELM_RELEASE}-kube-prometheus-admission
+    >        ```
+    >        Exclude the `kyma-system` Namespace by adding `namespaceSelector`:
+    >        ```yaml
+    >            namespaceSelector:
+    >              matchExpressions:
+    >              - key: kubernetes.io/metadata.name
+    >                operator: NotIn
+    >                values:
+    >                  - "kyma-system"
+    >        ```
+    >   - Add exclusion of the `kyma-system` Namespace to validating webhook:
+    >        ```bash
+    >         kubectl -n kyma-system edit validatingwebhookconfigurations ${HELM_RELEASE}-kube-prometheus-admission
+    >        ```
+    >        Exclude the `kyma-system` Namespace by adding `namespaceSelector`:
+    >        ```yaml
+    >            namespaceSelector:
+    >              matchExpressions:
+    >              - key: kubernetes.io/metadata.name
+    >                operator: NotIn
+    >                values:
+    >                  - "kyma-system"
+    >        ```  
+
+       
 ### Activate scraping of Istio metrics & Grafana dashboards
 
 1. To configure Prometheus for scraping of the Istio-specific metrics from any istio-proxy running in the cluster, deploy a PodMonitor, which scrapes any Pod that has a port with name `.*-envoy-prom` exposed.
