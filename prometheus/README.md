@@ -60,12 +60,12 @@ The provided `values.yaml` covers the following adjustments:
 - Client certificate injection to support scraping of workload secured with Istio strict mTLS
 - Active scraping of workload annotated with prometheus.io/scrape
 
-    >**Note:** If the adminssion webhooks are also being installed then these webhooks should exclude resources being installed in the `kyma-system` namespace. This can be done in the following way:
-    >    -  Add exclusion of `kyma-system` namespace to mutating webhook
+    >**Note:** If the admission webhooks are also being installed, then these webhooks must exclude resources being installed in the `kyma-system` Namespace. This can be done in the following way:
+    >    -  Add exclusion of the `kyma-system` Namespace to mutating webhook:
     >        ```bash
     >           kubectl -n kyma-system edit mutatingwebhookconfigurations ${HELM_RELEASE}-kube-prometheus-admission
     >        ```
-    >        Exclude `kyma-system` namespace by adding `namespaceSelector`
+    >        Exclude the `kyma-system` Namespace by adding `namespaceSelector`:
     >        ```yaml
     >            namespaceSelector:
     >              matchExpressions:
@@ -74,11 +74,11 @@ The provided `values.yaml` covers the following adjustments:
     >                values:
     >                  - "kyma-system"
     >        ```
-    >   - Add exclusion of `kyma-system` namespace to validationg webhook
+    >   - Add exclusion of the `kyma-system` Namespace to validating webhook:
     >        ```bash
     >         kubectl -n kyma-system edit validatingwebhookconfigurations ${HELM_RELEASE}-kube-prometheus-admission
     >        ```
-    >        Exclude `kyma-system` namespace by adding `namespaceSelector`
+    >        Exclude the `kyma-system` Namespace by adding `namespaceSelector`:
     >        ```yaml
     >            namespaceSelector:
     >              matchExpressions:
