@@ -1,5 +1,7 @@
 # Example Tracing
 
+>**CAUTION** This example is outdated and will be updated soon. Please have a look at the [trace-demo](./../trace-demo/) and [jaeger](./../jaeger/) instead.
+
 ## Overview
 
 This example illustrates how to enable tracing for a service deployed in Kyma. For demonstration, it creates a [Go application](src/order-front.go). This application uses [http-db-service](../http-db-service) for CRUD operations on orders.
