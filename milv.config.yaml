@@ -10,3 +10,7 @@ files:
   - path: "./examples/tracing/README.md"
     config:
       external-links-to-ignore: ["https://jaeger.{YOUR_CLUSTER_DOMAIN"]
+  - path: "./examples/trace-demo/README.md"
+    config:
+      external-links-to-ignore: ["https://frontend.$CLUSTER_DOMAIN"]
+      
