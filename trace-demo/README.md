@@ -52,13 +52,13 @@ The following instructions install the OpenTelemetry [demo application](https://
    apiVersion: telemetry.istio.io/v1alpha1
    kind: Telemetry
    metadata:
-   name: tracing-default
-   namespace: istio-system
+     name: tracing-default
+     namespace: istio-system
    spec:
-   tracing:
-   - providers:
-      - name: "kyma-traces"
-     randomSamplingPercentage: 100.00
+     tracing:
+     - providers:
+       - name: "kyma-traces"
+       randomSamplingPercentage: 100.00
    EOF
    ```
 
