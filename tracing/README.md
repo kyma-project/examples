@@ -41,7 +41,10 @@ kubectl -n istio-system edit telemetries.telemetry.istio.io kyma-traces
     curl -H "Content-Type: application/json" -d '{"orderCode" : "007", "orderPrice" : 12.0}' https://order-front-api.{YOUR_CLUSTER_DOMAIN}/orders
     ```
 
-2. Access the tracing UI on a cluster at `https://jaeger.{YOUR_CLUSTER_DOMAIN}`.
+2. Access the Jaeger UI on the cluster at `http://localhost:16686` using port-forwarding:
+```bash
+kubectl port-forward -n kyma-system svc/tracing-jaeger-query 16686:16686
+```
 
 3. Select **order-front** from the list of available services and click **Find Traces**.
 

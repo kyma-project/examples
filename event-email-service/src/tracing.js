@@ -1,4 +1,7 @@
 const traceHeaders = [
+  'Traceparent',
+  'Tracestate',
+  'Baggage',
   'X-Request-Id',
   'X-B3-Traceid',
   'X-B3-Spanid',

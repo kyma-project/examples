@@ -147,7 +147,7 @@ func storeOrdersInDB(order *Order, dbUrl *string, incomingHeaders http.Header) e
 }
 
 func propagateTracingHeaders(incomingHeaders http.Header, downstreamRequest *http.Request) {
-	traceHeadersName := [...]string{"traceparent", "tracestate", "baggage"}
+	traceHeadersName := [...]string{"Traceparent", "Tracestate", "Baggage"}
 	for _, headerName := range traceHeadersName {
 		headerVal := incomingHeaders[headerName]
 		if len(headerVal) > 0 {

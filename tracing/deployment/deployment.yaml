@@ -1,14 +1,20 @@
-apiVersion: gateway.kyma-project.io/v1alpha2
-kind: Api
+apiVersion: gateway.kyma-project.io/v1beta1
+kind: APIRule
 metadata:
     name: order-front-api
     labels:
       example: tracing
 spec:
+    gateway: kyma-system/kyma-gateway
     service:
       name: order-front
       port: 8080
-    hostname: order-front-api
+    host: order-front-api
+    rules:
+    - path: /.*
+      methods: ["GET"]
+      accessStrategies:
+        - handler: allow
 ---
 apiVersion: v1
 kind: Service
