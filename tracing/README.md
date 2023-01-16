@@ -10,11 +10,11 @@ To understand how traces are propagated, see the [Go application](src/order-fron
 
 ## Prerequisites
 
-- Kyma OS >= 2.10.x
-- kubectl >= 1.22.x
+- Kyma OS version 2.10.x or higher
+- kubectl version 1.22.x or higher
 - Helm 3.x
 
->**NOTE:** By default, the sampling rate for Istio is set to `1`, where `100` is the maximum value. This means that only 1 out of 100 requests is sent to Jaeger for trace recording which can affect the number of traces displayed for the service. To change this behavior, adjust the `randomSamplingPercentage` setting in Istio's telemetry resource:
+>**NOTE:** By default, the sampling rate for Istio is set to `1`, while `100` is the maximum value. This means that only 1 out of 100 requests is sent to Jaeger for trace recording, which can affect the number of traces displayed for the service. To change this behavior, adjust the `randomSamplingPercentage` setting in the Istio's telemetry resource:
 ```bash
 kubectl -n istio-system edit telemetries.telemetry.istio.io kyma-traces
 ```

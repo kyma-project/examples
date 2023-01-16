@@ -8,7 +8,7 @@ The following instructions install the OpenTelemetry [demo application](https://
 
 ## Prerequisites
 
-- Kyma Open Source >= 2.10.x
+- Kyma Open Source version 2.10.x or higher
 - kubectl version 1.22.x or higher
 - Helm 3.x
 
@@ -43,10 +43,10 @@ The following instructions install the OpenTelemetry [demo application](https://
 
 ### Activate a Kyma TracePipeline
 
-1. Provide a tracing backend and activate it
-   Install [Jaeger in-cluster](./../jaeger/) or provide a custom backend supporting the OTLP protocol
-2. Activate the Istio tracing feature
-   To [activate Istio](https://kyma-project.io/docs/kyma/main/01-overview/main-areas/telemetry/telemetry-03-traces#step-2-enable-istio-tracing) to report span data, an Istio telemetry resource needs to get applied, setting the sampling rate to 100% (not recommended for production).
+1. Provide a tracing backend and activate it.
+   Install [Jaeger in-cluster](./../jaeger/) or provide a custom backend supporting the OTLP protocol.
+2. Activate the Istio tracing feature.
+To [enable Istio](https://kyma-project.io/docs/kyma/main/01-overview/main-areas/telemetry/telemetry-03-traces#step-2-enable-istio-tracing) to report span data, apply an Istio telemetry resource and set the sampling rate to 100%. This approach is not recommended for production.
    ```bash
    cat <<EOF | kubectl apply -f -
    apiVersion: telemetry.istio.io/v1alpha1
@@ -111,12 +111,12 @@ To verify that the application is running properly, set up port forwarding and c
 
 ### Browser Instrumentation and missing root spans
 
-The frontend application of the demo uses [browser instrumentation] and with that the root span of a trace is being created external to the cluster and will not be captured with the described setup. In Jaeger you can see a warning at the first span indicating that there is a parent span not being captured.
+The frontend application of the demo uses [browser instrumentation](https://github.com/open-telemetry/opentelemetry-demo/blob/main/docs/services/frontend.md#browser-instrumentation). Because of that, the root span of a trace is created externally to the cluster and will not be captured with the described setup. In Jaeger, you can see a warning at the first span indicating that there is a parent span that is not being captured.
 
-In order to capture the spans reported by the browser you need to expose the trace endpoint of the collector and configure the frontend to report the spans to that exposed endpoint.
+In order to capture the spans reported by the browser, you need to expose the trace endpoint of the collector and configure the frontend to report the spans to that exposed endpoint.
 
-To expose the frontend webapp and the relevant trace endpoint you can define an Istio Virtualservice as in the following.
->**CAUTION** the example is exposing the trace endpoint in an insecure way, do not use that on production
+To expose the frontend web app and the relevant trace endpoint, define an Istio Virtualservice as in the following example.
+>**CAUTION** The example shows an insecure way of exposing the trace endpoint. Do not use it in production.
 ```bash
 export CLUSTER_DOMAIN={my-domain}
 
@@ -155,7 +155,7 @@ spec:
 EOF
 ```
 
-Furthermore you need to update the frontend configuration. For that you can repeat the helm command with setting the additional configuration:
+Then, update the frontend configuration. To do that, run the following helm command and set the additional configuration:
 ```bash
 helm upgrade --version 0.15.4 --install --create-namespace -n $KYMA_NS $HELM_OTEL_RELEASE open-telemetry/opentelemetry-demo \
 -f https://raw.githubusercontent.com/kyma-project/examples/main/trace-demo/values.yaml \
@@ -163,7 +163,7 @@ helm upgrade --version 0.15.4 --install --create-namespace -n $KYMA_NS $HELM_OTE
 --set "components.frontend.envOverrides[1].value=https://frontend.$CLUSTER_DOMAIN/v1/traces"
 ```
 
-Afterwards the web application will be accessible in your browser at `https://frontend.$CLUSTER_DOMAIN`. Using the developer tools of the browser you should see that requests to the traces endpoint are successful. Now every trace should have a proper root span recorded.
+Afterwards, the web application will be accessible in your browser at `https://frontend.$CLUSTER_DOMAIN`. Using the developer tools of the browser you should see that requests to the traces endpoint are successful. Now, every trace should have a proper root span recorded.
 ## Cleanup
 
 When you're done, you can remove the example and all its resources from the cluster by calling Helm:

@@ -110,7 +110,7 @@ When you're done, you can remove the example and all its resources from the clus
     kubectl -n $KYMA_NS delete -f https://raw.githubusercontent.com/kyma-project/examples/main/kiali/apirule.yaml
     ```
 
-2. (Optional) If you created the `$KYMA_NS` Namespace specifically for this tutorial, remove the Namespace:
+2. If you created the `$KYMA_NS` Namespace specifically for this tutorial, remove the Namespace:
     ```bash
     kubectl delete namespace $KYMA_NS
     ``` 
