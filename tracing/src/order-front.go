@@ -6,7 +6,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 )
@@ -54,7 +54,7 @@ func ordersHandler(dbUrl *string) http.Handler {
 				return
 			}
 
-			b, err := ioutil.ReadAll(r.Body)
+			b, err := io.ReadAll(r.Body)
 			defer r.Body.Close()
 			if err != nil {
 				log.Printf("Error reading HTTP request body: %v", err)
@@ -97,7 +97,7 @@ func ordersHandler(dbUrl *string) http.Handler {
 }
 
 func getOrdersFromDB(dbUrl *string, incomingHeaders http.Header) (*[]StoredOrder, error) {
-	downstreamRequest, err := http.NewRequest(http.MethodGet, *dbUrl, nil)
+	downstreamRequest, _ := http.NewRequest(http.MethodGet, *dbUrl, nil)
 	propagateTracingHeaders(incomingHeaders, downstreamRequest)
 	resp, err := httpClient.Do(downstreamRequest)
 	if err != nil {
@@ -105,7 +105,7 @@ func getOrdersFromDB(dbUrl *string, incomingHeaders http.Header) (*[]StoredOrder
 	}
 
 	orders := make([]StoredOrder, 0)
-	byteArray, err := ioutil.ReadAll(resp.Body)
+	byteArray, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}
@@ -115,7 +115,7 @@ func getOrdersFromDB(dbUrl *string, incomingHeaders http.Header) (*[]StoredOrder
 }
 
 func deleteOrdersFromDB(dbUrl *string, incomingHeaders http.Header) (int, error) {
-	downstreamRequest, err := http.NewRequest(http.MethodDelete, *dbUrl, nil)
+	downstreamRequest, _ := http.NewRequest(http.MethodDelete, *dbUrl, nil)
 	propagateTracingHeaders(incomingHeaders, downstreamRequest)
 	resp, err := httpClient.Do(downstreamRequest)
 	if err != nil {
@@ -132,7 +132,7 @@ func storeOrdersInDB(order *Order, dbUrl *string, incomingHeaders http.Header) e
 	if err != nil {
 		return err
 	}
-	downstreamRequest, err := http.NewRequest(http.MethodPost, *dbUrl, bytes.NewBuffer(payload))
+	downstreamRequest, _ := http.NewRequest(http.MethodPost, *dbUrl, bytes.NewBuffer(payload))
 	downstreamRequest.Header.Add("Content-Type", "application/json")
 	propagateTracingHeaders(incomingHeaders, downstreamRequest)
 
@@ -147,10 +147,10 @@ func storeOrdersInDB(order *Order, dbUrl *string, incomingHeaders http.Header) e
 }
 
 func propagateTracingHeaders(incomingHeaders http.Header, downstreamRequest *http.Request) {
-	traceHeadersName := [...]string{"X-Request-Id", "X-B3-Traceid", "X-B3-Spanid", "X-B3-Parentspanid", "X-B3-Sampled", "X-B3-Flags", "X-Ot-Span-Context"}
+	traceHeadersName := [...]string{"traceparent", "tracestate", "baggage"}
 	for _, headerName := range traceHeadersName {
 		headerVal := incomingHeaders[headerName]
-		if headerVal != nil && len(headerVal) > 0 {
+		if len(headerVal) > 0 {
 			log.Print(headerName, headerVal)
 			downstreamRequest.Header[headerName] = headerVal
 		}

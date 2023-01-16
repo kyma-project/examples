@@ -10,27 +10,16 @@ To understand how traces are propagated, see the [Go application](src/order-fron
 
 ## Prerequisites
 
-- Kyma as the target deployment environment.
-- Helm for local installation.
+- Kyma OS >= 2.10.x
+- kubectl >= 1.22.x
+- Helm 3.x
 
->**NOTE:** By default, the **PILOT_TRACE_SAMPLING** value in the [IstioControlPlane](https://istio.io/docs/reference/config/istio.operator.v1alpha1/) is set to `1`, where `100` is the maximum value. This means that only 1 out of 100 requests is sent to Jaeger for trace recording which can affect the number of traces displayed for the service. To change this behavior, follow [these](https://kyma-project.io/docs/main/components/tracing#troubleshooting-jaeger-shows-only-a-few-traces) instructions to increase the value.
-
-
-## Installation
-
-### Local installation
-
-> **NOTE:** If you use a local Deployment of Kyma on Minikube,  be aware that Jaeger installation is optional, and you cannot install it locally by default. However, you can install it on a Kyma instance and run it locally using Helm.
-
-1. To install Jaeger, go to the [Kyma resources](https://github.com/kyma-project/kyma/tree/main/resources) directory and run the following command:
-
+>**NOTE:** By default, the sampling rate for Istio is set to `1`, where `100` is the maximum value. This means that only 1 out of 100 requests is sent to Jaeger for trace recording which can affect the number of traces displayed for the service. To change this behavior, adjust the `randomSamplingPercentage` setting in Istio's telemetry resource:
 ```bash
-helm install -n jaeger -f jaeger/values.yaml --namespace kyma-system --set-string global.domainName=kyma.local --set-string global.isLocalEnv=true jaeger/
+kubectl -n istio-system edit telemetries.telemetry.istio.io kyma-traces
 ```
 
-2. Follow the instructions in the  **Cluster installation** section (skip step 2). You can access the tracing UI locally at `https://jaeger.kyma.local`.
-
-### Cluster installation
+## Installation
 
 1. Export your Namespace as a variable by replacing the `{namespace}` placeholder in the following command and running it:
 
