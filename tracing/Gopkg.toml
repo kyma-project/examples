@@ -1,7 +1,0 @@
-required = [
-  "golang.org/x/lint/golint"
-]
-
-[prune]
-  go-tests = true
-  unused-packages = true

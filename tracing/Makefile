@@ -3,15 +3,13 @@ IMG = $(DOCKER_PUSH_REPOSITORY)$(DOCKER_PUSH_DIRECTORY)/$(APP_NAME)
 TAG = $(DOCKER_TAG)
 
 resolve: 
-	dep ensure -vendor-only -v
+	go mod download
 
 validate:
-	go build -o golint-vendored ./vendor/golang.org/x/lint/golint
-	./golint-vendored
-	rm golint-vendored
+	go test ./... -count=1
 
 build:
-	CGO_ENABLED=0 go build -o ./bin/app ./src
+	CGO_ENABLED=0 go build -ldflags "-s -w" -a -o ./bin/app ./src
 
 .PHONY: build-image
 build-image:

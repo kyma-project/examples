@@ -1,0 +1,19 @@
+provisionDataStore:
+  cassandra: false
+allInOne:
+  enabled: true
+  args: ["--memory.max-traces", "10000", "--query.base-path", "/jaeger/ui"]
+  resources:
+    limits:
+      memory: 275Mi
+  podLabels:
+    sidecar.istio.io/inject: "false"
+storage:
+  type: none
+agent:
+  enabled: false
+collector:
+  enabled: false
+query:
+  enabled: false
+

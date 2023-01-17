@@ -35,9 +35,9 @@ As an alternative, you can install the upstream chart with all customization opt
     ```
    >**Note**: This Namespace must have **no** Istio sidecar injection enabled; that is, there must be no `istio-injection` label present on the Namespace. The Helm chart deploys jobs that will not succeed when Isto sidecar injection is enabled.
 
-1. Export the Helm release name that you want to use. It can be any name, but be aware that all resources in the cluster will be prefixed with that name. Replace the `{release-name}` placeholder in the following command and run it:
+1. Export the Helm release name that you want to use. It can be any name, but be aware that all resources in the cluster will be prefixed with that name. Run the following command:
     ```bash
-    export HELM_RELEASE="{release-name}"
+    export HELM_PROM_RELEASE="prometheus"
     ```
 
 1. Update your Helm installation with the required Helm repository:
@@ -51,7 +51,7 @@ As an alternative, you can install the upstream chart with all customization opt
 
 1. Run the Helm upgrade command, which installs the chart if it's not present yet. At the end of the command, change the Grafana admin password to some value of your choice.
     ```bash
-    helm upgrade --install -n ${KYMA_NS} ${HELM_RELEASE} prometheus-community/kube-prometheus-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/prometheus/values.yaml --set grafana.adminPassword=myPwd
+    helm upgrade --install -n ${KYMA_NS} ${HELM_PROM_RELEASE} prometheus-community/kube-prometheus-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/prometheus/values.yaml --set grafana.adminPassword=myPwd
     ```
 
 2. You can use the [values.yaml](./values.yaml) provided with this tutorial, which contains customized settings deviating from the default settings, or create your own one.
@@ -123,7 +123,7 @@ The provided `values.yaml` covers the following adjustments:
    ```
 3. Browse the Grafana dashboard and verify that the dashboards are showing data. The user `admin` is preconfigured in the Helm chart; the password was provided in your `helm install` command. The following command exposes the dashboard on `http://localhost:3000`:
    ```bash
-   kubectl -n ${KYMA_NS} port-forward svc/${HELM_RELEASE}-grafana 3000:80
+   kubectl -n ${KYMA_NS} port-forward svc/${HELM_PROM_RELEASE}-grafana 3000:80
    ```
 
 ### Deploy a custom workload and scrape it
@@ -149,7 +149,7 @@ You can try it out by removing the ServiceMonitor from the previous example and 
 
    The [alertmanager-values.yaml](./alertmanager-values.yaml) example provides a configuration that sends notifications for alerts with high severity to a Slack channel. To deploy it, download the file, adapt `<channel-name>`, `<api-url>` and `<cluster-domain>` to your environment, and run the Helm upgrade command to deploy the configuration:
    ```bash
-    helm upgrade --install -n ${KYMA_NS} ${HELM_RELEASE} prometheus-community/kube-prometheus-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/prometheus/values.yaml -f ./alertmanager-values.yaml --set grafana.adminPassword=myPwd
+    helm upgrade --install -n ${KYMA_NS} ${HELM_PROM_RELEASE} prometheus-community/kube-prometheus-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/prometheus/values.yaml -f ./alertmanager-values.yaml --set grafana.adminPassword=myPwd
    ```
 
 2. Follow the tutorial [monitoring-alert-rules](./monitoring-alert-rules/) to set up an alerting rule on Prometheus.
@@ -163,5 +163,5 @@ Follow the tutorial [monitoring-grafana-dashboard](./monitoring-grafana-dashboar
 To remove the installation from the cluster, call Helm:
 
 ```bash
-helm delete -n ${KYMA_NS} ${HELM_RELEASE}
+helm delete -n ${KYMA_NS} ${HELM_PROM_RELEASE}
 ```

@@ -1,6 +1,7 @@
-FROM golang:1.12 as builder
+FROM golang:1.19 as builder
 
 WORKDIR /go/src/tracing
+COPY ./go.mod .
 COPY src/order-front.go .
 RUN CGO_ENABLED=0 GOOS=linux go build -v -a -installsuffix cgo -o order-front .
 

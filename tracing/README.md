@@ -1,5 +1,7 @@
 # Example Tracing
 
+>**CAUTION** This example is outdated and will be updated soon. Please have a look at the [trace-demo](./../trace-demo/) and [jaeger](./../jaeger/) instead.
+
 ## Overview
 
 This example illustrates how to enable tracing for a service deployed in Kyma. For demonstration, it creates a [Go application](src/order-front.go). This application uses [http-db-service](../http-db-service) for CRUD operations on orders.
@@ -8,27 +10,16 @@ To understand how traces are propagated, see the [Go application](src/order-fron
 
 ## Prerequisites
 
-- Kyma as the target deployment environment.
-- Helm for local installation.
+- Kyma OS version 2.10.x or higher
+- kubectl version 1.22.x or higher
+- Helm 3.x
 
->**NOTE:** By default, the **PILOT_TRACE_SAMPLING** value in the [IstioControlPlane](https://istio.io/docs/reference/config/istio.operator.v1alpha1/) is set to `1`, where `100` is the maximum value. This means that only 1 out of 100 requests is sent to Jaeger for trace recording which can affect the number of traces displayed for the service. To change this behavior, follow [these](https://kyma-project.io/docs/main/components/tracing#troubleshooting-jaeger-shows-only-a-few-traces) instructions to increase the value.
-
-
-## Installation
-
-### Local installation
-
-> **NOTE:** If you use a local Deployment of Kyma on Minikube,  be aware that Jaeger installation is optional, and you cannot install it locally by default. However, you can install it on a Kyma instance and run it locally using Helm.
-
-1. To install Jaeger, go to the [Kyma resources](https://github.com/kyma-project/kyma/tree/main/resources) directory and run the following command:
-
+>**NOTE:** By default, the sampling rate for Istio is set to `1`, while `100` is the maximum value. This means that only 1 out of 100 requests is sent to Jaeger for trace recording, which can affect the number of traces displayed for the service. To change this behavior, adjust the `randomSamplingPercentage` setting in the Istio's telemetry resource:
 ```bash
-helm install -n jaeger -f jaeger/values.yaml --namespace kyma-system --set-string global.domainName=kyma.local --set-string global.isLocalEnv=true jaeger/
+kubectl -n istio-system edit telemetries.telemetry.istio.io kyma-traces
 ```
 
-2. Follow the instructions in the  **Cluster installation** section (skip step 2). You can access the tracing UI locally at `https://jaeger.kyma.local`.
-
-### Cluster installation
+## Installation
 
 1. Export your Namespace as a variable by replacing the `{namespace}` placeholder in the following command and running it:
 
@@ -50,7 +41,10 @@ helm install -n jaeger -f jaeger/values.yaml --namespace kyma-system --set-strin
     curl -H "Content-Type: application/json" -d '{"orderCode" : "007", "orderPrice" : 12.0}' https://order-front-api.{YOUR_CLUSTER_DOMAIN}/orders
     ```
 
-2. Access the tracing UI on a cluster at `https://jaeger.{YOUR_CLUSTER_DOMAIN}`.
+2. Access the Jaeger UI on the cluster at `http://localhost:16686` using port-forwarding:
+```bash
+kubectl port-forward -n kyma-system svc/tracing-jaeger-query 16686:16686
+```
 
 3. Select **order-front** from the list of available services and click **Find Traces**.
 

@@ -8,7 +8,7 @@ The following instructions install the OpenTelemetry [demo application](https://
 
 ## Prerequisites
 
-- Kyma OSS installed from main branch (`kyma deploy -s main`)
+- Kyma Open Source version 2.10.x or higher
 - kubectl version 1.22.x or higher
 - Helm 3.x
 
@@ -29,9 +29,9 @@ The following instructions install the OpenTelemetry [demo application](https://
     kubectl label namespace $KYMA_NS istio-injection=enabled
     ```
 
-1. Export the Helm release name that you want to use. The release name must be unique for the chosen Namespace. Be aware that all resources in the cluster will be prefixed with that name. Replace the `{release-name}` placeholder in the following command and run it:
+1. Export the Helm release name that you want to use. The release name must be unique for the chosen Namespace. Be aware that all resources in the cluster will be prefixed with that name. Run the following command:
     ```bash
-    export HELM_RELEASE="{release-name}"
+    export HELM_OTEL_RELEASE="otel"
     ```
 
 1. Update your Helm installation with the required Helm repository:
@@ -41,31 +41,32 @@ The following instructions install the OpenTelemetry [demo application](https://
     helm repo update
     ```
 
-### Activate Kyma Tracing preview
+### Activate a Kyma TracePipeline
 
-1. (Temporary) In the Telemetry operator, enable the tracing feature:
-
-    ```bash
-    kubectl apply -f https://raw.githubusercontent.com/kyma-project/kyma/main/components/telemetry-operator/config/crd/bases/telemetry.kyma-project.io_tracepipelines.yaml
-    kyma deploy -s main --component telemetry --value telemetry.operator.controllers.tracing.enabled=true
-    ```
-
-2. (Temporary) Activate Istio tracing based on w3c-tracecontext and OTLP:
-    ```bash
-    kyma deploy -s main --component istio -f https://raw.githubusercontent.com/kyma-project/examples/main/trace-demo/istio-values.yaml
-    ```
-3. If necessary, restart the relevant workloads.
-
-4. To enable the Jaeger backend, create a new TracePipeline:
+1. Provide a tracing backend and activate it.
+   Install [Jaeger in-cluster](./../jaeger/) or provide a custom backend supporting the OTLP protocol.
+2. Activate the Istio tracing feature.
+To [enable Istio](https://kyma-project.io/docs/kyma/main/01-overview/main-areas/telemetry/telemetry-03-traces#step-2-enable-istio-tracing) to report span data, apply an Istio telemetry resource and set the sampling rate to 100%. This approach is not recommended for production.
    ```bash
-   kubectl apply -f https://raw.githubusercontent.com/kyma-project/examples/main/trace-demo/tracepipeline.yaml
+   cat <<EOF | kubectl apply -f -
+   apiVersion: telemetry.istio.io/v1alpha1
+   kind: Telemetry
+   metadata:
+     name: tracing-default
+     namespace: istio-system
+   spec:
+     tracing:
+     - providers:
+       - name: "kyma-traces"
+       randomSamplingPercentage: 100.00
+   EOF
    ```
 
 ### Install the application
 
 Run the Helm upgrade command, which installs the chart if not present yet.
 ```bash
-helm upgrade --version 0.11.1 --install --create-namespace -n $KYMA_NS $HELM_RELEASE open-telemetry/opentelemetry-demo -f https://raw.githubusercontent.com/kyma-project/examples/main/trace-demo/values.yaml
+helm upgrade --version 0.15.4 --install --create-namespace -n $KYMA_NS $HELM_OTEL_RELEASE open-telemetry/opentelemetry-demo -f https://raw.githubusercontent.com/kyma-project/examples/main/trace-demo/values.yaml
 ```
 
 You can either use the [`values.yaml`](./values.yaml) provided in this `trace-demo` folder, which contains customized settings deviating from the default settings, or create your own `values.yaml` file.
@@ -76,7 +77,7 @@ To verify that the application is running properly, set up port forwarding and c
 
 1. To verify the frontend:
    ```bash
-   kubectl -n $KYMA_NS port-forward svc/$HELM_RELEASE-frontend 8080
+   kubectl -n $KYMA_NS port-forward svc/$HELM_OTEL_RELEASE-frontend 8080
    ```
    ```bash
    open http://localhost:8080
@@ -92,7 +93,7 @@ To verify that the application is running properly, set up port forwarding and c
 
 3. Enable failures with the feature flag service:
    ```bash
-   kubectl -n $KYMA_NS port-forward svc/$HELM_RELEASE-featureflagservice 8081
+   kubectl -n $KYMA_NS port-forward svc/$HELM_OTEL_RELEASE-featureflagservice 8081
    ```
    ```bash
    open http://localhost:8081
@@ -100,16 +101,73 @@ To verify that the application is running properly, set up port forwarding and c
 
 4. Generate load with the load generator:
    ```bash
-   kubectl -n $KYMA_NS port-forward svc/$HELM_RELEASE-loadgenerator 8089
+   kubectl -n $KYMA_NS port-forward svc/$HELM_OTEL_RELEASE-loadgenerator 8089
    ```
    ```bash
    open http://localhost:8089
    ```
 
+## Advanced
+
+### Browser Instrumentation and missing root spans
+
+The frontend application of the demo uses [browser instrumentation](https://github.com/open-telemetry/opentelemetry-demo/blob/main/docs/services/frontend.md#browser-instrumentation). Because of that, the root span of a trace is created externally to the cluster and will not be captured with the described setup. In Jaeger, you can see a warning at the first span indicating that there is a parent span that is not being captured.
+
+In order to capture the spans reported by the browser, you need to expose the trace endpoint of the collector and configure the frontend to report the spans to that exposed endpoint.
+
+To expose the frontend web app and the relevant trace endpoint, define an Istio Virtualservice as in the following example.
+>**CAUTION** The example shows an insecure way of exposing the trace endpoint. Do not use it in production.
+```bash
+export CLUSTER_DOMAIN={my-domain}
+
+cat <<EOF | kubectl -n $KYMA_NS apply -f -
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: frontend
+spec:
+  gateways:
+  - kyma-system/kyma-gateway
+  hosts:
+  - frontend.$CLUSTER_DOMAIN
+  http:
+  - route:
+    - destination:
+        host: telemetry-otlp-traces.kyma-system.svc.cluster.local
+        port:
+          number: 4318
+    match:
+    - uri:
+        prefix: "/v1/traces"
+    corsPolicy:
+      allowOrigins:
+      - prefix: https://frontend.$CLUSTER_DOMAIN
+      allowHeaders:
+      - Content-Type
+      allowMethods:
+      - POST
+      allowCredentials: true
+  - route:
+    - destination:
+        host: $HELM_OTEL_RELEASE-frontend.$KYMA_NS.svc.cluster.local
+        port:
+          number: 8080
+EOF
+```
+
+Then, update the frontend configuration. To do that, run the following helm command and set the additional configuration:
+```bash
+helm upgrade --version 0.15.4 --install --create-namespace -n $KYMA_NS $HELM_OTEL_RELEASE open-telemetry/opentelemetry-demo \
+-f https://raw.githubusercontent.com/kyma-project/examples/main/trace-demo/values.yaml \
+--set 'components.frontend.envOverrides[1].name=PUBLIC_OTEL_EXPORTER_OTLP_TRACES_ENDPOINT' \
+--set "components.frontend.envOverrides[1].value=https://frontend.$CLUSTER_DOMAIN/v1/traces"
+```
+
+Afterwards, the web application will be accessible in your browser at `https://frontend.$CLUSTER_DOMAIN`. Using the developer tools of the browser you should see that requests to the traces endpoint are successful. Now, every trace should have a proper root span recorded.
 ## Cleanup
 
 When you're done, you can remove the example and all its resources from the cluster by calling Helm:
 
 ```bash
-helm delete -n $KYMA_NS $HELM_RELEASE
+helm delete -n $KYMA_NS $HELM_OTEL_RELEASE
 ```
