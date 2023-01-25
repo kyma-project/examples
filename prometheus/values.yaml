@@ -10,6 +10,13 @@ prometheusOperator:
   # disable admission webhooks to do not interfere with the Kyma monitoring stack
   admissionWebhooks:
     enabled: false
+####### This block describes namespace selector for webhook configuration, so that webhooks are not getting triggered for the excluded namespaces
+    # namespaceSelector:
+    #   matchExpressions:
+    #   - key: kubernetes.io/metadata.name
+    #     operator: NotIn
+    #     values:
+    #       - "kyma-system"
 
 # change the port of the node-export to be different from the one used by the Kyma monitoring stack
 prometheus-node-exporter:
