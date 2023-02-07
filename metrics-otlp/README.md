@@ -46,7 +46,10 @@ Furthermore it brings an OpenTelemetry Collector DaemonSet acting as agent runni
    As this instructions are not providing any backend, the following command sets the backend configuration with placeholders `myEndpoint` and `myToken` which needs to get adjusted to your needs. Be aware of, that a token should be provided using a Secret which gets mounted via the `extraEnvs` parameter. As this cannot be passed via the command itself in an easy way, please consider using a dedicated additional values.yaml file for that.
 
    ```bash
-   helm upgrade metrics-gateway open-telemetry/opentelemetry-collector --version 0.47.0 --install --namespace $KYMA_NS -f metrics-gateway-values.yaml --set config.exporters.otlp.endpoint="{myEndpoint}" --set config.exporters.otlp.headers.Authorization="Bearer {myToken}"
+   helm upgrade metrics-gateway open-telemetry/opentelemetry-collector --version 0.47.0 --install --namespace $KYMA_NS \
+     -f https://raw.githubusercontent.com/kyma-project/examples/main/metrics-otlp/metrics-gateway-values.yaml \
+     --set config.exporters.otlp.endpoint="{myEndpoint}" \
+     --set config.exporters.otlp.headers.Authorization="Bearer {myToken}"
    ```
 
 1. Verify the deployment
@@ -64,7 +67,9 @@ Furthermore it brings an OpenTelemetry Collector DaemonSet acting as agent runni
    The following command will deploy an otel-collector using the upstream helm chart with prepared [values](./metrics-agent-values.yaml). The values file is defining a metrics pipeline for scraping workload by annotation and pushing them to the gateway. It defines also a second metrics pipeline determining node-specific metrics for your workload from the nodes kubelet and the nodes filesystem itself.
 
    ```bash
-   helm upgrade metrics-agent open-telemetry/opentelemetry-collector --version 0.47.0 --install --namespace $KYMA_NS -f metrics-agent-values.yaml --set config.exporters.otlp.endpoint=metrics-gateway.$KYMA_NS:4317
+   helm upgrade metrics-agent open-telemetry/opentelemetry-collector --version 0.47.0 --install --namespace $KYMA_NS \
+     -f https://raw.githubusercontent.com/kyma-project/examples/main/metrics-otlp/metrics-agent-values.yaml \
+     --set config.exporters.otlp.endpoint=metrics-gateway.$KYMA_NS:4317
    ```
 
 1. Verify the deployment
