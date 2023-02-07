@@ -111,7 +111,7 @@ To verify that the application is running properly, set up port forwarding and c
 
 ### Browser Instrumentation and missing root spans
 
-The frontend application of the demo uses [browser instrumentation](https://github.com/open-telemetry/opentelemetry-demo/blob/main/docs/services/frontend.md#browser-instrumentation). Because of that, the root span of a trace is created externally to the cluster and will not be captured with the described setup. In Jaeger, you can see a warning at the first span indicating that there is a parent span that is not being captured.
+The frontend application of the demo uses [browser instrumentation](https://opentelemetry.io/docs/demo/services/frontend/#browser-instrumentation). Because of that, the root span of a trace is created externally to the cluster and will not be captured with the described setup. In Jaeger, you can see a warning at the first span indicating that there is a parent span that is not being captured.
 
 In order to capture the spans reported by the browser, you need to expose the trace endpoint of the collector and configure the frontend to report the spans to that exposed endpoint.
 
