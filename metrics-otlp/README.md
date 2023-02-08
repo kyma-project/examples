@@ -2,7 +2,7 @@
 
 ## Overview
 
-The following instructions demonstrate how to install [OpenTelemetry Collector](https://github.com/open-telemetry/otel-collector)s on a Kyma cluster using the official [Helm chart](https://github.com/open-telemetry/opentelemetry-helm-charts/tree/main/charts/opentelemetry-collector) with the goal to collect and ship workload metrics to an OTLP endpoint. For a fully Prometheus-based approach, have a look at the [Prometheus](./../prometheus/README.md) tutorial instead.
+The following instructions demonstrate how to install [OpenTelemetry Collector](https://github.com/open-telemetry/opentelemetry-collector)s on a Kyma cluster using the official [Helm chart](https://github.com/open-telemetry/opentelemetry-helm-charts/tree/main/charts/opentelemetry-collector) with the goal to collect and ship workload metrics to an OTLP endpoint. For a fully Prometheus-based approach, have a look at the [Prometheus](./../prometheus/README.md) tutorial instead.
 
 The setup brings an OpenTelemetry Collector Deployment acting as gateway, to which all the cluster-wide metrics should be ingested. Then, the gateway enriches the metrics with missing resource attributes and ships them to a target backend.
 
