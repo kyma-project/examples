@@ -44,7 +44,7 @@ Furthermore, the setup brings an OpenTelemetry Collector DaemonSet acting as age
 
    Deploy an Otel Collector using the upstream Helm chart with a prepared [values](./metrics-gateway-values.yaml). The values file defines a pipeline for receiving OTLP metrics, enriches them with resource attributes that fulfil the Kubernetes semantic conventions, and then exports them to a custom OTLP backend.
    
-   Because these instructions don't provide any backend, the following command sets the backend configuration with placeholders `myEndpoint` and `myToken`. Adjust them to your needs. It's recommended that you provide a token using a Secret, which is mounted with the `extraEnvs` parameter. Because the parameter  cannot be passed with the command easily, use a dedicated additional `values.yaml` file for that.
+   The previous instructions don't provide any backend, so run the following command to set the backend configuration with placeholders `myEndpoint` and `myToken`. Adjust them to your needs. It's recommended that you provide a token using a Secret, which is mounted with the `extraEnvs` parameter. Because the parameter cannot be passed with the command easily, use a dedicated additional `values.yaml` file for that.
 
    ```bash
    helm upgrade metrics-gateway open-telemetry/opentelemetry-collector --version 0.47.0 --install --namespace $KYMA_NS \
