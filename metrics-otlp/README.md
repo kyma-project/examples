@@ -1,18 +1,19 @@
-# Install an OTLP based metrics collector 
+# Install an OTLP-based metrics collector 
 
 ## Overview
 
-The following instructions demonstrates how to install [OpenTelemetry Collector](https://github.com/open-telemetry/otel-collector)s on a Kyma cluster using the official [Helm chart](https://github.com/open-telemetry/opentelemetry-helm-charts/tree/main/charts/opentelemetry-collector) with the goal to collect and ship workload metrics to an OTLP endpoint. For a fully Prometheus-based approach please have a look at the [Prometheus](./../prometheus/README.md) tutorial instead.
+The following instructions demonstrate how to install [OpenTelemetry Collector](https://github.com/open-telemetry/otel-collector)s on a Kyma cluster using the official [Helm chart](https://github.com/open-telemetry/opentelemetry-helm-charts/tree/main/charts/opentelemetry-collector) with the goal to collect and ship workload metrics to an OTLP endpoint. For a fully Prometheus-based approach, have a look at the [Prometheus](./../prometheus/README.md) tutorial instead.
 
-The setup will bring an OpenTelemetry Collector Deployment acting as gateway where all the cluster-wide metrics should be ingested to. The gateway will then care about enriching the metrics with missing resource attributes and dies the actual shipment to a target backend.
+The setup brings an OpenTelemetry Collector Deployment acting as gateway, to which all the cluster-wide metrics should be ingested. Then, the gateway enriches the metrics with missing resource attributes and ships them to a target backend.
 
-Furthermore it brings an OpenTelemetry Collector DaemonSet acting as agent running on each node. Here, node specific metrics relevant for your workload are getting determined and an annotation based workload scraper is running there, scraping all containers running on the related node.
+Furthermore, the setup brings an OpenTelemetry Collector DaemonSet acting as agent running on each node. Here, node-specific metrics relevant for your workload are determined. This is also where an annotation-based workload scraper is running, which scrapes all containers running on the related node.
+## Architecture
 
 [Architecture](./assets/overview.drawio.svg)
 
 ## Prerequisites
 
-- Kyma Open Source >= 2.10.x
+- Kyma Open Source 2.10.x or higher
 - kubectl version 1.22.x or higher
 - Helm 3.x
 
@@ -24,7 +25,7 @@ Furthermore it brings an OpenTelemetry Collector DaemonSet acting as agent runni
     export KYMA_NS="{namespace}"
     ```
 
-1. If you don't have created a Namespace yet, do it now and enable Istio injection by label:
+1. If you haven't created a Namespace yet, do it now and enable Istio injection with the following label:
     ```bash
     kubectl create namespace $KYMA_NS
     kubectl label namespace $KYMA_NS istio-injection=enabled
@@ -39,11 +40,11 @@ Furthermore it brings an OpenTelemetry Collector DaemonSet acting as agent runni
 
 ## Install the gateway
 
-1. Deploy the gateway
+1. Deploy the gateway.
 
-   Deploy an otel-collector using the upstream helm chart with prepared [values](./metrics-gateway-values.yaml). The values file is defining a pipeline for receiving OTLP metrics, is enriching them with resource attributes fullfilling the kubernetes semantic conventions, and then exports them to a custom OTLP backend.
+   Deploy an Otel Collector using the upstream Helm chart with a prepared [values](./metrics-gateway-values.yaml). The values file defines a pipeline for receiving OTLP metrics, enriches them with resource attributes that fulfil the Kubernetes semantic conventions, and then exports them to a custom OTLP backend.
    
-   As this instructions are not providing any backend, the following command sets the backend configuration with placeholders `myEndpoint` and `myToken` which needs to get adjusted to your needs. Be aware of, that a token should be provided using a Secret which gets mounted via the `extraEnvs` parameter. As this cannot be passed via the command itself in an easy way, please consider using a dedicated additional values.yaml file for that.
+   Because these instructions don't provide any backend, the following command sets the backend configuration with placeholders `myEndpoint` and `myToken`. Adjust them to your needs. It's recommended that you provide a token using a Secret, which is mounted with the `extraEnvs` parameter. Because the parameter  cannot be passed with the command easily, use a dedicated additional `values.yaml` file for that.
 
    ```bash
    helm upgrade metrics-gateway open-telemetry/opentelemetry-collector --version 0.47.0 --install --namespace $KYMA_NS \
@@ -52,7 +53,7 @@ Furthermore it brings an OpenTelemetry Collector DaemonSet acting as agent runni
      --set config.exporters.otlp.headers.Authorization="Bearer {myToken}"
    ```
 
-1. Verify the deployment
+1. Verify the deployment.
    Check that the related Pod has been created in the Namespace and is in the `Running` state:
    ```bash
    kubectl -n $KYMA_NS rollout status deploy metrics-gateway
@@ -60,11 +61,11 @@ Furthermore it brings an OpenTelemetry Collector DaemonSet acting as agent runni
 
 ## Install the agent
 
-1. Deploy the agent
+1. Deploy the agent.
 
-   The gateway deployed in the previous step can be used to push metrics via OTLP. If you prefer to use the prometheus pull-approach, a dedicated instance is needed for scraping your workload. Furthermore, an agent is required running as a daemonset in order to retrieve node specific metrics.
+   The gateway deployed in the previous step can be used to _push_ metrics via OTLP. If you prefer to use the Prometheus _pull_ approach, you need a dedicated instance to scrape your workload. Furthermore, to retrieve node-specific metrics, you need an agent as a DaemonSet.
    
-   The following command will deploy an otel-collector using the upstream helm chart with prepared [values](./metrics-agent-values.yaml). The values file is defining a metrics pipeline for scraping workload by annotation and pushing them to the gateway. It defines also a second metrics pipeline determining node-specific metrics for your workload from the nodes kubelet and the nodes filesystem itself.
+   Deploy an Otel Collector using the upstream Helm chart with a prepared [values](./metrics-agent-values.yaml). The values file defines a metrics pipeline for scraping workload by annotation and pushing them to the gateway. It also defines a second metrics pipeline determining node-specific metrics for your workload from the nodes kubelet and the nodes filesystem itself.
 
    ```bash
    helm upgrade metrics-agent open-telemetry/opentelemetry-collector --version 0.47.0 --install --namespace $KYMA_NS \
@@ -72,23 +73,29 @@ Furthermore it brings an OpenTelemetry Collector DaemonSet acting as agent runni
      --set config.exporters.otlp.endpoint=metrics-gateway.$KYMA_NS:4317
    ```
 
-1. Verify the deployment
+1. Verify the deployment.
    Check that the related Pod has been created in the Namespace and is in the `Running` state:
    ```bash
    kubectl -n $KYMA_NS rollout status daemonset metrics-agent
    ```
 
+## Result
+
+Now, you have a setup in place as outlined in the [architecture diagram](#architecture), with a gateway and an agent. By default, the node-specific metrics are automatically ingested by the agent, and pushed via the gateway to the configured backend. Furthermore, metrics for the gateway and agent instances are exported.
+
+
 ## Usage
 
-After you have followed the instructions you should have a setup in place as outlined in the diagram on top of the tutorial, with a gateway and an agent. By default, the node specific metrics are getting ingested by the agent automatically and pushed via the gateway to the configured backend. Furthermore, metrics for the gateway and agent instances itself will be exported.
-
-To add metrics ingestion for your custom workload you have two options:
+To add metrics ingestion for your custom workload, you have the following options:
 
 ### Prometheus pull-based on base of annotations
 
-That approach assumes that you instrumented your application using a library like the [prometheus client library](https://prometheus.io/docs/instrumenting/clientlibs/), having a port in your workload exposed serving a typical prometheus metrics endpoint.
+This approach assumes that you instrumented your application using a library like the [prometheus client library](https://prometheus.io/docs/instrumenting/clientlibs/), having a port in your workload exposed serving a typical Prometheus metrics endpoint.
 
-The agent is configured with a generic scrape configuration which will determine endpoints to scrape in the cluster via annotations. You can either put the annotations to a service resolving your metrics port or directly at the pod itself. The annotations are as followed:
+The agent is configured with a generic scrape configuration, which uses annotations to specify the endpoints to scrape in the cluster. 
+Having the annotations in place is everything you need for metrics ingestion to start automatically.
+
+Put the following annotations either to a service that resolves your metrics port, or directly to the pod:
 
 ```yaml
 prometheus.io/scrape: "true"   # mandatory to enable automatic scraping
@@ -97,13 +104,12 @@ prometheus.io/port: "1234"     # optional, configure the port under which the me
 prometheus.io/path: /myMetrics # optional, configure the path under which the metrics are exposed
 ```
 
-Having the annotations in place is everything you need, metrics ingestion should start automatically.
 
-Be aware of, that the agent is capable of scraping endpoints even if the workload is using istio and accepts only mTLS communication. As the agent itself should not be part of the Service Mesh in order to observe the Service Mesh, the agent uses a sidecar but having no traffic interception enabled at all. Instead it mounts the client certificate and uses the certificate natively for the communication. That is a [recommended approach](https://istio.io/latest/docs/ops/integrations/prometheus/#tls-settings) by Istio itself.
+> **NOTE:** The agent can scrape endpoints even if the workload uses Istio and accepts only mTLS communication. Because the agent itself should not be part of the Service Mesh in order to observe the Service Mesh, the agent uses a sidecar but has no traffic interception enabled. Instead, it mounts the client certificate and uses the certificate natively for the communication. That is a [recommended approach](https://istio.io/latest/docs/ops/integrations/prometheus/#tls-settings) by Istio.
 
 ### OpenTelemetry push-based
 
-That approach assumes that you instrumented your workload using the [OpenTelemetry SDK](https://opentelemetry.io/docs/instrumentation/). Here, you only need to tell your workload to which target it should push the metrics. By using the deployed gateway, the application configuration does not need to be aware of any target backend, it only needs to get the static endpoint of the gateway. That can be achieved by configuring the SDK-specific [environment variables](https://opentelemetry.io/docs/reference/specification/protocol/exporter/). Also, if not done yet as part of your instrumentation, you strongly should configure a service name.
+This approach assumes that you instrumented your workload using the [OpenTelemetry SDK](https://opentelemetry.io/docs/instrumentation/). Here, you only need to tell your workload to which target it should push the metrics. By using the deployed gateway, the application configuration does not need to be aware of any target backend, it only needs to get the static endpoint of the gateway. To achieve this, configure the SDK-specific [environment variables](https://opentelemetry.io/docs/reference/specification/protocol/exporter/). Also, if not done yet as part of your instrumentation, it's strongly recommended that you configure a service name.
 
 ```yaml
 apiVersion: apps/v1
