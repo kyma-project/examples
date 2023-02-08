@@ -88,7 +88,7 @@ Now, you have a setup in place as outlined in the [architecture diagram](#archit
 
 To add metrics ingestion for your custom workload, you have the following options:
 
-### Prometheus pull-based on base of annotations
+### Prometheus pull-based, with annotations
 
 This approach assumes that you instrumented your application using a library like the [prometheus client library](https://prometheus.io/docs/instrumenting/clientlibs/), having a port in your workload exposed serving a typical Prometheus metrics endpoint.
 
