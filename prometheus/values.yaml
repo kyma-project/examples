@@ -10,6 +10,8 @@ prometheusOperator:
   # disable admission webhooks to do not interfere with the Kyma monitoring stack
   admissionWebhooks:
     enabled: false
+  tls:
+    enabled: false
 
 # change the port of the node-export to be different from the one used by the Kyma monitoring stack
 prometheus-node-exporter:
@@ -198,3 +200,9 @@ grafana:
       access: proxy
       jsonData:
         implementation: prometheus
+  sidecar:
+    securityContext:
+      privileged: false
+      runAsGroup: 1337
+      runAsNonRoot: true
+      runAsUser: 1337
