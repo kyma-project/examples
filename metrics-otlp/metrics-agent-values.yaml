@@ -137,6 +137,11 @@ config:
               - source_labels: [__meta_kubernetes_pod_node_name]
                 action: replace
                 target_label: node
+            tls_config:
+              ca_file: /etc/istio-output-certs/root-cert.pem
+              cert_file: /etc/istio-output-certs/cert-chain.pem
+              insecure_skip_verify: true
+              key_file: /etc/istio-output-certs/key.pem
   extensions:
     memory_ballast:
       size_mib: "400"
