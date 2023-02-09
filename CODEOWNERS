@@ -14,10 +14,10 @@
 /orders-service/ @m00g3n @pPrecel 
 
 # In-cluster eventing using function example
-/incluster_eventing/ @m00g3n @pPrecel @dbadura @kwiatekus @moelsayed @cortey
+/incluster_eventing/ @m00g3n @pPrecel @dbadura @kwiatekus @cortey
 
 # Custom function runtime image example
-/custom-serverless-runtime-image/ @m00g3n @pPrecel @dbadura @kwiatekus @moelsayed @cortey
+/custom-serverless-runtime-image/ @m00g3n @pPrecel @dbadura @kwiatekus @cortey
 
 # Observability
 /jaeger/ @kyma-project/observability
@@ -29,7 +29,7 @@
 /tracing/ @kyma-project/observability
 
 # Scaling functions to zero with KEDA
-/scale-to-zero-with-kedam @m00g3n @pPrecel @dbadura @kwiatekus @moelsayed @cortey
+/scale-to-zero-with-kedam @m00g3n @pPrecel @dbadura @kwiatekus @cortey
 
 # All .md files
 *.md @mmitoraj @NHingerl @grego952 @IwonaLanger @nataliasitko
