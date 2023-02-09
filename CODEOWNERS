@@ -5,7 +5,7 @@
 # For more details, read the following article on GitHub: https://help.github.com/articles/about-codeowners/.
 
 # These are the default owners for the whole content of the `examples` repository. The default owners are automatically added as reviewers when you open a pull request, unless different owners are specified in the file.
-* @a-thaler @lilitgh @rakesh-garimella @hisarbalik @skhalash @chrkl @lindnerby
+* @pbochynski @PK85 @a-thaler
 
 # Service binding example
 /service-binding/ @rakesh-garimella @lilitgh @k15r @nachtmaar @marcobebway
@@ -20,10 +20,13 @@
 /custom-serverless-runtime-image/ @m00g3n @pPrecel @dbadura @kwiatekus @moelsayed @cortey
 
 # Observability
-/prometheus/ @a-thaler @rakesh-garimella @skhalash @chrkl @lindnerby @dennis-ge @lilitgh
-/kiali/ @a-thaler @rakesh-garimella @skhalash @chrkl @lindnerby @dennis-ge @lilitgh
-/loki/ @a-thaler @rakesh-garimella @skhalash @chrkl @lindnerby @dennis-ge @lilitgh
-/trace-demo/ @a-thaler @rakesh-garimella @skhalash @chrkl @lindnerby @dennis-ge @lilitgh
+/jaeger/ @kyma-project/observability
+/kiali/ @kyma-project/observability
+/loki/ @kyma-project/observability
+/metrics-otlp/ @kyma-project/observability
+/prometheus/ @kyma-project/observability
+/trace-demo/ @kyma-project/observability
+/tracing/ @kyma-project/observability
 
 # Scaling functions to zero with KEDA
 /scale-to-zero-with-kedam @m00g3n @pPrecel @dbadura @kwiatekus @moelsayed @cortey
