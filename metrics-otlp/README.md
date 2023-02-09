@@ -44,13 +44,22 @@ Furthermore, the setup brings an OpenTelemetry Collector DaemonSet acting as age
 
    Deploy an Otel Collector using the upstream Helm chart with a prepared [values](./metrics-gateway-values.yaml). The values file defines a pipeline for receiving OTLP metrics, enriches them with resource attributes that fulfil the Kubernetes semantic conventions, and then exports them to a custom OTLP backend.
    
-   The previous instructions don't provide any backend, so run the following command to set the backend configuration with placeholders `myEndpoint` and `myToken`. Adjust them to your needs. It's recommended that you provide a token using a Secret, which is mounted with the `extraEnvs` parameter. Because the parameter cannot be passed with the command easily, use a dedicated additional `values.yaml` file for that.
+   The previous instructions don't provide any backend, so run the following command to set the backend configuration with placeholders `myEndpoint` and `myToken`. Adjust them to your needs. 
 
    ```bash
    helm upgrade metrics-gateway open-telemetry/opentelemetry-collector --version 0.47.0 --install --namespace $KYMA_NS \
      -f https://raw.githubusercontent.com/kyma-project/examples/main/metrics-otlp/metrics-gateway-values.yaml \
      --set config.exporters.otlp.endpoint="{myEndpoint}" \
      --set config.exporters.otlp.headers.Authorization="Bearer {myToken}"
+   ```
+
+   _Alternative_
+   
+   It's recommended that you provide tokens using a Secret. To achieve that, you can mount the relevant attributes of your secret via the `extraEnvs` parameter and use placeholders for referencing the actual env values. An example is provided at the [secret-values.yaml](./secret-values.yaml) file which can be adjusted to your specific secret and then used like that:
+   ```bash
+   helm upgrade metrics-gateway open-telemetry/opentelemetry-collector --version 0.47.0 --install --namespace $KYMA_NS \
+     -f https://raw.githubusercontent.com/kyma-project/examples/main/metrics-otlp/metrics-gateway-values.yaml \
+     -f secret-values.yaml
    ```
 
 1. Verify the deployment.
