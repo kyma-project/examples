@@ -116,6 +116,16 @@ prometheus.io/path: /myMetrics # optional, configure the path under which the me
 
 > **NOTE:** The agent can scrape endpoints even if the workload uses Istio and accepts only mTLS communication. Because the agent itself should not be part of the Service Mesh in order to observe the Service Mesh, the agent uses a sidecar but has no traffic interception enabled. Instead, it mounts the client certificate and uses the certificate natively for the communication. That is a [recommended approach](https://istio.io/latest/docs/ops/integrations/prometheus/#tls-settings) by Istio.
 
+To try it out, you can install the demo app taken from this [tutorial](https://github.com/kyma-project/examples/tree/main/prometheus/monitoring-custom-metrics) and annotate the workload with the annotations mentioned above.
+
+```bash
+kubectl apply -n $KYMA_NS -f https://raw.githubusercontent.com/kyma-project/examples/main/prometheus/monitoring-custom-metrics/deployment/deployment.yaml
+kubectl -n $KYMA_NS annotate service sample-metrics prometheus.io/scrape=true
+kubectl -n $KYMA_NS annotate service sample-metrics prometheus.io/port=8080
+```
+
+The workload exposes a metric with name `cpu_temperature_celsius` at port `8080` and that metric should now automatically get ingested to your configured backend..
+
 ### OpenTelemetry push-based
 
 This approach assumes that you instrumented your workload using the [OpenTelemetry SDK](https://opentelemetry.io/docs/instrumentation/). Here, you only need to tell your workload to which target it should push the metrics. By using the deployed gateway, the application configuration does not need to be aware of any target backend, it only needs to get the static endpoint of the gateway. To achieve this, configure the SDK-specific [environment variables](https://opentelemetry.io/docs/reference/specification/protocol/exporter/). Also, if not done yet as part of your instrumentation, it's strongly recommended that you configure a service name.
