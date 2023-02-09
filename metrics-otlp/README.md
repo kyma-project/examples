@@ -45,7 +45,7 @@ Furthermore, the setup brings an OpenTelemetry Collector DaemonSet acting as age
    The values file defines a pipeline for receiving OTLP metrics, enriches them with resource attributes that fulfil the Kubernetes semantic conventions, and then exports them to a custom OTLP backend.
    
    The previous instructions don't provide any backend, so you must set the backend configuration. 
-   - If you don't want to use a Secret, use the following command, and adjust the placeholders `myEndpoint` and `myToken` to your needs:
+   If you don't want to use a Secret, use the following command, and adjust the placeholders `myEndpoint` and `myToken` to your needs:
 
    ```bash
    helm upgrade metrics-gateway open-telemetry/opentelemetry-collector --version 0.47.0 --install --namespace $KYMA_NS \
@@ -116,7 +116,7 @@ prometheus.io/path: /myMetrics # optional, configure the path under which the me
 
 > **NOTE:** The agent can scrape endpoints even if the workload uses Istio and accepts only mTLS communication. Because the agent itself should not be part of the Service Mesh in order to observe the Service Mesh, the agent uses a sidecar but has no traffic interception enabled. Instead, it mounts the client certificate and uses the certificate natively for the communication. That is a [recommended approach](https://istio.io/latest/docs/ops/integrations/prometheus/#tls-settings) by Istio.
 
-To try it out, you can install the demo app taken from this [tutorial](https://github.com/kyma-project/examples/tree/main/prometheus/monitoring-custom-metrics) and annotate the workload with the annotations mentioned above.
+To try it out, you can install the demo app taken from the tutorial [Expose Custom Metrics in Kyma](https://github.com/kyma-project/examples/tree/main/prometheus/monitoring-custom-metrics) and annotate the workload with the annotations mentioned above.
 
 ```bash
 kubectl apply -n $KYMA_NS -f https://raw.githubusercontent.com/kyma-project/examples/main/prometheus/monitoring-custom-metrics/deployment/deployment.yaml
@@ -124,7 +124,7 @@ kubectl -n $KYMA_NS annotate service sample-metrics prometheus.io/scrape=true
 kubectl -n $KYMA_NS annotate service sample-metrics prometheus.io/port=8080
 ```
 
-The workload exposes a metric with name `cpu_temperature_celsius` at port `8080` and that metric should now automatically get ingested to your configured backend..
+The workload exposes the metric `cpu_temperature_celsius` at port `8080`, which is then automatically ingested to your configured backend.
 
 ### OpenTelemetry push-based
 
