@@ -38,13 +38,14 @@ Furthermore, the setup brings an OpenTelemetry Collector DaemonSet acting as age
     helm repo update
     ```
 
-## Install the gateway
+## Deploy the gateway
 
-1. Deploy the gateway.
+1. Deploy an Otel Collector using the upstream Helm chart with a prepared [values.yaml](./metrics-gateway-values.yaml) file.
 
-   Deploy an Otel Collector using the upstream Helm chart with a prepared [values](./metrics-gateway-values.yaml). The values file defines a pipeline for receiving OTLP metrics, enriches them with resource attributes that fulfil the Kubernetes semantic conventions, and then exports them to a custom OTLP backend.
+   The values file defines a pipeline for receiving OTLP metrics, enriches them with resource attributes that fulfil the Kubernetes semantic conventions, and then exports them to a custom OTLP backend.
    
-   The previous instructions don't provide any backend, so run the following command to set the backend configuration with placeholders `myEndpoint` and `myToken`. Adjust them to your needs. 
+   The previous instructions don't provide any backend, so you must set the backend configuration. 
+   - If you don't want to use a Secret, use the following command, and adjust the placeholders `myEndpoint` and `myToken` to your needs:
 
    ```bash
    helm upgrade metrics-gateway open-telemetry/opentelemetry-collector --version 0.47.0 --install --namespace $KYMA_NS \
@@ -53,9 +54,8 @@ Furthermore, the setup brings an OpenTelemetry Collector DaemonSet acting as age
      --set config.exporters.otlp.headers.Authorization="Bearer {myToken}"
    ```
 
-   _Alternative_
    
-   It's recommended that you provide tokens using a Secret. To achieve that, you can mount the relevant attributes of your secret via the `extraEnvs` parameter and use placeholders for referencing the actual env values. An example is provided at the [secret-values.yaml](./secret-values.yaml) file which can be adjusted to your specific secret and then used like that:
+   > **TIP:** It's recommended that you provide tokens using a Secret. To achieve that, you can mount the relevant attributes of your secret via the `extraEnvs` parameter and use placeholders for referencing the actual environment values. Take a look at the provided sample [secret-values.yaml](./secret-values.yaml) file, adjust it to your Secret, and run:
    ```bash
    helm upgrade metrics-gateway open-telemetry/opentelemetry-collector --version 0.47.0 --install --namespace $KYMA_NS \
      -f https://raw.githubusercontent.com/kyma-project/examples/main/metrics-otlp/metrics-gateway-values.yaml \
