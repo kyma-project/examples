@@ -1,0 +1,328 @@
+# possible values are documented here: https://github.com/open-telemetry/opentelemetry-helm-charts/blob/main/charts/opentelemetry-collector/values.yaml
+
+# Have a nicer name for the resources
+fullnameOverride: metrics-agent
+
+# Run as agent on every node
+mode: daemonset
+
+# actual otel controller configuration
+config:
+  receivers:
+    # Configures collection of kublet metrics
+    kubeletstats:
+      collection_interval: 30s
+    # Configures collection of node metrics
+    hostmetrics:
+      collection_interval: 30s
+    # Configures scraping of prometheus metrics by annotation
+    prometheus:
+      config:
+        scrape_configs:
+          # scrape collector itself
+          - job_name: telemetry-metric-agent
+            scrape_interval: 10s
+            static_configs:
+              - targets:
+                  - ${MY_POD_IP}:8888
+          # scrape all istio sidecars
+          - job_name: "istio-proxy"
+            metrics_path: /stats/prometheus
+            kubernetes_sd_configs:
+              - role: pod
+            relabel_configs:
+              - source_labels: [__meta_kubernetes_pod_node_name]
+                action: keep
+                regex: $NODE_NAME
+              - source_labels: [__meta_kubernetes_namespace]
+                action: drop
+                regex: kyma-system|kube-system
+              - source_labels: [__meta_kubernetes_pod_label_security_istio_io_tlsMode]
+                action: keep
+                regex: (istio)
+              - source_labels: [__meta_kubernetes_pod_container_port_name]
+                action: keep
+                regex: ".*-envoy-prom"
+            metric_relabel_configs:
+              - source_labels: [ __name__ ]
+                regex: "istio_.*"
+                action: keep
+          # scrape all services having prometheus annotation
+          - job_name: "service-endpoints"
+            kubernetes_sd_configs:
+              - role: endpoints
+            relabel_configs:
+              - source_labels: [__meta_kubernetes_endpoint_node_name]
+                action: keep
+                regex: $NODE_NAME
+              - source_labels: [__meta_kubernetes_namespace]
+                action: drop
+                regex: (kyma-system|kube-system)
+              - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scrape]
+                action: keep
+                regex: true
+              - source_labels: [__meta_kubernetes_pod_label_security_istio_io_tlsMode]
+                action: replace
+                target_label: __scheme__
+                replacement: https
+                regex: (istio)
+              - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scheme]
+                action: replace
+                target_label: __scheme__
+                regex: (https?)
+              - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_path]
+                action: replace
+                target_label: __metrics_path__
+                regex: (.+)
+              - source_labels: [__address__,__meta_kubernetes_service_annotation_prometheus_io_port]
+                action: replace
+                target_label: __address__
+                regex: ([^:]+)(?::\d+)?;(\d+)
+                replacement: $$1:$$2
+              - source_labels: [__meta_kubernetes_namespace]
+                action: replace
+                target_label: namespace
+              - source_labels: [__meta_kubernetes_service_name]
+                action: replace
+                target_label: service
+              - source_labels: [__meta_kubernetes_pod_name]
+                target_label: pod
+                action: replace
+              - source_labels: [__meta_kubernetes_pod_node_name]
+                action: replace
+                target_label: node
+            tls_config:
+              ca_file: /etc/istio-output-certs/root-cert.pem
+              cert_file: /etc/istio-output-certs/cert-chain.pem
+              insecure_skip_verify: true
+              key_file: /etc/istio-output-certs/key.pem
+          # scrape all pods having prometheus annotation
+          - job_name: "pod-endpoints"
+            kubernetes_sd_configs:
+              - role: pod
+            relabel_configs:
+              - source_labels: [__meta_kubernetes_endpoint_node_name]
+                action: keep
+                regex: $NODE_NAME
+              - source_labels: [__meta_kubernetes_namespace]
+                action: drop
+                regex: (kyma-system|kube-system)
+              - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+                action: keep
+                regex: true
+              - source_labels: [__meta_kubernetes_pod_label_security_istio_io_tlsMode]
+                action: replace
+                target_label: __scheme__
+                replacement: https
+                regex: (istio)
+              - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scheme]
+                action: replace
+                target_label: __scheme__
+                regex: (https?)
+              - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+                action: replace
+                target_label: __metrics_path__
+                regex: (.+)
+              - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+                action: replace
+                regex: ([^:]+)(?::\d+)?;(\d+)
+                replacement: $$1:$$2
+                target_label: __address__
+              - source_labels: [__meta_kubernetes_namespace]
+                action: replace
+                target_label: namespace
+              - source_labels: [__meta_kubernetes_pod_name]
+                action: replace
+                target_label: pod
+              - source_labels: [__meta_kubernetes_pod_node_name]
+                action: replace
+                target_label: node
+            tls_config:
+              ca_file: /etc/istio-output-certs/root-cert.pem
+              cert_file: /etc/istio-output-certs/cert-chain.pem
+              insecure_skip_verify: true
+              key_file: /etc/istio-output-certs/key.pem
+  extensions:
+    memory_ballast:
+      size_mib: "400"
+  processors:
+    # Configure batching of signals being exported
+    batch:
+      send_batch_max_size: 512
+      send_batch_size: 512
+      timeout: 1s
+    # Configure memory limits at which new signals should get rejected to not crash
+    memory_limiter:
+      check_interval: 1s
+      limit_mib: 750
+      spike_limit_mib: 100
+    # Configure to enrich prometheus metrics with a service name taken from the actual metric.service attribute
+    transform:
+      metric_statements:
+      - context: datapoint
+        statements:
+          - set(resource.attributes["service.name"], attributes["service"])
+    # Configure to remove wrong service instance id pointing to the collector
+    resource/1:
+      attributes:
+      - key: service.instance.id
+        action: delete
+    # Configure to enrich kubelet/host metrics with service name of the collector itself
+    resource/2:
+      attributes:
+      - key: service.name
+        value: metrics-agent
+        action: insert
+    # filter out kubelet metrics of system namespaces
+    filter:
+      metrics:
+        datapoint:
+        - 'resource.attributes["k8s.namespace.name"] == "kyma-system"'
+        - 'resource.attributes["k8s.namespace.name"] == "istio-system"'
+        - 'resource.attributes["k8s.namespace.name"] == "kube-system"'
+
+  exporters:
+    otlp:
+      # Provided via command line arguments
+      # ---------
+      #endpoint: metrics-gateway.$KYMA_NS:4317
+      tls:
+        insecure: true
+      retry_on_failure:
+        enabled: true
+        initial_interval: 5s
+        max_elapsed_time: 300s
+        max_interval: 30s
+      sending_queue:
+        enabled: true
+        queue_size: 512
+    # Configure an additional stdout logger. The verbosity level can be increased for troubleshooting
+    logging:
+      verbosity: normal # basic | normal | detailed
+
+  service:
+    # The actual pipelines
+    pipelines:
+      # Disable log ingestion
+      logs: null
+      # Disable trace ingestion
+      traces: null
+      # Enable a pipeline for metrics
+      # - receiving kublet and node metrics
+      # - enriching the metrics with resource attributes
+      # - exporting them batched with in-memory buffering and retry loop
+      metrics:
+        receivers:
+        - hostmetrics
+        - kubeletstats
+        processors:
+        - memory_limiter
+        - filter
+        - resource/2
+        - batch
+        exporters:
+        - otlp
+        - logging
+      # Enable a pipeline for metrics
+      # - scraping from annotated workload
+      # - enriching the metrics with resource attributes
+      # - exporting them batched with in-memory buffering and retry loop
+      metrics/2:
+        receivers:
+        - prometheus
+        processors:
+        - memory_limiter
+        - resource/1
+        - transform
+        - batch
+        exporters:
+        - otlp
+        - logging
+    telemetry:
+      # Configures the log level for the collector itself
+      logs:
+        level: info # info | debug
+
+# Inject the node name to scrape metrics belonging to the node only
+extraEnvs:
+  - name: NODE_NAME
+    valueFrom:
+      fieldRef:
+        fieldPath: spec.nodeName
+
+# Disabled trace specific ports coming with the helm chart
+ports:
+  jaeger-compact:
+    enabled: false
+  jaeger-thrift:
+    enabled: false
+  jaeger-grpc:
+    enabled: false
+  zipkin:
+    enabled: false
+
+# Adjust the resource settings to the batch and memory-limiter settings
+resources:
+  limits:
+    cpu: "1"
+    memory: 1Gi
+  requests:
+    cpu: 15m
+    memory: 50Mi
+
+# Tell the helm chart to pre-configure the host and kublet receiver with the typical defaults
+presets:
+  hostMetrics:
+    enabled: true
+  kubeletMetrics:
+    enabled: true
+
+# ServiceAccount needed for prometheus endpoint discovery
+serviceAccount:
+  create: true
+clusterRole:
+  create: true
+  rules:
+  - apiGroups:
+    - ""
+    resources:
+    - nodes
+    - nodes/metrics
+    - services
+    - endpoints
+    - pods
+    verbs:
+    - get
+    - list
+    - watch
+  - apiGroups:
+    - networking.k8s.io
+    resources:
+    - ingresses
+    verbs:
+    - get
+    - list
+    - watch
+  - nonResourceURLs:
+    - /metrics
+    - /metrics/cadvisor
+    verbs:
+    - get
+
+# annotations and mounts for scraping mTLS targets
+podAnnotations:
+  proxy.istio.io/config: |
+    # configure an env variable `OUTPUT_CERTS` to write certificates to the given folder
+    proxyMetadata:
+      OUTPUT_CERTS: /etc/istio-output-certs
+  sidecar.istio.io/inject: "true"
+  sidecar.istio.io/userVolumeMount: '[{"name": "istio-certs", "mountPath": "/etc/istio-output-certs"}]'
+  traffic.sidecar.istio.io/includeInboundPorts: ""
+  traffic.sidecar.istio.io/includeOutboundIPRanges: ""
+extraVolumeMounts:
+  - mountPath: /etc/istio-output-certs
+    name: istio-certs
+    readOnly: true
+extraVolumes:
+  - name: istio-certs
+    emptyDir: {}

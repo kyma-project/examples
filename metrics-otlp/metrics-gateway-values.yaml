@@ -1,0 +1,143 @@
+# possible values are documented here: https://github.com/open-telemetry/opentelemetry-helm-charts/blob/main/charts/opentelemetry-collector/values.yaml
+
+# Run as gateway
+mode: deployment
+
+# Have a nicer name for the resources
+fullnameOverride: "metrics-gateway"
+
+# actual otel controller configuration
+config:
+  receivers:
+    # Configure receiver for OTLP signals
+    otlp:
+      protocols:
+        grpc: {}
+        http: {}
+    # Configure scraping of the collector itself for monitoring
+    prometheus:
+      config:
+        scrape_configs:
+          - job_name: metrics-gateway
+            scrape_interval: 10s
+            static_configs:
+              - targets:
+                  - ${MY_POD_IP}:8888
+  extensions:
+    memory_ballast:
+      size_mib: "400"
+  processors:
+    # Configure batching of signals being exported
+    batch:
+      send_batch_max_size: 512
+      send_batch_size: 512
+      timeout: 1s
+    # Configure memory limits at which new signals should get rejected to not crash
+    memory_limiter:
+      check_interval: 1s
+      limit_percentage: 75
+      spike_limit_percentage: 10
+    # Configure to enrich metrics with typical resource attributes if not present yet
+    k8sattributes:
+      extract:
+        metadata:
+        - k8s.pod.name
+        - k8s.node.name
+        - k8s.namespace.name
+        - k8s.deployment.name
+        - k8s.statefulset.name
+        - k8s.daemonset.name
+        - k8s.cronjob.name
+        - k8s.job.name
+    # Configure to enrich metrics with a cluster name if not present yet
+    resource:
+      attributes:
+      - action: insert
+        key: k8s.cluster.name
+        value: ${KUBERNETES_SERVICE_HOST}
+  exporters:
+    # Configure the actual OTLP exporter
+    otlp:
+      # Provided via command line arguments
+      # ---------
+      # endpoint: <HOST>:4317
+      # headers:
+      #  Authorization: Bearer myToken
+      timeout: 5s
+      retry_on_failure:
+        enabled: true
+        initial_interval: 5s
+        max_elapsed_time: 300s
+        max_interval: 30s
+      sending_queue:
+        enabled: true
+        queue_size: 512
+    # Configure an additional stdout logger. The verbosity level can be increased for troubleshooting
+    logging:
+      verbosity: normal # basic | normal | detailed
+  service:
+    # The actual pipelines
+    pipelines:
+      # Disable log ingestion
+      logs: null
+      # Disable traces ingestion
+      traces: null
+      # Enable a pipeline for metrics
+      # - receiving OTLP metrics and self-scraped metrics
+      # - enriching the metrics with resource attributes
+      # - exporting them batched with in-memory buffering and retry loop
+      metrics:
+        receivers:
+          - otlp
+          - prometheus
+        processors:
+          - memory_limiter
+          - k8sattributes
+          - resource
+          - batch
+        exporters:
+          - otlp
+          - logging
+    # Configures the log level for the collector itself
+    telemetry:
+      logs:
+        level: info #info | debug
+
+# ServiceAccount required for k8s-attribute-processor
+serviceAccount:
+  create: true
+clusterRole:
+  create: true
+  rules:
+  - apiGroups: [""]
+    resources: ["pods", "namespaces"]
+    verbs: ["get", "watch", "list"]
+
+# Disabled istio sidecar injection
+podLabels:
+  sidecar.istio.io/inject: "false"
+
+# Disabled trace specific ports coming with the helm chart
+ports:
+  jaeger-compact:
+    enabled: false
+  jaeger-thrift:
+    enabled: false
+  jaeger-grpc:
+    enabled: false
+  zipkin:
+    enabled: false
+
+# Adjust the resource settings to the batch and memory-limiter settings
+resources:
+  limits:
+    cpu: "1"
+    memory: 1Gi
+  requests:
+    cpu: 15m
+    memory: 50Mi
+
+# Tell the helm chart to pre-configure the attribute processor with the typical defaults
+presets:
+  kubernetesAttributes:
+    enabled: true
