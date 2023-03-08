@@ -62,6 +62,10 @@ To [enable Istio](https://kyma-project.io/docs/kyma/main/01-overview/main-areas/
    EOF
    ```
 
+### Activate a Kyma MetricPipeline
+
+TODO: Add documentation after https://github.com/kyma-project/telemetry-manager/pull/62 is merged.
+
 ### Install the application
 
 Run the Helm upgrade command, which installs the chart if not present yet.
