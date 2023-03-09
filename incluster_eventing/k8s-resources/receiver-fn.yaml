@@ -6,7 +6,7 @@ metadata:
     name: event-receiver
     namespace: default
 spec:
-    runtime: nodejs16
+    runtime: nodejs18
     source:
       gitRepository: 
         url: https://github.com/kyma-project/examples.git
