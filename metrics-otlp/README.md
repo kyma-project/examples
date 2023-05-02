@@ -48,7 +48,7 @@ Furthermore, the setup brings an OpenTelemetry Collector DaemonSet acting as age
    If you don't want to use a Secret, use the following command, and adjust the placeholders `myEndpoint` and `myToken` to your needs:
 
    ```bash
-   helm upgrade metrics-gateway open-telemetry/opentelemetry-collector --version 0.47.0 --install --namespace $KYMA_NS \
+   helm upgrade metrics-gateway open-telemetry/opentelemetry-collector --version 0.55.1 --install --namespace $KYMA_NS \
      -f https://raw.githubusercontent.com/kyma-project/examples/main/metrics-otlp/metrics-gateway-values.yaml \
      --set config.exporters.otlp.endpoint="{myEndpoint}" \
      --set config.exporters.otlp.headers.Authorization="Bearer {myToken}"
@@ -57,7 +57,7 @@ Furthermore, the setup brings an OpenTelemetry Collector DaemonSet acting as age
    
    > **TIP:** It's recommended that you provide tokens using a Secret. To achieve that, you can mount the relevant attributes of your secret via the `extraEnvs` parameter and use placeholders for referencing the actual environment values. Take a look at the provided sample [secret-values.yaml](./secret-values.yaml) file, adjust it to your Secret, and run:
    ```bash
-   helm upgrade metrics-gateway open-telemetry/opentelemetry-collector --version 0.47.0 --install --namespace $KYMA_NS \
+   helm upgrade metrics-gateway open-telemetry/opentelemetry-collector --version 0.55.1 --install --namespace $KYMA_NS \
      -f https://raw.githubusercontent.com/kyma-project/examples/main/metrics-otlp/metrics-gateway-values.yaml \
      -f secret-values.yaml
    ```

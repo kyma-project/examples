@@ -15,7 +15,7 @@ config:
         grpc: {}
         http: {}
     # Configure scraping of the collector itself for monitoring
-    prometheus:
+    prometheus/self:
       config:
         scrape_configs:
           - job_name: metrics-gateway
@@ -50,7 +50,7 @@ config:
         - k8s.cronjob.name
         - k8s.job.name
     # Configure to enrich metrics with a cluster name if not present yet
-    resource:
+    resource/insert-cluster:
       attributes:
       - action: insert
         key: k8s.cluster.name
@@ -89,11 +89,11 @@ config:
       metrics:
         receivers:
           - otlp
-          - prometheus
+          - prometheus/self
         processors:
           - memory_limiter
           - k8sattributes
-          - resource
+          - resource/insert-cluster
           - batch
         exporters:
           - otlp

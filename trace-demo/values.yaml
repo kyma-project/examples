@@ -1,12 +1,11 @@
-observability:
-  otelcol:
-    enabled: false
-  jaeger:
-    enabled: false
-  prometheus:
-    enabled: false
-  grafana:
-    enabled: false
+opentelemetry-collector:
+  enabled: false
+jaeger:
+  enabled: false
+prometheus:
+  enabled: false
+grafana:
+  enabled: false
 
 components:
   redis:
@@ -17,6 +16,12 @@ components:
     envOverrides:
       - name: OTEL_EXPORTER_OTLP_ENDPOINT
         value: 'http://telemetry-otlp-traces.kyma-system:4317'
+    initContainers:
+      - name: wait-for-kafka
+        image: busybox:latest
+        command: ['sh', '-c', 'until nc -z -v -w30 {{ include "otel-demo.name" . }}-kafka 9092; do echo waiting for kafka; sleep 2; done;']
+        securityContext:
+          runAsUser: 1337
 
   adService:
     enabled: true
@@ -29,12 +34,24 @@ components:
     envOverrides:
       - name: OTEL_EXPORTER_OTLP_ENDPOINT
         value: 'http://telemetry-otlp-traces.kyma-system:4317'
+    initContainers:
+      - name: wait-for-redis
+        image: busybox:latest
+        command: ['sh', '-c', 'until nc -z -v -w30 {{ include "otel-demo.name" . }}-redis 6379; do echo waiting for redis; sleep 2; done;']
+        securityContext:
+          runAsUser: 1337
 
   checkoutService:
     enabled: true
     envOverrides:
       - name: OTEL_EXPORTER_OTLP_ENDPOINT
         value: 'http://telemetry-otlp-traces.kyma-system:4317'
+    initContainers:
+      - name: wait-for-kafka
+        image: busybox:latest
+        command: ['sh', '-c', 'until nc -z -v -w30 {{ include "otel-demo.name" . }}-kafka 9092; do echo waiting for kafka; sleep 2; done;']
+        securityContext:
+          runAsUser: 1337
 
   currencyService:
     enabled: true
@@ -55,12 +72,30 @@ components:
     envOverrides:
       - name: OTEL_EXPORTER_OTLP_ENDPOINT
         value: 'http://telemetry-otlp-traces.kyma-system:4317'
+    initContainers:
+      - name: wait-for-ffspostgres
+        image: busybox:latest
+        command: ['sh', '-c', 'until nc -z -v -w30 {{ include "otel-demo.name" . }}-ffspostgres 5432; do echo waiting for ffspostgres; sleep 2; done']
+        securityContext:
+          runAsUser: 1337
 
   ffsPostgres:
     enabled: true
     envOverrides:
       - name: OTEL_EXPORTER_OTLP_ENDPOINT
         value: 'http://telemetry-otlp-traces.kyma-system:4317'
+
+  frauddetectionService:
+    enabled: true
+    envOverrides:
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: 'http://telemetry-otlp-traces.kyma-system:4317'
+    initContainers:
+      - name: wait-for-kafka
+        image: busybox:latest
+        command: ['sh', '-c', 'until nc -z -v -w30 {{ include "otel-demo.name" . }}-kafka 9092; do echo waiting for kafka; sleep 2; done;']
+        securityContext:
+          runAsUser: 1337
 
   frontend:
     enabled: true
