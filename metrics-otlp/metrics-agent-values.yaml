@@ -15,40 +15,65 @@ config:
     # Configures collection of node metrics
     hostmetrics:
       collection_interval: 30s
-    # Configures scraping of prometheus metrics by annotation
-    prometheus:
+    # Configures scraping of prometheus metrics of collector itself
+    prometheus/self:
       config:
         scrape_configs:
-          # scrape collector itself
-          - job_name: telemetry-metric-agent
+          - job_name: metrics-agent
             scrape_interval: 10s
             static_configs:
               - targets:
                   - ${MY_POD_IP}:8888
-          # scrape all istio sidecars
+    # Configures scraping of prometheus metrics from istio sidecar
+    prometheus/istio:
+      config:
+        scrape_configs:
           - job_name: "istio-proxy"
             metrics_path: /stats/prometheus
             kubernetes_sd_configs:
-              - role: pod
+              - role: endpoints
             relabel_configs:
-              - source_labels: [__meta_kubernetes_pod_node_name]
+              - source_labels:
+                - __meta_kubernetes_endpoint_node_name
                 action: keep
                 regex: $NODE_NAME
-              - source_labels: [__meta_kubernetes_namespace]
+              - source_labels:
+                - __meta_kubernetes_namespace
                 action: drop
                 regex: kyma-system|kube-system
-              - source_labels: [__meta_kubernetes_pod_label_security_istio_io_tlsMode]
+              - source_labels:
+                - __meta_kubernetes_pod_label_security_istio_io_tlsMode
                 action: keep
                 regex: (istio)
-              - source_labels: [__meta_kubernetes_pod_container_port_name]
+              - source_labels:
+                - __meta_kubernetes_pod_container_port_name
                 action: keep
-                regex: ".*-envoy-prom"
+                regex: .*-envoy-prom
+              - source_labels:
+                - __meta_kubernetes_namespace
+                action: replace
+                target_label: namespace
+              - source_labels:
+                - __meta_kubernetes_service_name
+                action: replace
+                target_label: service
+              - source_labels:
+                - __meta_kubernetes_pod_name
+                action: replace
+                target_label: pod
+              - source_labels:
+                - __meta_kubernetes_pod_node_name
+                action: replace
+                target_label: node
             metric_relabel_configs:
               - source_labels: [ __name__ ]
                 regex: "istio_.*"
                 action: keep
-          # scrape all services having prometheus annotation
-          - job_name: "service-endpoints"
+    # Configures scraping of prometheus metrics from annotated services
+    prometheus/app-services:
+      config:
+        scrape_configs:
+          - job_name: "app-services"
             kubernetes_sd_configs:
               - role: endpoints
             relabel_configs:
@@ -96,12 +121,15 @@ config:
               cert_file: /etc/istio-output-certs/cert-chain.pem
               insecure_skip_verify: true
               key_file: /etc/istio-output-certs/key.pem
-          # scrape all pods having prometheus annotation
-          - job_name: "pod-endpoints"
+    # Configures scraping of prometheus metrics from annotated pods
+    prometheus/app-pods:
+      config:
+        scrape_configs:
+          - job_name: "app-pods"
             kubernetes_sd_configs:
               - role: pod
             relabel_configs:
-              - source_labels: [__meta_kubernetes_endpoint_node_name]
+              - source_labels: [__meta_kubernetes_pod_node_name]
                 action: keep
                 regex: $NODE_NAME
               - source_labels: [__meta_kubernetes_namespace]
@@ -157,26 +185,28 @@ config:
       limit_mib: 750
       spike_limit_mib: 100
     # Configure to enrich prometheus metrics with a service name taken from the actual metric.service attribute
-    transform:
+    transform/copy-service:
       metric_statements:
       - context: datapoint
         statements:
           - set(resource.attributes["service.name"], attributes["service"])
-    # Configure to remove wrong service instance id pointing to the collector
-    resource/1:
+    # Configure to enrich host metrics with service name of the collector itself
+    resource/insert-host-service:
       attributes:
-      - key: service.instance.id
-        action: delete
-    # Configure to enrich kubelet/host metrics with service name of the collector itself
-    resource/2:
+      - action: insert
+        key: service.name
+        value: metrics-agent-host
+    # Configure to enrich kubelet metrics with service name of the collector itself
+    resource/insert-kublet-service:
       attributes:
-      - key: service.name
-        value: metrics-agent
-        action: insert
+      - action: insert
+        key: service.name
+        value: metrics-agent-kubelet
     # filter out kubelet metrics of system namespaces
     filter:
       metrics:
         datapoint:
+        - 'resource.attributes["k8s.namespace.name"] == "compass-system"'
         - 'resource.attributes["k8s.namespace.name"] == "kyma-system"'
         - 'resource.attributes["k8s.namespace.name"] == "istio-system"'
         - 'resource.attributes["k8s.namespace.name"] == "kube-system"'
@@ -197,7 +227,11 @@ config:
         enabled: true
         queue_size: 512
     # Configure an additional stdout logger. The verbosity level can be increased for troubleshooting
-    logging:
+    logging/kubelet:
+      verbosity: normal # basic | normal | detailed
+    logging/host:
+      verbosity: normal # basic | normal | detailed
+    logging/prometheus:
       verbosity: normal # basic | normal | detailed
 
   service:
@@ -207,37 +241,44 @@ config:
       logs: null
       # Disable trace ingestion
       traces: null
-      # Enable a pipeline for metrics
-      # - receiving kublet and node metrics
-      # - enriching the metrics with resource attributes
-      # - exporting them batched with in-memory buffering and retry loop
+      # Enable a pipeline for kubelet metrics
       metrics:
         receivers:
-        - hostmetrics
         - kubeletstats
         processors:
         - memory_limiter
         - filter
-        - resource/2
+        - resource/insert-kublet-service
         - batch
         exporters:
         - otlp
-        - logging
-      # Enable a pipeline for metrics
-      # - scraping from annotated workload
-      # - enriching the metrics with resource attributes
-      # - exporting them batched with in-memory buffering and retry loop
-      metrics/2:
+        - logging/kubelet
+      # Enable a pipeline for host metrics
+      metrics/1:
         receivers:
-        - prometheus
+        - hostmetrics
         processors:
         - memory_limiter
-        - resource/1
-        - transform
+        - resource/insert-host-service
+        - filter
         - batch
         exporters:
         - otlp
-        - logging
+        - logging/host
+      # Enable a pipeline for metrics scraping
+      metrics/2:
+        receivers:
+        - prometheus/self
+        - prometheus/istio
+        - prometheus/app-services
+        - prometheus/app-pods
+        processors:
+        - memory_limiter
+        - transform/copy-service
+        - batch
+        exporters:
+        - otlp
+        - logging/prometheus
     telemetry:
       # Configures the log level for the collector itself
       logs:
