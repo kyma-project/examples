@@ -7,12 +7,6 @@ prometheusOperator:
   kubeletService:
     enabled: false
 
-  # disable admission webhooks to do not interfere with the Kyma monitoring stack
-  admissionWebhooks:
-    enabled: false
-  tls:
-    enabled: false
-
 # change the port of the node-export to be different from the one used by the Kyma monitoring stack
 prometheus-node-exporter:
   service:
