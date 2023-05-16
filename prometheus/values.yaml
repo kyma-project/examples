@@ -7,7 +7,7 @@ prometheusOperator:
   kubeletService:
     enabled: false
 
-# change the port of the node-export to be different from the one used by the Kyma monitoring stack
+# change the port of the node-exporter to be different from the one used by the Kyma monitoring stack
 prometheus-node-exporter:
   service:
     port: 9101
