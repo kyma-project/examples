@@ -1,0 +1,138 @@
+opentelemetry-collector:
+  enabled: false
+jaeger:
+  enabled: false
+prometheus:
+  enabled: false
+grafana:
+  enabled: false
+
+components:
+  redis:
+    enabled: true
+
+  accountingService:
+    enabled: true
+    envOverrides:
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: 'http://otel-collector.${KYMA_NS}:4317'
+    initContainers:
+      - name: wait-for-kafka
+        image: busybox:latest
+        command: ['sh', '-c', 'until nc -z -v -w30 {{ include "otel-demo.name" . }}-kafka 9092; do echo waiting for kafka; sleep 2; done;']
+        securityContext:
+          runAsUser: 1337
+
+  adService:
+    enabled: true
+    envOverrides:
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: 'http://otel-collector.${KYMA_NS}:4317'
+
+  cartService:
+    enabled: true
+    envOverrides:
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: 'http://otel-collector.${KYMA_NS}:4317'
+    initContainers:
+      - name: wait-for-redis
+        image: busybox:latest
+        command: ['sh', '-c', 'until nc -z -v -w30 {{ include "otel-demo.name" . }}-redis 6379; do echo waiting for redis; sleep 2; done;']
+        securityContext:
+          runAsUser: 1337
+
+  checkoutService:
+    enabled: true
+    envOverrides:
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: 'http://otel-collector.${KYMA_NS}:4317'
+    initContainers:
+      - name: wait-for-kafka
+        image: busybox:latest
+        command: ['sh', '-c', 'until nc -z -v -w30 {{ include "otel-demo.name" . }}-kafka 9092; do echo waiting for kafka; sleep 2; done;']
+        securityContext:
+          runAsUser: 1337
+
+  currencyService:
+    enabled: true
+    envOverrides:
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: 'http://otel-collector.${KYMA_NS}:4317'
+
+  emailService:
+    enabled: true
+    envOverrides:
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: 'http://otel-collector.${KYMA_NS}:4317'
+
+  featureflagService:
+    enabled: true
+    envOverrides:
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: 'http://otel-collector.${KYMA_NS}:4317'
+    initContainers:
+      - name: wait-for-ffspostgres
+        image: busybox:latest
+        command: ['sh', '-c', 'until nc -z -v -w30 {{ include "otel-demo.name" . }}-ffspostgres 5432; do echo waiting for ffspostgres; sleep 2; done']
+        securityContext:
+          runAsUser: 1337
+
+  ffsPostgres:
+    enabled: true
+    envOverrides:
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: 'http://otel-collector.${KYMA_NS}:4317'
+
+  frauddetectionService:
+    enabled: true
+    envOverrides:
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: 'http://otel-collector.${KYMA_NS}:4317'
+    initContainers:
+      - name: wait-for-kafka
+        image: busybox:latest
+        command: ['sh', '-c', 'until nc -z -v -w30 {{ include "otel-demo.name" . }}-kafka 9092; do echo waiting for kafka; sleep 2; done;']
+        securityContext:
+          runAsUser: 1337
+
+  frontend:
+    enabled: true
+    envOverrides:
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: 'http://otel-collector.${KYMA_NS}:4317'
+
+  loadgenerator:
+    enabled: true
+    envOverrides:
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: 'http://otel-collector.${KYMA_NS}:4317'
+
+  paymentService:
+    enabled: true
+    envOverrides:
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: 'http://otel-collector.${KYMA_NS}:4317'
+
+  productCatalogService:
+    enabled: true
+    envOverrides:
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: 'http://otel-collector.${KYMA_NS}:4317'
+
+  recommendationService:
+    enabled: true
+    envOverrides:
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: 'http://otel-collector.${KYMA_NS}:4317'
+
+  shippingService:
+    enabled: true
+    envOverrides:
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: 'http://otel-collector.${KYMA_NS}:4317'
+
+  quoteService:
+    enabled: true
+    envOverrides:
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: 'http://otel-collector.${KYMA_NS}:4317'

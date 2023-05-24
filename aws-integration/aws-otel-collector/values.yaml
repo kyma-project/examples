@@ -1,0 +1,136 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: otel-collector
+  namespace: ${KYMA_NS}
+data:
+  collector.conf: |
+    receivers:
+      prometheus:
+        config:
+          scrape_configs:
+            - job_name: otel-collector
+              scrape_interval: 5s
+              static_configs:
+                - targets: [localhost:8888]
+      otlp:
+        protocols:
+          grpc:
+          http:
+    processors:
+      memory_limiter:
+        limit_mib: 50
+        check_interval: 1s
+      batch/traces:
+        timeout: 1s
+        send_batch_size: 50
+    exporters:
+      awsxray:
+        region: ${AWS_REGION}
+      awsemf:
+        region: ${AWS_REGION}
+      logging/metrics:
+        verbosity: basic
+      logging/traces:
+        verbosity: basic
+    extensions:
+      health_check:
+      pprof:
+      zpages:
+    service:
+      extensions: [health_check, pprof, zpages]
+      pipelines:
+        traces:
+          receivers: [otlp]
+          processors: [memory_limiter, batch/traces]
+          exporters: [awsxray, logging/traces]
+        metrics:
+          receivers: [otlp, prometheus]
+          exporters: [awsemf, logging/metrics]
+      telemetry:
+        logs:
+          level: "debug"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: otel-collector
+  namespace: ${KYMA_NS}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: otel-collector
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: otel-collector
+    spec:
+      containers:
+      - name: collector
+        args:
+        - --config=/conf/collector.conf
+        env:
+        - name: MY_POD_IP
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: status.podIP
+        envFrom:
+        - secretRef:
+            name: aws-credentials
+        image: public.ecr.aws/aws-observability/aws-otel-collector:latest
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            cpu: "1"
+            memory: 1Gi
+          requests:
+            cpu: 25m
+            memory: 32Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          privileged: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 10001
+          seccompProfile:
+            type: RuntimeDefault
+        volumeMounts:
+        - mountPath: /conf
+          name: config
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      volumes:
+      - configMap:
+          defaultMode: 420
+          items:
+          - key: collector.conf
+            path: collector.conf
+          name: otel-collector
+        name: config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: otel-collector
+  name: otel-collector
+  namespace: ${KYMA_NS}
+spec:
+  ports:
+  - name: grpc-collector
+    port: 4317
+    protocol: TCP
+    targetPort: 4317
+  selector:
+    app.kubernetes.io/name: otel-collector
+  sessionAffinity: None
+  type: ClusterIP

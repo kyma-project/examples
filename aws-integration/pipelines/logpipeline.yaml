@@ -1,0 +1,31 @@
+apiVersion: telemetry.kyma-project.io/v1alpha1
+kind: LogPipeline
+metadata:
+  name: aws-cloudwatch
+spec:
+  input:
+    application:
+      namespaces:
+        system: true
+  output:
+    custom: |
+      Name cloudwatch_logs
+      region ${AWS_REGION}
+      auto_create_group On
+      log_group_name fallback-group
+      log_stream_prefix fallback-stream
+      log_group_template $cluster_identifier
+      log_stream_template $kubernetes['namespace_name'].$kubernetes['pod_name'].$kubernetes['container_name']
+  variables:
+    - name: AWS_ACCESS_KEY_ID
+      valueFrom:
+        secretKeyRef:
+          name: aws-credentials
+          namespace: ${KYMA_NS}
+          key: AWS_ACCESS_KEY_ID
+    - name: AWS_SECRET_ACCESS_KEY
+      valueFrom:
+        secretKeyRef:
+          name: aws-credentials
+          namespace: ${KYMA_NS}
+          key: AWS_SECRET_ACCESS_KEY
