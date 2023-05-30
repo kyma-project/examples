@@ -3,10 +3,6 @@ kind: LogPipeline
 metadata:
   name: aws-cloudwatch
 spec:
-  input:
-    application:
-      namespaces:
-        system: true
   output:
     custom: |
       Name cloudwatch_logs
@@ -21,11 +17,17 @@ spec:
       valueFrom:
         secretKeyRef:
           name: aws-credentials
-          namespace: ${KYMA_NS}
+          namespace: aws-integration
           key: AWS_ACCESS_KEY_ID
     - name: AWS_SECRET_ACCESS_KEY
       valueFrom:
         secretKeyRef:
           name: aws-credentials
-          namespace: ${KYMA_NS}
+          namespace: aws-integration
           key: AWS_SECRET_ACCESS_KEY
+    - name: AWS_REGION
+      valueFrom:
+        secretKeyRef:
+          name: aws-credentials
+          namespace: aws-integration
+          key: AWS_REGION

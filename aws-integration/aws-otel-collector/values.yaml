@@ -3,7 +3,6 @@ kind: ConfigMap
 metadata:
   creationTimestamp: null
   name: otel-collector
-  namespace: ${KYMA_NS}
 data:
   collector.conf: |
     receivers:
@@ -56,7 +55,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: otel-collector
-  namespace: ${KYMA_NS}
 spec:
   replicas: 1
   selector:
@@ -123,7 +121,6 @@ metadata:
   labels:
     app.kubernetes.io/name: otel-collector
   name: otel-collector
-  namespace: ${KYMA_NS}
 spec:
   ports:
   - name: grpc-collector
