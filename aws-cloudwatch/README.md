@@ -1,9 +1,8 @@
-# Connect AWS X-Ray and CloudWatch to kyma
+# Integrate Kyma with AWS CloudWatch
 
 ## Overview 
 
-Sometimes you may want to transfer your logs, metrics and traces to other systems as well. Kyma provides a possibility to integrate it with some of the AWS components by deploying a custom OTEL Collector which would collect traces, logs, and metrics from kyma system and forward them to the AWS. In order to do this, we recommend you to use [AWS distribution](https://aws-otel.github.io) for OTEL Collector. 
-In this tutorial we will show you how to deploy OTEL Collector in order to connect Kyma observability 
+The Kyma Telemetry module supports you in integrating with observability backends in a convenient way. This example outlines how to integrate with [AWS CloudWatch](https://aws.amazon.com/cloudwatch) as a backend. As CloudWatch is not supporting OTLP ingestion natively, it will require to deploy the [AWS Distro for OpenTelemetry](https://aws-otel.github.io) additionally. 
 
 ## Prerequisistes 
 
@@ -23,10 +22,6 @@ In this tutorial we will show you how to deploy OTEL Collector in order to conne
 1. If you don't have created a Namespace yet, do it now:
     ```bash
     kubectl create namespace $KYMA_NS
-    ```
-1. Export the AWS region you want to use as variable. Replace `{NAMESPACE}` placeholder in the following command and run it:
-    ```bash
-    export AWS_REGION="{NAMESPACE}"
     ```
 
 ### Create AWS IAM User
@@ -58,13 +53,12 @@ After creating the IAM Policies, we can finally create an IAM User:
 1. Select `Application running outside AWS` and then click `Next`
 1. Describe the purpose of this access key and click `Create access key`
 1. Now copy and save `Access key` and `Secret access key`
-1. Encode the keys into base64 encoding
 
 ### Create a secret with AWS Credentials
 
 In order to connect OTEL Collector to AWS we need to define security credentials in the kyma system. 
 
-1. In the [values.yaml](./aws-secret/values.yaml), replace the `{KEY_ID_BASE64}` and `{KEY_SECRET_BASE64}` to your encoded access keys 
+1. In the [values.yaml](./aws-secret/values.yaml), replace the `{ACCESS_KEY}` and `{SECRET_ACCESS_KEY}` to your access keys, and `{AWS_REGION}` with the AWS region you want to use
 2. Now, create the secret by using 
     ```bash
     kubectl apply -f ./aws-secret/values.yaml
@@ -76,7 +70,7 @@ After creating a secret and configuering AWS, we can finally deploy an Otel Coll
 
 1. Deploy an OTEL Collector by calling 
     ```bash
-    kubectl apply -f ./aws-otel-collector/values.yaml
+    kubectl -n $KYMA_NS apply -f ./aws-otel-collector/values.yaml
     ```
 
 ### Create pipelines
@@ -87,11 +81,11 @@ After deploying OTEL Collector itself, you should deploy logpipeline, tracepipel
     ```bash
     kubectl apply -f ./pipelines/logpipeline.yaml
     ```
-1. Deploy a tracepipeline by calling 
+1. Replace `{NAMESPACE}` and deploy a tracepipeline by calling 
     ```bash
     kubectl apply -f ./pipelines/tracepipeline.yaml
     ```
-1. Deploy a metricpipeline by calling 
+1. Replace `{NAMESPACE}` and deploy a metricpipeline by calling 
     ```bash
     kubectl apply -f ./pipelines/metricpipeline.yaml
     ```
@@ -100,12 +94,16 @@ After deploying OTEL Collector itself, you should deploy logpipeline, tracepipel
 
 In order to verify the results of CloudWatch and X-Ray we will deploy sample applications for each service accordingly.
 
-### Verifying X-Ray trace arrival 
+### Verifying CloudWatch traces, logs, and metrics arrival 
 
-In order to deploy sample app which generates traces:
+In order to deploy sample app which generates traces that we took from [aws-otel tutorial](https://docs.aws.amazon.com/eks/latest/userguide/sample-app.html):
+1. Deploy traffic generator app
+    ```bash
+    kubectl apply -n ${KYMA_NS} -f ./trace-sample-app/traffic-generator.yaml
+    ```
 1. Deploy an app using 
     ```bash
-    kubectl apply -n ${KYMA_NS} -f ./trace-sample-app/values.yaml
+    kubectl apply -n ${KYMA_NS} -f ./trace-sample-app/sample-app.yaml
     ```
 1. Port-forward an application in order to be able to access it by calling 
     ```bash
@@ -113,20 +111,8 @@ In order to deploy sample app which generates traces:
     ```
 1. Make some requests to the application like `localhost:4567` or `localhost:4567/outgoing-http-call`
 1. Go to the `AWS X-Ray` tab, and check out the `Traces` section
-
-### Verifying CloudWatch logs and metrics arrival
-
-In order to deploy sample app which generates logs and metrics, we can use OpenTelemetry example. 
-1. Execute 
-    ```bash
-    helm upgrade --version 0.22.2 --install --create-namespace -n ${KYMA_NS} otel-collector open-telemetry/opentelemetry-demo -f ./open-telemetry-sample-app/values.yaml
-    ```
-1. You can port-forward this application in order to access it via browser by calling 
-    ```bash
-    kubectl -n ${KYMA_NS} port-forward svc/otel-collector-frontend 8080
-    ```
-    and going to the `localhost:8080`
-1. Now, you can go to `AWS CloudWatch` and look at the main dashboard. There should be logs and metrics arriving
+1. To verify the logs, you can go to `AWS CloudWatch`, then open the `Log groups` and select your cluster. Now, you can open `aws-integration.sample-app-*` and check out the logs of your application.
+1. To verify metrics, you can go to the `All metrics`, and open the `aws-integration/otel-collector`
 
 ### Creating the dashboard to observe incoming metrics and logs
 
