@@ -61,7 +61,7 @@ In order to connect OTEL Collector to AWS we need to define security credentials
 1. In the [values.yaml](./aws-secret/values.yaml), replace the `{ACCESS_KEY}` and `{SECRET_ACCESS_KEY}` to your access keys, and `{AWS_REGION}` with the AWS region you want to use
 2. Now, create the secret by using 
     ```bash
-    kubectl apply -f ./aws-secret/values.yaml
+    kubectl apply -f ./aws-secret/aws-secret.yaml
     ```
 
 ### Deploy an OTEL Collector
@@ -70,7 +70,7 @@ After creating a secret and configuering AWS, we can finally deploy an Otel Coll
 
 1. Deploy an OTEL Collector by calling 
     ```bash
-    kubectl -n $KYMA_NS apply -f ./aws-otel-collector/values.yaml
+    kubectl -n $KYMA_NS apply -f ./aws-otel-collector/aws-otel.yaml
     ```
 
 ### Create pipelines
