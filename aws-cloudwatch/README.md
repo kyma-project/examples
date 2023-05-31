@@ -122,3 +122,12 @@ In order to create a dashboard, you should:
 1. Select the widget type and click `Next`
 1. Select what you want to observe, either metrics or logs, and click `Next`
 1. Decide on which metrics and logs to include and click `Create widget`
+
+## AWS OTEL Collector and TraceId specifics
+
+Currently, there is no mechanism to properly convert TraceId from W3C context into the AWS TraceId format. Because of that, your application should emit traces with ids of the format compatible with AWS TraceId. In order to do that, you can use one of the available ADOT SDKs:
+* [Go](https://aws-otel.github.io/docs/getting-started/go-sdk)
+* [Java](https://aws-otel.github.io/docs/getting-started/java-sdk)
+* [JavaScript](https://aws-otel.github.io/docs/getting-started/javascript-sdk)
+* [.NET](https://aws-otel.github.io/docs/getting-started/dotnet-sdk)
+* [Python](https://aws-otel.github.io/docs/getting-started/python-sdk)

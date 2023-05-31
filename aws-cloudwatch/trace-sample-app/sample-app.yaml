@@ -41,10 +41,12 @@ spec:
                   key: AWS_REGION
             - name: LISTEN_ADDRESS
               value: 0.0.0.0:4567
-            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+            - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
               value: http://telemetry-otlp-traces.kyma-system:4317
+            - name: OTEL_EXPORTER_OTLP_METRICS_ENDPOINT
+              value: http://telemetry-otlp-metrics.kyma-system:4317
             - name: OTEL_RESOURCE_ATTRIBUTES
-              value: service.namespace=kyma-system,service.name=telemetry-otlp-traces
+              value: service.namespace=sample-app-namespace,service.name=sample-app
           image: public.ecr.aws/aws-otel-test/aws-otel-java-spark:1.17.0
           name: sample-app
           ports:
