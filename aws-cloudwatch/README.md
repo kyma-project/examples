@@ -4,6 +4,8 @@
 
 The Kyma Telemetry module supports you in integrating with observability backends in a convenient way. This example outlines how to integrate with [AWS CloudWatch](https://aws.amazon.com/cloudwatch) as a backend. As CloudWatch is not supporting OTLP ingestion natively, it will require to deploy the [AWS Distro for OpenTelemetry](https://aws-otel.github.io) additionally. 
 
+![overview](./integration-diagram.svg)
+
 ## Prerequisistes 
 
 - Kyma as the target deployment environment
