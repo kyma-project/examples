@@ -72,12 +72,27 @@ helm upgrade --install --create-namespace -n ${KYMA_NS} ${HELM_LOKI_RELEASE} gra
    helm upgrade --install --create-namespace -n ${KYMA_NS} ${HELM_LOKI_RELEASE} grafana/loki-stack -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/loki-values.yaml --set promtail.enabled=false
    ```
 
-2. Download the [LogPipeline](logpipeline.yaml) and replace the `{HELM_LOKI_RELEASE}` and `{NAMESPACE}` placeholder.
-
-3. Apply the modified LogPipeline:
+2. Apply the LogPipeline:
 
    ```bash
-   kubectl apply -f logpipeline.yaml
+   cat <<EOF | kubectl apply -f -
+   apiVersion: telemetry.kyma-project.io/v1alpha1
+   kind: LogPipeline
+   metadata:
+     name: custom-loki
+   spec:
+      input:
+         application:
+            namespaces:
+              system: true
+      output:
+         custom: |
+            name   loki
+            host   ${HELM_LOKI_RELEASE}-headless.${KYMA_NS}.svc.cluster.local
+            port   3100
+            auto_kubernetes_labels off
+            labels job=fluentbit, container=$kubernetes['container_name'], namespace=$kubernetes['namespace_name'], pod=$kubernetes['pod_name'], node=$kubernetes['host'], app=$kubernetes['labels']['app'],app=$kubernetes['labels']['app.kubernetes.io/name']
+   EOF
    ```
 
 When the status of the applied LogPipeline resource turns into `Running`, the underlying Fluent Bit is reconfigured and log shipment to your Loki instance is active.
@@ -136,7 +151,7 @@ When the status of the applied LogPipeline resource turns into `Running`, the un
 </div>
 
 >**NOTE:**
->- The used output plugin configuration uses all labels of a Pod to label the Loki log streams. Performance-wise, such segregation of the log streams might be not optimal. Follow [Loki's labelling best practices](https://grafana.com/docs/loki/latest/best-practices/) for a tailor-made setup that fits your workload configuration.
+>- The used output plugin configuration uses a static label map to assign labels of a Pod to Loki log streams. Activating the `     auto_kubernetes_labels` feature for using all labels of a Pod is not recommended performance-wise. Follow [Loki's labelling best practices](https://grafana.com/docs/loki/latest/best-practices/) for a tailor-made setup that fits your workload configuration.
 >- These instructions install Loki in a lightweight setup that does not fulfil production-grade qualities. Consider using a scalable setup based on an object storage backend instead (see [Simple scalable deployment of Grafana Loki with Helm](https://grafana.com/docs/loki/latest/installation/helm/install-scalable/)).
 
 
