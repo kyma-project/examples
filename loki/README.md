@@ -175,7 +175,7 @@ Because Grafana provides a very good Loki integration, you might want to install
    ```bash
    kubectl get secret --namespace mlp grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
    ```
-   
+
    to get the password for the access, then run:
    ```bash
    kubectl -n ${KYMA_NS} port-forward svc/grafana 3000:80
@@ -184,17 +184,13 @@ Because Grafana provides a very good Loki integration, you might want to install
    Open Grafana in your browser under `http://localhost:3000` and log in with user admin and the password taken from the previous Helm command.
   
 ## Exposure
-1. To expose Grafana using the Kyma API Gateway, download the APIRule file and replace the `{release-name}` variable with the name of Helm release:
-   ```bash
-   curl https://raw.githubusercontent.com/kyma-project/examples/main/loki/apirule.yaml -o apirule.yaml
-   ```
-1. Create an APIRule:
+1. To expose Grafana using the Kyma API Gateway, create an APIRule:
    ```bash
    kubectl -n ${KYMA_NS} apply -f apirule.yaml 
    ```
 1. Get the public URL of your Loki instance:
    ```bash
-   kubectl -n ${KYMA_NS} get vs -l apirule.gateway.kyma-project.io/v1beta1=grafana.${KYMA_NS} -ojsonpath='{.items[*].spec.hosts[*]}'
+   kubectl -n ${KYMA_NS} get virtualservice -l apirule.gateway.kyma-project.io/v1beta1=grafana.${KYMA_NS} -ojsonpath='{.items[*].spec.hosts[*]}'
    ```
 
 ### Add a Link for Grafana to the Kyma Dashboard
