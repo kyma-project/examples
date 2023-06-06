@@ -173,7 +173,7 @@ Because Grafana provides a very good Loki integration, you might want to install
 1. To access the Grafana UI with kubectl port forwarding, run:
 
    ```bash
-   kubectl get secret --namespace mlp grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+   kubectl get secret --namespace ${KYMA_NS} grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
    ```
 
    to get the password for the access, then run:
