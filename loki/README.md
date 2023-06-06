@@ -7,6 +7,15 @@ To get all the customization options, set up a parallel installation of the upst
 
 >**CAUTION:** This example uses the Grafana Loki version, which is distributed under AGPL-3.0 only and might not be free of charge for commercial usage.
 
+## Table of Content
+
+- [Prerequisites](#prerequisites)
+- [Preparation](#preparation)
+- [Loki installation](#loki-installation)
+- [Log agent installation](#log-agent-installation)
+- [Grafana installation](#grafana-installation)
+- [Grafana Exposure](#grafana-exposure)
+
 ## Prerequisites
 
 - Kyma as the target deployment environment
@@ -76,7 +85,7 @@ helm upgrade --install --create-namespace -n ${KYMA_NS} promtail grafana/promtai
   </details>
   <details>
   <summary label="fluent-bit-installation">
-  Installation with Kyma's LogPipeline
+  Install Fluent Bit with Kyma's LogPipeline
   </summary>
 
 >**CAUTION:** This setup uses an unsupported output plugin for the LogPipline.
