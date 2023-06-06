@@ -115,7 +115,7 @@ Apply the LogPipeline:
 
 When the status of the applied LogPipeline resource turns into `Running`, the underlying Fluent Bit is reconfigured and log shipment to your Loki instance is active.
 
->**NOTE:** The used output plugin configuration uses a static label map to assign labels of a Pod to Loki log streams. Activating the `     auto_kubernetes_labels` feature for using all labels of a Pod is not recommended performance-wise. Follow [Loki's labelling best practices](https://grafana.com/docs/loki/latest/best-practices/) for a tailor-made setup that fits your workload configuration.
+>**NOTE:** The used output plugin configuration uses a static label map to assign labels of a Pod to Loki log streams. It's not recommended to activate the `auto_kubernetes_labels` feature for using all labels of a Pod because this lowers the performance. Follow [Loki's labelling best practices](https://grafana.com/docs/loki/latest/best-practices/) for a tailor-made setup that fits your workload configuration.
 
   </details>
 </div>
