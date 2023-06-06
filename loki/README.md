@@ -218,5 +218,5 @@ Because Grafana provides a very good Loki integration, you might want to install
 2. To remove the deployed LogPipeline instance from cluster, run:
 
    ```bash
-   kubectl delete -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/logpipeline-custom.yaml
+   kubectl delete LogPipeline custom-loki
    ```
