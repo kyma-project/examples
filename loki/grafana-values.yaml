@@ -1,10 +1,9 @@
-grafana:
-  enabled: true
-  sidecar:
-    datasources:
-      enabled: true
-      access: proxy
-      maxLines: 1000
 
-  podLabels:
-    sidecar.istio.io/inject: "true"
+sidecar:
+  datasources:
+    enabled: true
+  dashboards:
+    enabled: true
+
+podLabels:
+  sidecar.istio.io/inject: "true"

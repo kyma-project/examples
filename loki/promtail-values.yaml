@@ -1,0 +1,8 @@
+
+# enable istio sidecar injection
+podLabels:
+  sidecar.istio.io/inject: "true"
+
+config:
+  clients: 
+    - url: http://loki:3100/loki/api/v1/push
