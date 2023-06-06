@@ -45,7 +45,6 @@ You install the Loki stack with a Helm upgrade command, which installs the chart
 
 ```bash
 helm upgrade --install --create-namespace -n ${KYMA_NS} ${HELM_LOKI_RELEASE} grafana/loki -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/loki-values.yaml
-helm upgrade --install --create-namespace -n ${KYMA_NS} ${HELM_LOKI_RELEASE} grafana/loki -f loki-values.yaml
 ```
 
 In any case, you can either use the [loki-values.yaml](./loki-values.yaml) provided in this `loki` folder, which contains customized settings deviating from the default settings, or create your own `values.yaml` file. The prepared `values.yaml` file activates the `singleBinary` mode and disables additional components which are usually used when running Loki as a central backend. 
@@ -145,8 +144,7 @@ Because Grafana provides a very good Loki integration, you might want to install
 1. To deploy Grafana, run:
 
    ```bash
-   helm upgrade --install --create-namespace -n ${KYMA_NS} grafana grafana/grafana -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/grafana-values.yaml --set grafana.adminPassword=myPwd
-   helm upgrade --install --create-namespace -n ${KYMA_NS} grafana grafana/grafana -f grafana-values.yaml --set adminPassword=myPwd
+   helm upgrade --install --create-namespace -n ${KYMA_NS} grafana grafana/grafana -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/grafana-values.yaml
    ```
 
 1. To enable Loki as Grafana Datasource, run:
@@ -174,6 +172,11 @@ Because Grafana provides a very good Loki integration, you might want to install
 
 1. To access the Grafana UI with kubectl port forwarding, run:
 
+   ```bash
+   kubectl get secret --namespace mlp grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+   ```
+   
+   to get the password for the access, then run:
    ```bash
    kubectl -n ${KYMA_NS} port-forward svc/grafana 3000:80
    ```
