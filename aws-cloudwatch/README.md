@@ -83,7 +83,7 @@ After deploying OTEL Collector itself, you should deploy logpipeline, tracepipel
     ```bash
     kubectl apply -f ./pipelines/logpipeline.yaml
     ```
-1. Replace `{NAMESPACE}` and deploy a tracepipeline by calling 
+1. Enable a TracePipeline in the cluster so that all components have a well-defined OTLP based push URL in the cluster to send trace data to. For that replace `{NAMESPACE}` and apply a TracePipeline by calling 
     ```bash
     kubectl apply -f ./pipelines/tracepipeline.yaml
     ```
