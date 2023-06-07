@@ -68,18 +68,18 @@ In order to connect the AWS Distro to the AWS services we need to define place t
 
 ### Deploy the AWS Distro
 
-After creating a secret and configuering AWS, we can finally deploy an Otel Collector itself.
+After creating a secret and configuring the required users in AWS, we finally can deploy the AWS Distro. That is a specific distribution of an otel-collector which will take care of the conversion and dispatching of the OTLP based metrics and trace data in the cluster, to the AWS specific format and protocol.
 
-1. Deploy an OTEL Collector by calling 
+1. Deploy the AWS Distro by calling 
     ```bash
     kubectl -n $KYMA_NS apply -f ./aws-otel-collector/aws-otel.yaml
     ```
 
-### Create pipelines
+### Setup Kyma Telemetry
 
-After deploying OTEL Collector itself, you should deploy logpipeline, tracepipeline, and metricpipeline. 
+Enable ingestion of the signals from your workloads, using the available features of the Kyma Telemetry module:
 
-1. Deploy a logpipeline by calling 
+1. Enable a LogPipeline which is shipping container logs of all workload directly to the AWS X-Ray service, leveraging the same secret as the AWS Distro is using, bypassing the AWS Distro. As logs are not yet supported by the AWS Distro and the Kyma feature is not based on OTLP yet, the integration here is not consistent with the rest for now. Enable the LogPipeline by running:
     ```bash
     kubectl apply -f ./pipelines/logpipeline.yaml
     ```
