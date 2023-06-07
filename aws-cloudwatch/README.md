@@ -58,7 +58,7 @@ After creating the IAM Policies, we can finally create an IAM User:
 
 ### Create a secret with AWS Credentials
 
-In order to connect OTEL Collector to AWS we need to define security credentials in the kyma system. 
+In order to connect the AWS Distro to the AWS services we need to define place the credentials of the created user into the cluster. 
 
 1. In the [values.yaml](./aws-secret/values.yaml), replace the `{ACCESS_KEY}` and `{SECRET_ACCESS_KEY}` to your access keys, and `{AWS_REGION}` with the AWS region you want to use
 2. Now, create the secret by using 
