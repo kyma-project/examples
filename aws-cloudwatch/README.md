@@ -66,7 +66,7 @@ In order to connect the AWS Distro to the AWS services we need to define place t
     kubectl apply -f ./aws-secret/aws-secret.yaml
     ```
 
-### Deploy an OTEL Collector
+### Deploy the AWS Distro
 
 After creating a secret and configuering AWS, we can finally deploy an Otel Collector itself.
 
