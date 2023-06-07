@@ -28,7 +28,7 @@ The Kyma Telemetry module supports you in integrating with observability backend
 
 ### Create AWS IAM User
 
-As a first step, we need to create an IAM User assign to it specific IAM policies through which our OTEL Collector will be communicating with AWS. 
+Create an IAM User and assign to the specific IAM policies needed to let the AWS distro communicate with the AWS services
 
 Firstly, we need to create IAM policy for pushing our metrics:
 1. Go to the AWS searchbar, and search for IAM service
