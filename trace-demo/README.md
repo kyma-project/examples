@@ -83,9 +83,9 @@ To verify that the application is running properly, set up port forwarding and c
    open http://localhost:8080
    ````
 
-2. To verify that traces arrive in the Jaeger backend:
+2. To verify that traces arrive in the Jaeger backend, assuming you deployed a [Jaeger in-cluster](./../jaeger/) using the same namespace as used for the demo app:
    ```bash
-   kubectl -n kyma-system port-forward svc/tracing-jaeger-query 16686
+   kubectl -n $KYMA_NS port-forward svc/tracing-jaeger-query 16686
    ```
    ```bash
    open http://localhost:16686
