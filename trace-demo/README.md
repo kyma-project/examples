@@ -75,7 +75,7 @@ You can either use the [`values.yaml`](./values.yaml) provided in this `trace-de
 
 To verify that the application is running properly, set up port forwarding and call the respective local hosts.
 
-1. To verify the frontend:
+1. Verify the frontend:
    ```bash
    kubectl -n $KYMA_NS port-forward svc/$HELM_OTEL_RELEASE-frontend 8080
    ```
@@ -83,9 +83,9 @@ To verify that the application is running properly, set up port forwarding and c
    open http://localhost:8080
    ````
 
-2. To verify that traces arrive in the Jaeger backend:
+2. Verify that traces arrive in the Jaeger backend. If you deployed [Jaeger in your cluster](./../jaeger/) using the same Namespace as used for the demo app, run:
    ```bash
-   kubectl -n kyma-system port-forward svc/tracing-jaeger-query 16686
+   kubectl -n $KYMA_NS port-forward svc/tracing-jaeger-query 16686
    ```
    ```bash
    open http://localhost:16686
