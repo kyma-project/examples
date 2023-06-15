@@ -20,14 +20,9 @@ Keda is used to scale the worker Function. [KEDA Prometheus scaler](https://keda
 ## Prerequisites
 
 - Kyma as the target deployment environment.
+- Keda module enabled
 
 ## Installation
-
-Run the following against your Kyma runtime to install KEDA:
-
-```bash
-kubectl apply -f https://github.com/kedacore/keda/releases/download/v2.8.0/keda-2.8.0.yaml
-```
 
 Make sure istio sidecar injection is enabled in the target Namesapce:
 
