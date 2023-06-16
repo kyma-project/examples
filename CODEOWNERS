@@ -29,7 +29,7 @@
 /tracing/ @kyma-project/observability
 
 # Scaling functions to zero with KEDA
-/scale-to-zero-with-kedam @m00g3n @pPrecel @dbadura @kwiatekus @cortey
+/scale-to-zero-with-keda @m00g3n @pPrecel @dbadura @kwiatekus @cortey @anoipm @MichalKalke
 
 # All .md files
 *.md @mmitoraj @NHingerl @grego952 @IwonaLanger @nataliasitko
