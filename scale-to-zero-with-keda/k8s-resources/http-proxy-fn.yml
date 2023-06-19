@@ -5,12 +5,7 @@ metadata:
     app.kubernetes.io/name: http-proxy-fn
   name: http-proxy-fn
 spec:
-  resourceConfiguration:
-    build:
-      resources: {}
-    function:
-      resources: {}
-  runtime: nodejs16
+  runtime: nodejs18
   replicas: 1
   source:
     gitRepository:

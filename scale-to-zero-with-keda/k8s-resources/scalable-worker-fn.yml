@@ -5,38 +5,23 @@ metadata:
     app.kubernetes.io/name: scalable-worker-fn
   name: scalable-worker-fn
 spec:
-  resourceConfiguration:
-    build:
-      resources: {}
-    function:
-      resources: {}
-  runtime: nodejs16
-  replicas: 1
+  runtime: nodejs18
   source:
     gitRepository:
       url: https://github.com/kwiatekus/examples.git
       baseDir: /scale-to-zero-with-keda/src/scalable-worker-fn
       reference: scale-with-keda
 ---
-apiVersion: eventing.kyma-project.io/v1alpha1
+apiVersion: eventing.kyma-project.io/v1alpha2
 kind: Subscription
 metadata:
   creationTimestamp: null
   name: scalable-worker-sub
 spec:
-  filter:
-    filters:
-    - eventSource:
-        property: source
-        type: exact
-        value: ""
-      eventType:
-        property: type
-        type: exact
-        value: sap.kyma.custom.acme.payload.received.v1
-  protocol: ""
-  protocolsettings: {}
   sink: http://scalable-worker-fn.default.svc.cluster.local
+  typeMatching: exact
+  types:
+  - sap.kyma.custom.acme.payload.received.v1
 ---
 apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
@@ -49,13 +34,11 @@ spec:
     name:          scalable-worker-fn
   minReplicaCount:  0
   maxReplicaCount:  5
-  cooldownPeriod: 30
-  pollingInterval: 10
   triggers:
   - type: prometheus
     metadata:
       serverAddress: http://prometheus-operated.kyma-system.svc.cluster.local:9090
-      metricName: requests_per_sec
-      query: round(sum(irate(istio_requests_total{reporter=~"source",destination_service=~"scalable-worker-fn.default.svc.cluster.local"}[1m])), 0.001)
+      query: sum(rate(istio_requests_total{destination_service="scalable-worker-fn.default.svc.cluster.local",reporter="source"}[1m]))
       threshold: '2'
+      
 
