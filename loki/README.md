@@ -1,9 +1,7 @@
 # Installing a custom Loki stack in Kyma
 
 ## Overview
-
-In contrast to the upstream [Loki chart](https://github.com/grafana/loki/tree/main/production/helm/loki), Kyma's Loki component offers limited configuration options. Furthermore, any modifications you make might be reset at the next upgrade cycle.
-To get all the customization options, set up a parallel installation of the upstream chart, co-existing with the Kyma stack:
+The following instructions outline how to use [`Loki`](https://github.com/grafana/loki/tree/main/production/helm/loki) as a logging backend with Kyma's [LogPipeline](https://kyma-project.io/docs/kyma/main/01-overview/telemetry/telemetry-02-logs/) or with [Promtail](https://grafana.com/docs/loki/latest/clients/promtail/).
 
 >**CAUTION:** This example uses the Grafana Loki version, which is distributed under AGPL-3.0 only and might not be free of charge for commercial usage.
 
@@ -197,7 +195,7 @@ Because Grafana provides a very good Loki integration, you might want to install
 ### Expose Grafana
 1. To expose Grafana using the Kyma API Gateway, create an APIRule:
    ```bash
-   kubectl -n ${KYMA_NS} apply -f apirule.yaml 
+   kubectl -n ${KYMA_NS} apply -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/apirule.yaml
    ```
 1. Get the public URL of your Loki instance:
    ```bash
