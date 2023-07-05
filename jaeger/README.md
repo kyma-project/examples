@@ -2,9 +2,7 @@
 
 ## Overview
 
-The Kyma tracing component brings limited configuration options in contrast to the upstream [`jaeger`](https://github.com/jaegertracing/helm-charts/tree/main/charts/jaeger) chart. Modifications might be reset with the next upgrade cycle.
-
-An alternative can be a parallel installation of the upstream chart offering all customization options. The following instructions outline how to perform such installation in co-existence with the Kyma stack.
+The following instructions outline how to use [`Jaeger`](https://github.com/jaegertracing/helm-charts/tree/main/charts/jaeger) as a tracing backend with Kyma's [TracePipeline](https://kyma-project.io/docs/kyma/main/01-overview/telemetry/telemetry-03-traces/).
 
 ## Prerequisites
 
@@ -54,7 +52,7 @@ kubectl -n $KYMA_NS rollout status deploy $HELM_JAEGER_RELEASE
 
 ### Activate a TracePipeline
 
-To configure the Kyma trace collector with the deployed Jaeger instance as the backend. To create a new [TracePipeline](https://kyma-project.io/docs/kyma/main/01-overview/main-areas/telemetry/telemetry-03-traces/), 
+To configure the Kyma trace collector with the deployed Jaeger instance as the backend. To create a new [TracePipeline](https://kyma-project.io/docs/kyma/main/01-overview/telemetry/telemetry-03-traces/), 
 execute the following command:
    ```bash
    cat <<EOF | kubectl -n $KYMA_NS apply -f -
@@ -73,7 +71,7 @@ execute the following command:
   
 ### Activate Istio Tracing
 
-To [enable Istio](https://kyma-project.io/docs/kyma/main/01-overview/main-areas/telemetry/telemetry-03-traces#step-2-enable-istio-tracing) to report span data, apply an Istio telemetry resource and set the sampling rate to 100%. This approach is not recommended for production.
+To [enable Istio](https://kyma-project.io/docs/kyma/main/01-overview/telemetry/telemetry-03-traces#step-2-enable-istio-tracing) to report span data, apply an Istio telemetry resource and set the sampling rate to 100%. This approach is not recommended for production.
 
 ```bash
 cat <<EOF | kubectl apply -f -
