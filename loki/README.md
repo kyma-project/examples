@@ -197,7 +197,7 @@ Because Grafana provides a very good Loki integration, you might want to install
 ### Expose Grafana
 1. To expose Grafana using the Kyma API Gateway, create an APIRule:
    ```bash
-   kubectl -n ${KYMA_NS} apply -f apirule.yaml 
+   kubectl -n ${KYMA_NS} apply -f https://raw.githubusercontent.com/kyma-project/examples/main/loki/apirule.yaml
    ```
 1. Get the public URL of your Loki instance:
    ```bash
