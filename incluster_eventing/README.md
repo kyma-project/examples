@@ -3,7 +3,7 @@
 ## Overview
 
 This example provides a very simple scenario of asynchronous communication between two Functions, where: 
-- The first Function accepts the incoming traffic via HTTP, sanitizes the payload, and publishes the content as an in-cluster event via [Kyma Eventing](https://kyma-project.io/docs/kyma/latest/01-overview/main-areas/eventing/).
+- The first Function accepts the incoming traffic via HTTP, sanitizes the payload, and publishes the content as an in-cluster event via [Kyma Eventing](https://kyma-project.io/docs/kyma/latest/01-overview/eventing/).
 - The second Function is a message receiver. It subscribes to the given event type and stores the payload.
 
 This example also provides a template for a git project with Kyma Functions. Please refer to the Deploy section below.
