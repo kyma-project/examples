@@ -1,0 +1,19 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: scaled-object-fibo-fn1
+spec:
+  scaleTargetRef:
+    apiVersion: serverless.kyma-project.io/v1alpha2
+    kind: Function
+    name: fibo-fn1
+  minReplicaCount:  1
+  maxReplicaCount:  20
+  pollingInterval: 5
+  cooldownPeriod: 5
+  triggers:
+  - type: prometheus
+    metadata:
+      serverAddress: http://prometheus-operated.kyma-system.svc.cluster.local:9090
+      query: sum(rate(istio_requests_total{destination_service_name="fibo-fn1"}[1m]))
+      threshold: "2"

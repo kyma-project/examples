@@ -1,0 +1,5 @@
+resources:
+- functions.yaml
+- load1.yaml
+- load2.yaml
+- scaledobject.yaml

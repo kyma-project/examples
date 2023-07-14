@@ -1,0 +1,80 @@
+apiVersion: serverless.kyma-project.io/v1alpha2
+kind: Function
+metadata:
+    labels:
+        app.kubernetes.io/name: fibo-fn1
+    name: fibo-fn1
+spec:
+    env:
+        - name: FIBONACCI_MIN
+          value: "15"
+        - name: FIBONACCI_MAX
+          value: "50"
+    runtime: nodejs18
+    source:
+        inline:
+            dependencies: |-
+                {
+                  "name": "fibo-fn1",
+                  "version": "0.0.1",
+                  "dependencies": {
+                    "fibonacci":"1.6.10"
+                  }
+                }
+            source: |
+                const fibonacci = require ('fibonacci');
+                module.exports = {
+                    main: function (event, context) {
+                        let fiboArg = between(parseInt(process.env['FIBONACCI_MIN'],10),parseInt(process.env['FIBONACCI_MAX'],10))
+                        console.log(`Calculating fibonacci series of ${fiboArg}...`);
+                        let fiboResult = fibonacci.iterate(fiboArg);
+                        console.log(`Result: ${fiboResult}`);
+                        return fiboResult;
+                    }
+                }
+
+                function between(min, max) {
+                    return Math.floor(Math.random() * (max - min) + min);
+                }
+---
+apiVersion: serverless.kyma-project.io/v1alpha2
+kind: Function
+metadata:
+    labels:
+        app.kubernetes.io/name: fibo-fn2
+    name: fibo-fn2
+spec:
+    env:
+        - name: FIBONACCI_MIN
+          value: "15"
+        - name: FIBONACCI_MAX
+          value: "50"
+    runtime: nodejs18
+    scaleConfig:
+        minReplicas: 1
+        maxReplicas: 20
+    source:
+        inline:
+            dependencies: |-
+                {
+                  "name": "fibo-fn2",
+                  "version": "0.0.1",
+                  "dependencies": {
+                    "fibonacci":"1.6.10"
+                  }
+                }
+            source: |
+                const fibonacci = require ('fibonacci');
+                module.exports = {
+                    main: function (event, context) {
+                        let fiboArg = between(parseInt(process.env['FIBONACCI_MIN'],10),parseInt(process.env['FIBONACCI_MAX'],10))
+                        console.log(`Calculating fibonacci series of ${fiboArg}...`);
+                        let fiboResult = fibonacci.iterate(fiboArg);
+                        console.log(`Result: ${fiboResult}`);
+                        return fiboResult;
+                    }
+                }
+
+                function between(min, max) {
+                    return Math.floor(Math.random() * (max - min) + min);
+                }

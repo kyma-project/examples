@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: busybee2
+  name: busybee2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: busybee2
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: busybee2
+    spec:
+      containers:
+      - image: busybox
+        name: busybox
+        command:
+         - "/bin/sh"
+         - "-c"
+         - "--"
+        args:
+          - "while true; do sleep 0.5; wget -q -O- http://fibo-fn2.default.svc.cluster.local:80/get > /dev/null ; done"
