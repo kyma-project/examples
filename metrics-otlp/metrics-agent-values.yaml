@@ -351,12 +351,13 @@ clusterRole:
     - get
 
 # annotations and mounts for scraping mTLS targets
+podLabels:
+  sidecar.istio.io/inject: "true"
 podAnnotations:
   proxy.istio.io/config: |
     # configure an env variable `OUTPUT_CERTS` to write certificates to the given folder
     proxyMetadata:
       OUTPUT_CERTS: /etc/istio-output-certs
-  sidecar.istio.io/inject: "true"
   sidecar.istio.io/userVolumeMount: '[{"name": "istio-certs", "mountPath": "/etc/istio-output-certs"}]'
   traffic.sidecar.istio.io/includeInboundPorts: ""
   traffic.sidecar.istio.io/includeOutboundIPRanges: ""
