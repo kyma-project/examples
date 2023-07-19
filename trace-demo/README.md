@@ -66,7 +66,7 @@ To [enable Istio](https://kyma-project.io/docs/kyma/main/01-overview/telemetry/t
 
 Run the Helm upgrade command, which installs the chart if not present yet.
 ```bash
-helm upgrade --version 0.22.2 --install --create-namespace -n $KYMA_NS $HELM_OTEL_RELEASE open-telemetry/opentelemetry-demo -f https://raw.githubusercontent.com/kyma-project/examples/main/trace-demo/values.yaml
+helm upgrade --version 0.22.4 --install --create-namespace -n $KYMA_NS $HELM_OTEL_RELEASE open-telemetry/opentelemetry-demo -f https://raw.githubusercontent.com/kyma-project/examples/main/trace-demo/values.yaml
 ```
 
 You can either use the [`values.yaml`](./values.yaml) provided in this `trace-demo` folder, which contains customized settings deviating from the default settings, or create your own `values.yaml` file.

@@ -8,9 +8,6 @@ grafana:
   enabled: false
 
 components:
-  redis:
-    enabled: true
-
   accountingService:
     enabled: true
     envOverrides:
@@ -79,12 +76,6 @@ components:
         securityContext:
           runAsUser: 1337
 
-  ffsPostgres:
-    enabled: true
-    envOverrides:
-      - name: OTEL_EXPORTER_OTLP_ENDPOINT
-        value: 'http://telemetry-otlp-traces.kyma-system:4317'
-
   frauddetectionService:
     enabled: true
     envOverrides:
@@ -99,9 +90,15 @@ components:
 
   frontend:
     enabled: true
+    resources:
+      limits:
+        memory: 500Mi
     envOverrides:
       - name: OTEL_EXPORTER_OTLP_ENDPOINT
         value: 'http://telemetry-otlp-traces.kyma-system:4317'
+
+  frontendProxy:
+    enabled: true
 
   loadgenerator:
     enabled: true
@@ -121,6 +118,12 @@ components:
       - name: OTEL_EXPORTER_OTLP_ENDPOINT
         value: 'http://telemetry-otlp-traces.kyma-system:4317'
 
+  quoteService:
+    enabled: true
+    envOverrides:
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: 'telemetry-otlp-traces.kyma-system:4317'
+
   recommendationService:
     enabled: true
     envOverrides:
@@ -135,8 +138,17 @@ components:
       - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
         value: 'http://telemetry-otlp-traces.kyma-system:4317'
 
-  quoteService:
+  ffsPostgres:
     enabled: true
     envOverrides:
       - name: OTEL_EXPORTER_OTLP_ENDPOINT
-        value: 'telemetry-otlp-traces.kyma-system:4317'
+        value: 'http://telemetry-otlp-traces.kyma-system:4317'
+
+  kafka:
+    enabled: true
+    envOverrides:
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: 'http://telemetry-otlp-traces.kyma-system:4317'
+
+  redis:
+    enabled: true
