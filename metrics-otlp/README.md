@@ -25,10 +25,9 @@ Furthermore, the setup brings an OpenTelemetry Collector DaemonSet acting as age
     export KYMA_NS="{namespace}"
     ```
 
-1. If you haven't created a Namespace yet, do it now and enable Istio injection with the following label:
+1. If you haven't created a Namespace yet, do it now:
     ```bash
     kubectl create namespace $KYMA_NS
-    kubectl label namespace $KYMA_NS istio-injection=enabled
     ```
 
 1. Update your Helm installation with the required Helm repository:
@@ -48,7 +47,7 @@ Furthermore, the setup brings an OpenTelemetry Collector DaemonSet acting as age
    If you don't want to use a Secret, use the following command, and adjust the placeholders `myEndpoint` and `myToken` to your needs:
 
    ```bash
-   helm upgrade metrics-gateway open-telemetry/opentelemetry-collector --version 0.55.1 --install --namespace $KYMA_NS \
+   helm upgrade metrics-gateway open-telemetry/opentelemetry-collector --version 0.62.2 --install --namespace $KYMA_NS \
      -f https://raw.githubusercontent.com/kyma-project/examples/main/metrics-otlp/metrics-gateway-values.yaml \
      --set config.exporters.otlp.endpoint="{myEndpoint}" \
      --set config.exporters.otlp.headers.Authorization="Bearer {myToken}"
@@ -57,7 +56,7 @@ Furthermore, the setup brings an OpenTelemetry Collector DaemonSet acting as age
    
    > **TIP:** It's recommended that you provide tokens using a Secret. To achieve that, you can mount the relevant attributes of your secret via the `extraEnvs` parameter and use placeholders for referencing the actual environment values. Take a look at the provided sample [secret-values.yaml](./secret-values.yaml) file, adjust it to your Secret, and run:
    ```bash
-   helm upgrade metrics-gateway open-telemetry/opentelemetry-collector --version 0.55.1 --install --namespace $KYMA_NS \
+   helm upgrade metrics-gateway open-telemetry/opentelemetry-collector --version 0.62.2 --install --namespace $KYMA_NS \
      -f https://raw.githubusercontent.com/kyma-project/examples/main/metrics-otlp/metrics-gateway-values.yaml \
      -f secret-values.yaml
    ```
@@ -77,7 +76,7 @@ Furthermore, the setup brings an OpenTelemetry Collector DaemonSet acting as age
    Deploy an Otel Collector using the upstream Helm chart with a prepared [values](./metrics-agent-values.yaml). The values file defines a metrics pipeline for scraping workload by annotation and pushing them to the gateway. It also defines a second metrics pipeline determining node-specific metrics for your workload from the nodes kubelet and the nodes filesystem itself.
 
    ```bash
-   helm upgrade metrics-agent open-telemetry/opentelemetry-collector --version 0.47.0 --install --namespace $KYMA_NS \
+   helm upgrade metrics-agent open-telemetry/opentelemetry-collector --version 0.62.2 --install --namespace $KYMA_NS \
      -f https://raw.githubusercontent.com/kyma-project/examples/main/metrics-otlp/metrics-agent-values.yaml \
      --set config.exporters.otlp.endpoint=metrics-gateway.$KYMA_NS:4317
    ```
