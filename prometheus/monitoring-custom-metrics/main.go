@@ -23,6 +23,13 @@ var (
 		},
 		[]string{"device"},
 	)
+	cpuEnergy = prometheus.NewHistogramVec(
+		prometheus.HistogramOpts{
+			Name:    "cpu_energy_watt",
+			Help:    "Current power usage reported by the CPU.",
+			Buckets: prometheus.LinearBuckets(0, 20, 5),
+		},
+		[]string{})
 )
 
 func init() {
@@ -36,8 +43,15 @@ func randomTemp() float64 {
 	return math.Round(rand.Float64()*300)/10 + 60
 }
 
+// randomTemp generates the energy ranging from 0 to 100
+func randomEnergy() float64 {
+	return math.Round(rand.Float64() * 100)
+}
+
 func main() {
 	hdFailures.With(prometheus.Labels{"device": "/dev/sda"}).Inc()
+
+	cpuEnergy.WithLabelValues("core", "0").Observe(randomEnergy())
 
 	// The Handler function provides a default handler to expose metrics
 	// via an HTTP server. "/metrics" is the usual endpoint for that.
