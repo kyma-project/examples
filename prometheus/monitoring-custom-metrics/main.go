@@ -43,6 +43,8 @@ func init() {
 	// Metrics have to be registered to be exposed:
 	prometheus.MustRegister(cpuTemp)
 	prometheus.MustRegister(hdFailures)
+	prometheus.MustRegister(cpuEnergy)
+	prometheus.MustRegister(hwHumidity)
 }
 
 // randomTemp generates the temperature ranging from 60 to 90
@@ -62,8 +64,8 @@ func randomHumidity() float64 {
 
 func main() {
 	hdFailures.With(prometheus.Labels{"device": "/dev/sda"}).Inc()
-	cpuEnergy.WithLabelValues("core", "0").Observe(randomEnergy())
-	hwHumidity.WithLabelValues("sensor", "0").Observe(randomHumidity())
+	cpuEnergy.With(prometheus.Labels{"core": "0"}).Observe(randomEnergy())
+	hwHumidity.With(prometheus.Labels{"sensor": "0"}).Observe(randomHumidity())
 
 	// The Handler function provides a default handler to expose metrics
 	// via an HTTP server. "/metrics" is the usual endpoint for that.
