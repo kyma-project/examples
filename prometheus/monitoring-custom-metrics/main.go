@@ -30,6 +30,11 @@ var (
 			Buckets: prometheus.LinearBuckets(0, 20, 5),
 		},
 		[]string{})
+	hwHumidity = prometheus.NewSummary(
+		prometheus.SummaryOpts{
+			Name: "hw_humidity",
+			Help: "The summary of humidity rate reported by a humidity sensor, as a ratio.",
+		})
 )
 
 func init() {
@@ -43,15 +48,20 @@ func randomTemp() float64 {
 	return math.Round(rand.Float64()*300)/10 + 60
 }
 
-// randomTemp generates the energy ranging from 0 to 100
+// randomEnergy generates the energy ranging from 0 to 100
 func randomEnergy() float64 {
 	return math.Round(rand.Float64() * 100)
 }
 
+// randomHumidity generates the humidity from 0 to 1
+func randomHumidity() float64 {
+	return rand.Float64()
+}
+
 func main() {
 	hdFailures.With(prometheus.Labels{"device": "/dev/sda"}).Inc()
-
 	cpuEnergy.WithLabelValues("core", "0").Observe(randomEnergy())
+	hwHumidity.Observe(randomHumidity())
 
 	// The Handler function provides a default handler to expose metrics
 	// via an HTTP server. "/metrics" is the usual endpoint for that.
