@@ -7,6 +7,14 @@ prometheus:
 grafana:
   enabled: false
 
+default:
+  envOverrides:
+  - name: OTEL_SERVICE_NAME
+    valueFrom:
+      fieldRef:
+        apiVersion: v1
+        fieldPath: "metadata.labels['app.kubernetes.io/name']"
+
 components:
   accountingService:
     enabled: true
