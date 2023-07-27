@@ -37,4 +37,4 @@ jobs:
         with:
           context: prometheus/monitoring-custom-metrics
           push: true
-          tags: ghcr.io/sap/sap-btp-service-operator/controller:${{ steps.vars.outputs.short_sha }}
+          tags: ghcr.io/kyma-project/develop/monitoring-custom-metrics:${{ steps.vars.outputs.short_sha }}
