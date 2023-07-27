@@ -7,6 +7,14 @@ prometheus:
 grafana:
   enabled: false
 
+default:
+  envOverrides:
+  - name: OTEL_SERVICE_NAME
+    valueFrom:
+      fieldRef:
+        apiVersion: v1
+        fieldPath: "metadata.labels['app.kubernetes.io/name']"
+
 components:
   accountingService:
     enabled: true
@@ -25,12 +33,22 @@ components:
     envOverrides:
       - name: OTEL_EXPORTER_OTLP_ENDPOINT
         value: 'http://telemetry-otlp-traces.kyma-system:4317'
+    service:
+      port: null
+    ports:
+      - name: grpc
+        value: 8080
 
   cartService:
     enabled: true
     envOverrides:
       - name: OTEL_EXPORTER_OTLP_ENDPOINT
         value: 'http://telemetry-otlp-traces.kyma-system:4317'
+    service:
+      port: null
+    ports:
+      - name: grpc
+        value: 8080
     initContainers:
       - name: wait-for-redis
         image: busybox:latest
@@ -43,6 +61,11 @@ components:
     envOverrides:
       - name: OTEL_EXPORTER_OTLP_ENDPOINT
         value: 'http://telemetry-otlp-traces.kyma-system:4317'
+    service:
+      port: null
+    ports:
+      - name: grpc
+        value: 8080
     initContainers:
       - name: wait-for-kafka
         image: busybox:latest
@@ -55,6 +78,11 @@ components:
     envOverrides:
       - name: OTEL_EXPORTER_OTLP_ENDPOINT
         value: 'http://telemetry-otlp-traces.kyma-system:4317'
+    service:
+      port: null
+    ports:
+      - name: grpc
+        value: 8080
 
   emailService:
     enabled: true
@@ -63,6 +91,11 @@ components:
         value: 'http://telemetry-otlp-traces.kyma-system:4317'
       - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
         value: 'http://telemetry-otlp-traces.kyma-system:4318/v1/traces'
+    service:
+      port: null
+    ports:
+      - name: http
+        value: 8080
 
   featureflagService:
     enabled: true
@@ -96,6 +129,11 @@ components:
     envOverrides:
       - name: OTEL_EXPORTER_OTLP_ENDPOINT
         value: 'http://telemetry-otlp-traces.kyma-system:4317'
+    service:
+      port: null
+    ports:
+      - name: http
+        value: 8080
 
   frontendProxy:
     enabled: true
@@ -111,24 +149,44 @@ components:
     envOverrides:
       - name: OTEL_EXPORTER_OTLP_ENDPOINT
         value: 'http://telemetry-otlp-traces.kyma-system:4317'
+    service:
+      port: null
+    ports:
+      - name: grpc
+        value: 8080
 
   productCatalogService:
     enabled: true
     envOverrides:
       - name: OTEL_EXPORTER_OTLP_ENDPOINT
         value: 'http://telemetry-otlp-traces.kyma-system:4317'
+    service:
+      port: null
+    ports:
+      - name: grpc
+        value: 8080
 
   quoteService:
     enabled: true
     envOverrides:
       - name: OTEL_EXPORTER_OTLP_ENDPOINT
         value: 'telemetry-otlp-traces.kyma-system:4317'
+    service:
+      port: null
+    ports:
+      - name: http
+        value: 8080
 
   recommendationService:
     enabled: true
     envOverrides:
       - name: OTEL_EXPORTER_OTLP_ENDPOINT
         value: 'http://telemetry-otlp-traces.kyma-system:4317'
+    service:
+      port: null
+    ports:
+      - name: grpc
+        value: 8080
 
   shippingService:
     enabled: true
@@ -137,6 +195,11 @@ components:
         value: 'http://telemetry-otlp-traces.kyma-system:4317'
       - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
         value: 'http://telemetry-otlp-traces.kyma-system:4317'
+    service:
+      port: null
+    ports:
+      - name: grpc
+        value: 8080
 
   ffsPostgres:
     enabled: true
