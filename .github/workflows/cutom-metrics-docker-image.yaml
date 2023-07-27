@@ -29,7 +29,7 @@ jobs:
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
-          repository: kyma-project/develop/monitoring-custom-metrics
+          repository: skhalash/examples/monitoring-custom-metrics
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
@@ -38,4 +38,4 @@ jobs:
         with:
           context: prometheus/monitoring-custom-metrics
           push: true
-          tags: ghcr.io/kyma-project/develop/monitoring-custom-metrics:${{ steps.vars.outputs.short_sha }}
+          tags: ghcr.io/skhalash/examples/monitoring-custom-metrics:${{ steps.vars.outputs.short_sha }}
