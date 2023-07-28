@@ -33,7 +33,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v3
         with:
-          images: ghcr.io/kyma-system/examples/monitoring-custom-metrics
+          images: ghcr.io/kyma-project/examples/monitoring-custom-metrics
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
