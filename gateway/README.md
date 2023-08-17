@@ -108,7 +108,7 @@ curl -ik https://{hostname}.{domain}/orders -H 'Authorization: Bearer {oauth2-to
 
 There are additional prerequisites to exposing a service manually using kubectl:
 
-- [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) in the version specified in the [Kyma documentation](https://kyma-project.io/docs/#installation-install-kyma-locally). It must be configured to point to your Kyma cluster. For more information, see the document about [getting the kubeconfig file](https://kyma-project.io/docs/components/security/#details-iam-kubeconfig-service-get-the-kubeconfig-file-and-configure-the-cli).
+- [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) in the version specified in the [Kyma documentation](https://kyma-project.io/#/02-get-started/README). It must be configured to point to your Kyma cluster.
 - A JWT fetched from the Console UI which is later referred to as **\{jwt\}**. For more details, see the **Fetch JWT** section in the **Exposure through the console UI**.
 - If you run Kyma locally, add the `http-db-service.kyma.local` to your hosts file.
 
@@ -270,4 +270,4 @@ Wait until all containers of the Pod are running.
 kubectl get pods -l example=gateway-service -n $KYMA_EXAMPLE_NS -o json | jq '.items[].spec.containers[].name'
 ```
 
-One of the returned strings should be the istio-proxy. If there is no such string, the Namespace probably does not have Istio injection enabled. For more information, read the document about the [sidecar proxy injection](https://kyma-project.io/docs/kyma/latest/04-operation-guides/operations/smsh-01-istio-enable-sidecar-injection/).
+One of the returned strings should be the istio-proxy. If there is no such string, the Namespace probably does not have Istio injection enabled. For more information, read the document about the [sidecar proxy injection](https://kyma-project.io/#/04-operation-guides/operations/smsh-01-istio-enable-sidecar-injection).

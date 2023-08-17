@@ -4,7 +4,7 @@
 
 The examples project provides a central repository to showcase and illustrate features and concepts on Kyma.
 
-> **NOTE:** The examples in this repository are provided as is, which means they may not always be up to date with the latest Kyma version. For current examples and tutorials, check our [documentation](https://kyma-project.io/docs/) page.
+> **NOTE:** The examples in this repository are provided as is, which means they may not always be up to date with the latest Kyma version. For current examples and tutorials, check our [documentation](https://kyma-project.io) page.
 
 ### What an example is
 
