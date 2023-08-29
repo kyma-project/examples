@@ -2,6 +2,9 @@ cr:
   create: true
   name: kiali-server
   spec:
+    auth:
+      # configure the authentication strategy
+      # strategy: token | anonymous | header | ..
     server:
       observability:
         tracing:
@@ -34,7 +37,8 @@ cr:
       grafana:
         enabled: false
       prometheus:
-        url: "http://monitoring-prometheus.kyma-system:9090"
+      # set prometheus url via command line args
+      #  url: ""
       tracing:
         enabled: false
     kiali_feature_flags:
