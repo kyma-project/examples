@@ -39,3 +39,18 @@ The summary of the documentation in the `examples` repository lists all availabl
 ## Installation
 
 You can run all the examples locally or in a cluster. For instructions on installing and running an example, refer to the `README.md` document of the specific example, either by using the **List of examples** section or by navigating through the project structure.
+
+## Contributing
+<!--- mandatory section - do not change this! --->
+
+See the [CONTRIBUTING](CONTRIBUTING.md) file.
+
+## Code of Conduct
+<!--- mandatory section - do not change this! --->
+
+See [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
+
+## Licensing
+<!--- mandatory section - do not change this! --->
+
+See the [LICENSE](LICENSE) file.
