@@ -2,12 +2,12 @@
 
 ## Overview
 
-The following instructions outline how to install [`Kiali`](https://github.com/kiali/helm-charts/tree/master/kiali-operator) in Kyma. As Kiali requires a prometheus installation preserving istio metrics, this example assumes that you installed the [custom prometheus example](./../prometheus/).
+The following instructions outline how to install [`Kiali`](https://github.com/kiali/helm-charts/tree/master/kiali-operator) in Kyma. Because Kiali needs a Prometheus installation preserving Istio metrics, this example assumes that you installed the [custom Prometheus example](./../prometheus/).
 
 ## Prerequisites
 
 - Kyma as the target deployment runtime
-- A [prometheus instance preserving istio metrics](./../prometheus/) deployed to the runtime
+- A [Prometheus instance preserving Istio metrics](./../prometheus/) deployed to the runtime.
 - kubectl > 1.26.x
 - Helm 3.x
 
