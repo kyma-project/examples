@@ -2,7 +2,7 @@
 
 ## Overview
 
-The following instructions outline how to install [`Kiali`](https://github.com/kiali/helm-charts/tree/master/kiali-operator) in Kyma. Because Kiali needs a Prometheus installation preserving Istio metrics, this example assumes that you installed the [custom Prometheus example](./../prometheus/).
+The following instructions outline how to install [`Kiali`](https://github.com/kiali/helm-charts/tree/master/kiali-operator) in Kyma.
 
 ## Prerequisites
 
