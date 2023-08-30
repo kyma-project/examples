@@ -1,6 +1,8 @@
 package main
 
 import (
+	"context"
+	"fmt"
 	"log"
 	"math"
 	"math/rand"
@@ -9,6 +11,13 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
+	"go.opentelemetry.io/otel/sdk/resource"
+	sdktrace "go.opentelemetry.io/otel/sdk/trace"
+	semconv "go.opentelemetry.io/otel/semconv/v1.17.0"
 )
 
 var (
@@ -37,6 +46,7 @@ var (
 			Objectives: map[float64]float64{0.5: 0.05, 0.9: 0.01, 0.99: 0.001},
 		},
 		[]string{"sensor"})
+	tracer = otel.Tracer("github.com/kyma-project/examples/prometheus/monitoring-custom-metrics")
 )
 
 func init() {
@@ -62,14 +72,52 @@ func randomHumidity() float64 {
 	return rand.Float64()
 }
 
+func newTraceProvider(exp sdktrace.SpanExporter) *sdktrace.TracerProvider {
+	// Ensure default SDK resources and the required service name are set.
+	r, err := resource.Merge(
+		resource.Default(),
+		resource.NewWithAttributes(
+			semconv.SchemaURL,
+			semconv.ServiceName("monitoring-custom-metrics"),
+		),
+	)
+
+	if err != nil {
+		panic(err)
+	}
+
+	return sdktrace.NewTracerProvider(
+		sdktrace.WithBatcher(exp),
+		sdktrace.WithResource(r),
+	)
+}
+
 func main() {
+	client := otlptracehttp.NewClient()
+	ctx := context.Background()
+	exporter, err := otlptrace.New(ctx, client)
+	if err != nil {
+		panic(fmt.Errorf("creating OTLP trace exporter: %w", err))
+	}
+	// Create a new tracer provider with a batch span processor and the given exporter.
+	tp := newTraceProvider(exporter)
+	otel.SetTracerProvider(tp)
+
+	// Handle shutdown properly so nothing leaks.
+	defer func() { _ = tp.Shutdown(ctx) }()
+
 	hdFailures.With(prometheus.Labels{"device": "/dev/sda"}).Inc()
 	cpuEnergy.With(prometheus.Labels{"core": "0"}).Observe(randomEnergy())
 	hwHumidity.With(prometheus.Labels{"sensor": "0"}).Observe(randomHumidity())
 
 	// The Handler function provides a default handler to expose metrics
+	handler := promhttp.Handler()
+
+	// Wrap the handler with OpenTelemetry instrumentation
+	wrappedHandler := otelhttp.NewHandler(handler, "/metrics")
+
 	// via an HTTP server. "/metrics" is the usual endpoint for that.
-	http.Handle("/metrics", promhttp.Handler())
+	http.Handle("/metrics", wrappedHandler)
 
 	http.DefaultClient.Timeout = 30 * time.Second
 
