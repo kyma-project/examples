@@ -8,7 +8,7 @@ The following instructions outline how to install [`Kiali`](https://github.com/k
 
 - Kyma as the target deployment runtime
 - A [Prometheus instance preserving Istio metrics](./../prometheus/) deployed to the runtime.
-- kubectl > 1.26.x
+- kubectl version 1.26.x or higher
 - Helm 3.x
 
 ## Installation
