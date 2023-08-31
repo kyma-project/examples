@@ -6,8 +6,9 @@ The following instructions outline how to install [`Kiali`](https://github.com/k
 
 ## Prerequisites
 
-- Kyma as the target deployment environment
-- kubectl > 1.22.x
+- Kyma as the target deployment runtime
+- A [Prometheus instance preserving Istio metrics](./../prometheus/) deployed to the runtime.
+- kubectl version 1.26.x or higher
 - Helm 3.x
 
 ## Installation
@@ -38,7 +39,8 @@ The following instructions outline how to install [`Kiali`](https://github.com/k
 
 Run the Helm upgrade command, which installs the chart if not present yet.
 ```bash
-helm upgrade --install --create-namespace -n $KYMA_NS $HELM_KIALI_RELEASE kiali/kiali-operator -f https://raw.githubusercontent.com/kyma-project/examples/main/kiali/values.yaml
+export PROM_SERVICE_NAME=$(kubectl -n ${KYMA_NS} get service -l app=kube-prometheus-stack-prometheus -ojsonpath='{.items[*].metadata.name}')
+helm upgrade --install --create-namespace -n $KYMA_NS $HELM_KIALI_RELEASE kiali/kiali-operator -f https://raw.githubusercontent.com/kyma-project/examples/main/kiali/values.yaml --set cr.spec.external_services.prometheus.url=http://$PROM_SERVICE_NAME.$KYMA_NS:9090
 ```
 
 You can either use the [`values.yaml`](./values.yaml) provided in this `kiali` folder, which contains customized settings deviating from the default settings, or create your own `values.yaml` file.
