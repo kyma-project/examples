@@ -8,4 +8,5 @@ FROM scratch
 LABEL source=git@github.com:kyma-project/examples.git
 COPY --from=builder /app .
 EXPOSE 8080
+git
 CMD ["./main"]
