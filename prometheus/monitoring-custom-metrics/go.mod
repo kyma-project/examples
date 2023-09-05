@@ -1,6 +1,6 @@
 module github.com/kyma-project/examples/monitoring-custom-metrics
 
-go 1.20
+go 1.22
 
 require (
 	github.com/prometheus/client_golang v1.0.0
