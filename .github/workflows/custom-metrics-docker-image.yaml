@@ -38,7 +38,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
-          context: prometheus/monitoring-custom-metrics
+          context: ./prometheus/monitoring-custom-metrics
+          file: ./prometheus/monitoring-custom-metrics/custom.Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
