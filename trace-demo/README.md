@@ -46,7 +46,7 @@ The following instructions install the OpenTelemetry [demo application](https://
 1. Provide a tracing backend and activate it.
    Install [Jaeger in-cluster](./../jaeger/) or provide a custom backend supporting the OTLP protocol.
 2. Activate the Istio tracing feature.
-To [enable Istio](https://kyma-project.io/docs/kyma/main/01-overview/telemetry/telemetry-03-traces#step-2-enable-istio-tracing) to report span data, apply an Istio telemetry resource and set the sampling rate to 100%. This approach is not recommended for production.
+To [enable Istio](https://kyma-project.io/#/telemetry-manager/user/03-traces?id=step-2-enable-istio-tracing) to report span data, apply an Istio telemetry resource and set the sampling rate to 100%. This approach is not recommended for production.
    ```bash
    cat <<EOF | kubectl apply -f -
    apiVersion: telemetry.istio.io/v1alpha1

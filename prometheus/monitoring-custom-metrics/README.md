@@ -48,9 +48,9 @@ This example shows how to expose custom metrics to Prometheus with a Golang serv
     kubectl -n ${KYMA_NS} port-forward $(kubectl -n ${KYMA_NS} get service -l app=kube-prometheus-stack-prometheus -oname) 9090
     ```
 
-All the **sample-metrics** endpoints appear as the [`Targets`](http://localhost:9090/targets#job-sample-metrics) list.
+All the **sample-metrics** endpoints appear as `Targets` under `http://localhost:9090/targets#job-sample-metrics` list.
 
-2. Use either `cpu_temperature_celsius` or `hd_errors_total` in the **expression** field [here](http://localhost:9090/graph).
+2. Use either `cpu_temperature_celsius` or `hd_errors_total` in the **expression** field under `http://localhost:9090/graph`.
 3. Click the **Execute** button to check the values scraped by Prometheus.
 
 ### Cleanup
