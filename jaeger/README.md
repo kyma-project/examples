@@ -2,7 +2,7 @@
 
 ## Overview
 
-The following instructions outline how to use [`Jaeger`](https://github.com/jaegertracing/helm-charts/tree/main/charts/jaeger) as a tracing backend with Kyma's [TracePipeline](https://kyma-project.io/docs/kyma/main/01-overview/telemetry/telemetry-03-traces/).
+The following instructions outline how to use [`Jaeger`](https://github.com/jaegertracing/helm-charts/tree/main/charts/jaeger) as a tracing backend with Kyma's [TracePipeline](https://kyma-project.io/#/telemetry-manager/user/03-traces).
 
 ## Prerequisites
 
@@ -52,7 +52,7 @@ kubectl -n $KYMA_NS rollout status deploy $HELM_JAEGER_RELEASE
 
 ### Activate a TracePipeline
 
-To configure the Kyma trace collector with the deployed Jaeger instance as the backend. To create a new [TracePipeline](https://kyma-project.io/docs/kyma/main/01-overview/telemetry/telemetry-03-traces/), 
+To configure the Kyma trace collector with the deployed Jaeger instance as the backend. To create a new [TracePipeline](https://kyma-project.io/#/telemetry-manager/user/03-traces), 
 execute the following command:
    ```bash
    cat <<EOF | kubectl -n $KYMA_NS apply -f -
@@ -71,7 +71,7 @@ execute the following command:
   
 ### Activate Istio Tracing
 
-To [enable Istio](https://kyma-project.io/docs/kyma/main/01-overview/telemetry/telemetry-03-traces#step-2-enable-istio-tracing) to report span data, apply an Istio telemetry resource and set the sampling rate to 100%. This approach is not recommended for production.
+To [enable Istio](https://kyma-project.io/#/telemetry-manager/user/03-traces?id=step-2-enable-istio-tracing) to report span data, apply an Istio telemetry resource and set the sampling rate to 100%. This approach is not recommended for production.
 
 ```bash
 cat <<EOF | kubectl apply -f -
@@ -95,7 +95,7 @@ To access Jaeger using port forwarding, run:
 kubectl -n $KYMA_NS port-forward svc/$HELM_JAEGER_RELEASE-query 16686
 ```
 
-Open the Jaeger UI in your browser under [http://localhost:16686](http://localhost:16686).
+Open the Jaeger UI in your browser under `http://localhost:16686`.
 
 ### Deploy a workload and activate Kyma's TracePipeline feature
 

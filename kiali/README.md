@@ -60,7 +60,7 @@ To access Kiali, either use kubectl port forwarding, or expose it using the Kyma
   kubectl -n $KYMA_NS port-forward svc/kiali-server 20001
   ```
 
-  Open Kiali in your browser under [http://localhost:20001](http://localhost:20001) and log in with a [Kubernetes service account token](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#service-account-tokens), for instance, from your kubeconfig file.
+  Open Kiali in your browser under `http://localhost:20001` and log in with a [Kubernetes service account token](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#service-account-tokens), for instance, from your kubeconfig file.
 
 * To expose Kiali using the Kyma API Gateway, create an APIRule:
   ```bash
