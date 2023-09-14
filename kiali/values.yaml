@@ -2,7 +2,7 @@ cr:
   create: true
   name: kiali-server
   spec:
-    auth:
+    auth: {}
       # configure the authentication strategy
       # strategy: token | anonymous | header | ..
     server:
@@ -36,7 +36,7 @@ cr:
             is_proxy: true
       grafana:
         enabled: false
-      prometheus:
+      prometheus: {}
       # set prometheus url via command line args
       #  url: ""
       tracing:
