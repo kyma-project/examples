@@ -4,11 +4,9 @@
 
 The following instructions install the OpenTelemetry [demo application](https://github.com/open-telemetry/opentelemetry-demo) on a Kyma cluster using a provided [Helm chart](https://github.com/open-telemetry/opentelemetry-helm-charts/tree/main/charts/opentelemetry-demo). The demo application will be configured to push trace data via OTLP to the collector provided by Kyma, so that they will be collected together with the related Istio trace data.
 
-**CAUTION:** The following instructions are under development and rely on a preliminary state of the [Configurable Tracing](https://github.com/kyma-project/kyma/issues/11231) feature. The goal is to have an early E2E scenario for that feature. For now, you must reconfigure the Istio and Telemetry installation, which is only possible using a custom Kyma OpenSource installation. In the final state, this reconfiguration will not be required anymore.
-
 ## Prerequisites
 
-- Kyma Open Source version 2.10.x or higher
+- Kyma having the [Telemetry module](https://kyma-project.io/#/telemetry-manager/user/README) installed
 - kubectl version 1.22.x or higher
 - Helm 3.x
 
@@ -66,7 +64,7 @@ To [enable Istio](https://kyma-project.io/#/telemetry-manager/user/03-traces?id=
 
 Run the Helm upgrade command, which installs the chart if not present yet.
 ```bash
-helm upgrade --version 0.22.4 --install --create-namespace -n $KYMA_NS $HELM_OTEL_RELEASE open-telemetry/opentelemetry-demo -f https://raw.githubusercontent.com/kyma-project/examples/main/trace-demo/values.yaml
+helm upgrade --version 0.24.0 --install --create-namespace -n $KYMA_NS $HELM_OTEL_RELEASE open-telemetry/opentelemetry-demo -f https://raw.githubusercontent.com/kyma-project/examples/main/trace-demo/values.yaml
 ```
 
 You can either use the [`values.yaml`](./values.yaml) provided in this `trace-demo` folder, which contains customized settings deviating from the default settings, or create your own `values.yaml` file.
