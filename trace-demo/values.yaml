@@ -213,8 +213,10 @@ components:
   recommendationService:
     enabled: true
     envOverrides:
-      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+      - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
         value: 'http://telemetry-otlp-traces.kyma-system:4317'
+      - name: OTEL_EXPORTER_OTLP_METRICS_ENDPOINT
+        value: 'http://telemetry-otlp-metrics.kyma-system:4317'
     service:
       port: null
     ports:
