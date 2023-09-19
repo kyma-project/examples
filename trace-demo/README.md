@@ -6,7 +6,7 @@ The following instructions install the OpenTelemetry [demo application](https://
 
 ## Prerequisites
 
-- Kyma having the [Telemetry module](https://kyma-project.io/#/telemetry-manager/user/README) installed
+- Kyma with the [Telemetry module](https://kyma-project.io/#/telemetry-manager/user/README) installed
 - kubectl version 1.22.x or higher
 - Helm 3.x
 
@@ -67,7 +67,11 @@ Run the Helm upgrade command, which installs the chart if not present yet.
 helm upgrade --version 0.24.0 --install --create-namespace -n $KYMA_NS $HELM_OTEL_RELEASE open-telemetry/opentelemetry-demo -f https://raw.githubusercontent.com/kyma-project/examples/main/trace-demo/values.yaml
 ```
 
-You can either use the [`values.yaml`](./values.yaml) provided in this `trace-demo` folder, which contains customized settings deviating from the default settings, or create your own `values.yaml` file.
+You can either use the [`values.yaml`](./values.yaml) provided in this `trace-demo` folder, which contains customized settings deviating from the default settings, or create your own `values.yaml` file. The customizations cover the following areas:
+- Disable the observability tooling provided with the chart
+- Configure Kyma Telemetry instead
+- Extend memory limits of the demo apps to avoid crashes caused by memory exhaustion
+- Adjust initContainers and services of demo apps to work proper with Istio
 
 ### Verify the application
 
