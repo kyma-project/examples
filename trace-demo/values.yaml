@@ -19,8 +19,10 @@ components:
   accountingService:
     enabled: true
     envOverrides:
-      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+      - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
         value: 'http://telemetry-otlp-traces.kyma-system:4317'
+      - name: OTEL_EXPORTER_OTLP_METRICS_ENDPOINT
+        value: 'http://telemetry-otlp-metrics.kyma-system:4317'
     initContainers:
       - name: wait-for-kafka
         image: busybox:latest
@@ -31,8 +33,10 @@ components:
   adService:
     enabled: true
     envOverrides:
-      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+      - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
         value: 'http://telemetry-otlp-traces.kyma-system:4317'
+      - name: OTEL_EXPORTER_OTLP_METRICS_ENDPOINT
+        value: 'http://telemetry-otlp-metrics.kyma-system:4317'
     service:
       port: null
     ports:
@@ -42,8 +46,10 @@ components:
   cartService:
     enabled: true
     envOverrides:
-      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+      - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
         value: 'http://telemetry-otlp-traces.kyma-system:4317'
+      - name: OTEL_EXPORTER_OTLP_METRICS_ENDPOINT
+        value: 'http://telemetry-otlp-metrics.kyma-system:4317'
     service:
       port: null
     ports:
@@ -59,8 +65,10 @@ components:
   checkoutService:
     enabled: true
     envOverrides:
-      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+      - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
         value: 'http://telemetry-otlp-traces.kyma-system:4317'
+      - name: OTEL_EXPORTER_OTLP_METRICS_ENDPOINT
+        value: 'http://telemetry-otlp-metrics.kyma-system:4317'
     service:
       port: null
     ports:
@@ -76,8 +84,10 @@ components:
   currencyService:
     enabled: true
     envOverrides:
-      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+      - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
         value: 'http://telemetry-otlp-traces.kyma-system:4317'
+      - name: OTEL_EXPORTER_OTLP_METRICS_ENDPOINT
+        value: 'http://telemetry-otlp-metrics.kyma-system:4317'
     service:
       port: null
     ports:
@@ -87,21 +97,26 @@ components:
   emailService:
     enabled: true
     envOverrides:
-      - name: OTEL_EXPORTER_OTLP_ENDPOINT
-        value: 'http://telemetry-otlp-traces.kyma-system:4317'
       - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
-        value: 'http://telemetry-otlp-traces.kyma-system:4318/v1/traces'
+        value: 'http://telemetry-otlp-traces.kyma-system:4318'
+      - name: OTEL_EXPORTER_OTLP_METRICS_ENDPOINT
+        value: 'http://telemetry-otlp-metrics.kyma-system:4318'
     service:
       port: null
     ports:
       - name: http
         value: 8080
+    resources:
+      limits:
+        memory: 150Mi
 
   featureflagService:
     enabled: true
     envOverrides:
-      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+      - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
         value: 'http://telemetry-otlp-traces.kyma-system:4317'
+      - name: OTEL_EXPORTER_OTLP_METRICS_ENDPOINT
+        value: 'http://telemetry-otlp-metrics.kyma-system:4317'
     initContainers:
       - name: wait-for-ffspostgres
         image: busybox:latest
@@ -112,8 +127,10 @@ components:
   frauddetectionService:
     enabled: true
     envOverrides:
-      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+      - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
         value: 'http://telemetry-otlp-traces.kyma-system:4317'
+      - name: OTEL_EXPORTER_OTLP_METRICS_ENDPOINT
+        value: 'http://telemetry-otlp-metrics.kyma-system:4317'
     initContainers:
       - name: wait-for-kafka
         image: busybox:latest
@@ -127,8 +144,10 @@ components:
       limits:
         memory: 500Mi
     envOverrides:
-      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+      - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
         value: 'http://telemetry-otlp-traces.kyma-system:4317'
+      - name: OTEL_EXPORTER_OTLP_METRICS_ENDPOINT
+        value: 'http://telemetry-otlp-metrics.kyma-system:4317'
     service:
       port: null
     ports:
@@ -141,14 +160,21 @@ components:
   loadgenerator:
     enabled: true
     envOverrides:
-      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+      - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
         value: 'http://telemetry-otlp-traces.kyma-system:4317'
+      - name: OTEL_EXPORTER_OTLP_METRICS_ENDPOINT
+        value: 'http://telemetry-otlp-metrics.kyma-system:4317'
+    resources:
+      limits:
+        memory: 170Mi
 
   paymentService:
     enabled: true
     envOverrides:
-      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+      - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
         value: 'http://telemetry-otlp-traces.kyma-system:4317'
+      - name: OTEL_EXPORTER_OTLP_METRICS_ENDPOINT
+        value: 'http://telemetry-otlp-metrics.kyma-system:4317'
     service:
       port: null
     ports:
@@ -158,8 +184,10 @@ components:
   productCatalogService:
     enabled: true
     envOverrides:
-      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+      - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
         value: 'http://telemetry-otlp-traces.kyma-system:4317'
+      - name: OTEL_EXPORTER_OTLP_METRICS_ENDPOINT
+        value: 'http://telemetry-otlp-metrics.kyma-system:4317'
     service:
       port: null
     ports:
@@ -169,19 +197,26 @@ components:
   quoteService:
     enabled: true
     envOverrides:
-      - name: OTEL_EXPORTER_OTLP_ENDPOINT
-        value: 'telemetry-otlp-traces.kyma-system:4317'
+      - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
+        value: 'http://telemetry-otlp-traces.kyma-system:4317'
+      - name: OTEL_EXPORTER_OTLP_METRICS_ENDPOINT
+        value: 'http://telemetry-otlp-metrics.kyma-system:4317'
     service:
       port: null
     ports:
       - name: http
         value: 8080
+    resources:
+      limits:
+        memory: 80Mi
 
   recommendationService:
     enabled: true
     envOverrides:
-      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+      - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
         value: 'http://telemetry-otlp-traces.kyma-system:4317'
+      - name: OTEL_EXPORTER_OTLP_METRICS_ENDPOINT
+        value: 'http://telemetry-otlp-metrics.kyma-system:4317'
     service:
       port: null
     ports:
@@ -191,10 +226,10 @@ components:
   shippingService:
     enabled: true
     envOverrides:
-      - name: OTEL_EXPORTER_OTLP_ENDPOINT
-        value: 'http://telemetry-otlp-traces.kyma-system:4317'
       - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
         value: 'http://telemetry-otlp-traces.kyma-system:4317'
+      - name: OTEL_EXPORTER_OTLP_METRICS_ENDPOINT
+        value: 'http://telemetry-otlp-metrics.kyma-system:4317'
     service:
       port: null
     ports:
@@ -204,14 +239,21 @@ components:
   ffsPostgres:
     enabled: true
     envOverrides:
-      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+      - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
         value: 'http://telemetry-otlp-traces.kyma-system:4317'
+      - name: OTEL_EXPORTER_OTLP_METRICS_ENDPOINT
+        value: 'http://telemetry-otlp-metrics.kyma-system:4317'
 
   kafka:
     enabled: true
     envOverrides:
-      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+      - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
         value: 'http://telemetry-otlp-traces.kyma-system:4317'
+      - name: OTEL_EXPORTER_OTLP_METRICS_ENDPOINT
+        value: 'http://telemetry-otlp-metrics.kyma-system:4317'
+    resources:
+      limits:
+        memory: 700Mi
 
   redis:
     enabled: true
