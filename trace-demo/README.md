@@ -6,7 +6,8 @@ The following instructions install the OpenTelemetry [demo application](https://
 
 ## Prerequisites
 
-- Kyma with the [Telemetry module](https://kyma-project.io/#/telemetry-manager/user/README) installed
+- Kyma as the target deployment environment
+- The [Telemetry module](https://kyma-project.io/#/telemetry-manager/user/README) is [installed](https://kyma-project.io/#/02-get-started/08-install-uninstall-upgrade-kyma-module?id=install-uninstall-and-upgrade-kyma-with-a-module)
 - kubectl version 1.22.x or higher
 - Helm 3.x
 
