@@ -7,6 +7,15 @@ prometheusOperator:
   kubeletService:
     enabled: false
 
+  # Define resource limits
+  resources:
+    requests:
+      cpu: "10m"
+      memory: "128Mi"
+    limits:
+      cpu: "500m"
+      memory: "1Gi"
+
 # change the port of the node-exporter to be different from the one used by the Kyma monitoring stack
 prometheus-node-exporter:
   service:
@@ -18,6 +27,15 @@ prometheus-node-exporter:
 
 kube-state-metrics:
   prometheusScrape: false
+
+  # Define resource limits
+  resources:
+    requests:
+      cpu: "10m"
+      memory: "128Mi"
+    limits:
+      cpu: "500m"
+      memory: "2Gi"
 
 ####### This block disables control plane components which are not reachable from within the Gardener data plane
 
@@ -61,6 +79,30 @@ prometheus:
     volumeMounts:
       - mountPath: /etc/prometheus/secrets/istio.default/
         name: istio-certs
+
+####### This block configures data retention and persistence
+    # How long to retain metrics
+    retention: 30d
+
+    # Maximum size of metrics
+    retentionSize: 25GB
+
+    # Use a persistent volume for durable storage of data
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          resources:
+            requests:
+              storage: 30Gi
+    
+    # Define resource limits
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 4Gi
+      requests:
+        cpu: 125m
+        memory: 256m
 
 ####### This block is needed to also use ServiceMonitors, which are not deployed as part of the chart
 
@@ -185,6 +227,7 @@ prometheus:
             action: replace
             target_label: node
 
+# Configures grafana with istio sidecar and alertmanage as additional datasource
 grafana:
   additionalDataSources:
     - name: Alertmanager
