@@ -244,3 +244,10 @@ grafana:
       runAsUser: 1337
   podLabels:
     sidecar.istio.io/inject: "true"
+  serviceMonitor:
+    scheme: https
+    tlsConfig:
+      caFile: /etc/prometheus/secrets/istio.default/root-cert.pem
+      certFile: /etc/prometheus/secrets/istio.default/cert-chain.pem
+      insecureSkipVerify: true
+      keyFile: /etc/prometheus/secrets/istio.default/key.pem
