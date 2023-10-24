@@ -59,6 +59,8 @@ The provided `values.yaml` covers the following adjustments:
 - Parallel operation to a Kyma monitoring stack
 - Client certificate injection to support scraping of workload secured with Istio strict mTLS
 - Active scraping of workload annotated with prometheus.io/scrape
+- Basic configuration of data persistence with retention
+- Basic resource limits for involved components
 
 ### Activate scraping of Istio metrics & Grafana dashboards
 
