@@ -10,7 +10,7 @@ spec:
     gitRepository:
       url: https://github.com/kwiatekus/examples.git
       baseDir: /scale-to-zero-with-keda/src/scalable-worker-fn
-      reference: scale-with-keda
+      reference: fix-scale-to-zero-example
 ---
 apiVersion: eventing.kyma-project.io/v1alpha2
 kind: Subscription

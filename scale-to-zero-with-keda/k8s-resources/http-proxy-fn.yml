@@ -11,7 +11,7 @@ spec:
     gitRepository:
       url: https://github.com/kwiatekus/examples.git
       baseDir: /scale-to-zero-with-keda/src/http-proxy-fn
-      reference: scale-with-keda
+      reference: fix-scale-to-zero-example
   env:
     - name: eventspecversion
       value: "1.0"
