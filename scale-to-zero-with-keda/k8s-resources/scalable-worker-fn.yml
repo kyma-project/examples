@@ -8,9 +8,9 @@ spec:
   runtime: nodejs18
   source:
     gitRepository:
-      url: https://github.com/kwiatekus/examples.git
+      url: https://github.com/kyma-project/examples.git
       baseDir: /scale-to-zero-with-keda/src/scalable-worker-fn
-      reference: fix-scale-to-zero-example
+      reference: main
 ---
 apiVersion: eventing.kyma-project.io/v1alpha2
 kind: Subscription
