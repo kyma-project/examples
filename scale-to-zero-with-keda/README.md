@@ -19,12 +19,12 @@ Keda is used to scale the worker Function. [KEDA Prometheus scaler](https://keda
 
 ## Prerequisites
 
-- Kyma as the target deployment environment.
-- Keda module enabled
+- Kyma v2.19.x as the target kubernetes runtime.
+- Keda module [installed](https://github.com/kyma-project/keda-manager#install-keda-manager-and-keda-from-the-latest-release).
 
 ## Installation
 
-Make sure istio sidecar injection is enabled in the target Namesapce:
+Make sure istio sidecar injection is enabled in the target Namespace:
 
 ```bash
 kubectl label namespace default istio-injection=enabled
