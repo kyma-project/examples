@@ -57,7 +57,7 @@ Once you generate a load (even a single request), the non-zero request rate targ
  Call the HTTP proxy Function once:
 
  ```bash
- curl -H "Content-Type: application/cloudevents+json" -X POST -d '{"foo":"bar"}' https://incoming.{your_cluster_domain}
+ curl -H "Content-Type: application/json" -X POST -d '{"foo":"bar"}' https://incoming.{your_cluster_domain}
  ```
 
 The message is pushed to the Kyma Eventing.
