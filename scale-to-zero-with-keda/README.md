@@ -19,8 +19,12 @@ Keda is used to scale the worker Function. [KEDA Prometheus scaler](https://keda
 
 ## Prerequisites
 
-- Kyma v2.19.x as the target kubernetes runtime.
+- Kyma as the target kubernetes runtime.
 - Keda module [installed](https://github.com/kyma-project/keda-manager#install-keda-manager-and-keda-from-the-latest-release).
+- Serverless module [installed](https://github.com/kyma-project/serverless-manager#install)
+- Custom prometheus stack [installed](https://github.com/kyma-project/examples/blob/main/prometheus/README.md#installation) with istio scraping [enabled](https://github.com/kyma-project/examples/blob/main/prometheus/README.md#installation)
+
+>> NOTE: Serverless and prometheus are included in kyma in versions up to 2.19.x
 
 ## Installation
 
