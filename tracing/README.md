@@ -24,13 +24,13 @@ kubectl -n istio-system edit telemetries.telemetry.istio.io kyma-traces
 1. Export your Namespace as a variable by replacing the `{namespace}` placeholder in the following command and running it:
 
     ```bash
-    export KYMA_EXAMPLE_NS="{namespace}"
+    export K8S_NAMESPACE="{namespace}"
     ```
 
 2. Deploy the service. Run this command:
 
     ```bash
-    kubectl apply -f deployment/deployment.yaml -n $KYMA_EXAMPLE_NS
+    kubectl apply -f deployment/deployment.yaml -n $K8S_NAMESPACE
     ```
 
 ## Get traces from the example service
@@ -56,5 +56,5 @@ kubectl port-forward -n kyma-system svc/tracing-jaeger-query 16686:16686
 To remove all resources related to this example from your Kyma cluster, run this command:
 
 ```bash
-kubectl delete all,api -l example=tracing -n $KYMA_EXAMPLE_NS
+kubectl delete all,api -l example=tracing -n $K8S_NAMESPACE
 ```

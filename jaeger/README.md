@@ -18,7 +18,7 @@ The following instructions outline how to use [`Jaeger`](https://github.com/jaeg
 1. Export your Namespace as a variable. Replace the `{namespace}` placeholder in the following command and run it:
 
     ```bash
-    export KYMA_NS="{namespace}"
+    export K8S_NAMESPACE="{namespace}"
     ```
 
 1. Export the Helm release name that you want to use. The release name must be unique for the chosen Namespace. Be aware that all resources in the cluster will be prefixed with that name. Run the following command:
@@ -39,7 +39,7 @@ The following instructions outline how to use [`Jaeger`](https://github.com/jaeg
 
 Run the Helm upgrade command, which installs the chart if not present yet.
 ```bash
-helm upgrade --install --create-namespace -n $KYMA_NS $HELM_JAEGER_RELEASE jaegertracing/jaeger -f https://raw.githubusercontent.com/kyma-project/examples/main/jaeger/values.yaml
+helm upgrade --install --create-namespace -n $K8S_NAMESPACE $HELM_JAEGER_RELEASE jaegertracing/jaeger -f https://raw.githubusercontent.com/kyma-project/examples/main/jaeger/values.yaml
 ```
 
 You can either use the [`values.yaml`](./values.yaml) provided in this `jaeger` folder, which contains customized settings deviating from the default settings, or create your own `values.yaml` file.
@@ -48,7 +48,7 @@ You can either use the [`values.yaml`](./values.yaml) provided in this `jaeger` 
 
 Check if the `jaeger` Pod was successfully created in the Namespace and is in the `Running` state:
 ```bash
-kubectl -n $KYMA_NS rollout status deploy $HELM_JAEGER_RELEASE
+kubectl -n $K8S_NAMESPACE rollout status deploy $HELM_JAEGER_RELEASE
 ```
 
 ### Activate a TracePipeline
@@ -56,7 +56,7 @@ kubectl -n $KYMA_NS rollout status deploy $HELM_JAEGER_RELEASE
 To configure the Kyma trace collector with the deployed Jaeger instance as the backend. To create a new [TracePipeline](https://kyma-project.io/#/telemetry-manager/user/03-traces), 
 execute the following command:
    ```bash
-   cat <<EOF | kubectl -n $KYMA_NS apply -f -
+   cat <<EOF | kubectl -n $K8S_NAMESPACE apply -f -
    apiVersion: telemetry.kyma-project.io/v1alpha1
    kind: TracePipeline
    metadata:
@@ -66,7 +66,7 @@ execute the following command:
        otlp:
          protocol: http
          endpoint:
-           value: http://$HELM_JAEGER_RELEASE-collector.$KYMA_NS.svc.cluster.local:4318
+           value: http://$HELM_JAEGER_RELEASE-collector.$K8S_NAMESPACE.svc.cluster.local:4318
    EOF
    ```
   
@@ -93,7 +93,7 @@ EOF
 
 To access Jaeger using port forwarding, run:
 ```bash
-kubectl -n $KYMA_NS port-forward svc/$HELM_JAEGER_RELEASE-query 16686
+kubectl -n $K8S_NAMESPACE port-forward svc/$HELM_JAEGER_RELEASE-query 16686
 ```
 
 Open the Jaeger UI in your browser under `http://localhost:16686`.
@@ -109,7 +109,7 @@ To see distributed traces visualized in Jaeger, follow the instructions in [`tra
 Jaeger can be provided as a data source integrated into Grafana. For example, it can be part of a Grafana installation as described in the [Prometheus tutorial](./../prometheus/README.md). To have a Jaeger data source as part of the Grafana installation, deploy a Grafana data source in the following way:
 
 ```bash
-cat <<EOF | kubectl -n $KYMA_NS apply -f -
+cat <<EOF | kubectl -n $K8S_NAMESPACE apply -f -
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -123,7 +123,7 @@ data:
       - name: Jaeger-Tracing
         type: jaeger
         access: proxy
-        url: http://$HELM_JAEGER_RELEASE-query.$KYMA_NS:16686
+        url: http://$HELM_JAEGER_RELEASE-query.$K8S_NAMESPACE:16686
         editable: true
 EOF
 ```
@@ -139,7 +139,7 @@ Jaeger does not provide authentication mechanisms by itself. To secure Jaeger, f
 
 To expose Jaeger using Kyma API Gateway, create the following APIRule:
 ```bash
-cat <<EOF | kubectl -n $KYMA_NS apply -f -
+cat <<EOF | kubectl -n $K8S_NAMESPACE apply -f -
 apiVersion: gateway.kyma-project.io/v1beta1
 kind: APIRule
 metadata:
@@ -162,7 +162,7 @@ EOF
 
 Get the public URL of your Jaeger instance:
 ```bash
-kubectl -n $KYMA_NS get vs -l apirule.gateway.kyma-project.io/v1beta1=jaeger.$KYMA_NS -ojsonpath='{.items[*].spec.hosts[*]}'
+kubectl -n $K8S_NAMESPACE get vs -l apirule.gateway.kyma-project.io/v1beta1=jaeger.$K8S_NAMESPACE -ojsonpath='{.items[*].spec.hosts[*]}'
 ```
 
 ## Cleanup
@@ -172,10 +172,10 @@ When you're done, remove the example and all its resources from the cluster.
 1. Remove the stack by calling Helm:
 
     ```bash
-    helm delete -n $KYMA_NS $HELM_JAEGER_RELEASE
+    helm delete -n $K8S_NAMESPACE $HELM_JAEGER_RELEASE
     ```
 
-2. If you created the `$KYMA_NS` Namespace specifically for this tutorial, remove the Namespace:
+2. If you created the `$K8S_NAMESPACE` Namespace specifically for this tutorial, remove the Namespace:
     ```bash
-    kubectl delete namespace $KYMA_NS
+    kubectl delete namespace $K8S_NAMESPACE
     ``` 

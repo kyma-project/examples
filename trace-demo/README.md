@@ -16,16 +16,16 @@ The following instructions install the OpenTelemetry [demo application](https://
 1. Export your Namespace as a variable. Replace the `{namespace}` placeholder in the following command and run it:
 
     ```bash
-    export KYMA_NS="{namespace}"
+    export K8S_NAMESPACE="{namespace}"
     ```
 1. If you don't have created a Namespace yet, do it now:
     ```bash
-    kubectl create namespace $KYMA_NS
+    kubectl create namespace $K8S_NAMESPACE
     ```
 
 1. To enable Istio injection in your Namespace, set the following label:
     ```bash
-    kubectl label namespace $KYMA_NS istio-injection=enabled
+    kubectl label namespace $K8S_NAMESPACE istio-injection=enabled
     ```
 
 1. Export the Helm release name that you want to use. The release name must be unique for the chosen Namespace. Be aware that all resources in the cluster will be prefixed with that name. Run the following command:
@@ -65,7 +65,7 @@ To [enable Istio](https://kyma-project.io/#/telemetry-manager/user/03-traces?id=
 
 Run the Helm upgrade command, which installs the chart if not present yet.
 ```bash
-helm upgrade --version 0.24.0 --install --create-namespace -n $KYMA_NS $HELM_OTEL_RELEASE open-telemetry/opentelemetry-demo -f https://raw.githubusercontent.com/kyma-project/examples/main/trace-demo/values.yaml
+helm upgrade --version 0.24.0 --install --create-namespace -n $K8S_NAMESPACE $HELM_OTEL_RELEASE open-telemetry/opentelemetry-demo -f https://raw.githubusercontent.com/kyma-project/examples/main/trace-demo/values.yaml
 ```
 
 You can either use the [`values.yaml`](./values.yaml) provided in this `trace-demo` folder, which contains customized settings deviating from the default settings, or create your own `values.yaml` file. The customizations cover the following areas:
@@ -80,7 +80,7 @@ To verify that the application is running properly, set up port forwarding and c
 
 1. Verify the frontend:
    ```bash
-   kubectl -n $KYMA_NS port-forward svc/$HELM_OTEL_RELEASE-frontend 8080
+   kubectl -n $K8S_NAMESPACE port-forward svc/$HELM_OTEL_RELEASE-frontend 8080
    ```
    ```bash
    open http://localhost:8080
@@ -88,7 +88,7 @@ To verify that the application is running properly, set up port forwarding and c
 
 2. Verify that traces arrive in the Jaeger backend. If you deployed [Jaeger in your cluster](./../jaeger/) using the same Namespace as used for the demo app, run:
    ```bash
-   kubectl -n $KYMA_NS port-forward svc/tracing-jaeger-query 16686
+   kubectl -n $K8S_NAMESPACE port-forward svc/tracing-jaeger-query 16686
    ```
    ```bash
    open http://localhost:16686
@@ -96,7 +96,7 @@ To verify that the application is running properly, set up port forwarding and c
 
 3. Enable failures with the feature flag service:
    ```bash
-   kubectl -n $KYMA_NS port-forward svc/$HELM_OTEL_RELEASE-featureflagservice 8081
+   kubectl -n $K8S_NAMESPACE port-forward svc/$HELM_OTEL_RELEASE-featureflagservice 8081
    ```
    ```bash
    open http://localhost:8081
@@ -104,7 +104,7 @@ To verify that the application is running properly, set up port forwarding and c
 
 4. Generate load with the load generator:
    ```bash
-   kubectl -n $KYMA_NS port-forward svc/$HELM_OTEL_RELEASE-loadgenerator 8089
+   kubectl -n $K8S_NAMESPACE port-forward svc/$HELM_OTEL_RELEASE-loadgenerator 8089
    ```
    ```bash
    open http://localhost:8089
@@ -123,7 +123,7 @@ To expose the frontend web app and the relevant trace endpoint, define an Istio 
 ```bash
 export CLUSTER_DOMAIN={my-domain}
 
-cat <<EOF | kubectl -n $KYMA_NS apply -f -
+cat <<EOF | kubectl -n $K8S_NAMESPACE apply -f -
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -152,7 +152,7 @@ spec:
       allowCredentials: true
   - route:
     - destination:
-        host: $HELM_OTEL_RELEASE-frontend.$KYMA_NS.svc.cluster.local
+        host: $HELM_OTEL_RELEASE-frontend.$K8S_NAMESPACE.svc.cluster.local
         port:
           number: 8080
 EOF
@@ -160,7 +160,7 @@ EOF
 
 Then, update the frontend configuration. To do that, run the following helm command and set the additional configuration:
 ```bash
-helm upgrade --version 0.22.2 --install --create-namespace -n $KYMA_NS $HELM_OTEL_RELEASE open-telemetry/opentelemetry-demo \
+helm upgrade --version 0.22.2 --install --create-namespace -n $K8S_NAMESPACE $HELM_OTEL_RELEASE open-telemetry/opentelemetry-demo \
 -f https://raw.githubusercontent.com/kyma-project/examples/main/trace-demo/values.yaml \
 --set 'components.frontend.envOverrides[1].name=PUBLIC_OTEL_EXPORTER_OTLP_TRACES_ENDPOINT' \
 --set "components.frontend.envOverrides[1].value=https://frontend.$CLUSTER_DOMAIN/v1/traces"
@@ -172,5 +172,5 @@ Afterwards, the web application will be accessible in your browser at `https://f
 When you're done, you can remove the example and all its resources from the cluster by calling Helm:
 
 ```bash
-helm delete -n $KYMA_NS $HELM_OTEL_RELEASE
+helm delete -n $K8S_NAMESPACE $HELM_OTEL_RELEASE
 ```

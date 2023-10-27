@@ -117,7 +117,7 @@ There are additional prerequisites to exposing a service manually using kubectl:
 1. Export your Namespace as a variable. Replace the `{namespace}` placeholder in the following command and run it:
 
    ```bash
-   export KYMA_EXAMPLE_NS="{namespace}"
+   export K8S_NAMESPACE="{namespace}"
    ```
    
 2. Export your Kyma domain as a variable. Replace the `{domain}` placeholder in the following command and run it:
@@ -129,7 +129,7 @@ There are additional prerequisites to exposing a service manually using kubectl:
 3. Apply the `deployment.yaml` file from the `service` directory in this example.
 
    ```bash
-   kubectl apply -f ./service/deployment.yaml -n $KYMA_EXAMPLE_NS
+   kubectl apply -f ./service/deployment.yaml -n $K8S_NAMESPACE
    ```
 
 #### Expose a service without authentication
@@ -137,7 +137,7 @@ There are additional prerequisites to exposing a service manually using kubectl:
 Run this command to create an API Rule:
 
 ```bash
-kubectl apply -f ./service/api-without-auth.yaml -n $KYMA_EXAMPLE_NS
+kubectl apply -f ./service/api-without-auth.yaml -n $K8S_NAMESPACE
 ```
 
 #### Test the API Rules without authentication
@@ -163,7 +163,7 @@ metadata:
   labels:
     example: gateway-service
   name: http-db-service
-  namespace: $KYMA_EXAMPLE_NS
+  namespace: $K8S_NAMESPACE
 spec:
   gateway: kyma-gateway.kyma-system.svc.cluster.local
   rules:
@@ -190,7 +190,7 @@ EOF
 You can also manually adjust the `https://dex.kyma.local` domain in the `trusted_issuers` section of the `api-with-jwt.yaml` file to fit your setup. After adjusting the domain, run:
 
 ```bash
-kubectl apply -f ./service/api-with-jwt.yaml -n $KYMA_EXAMPLE_NS
+kubectl apply -f ./service/api-with-jwt.yaml -n $K8S_NAMESPACE
 ```
 
 #### Test the APIs with JWT authentication
@@ -211,7 +211,7 @@ curl -ik https://http-db-service.$KYMA_EXAMPLE_DOMAIN/orders -H 'Authorization: 
 
 Create an API Rule with the OAuth2 authentication settings:
 ```bash
-kubectl apply -f ./service/api-with-oauth2.yaml -n $KYMA_EXAMPLE_NS
+kubectl apply -f ./service/api-with-oauth2.yaml -n $K8S_NAMESPACE
 ```
 
 #### Fetch the OAuth2 token
@@ -219,7 +219,7 @@ kubectl apply -f ./service/api-with-oauth2.yaml -n $KYMA_EXAMPLE_NS
 1. Create an OAuth2 client:
 
     ```bash
-    kubectl apply -f ./service/oauth2client.yaml -n $KYMA_EXAMPLE_NS
+    kubectl apply -f ./service/oauth2client.yaml -n $K8S_NAMESPACE
     ```
 
 2. Fetch the access token with the required scopes. The access token in the response is referred to as the **\{oauth2-token\}**. Run:
@@ -245,9 +245,9 @@ curl -ik https://http-db-service.$KYMA_EXAMPLE_DOMAIN/orders -H 'Authorization: 
 Run the following command to completely remove the example and all its resources from the cluster:
 
 ```bash
-kubectl delete all -l example=gateway-service -n $KYMA_EXAMPLE_NS
-kubectl delete apirules.gateway.kyma-project.io -l example=gateway-service -n $KYMA_EXAMPLE_NS
-kubectl delete oauth2clients.hydra.ory.sh -l example=gateway-service -n $KYMA_EXAMPLE_NS
+kubectl delete all -l example=gateway-service -n $K8S_NAMESPACE
+kubectl delete apirules.gateway.kyma-project.io -l example=gateway-service -n $K8S_NAMESPACE
+kubectl delete oauth2clients.hydra.ory.sh -l example=gateway-service -n $K8S_NAMESPACE
 ```
 
 ## Troubleshooting
@@ -257,7 +257,7 @@ kubectl delete oauth2clients.hydra.ory.sh -l example=gateway-service -n $KYMA_EX
 **No healthy upstream:** Check if the Pod you created is running. Run:
 
 ```bash
-kubectl get pods -n $KYMA_EXAMPLE_NS
+kubectl get pods -n $K8S_NAMESPACE
 ```
 
 Wait until all containers of the Pod are running.
@@ -267,7 +267,7 @@ Wait until all containers of the Pod are running.
 **Upstream connect error or disconnect/reset before headers:** Check if the Pod you created has the istio-proxy container injected. Run this command:
 
 ```bash
-kubectl get pods -l example=gateway-service -n $KYMA_EXAMPLE_NS -o json | jq '.items[].spec.containers[].name'
+kubectl get pods -l example=gateway-service -n $K8S_NAMESPACE -o json | jq '.items[].spec.containers[].name'
 ```
 
 One of the returned strings should be the istio-proxy. If there is no such string, the Namespace probably does not have Istio injection enabled. For more information, read the document about the [sidecar proxy injection](https://kyma-project.io/#/04-operation-guides/operations/smsh-01-istio-enable-sidecar-injection).
