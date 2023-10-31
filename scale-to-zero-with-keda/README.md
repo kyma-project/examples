@@ -34,6 +34,8 @@ Make sure Istio sidecar injection is enabled in the target Namespace:
 kubectl label namespace default istio-injection=enabled
 ```
 
+Edit `k8s-resources/scalable-worker-fn.yml` and `k8s-resources/peer-authentication.yaml` files to fill in the namespace value (namespace where prometheus was deployed).
+
 Apply the example resources from `./k8s-resources` directory:
 ```bash
 kubectl apply -f ./k8s-resources
