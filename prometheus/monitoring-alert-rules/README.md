@@ -22,7 +22,7 @@ This example shows how to deploy and view alerting rules in Kyma.
 2. Run the `port-forward` command on the `monitoring-prometheus` service to access the Prometheus dashboard.
 
     ```bash
-    kubectl -n ${KYMA_NS} port-forward $(kubectl -n ${KYMA_NS} get service -l app=kube-prometheus-stack-prometheus -oname) 9090
+    kubectl -n ${K8S_NAMESPACE} port-forward $(kubectl -n ${K8S_NAMESPACE} get service -l app=kube-prometheus-stack-prometheus -oname) 9090
     ```
 
 3. Go to `http://localhost:9090/rules` and find the **pod-not-running** rule.
@@ -34,13 +34,13 @@ This example shows how to deploy and view alerting rules in Kyma.
 1. Export your Namespace as a variable:
 
     ```bash
-    export KYMA_APPLICATION_NS="{namespace}"
+    export K8S_NAMESPACE="{namespace}"
     ```
 
 2. To stop the alert from getting fired, create the Deployment:
 
     ```bash
-    kubectl apply -f https://raw.githubusercontent.com/kyma-project/examples/main/http-db-service/deployment/deployment.yaml -n $KYMA_APPLICATION_NS
+    kubectl apply -f https://raw.githubusercontent.com/kyma-project/examples/main/http-db-service/deployment/deployment.yaml -n $K8S_NAMESPACE
     ```
 
 ### Cleanup
@@ -56,5 +56,5 @@ Run the following commands to completely remove the example and all its resource
 2. Remove the **http-db-service** example and all its resources from the cluster:
 
     ```bash
-    kubectl delete all -l example=http-db-service -n $KYMA_APPLICATION_NS
+    kubectl delete all -l example=http-db-service -n $K8S_NAMESPACE
     ```

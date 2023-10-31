@@ -22,12 +22,12 @@ Furthermore, the setup brings an OpenTelemetry Collector DaemonSet acting as age
 1. Export your Namespace as a variable. Replace the `{namespace}` placeholder in the following command and run it:
 
     ```bash
-    export KYMA_NS="{namespace}"
+    export K8S_NAMESPACE="{namespace}"
     ```
 
 1. If you haven't created a Namespace yet, do it now:
     ```bash
-    kubectl create namespace $KYMA_NS
+    kubectl create namespace $K8S_NAMESPACE
     ```
 
 1. Update your Helm installation with the required Helm repository:
@@ -47,7 +47,7 @@ Furthermore, the setup brings an OpenTelemetry Collector DaemonSet acting as age
    If you don't want to use a Secret, use the following command, and adjust the placeholders `myEndpoint` and `myToken` to your needs:
 
    ```bash
-   helm upgrade metrics-gateway open-telemetry/opentelemetry-collector --version 0.62.2 --install --namespace $KYMA_NS \
+   helm upgrade metrics-gateway open-telemetry/opentelemetry-collector --version 0.62.2 --install --namespace $K8S_NAMESPACE \
      -f https://raw.githubusercontent.com/kyma-project/examples/main/metrics-otlp/metrics-gateway-values.yaml \
      --set config.exporters.otlp.endpoint="{myEndpoint}" \
      --set config.exporters.otlp.headers.Authorization="Bearer {myToken}"
@@ -56,7 +56,7 @@ Furthermore, the setup brings an OpenTelemetry Collector DaemonSet acting as age
    
    > **TIP:** It's recommended that you provide tokens using a Secret. To achieve that, you can mount the relevant attributes of your secret via the `extraEnvs` parameter and use placeholders for referencing the actual environment values. Take a look at the provided sample [secret-values.yaml](./secret-values.yaml) file, adjust it to your Secret, and run:
    ```bash
-   helm upgrade metrics-gateway open-telemetry/opentelemetry-collector --version 0.62.2 --install --namespace $KYMA_NS \
+   helm upgrade metrics-gateway open-telemetry/opentelemetry-collector --version 0.62.2 --install --namespace $K8S_NAMESPACE \
      -f https://raw.githubusercontent.com/kyma-project/examples/main/metrics-otlp/metrics-gateway-values.yaml \
      -f secret-values.yaml
    ```
@@ -64,7 +64,7 @@ Furthermore, the setup brings an OpenTelemetry Collector DaemonSet acting as age
 1. Verify the deployment.
    Check that the related Pod has been created in the Namespace and is in the `Running` state:
    ```bash
-   kubectl -n $KYMA_NS rollout status deploy metrics-gateway
+   kubectl -n $K8S_NAMESPACE rollout status deploy metrics-gateway
    ```
 
 ## Install the agent
@@ -76,15 +76,15 @@ Furthermore, the setup brings an OpenTelemetry Collector DaemonSet acting as age
    Deploy an Otel Collector using the upstream Helm chart with a prepared [values](./metrics-agent-values.yaml). The values file defines a metrics pipeline for scraping workload by annotation and pushing them to the gateway. It also defines a second metrics pipeline determining node-specific metrics for your workload from the nodes kubelet and the nodes filesystem itself.
 
    ```bash
-   helm upgrade metrics-agent open-telemetry/opentelemetry-collector --version 0.62.2 --install --namespace $KYMA_NS \
+   helm upgrade metrics-agent open-telemetry/opentelemetry-collector --version 0.62.2 --install --namespace $K8S_NAMESPACE \
      -f https://raw.githubusercontent.com/kyma-project/examples/main/metrics-otlp/metrics-agent-values.yaml \
-     --set config.exporters.otlp.endpoint=metrics-gateway.$KYMA_NS:4317
+     --set config.exporters.otlp.endpoint=metrics-gateway.$K8S_NAMESPACE:4317
    ```
 
 1. Verify the deployment.
    Check that the related Pod has been created in the Namespace and is in the `Running` state:
    ```bash
-   kubectl -n $KYMA_NS rollout status daemonset metrics-agent
+   kubectl -n $K8S_NAMESPACE rollout status daemonset metrics-agent
    ```
 
 ## Result
@@ -118,9 +118,9 @@ prometheus.io/path: /myMetrics # optional, configure the path under which the me
 To try it out, you can install the demo app taken from the tutorial [Expose Custom Metrics in Kyma](https://github.com/kyma-project/examples/tree/main/prometheus/monitoring-custom-metrics) and annotate the workload with the annotations mentioned above.
 
 ```bash
-kubectl apply -n $KYMA_NS -f https://raw.githubusercontent.com/kyma-project/examples/main/prometheus/monitoring-custom-metrics/deployment/deployment.yaml
-kubectl -n $KYMA_NS annotate service sample-metrics prometheus.io/scrape=true
-kubectl -n $KYMA_NS annotate service sample-metrics prometheus.io/port=8080
+kubectl apply -n $K8S_NAMESPACE -f https://raw.githubusercontent.com/kyma-project/examples/main/prometheus/monitoring-custom-metrics/deployment/deployment.yaml
+kubectl -n $K8S_NAMESPACE annotate service sample-metrics prometheus.io/scrape=true
+kubectl -n $K8S_NAMESPACE annotate service sample-metrics prometheus.io/port=8080
 ```
 
 The workload exposes the metric `cpu_temperature_celsius` at port `8080`, which is then automatically ingested to your configured backend.
@@ -140,7 +140,7 @@ spec:
       containers:
       - env:
         - name: OTEL_EXPORTER_OTLP_METRICS_ENDPOINT
-          value: http://metrics-gateway.$KYMA_NS:4317
+          value: http://metrics-gateway.$K8S_NAMESPACE:4317
         - name: OTEL_SERVICE_NAME
           valueFrom:
             fieldRef:
@@ -153,6 +153,6 @@ spec:
 When you're done, you can remove the example and all its resources from the cluster by calling Helm:
 
 ```bash
-helm delete -n $KYMA_NS metrics-gateway
-helm delete -n $KYMA_NS metrics-agent
+helm delete -n $K8S_NAMESPACE metrics-gateway
+helm delete -n $K8S_NAMESPACE metrics-agent
 ```

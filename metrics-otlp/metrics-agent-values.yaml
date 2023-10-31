@@ -215,7 +215,7 @@ config:
     otlp:
       # Provided via command line arguments
       # ---------
-      #endpoint: metrics-gateway.$KYMA_NS:4317
+      #endpoint: metrics-gateway.$K8S_NAMESPACE:4317
       tls:
         insecure: true
       retry_on_failure:

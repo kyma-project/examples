@@ -65,5 +65,5 @@ When you create a dashboard to monitor one of your applications (Function, micro
 4. Restart the Grafana deployment with the following command:
 
    ```bash
-   kubectl -n ${KYMA_NS} rollout restart deployment ${HELM_RELEASE}-grafana
+   kubectl -n ${K8S_NAMESPACE} rollout restart deployment ${HELM_RELEASE}-grafana
    ```

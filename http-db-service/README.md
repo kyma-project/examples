@@ -29,12 +29,12 @@ Run the following commands to deploy the published service to Kyma:
 1. Export your Namespace as variable by replacing the `{namespace}` placeholder in the following command and running it:
 
     ```bash
-    export KYMA_EXAMPLE_NS="{namespace}"
+    export K8S_NAMESPACE="{namespace}"
     ```
 2. Deploy the service:
     ```bash
-    kubectl create namespace $KYMA_EXAMPLE_NS
-    kubectl apply -f deployment/deployment.yaml -n $KYMA_EXAMPLE_NS
+    kubectl create namespace $K8S_NAMESPACE
+    kubectl apply -f deployment/deployment.yaml -n $K8S_NAMESPACE
     ```
 
 ### MSSQL Database tests
@@ -58,5 +58,5 @@ The command runs the specific unit tests for MSSQL databases with the environmen
 Run the following command to completely remove the example and all its resources from the cluster:
 
 ```bash
-kubectl delete all -l example=http-db-service -n $KYMA_EXAMPLE_NS
+kubectl delete all -l example=http-db-service -n $K8S_NAMESPACE
 ```

@@ -28,17 +28,17 @@ This example illustrates how to write a service in `NodeJS` that listens for Eve
 
 1. Export your Namespace as a variable by replacing the **{namespace}** placeholder in the following command and running it:
     ```bash
-    export KYMA_EXAMPLE_NS="{namespace}"
+    export K8S_NAMESPACE="{namespace}"
     ```
 
 2. Deploy the service:
     ```bash
-    kubectl apply -f deployment -n $KYMA_EXAMPLE_NS
+    kubectl apply -f deployment -n $K8S_NAMESPACE
     ```
 
 3. Expose the service endpoint:
     ```bash
-    kubectl port-forward -n $KYMA_EXAMPLE_NS $(kubectl get pod -n $KYMA_EXAMPLE_NS -l example=event-email-service | grep event-email-service | awk '{print $1}') 3000
+    kubectl port-forward -n $K8S_NAMESPACE $(kubectl get pod -n $K8S_NAMESPACE -l example=event-email-service | grep event-email-service | awk '{print $1}') 3000
     ```
 
 ### Test the service
@@ -56,5 +56,5 @@ After sending the Event, you should see a log entry either in your terminal (if 
 Clean all deployed example resources from Kyma with the following command:
 
 ```bash
-kubectl delete all -l example=event-email-service -n $KYMA_EXAMPLE_NS
+kubectl delete all -l example=event-email-service -n $K8S_NAMESPACE
 ```

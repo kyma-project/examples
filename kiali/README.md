@@ -18,7 +18,7 @@ The following instructions outline how to install [`Kiali`](https://github.com/k
 1. Export your Namespace as a variable. Replace the `{namespace}` placeholder in the following command and run it:
 
     ```bash
-    export KYMA_NS="{namespace}"
+    export K8S_NAMESPACE="{namespace}"
     ```
 
 1. Export the Helm release name that you want to use. The release name must be unique for the chosen Namespace. Be aware that all resources in the cluster will be prefixed with that name. Run the following command:
@@ -39,8 +39,8 @@ The following instructions outline how to install [`Kiali`](https://github.com/k
 
 Run the Helm upgrade command, which installs the chart if not present yet.
 ```bash
-export PROM_SERVICE_NAME=$(kubectl -n ${KYMA_NS} get service -l app=kube-prometheus-stack-prometheus -ojsonpath='{.items[*].metadata.name}')
-helm upgrade --install --create-namespace -n $KYMA_NS $HELM_KIALI_RELEASE kiali/kiali-operator -f https://raw.githubusercontent.com/kyma-project/examples/main/kiali/values.yaml --set cr.spec.external_services.prometheus.url=http://$PROM_SERVICE_NAME.$KYMA_NS:9090
+export PROM_SERVICE_NAME=$(kubectl -n ${K8S_NAMESPACE} get service -l app=kube-prometheus-stack-prometheus -ojsonpath='{.items[*].metadata.name}')
+helm upgrade --install --create-namespace -n $K8S_NAMESPACE $HELM_KIALI_RELEASE kiali/kiali-operator -f https://raw.githubusercontent.com/kyma-project/examples/main/kiali/values.yaml --set cr.spec.external_services.prometheus.url=http://$PROM_SERVICE_NAME.$K8S_NAMESPACE:9090
 ```
 
 You can either use the [`values.yaml`](./values.yaml) provided in this `kiali` folder, which contains customized settings deviating from the default settings, or create your own `values.yaml` file.
@@ -49,7 +49,7 @@ You can either use the [`values.yaml`](./values.yaml) provided in this `kiali` f
 
 Check that the `kiali-operator` and `kiali-server` Pods have been created in the Namespace and are in the `Running` state:
 ```bash
-kubectl -n $KYMA_NS rollout status deploy $HELM_KIALI_RELEASE-kiali-operator && kubectl -n $KYMA_NS rollout status deploy kiali-server
+kubectl -n $K8S_NAMESPACE rollout status deploy $HELM_KIALI_RELEASE-kiali-operator && kubectl -n $K8S_NAMESPACE rollout status deploy kiali-server
 ```
 ### Access Kiali
 
@@ -57,18 +57,18 @@ To access Kiali, either use kubectl port forwarding, or expose it using the Kyma
 
 * To access Kiali using port forwarding, run:
   ```bash
-  kubectl -n $KYMA_NS port-forward svc/kiali-server 20001
+  kubectl -n $K8S_NAMESPACE port-forward svc/kiali-server 20001
   ```
 
   Open Kiali in your browser under `http://localhost:20001` and log in with a [Kubernetes service account token](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#service-account-tokens), for instance, from your kubeconfig file.
 
 * To expose Kiali using the Kyma API Gateway, create an APIRule:
   ```bash
-  kubectl -n $KYMA_NS apply -f https://raw.githubusercontent.com/kyma-project/examples/main/kiali/apirule.yaml
+  kubectl -n $K8S_NAMESPACE apply -f https://raw.githubusercontent.com/kyma-project/examples/main/kiali/apirule.yaml
   ```
   Get the public URL of your Kiali server:
   ```bash
-  kubectl -n $KYMA_NS get vs -l apirule.gateway.kyma-project.io/v1beta1=kiali.$KYMA_NS -ojsonpath='{.items[*].spec.hosts[*]}'
+  kubectl -n $K8S_NAMESPACE get vs -l apirule.gateway.kyma-project.io/v1beta1=kiali.$K8S_NAMESPACE -ojsonpath='{.items[*].spec.hosts[*]}'
   ```
 
 ### Deploy a custom workload and invoke
@@ -95,7 +95,7 @@ Kiali supports different authentication strategies. The default authentication s
 
 * For Kiali access by port forwarding, you need no additional authentication, and you can activate the [anonymous strategy](https://kiali.io/docs/configuration/authentication/anonymous/):
   ```bash
-  helm upgrade --install --create-namespace -n $KYMA_NS $HELM_KIALI_RELEASE kiali/kiali-operator --set cr.spec.auth.strategy=anonymous -f https://raw.githubusercontent.com/kyma-project/examples/main/kiali/values.yaml
+  helm upgrade --install --create-namespace -n $K8S_NAMESPACE $HELM_KIALI_RELEASE kiali/kiali-operator --set cr.spec.auth.strategy=anonymous -f https://raw.githubusercontent.com/kyma-project/examples/main/kiali/values.yaml
   ```
 * When exposing the Kiali server over the ingress gateway, we recommend to use an external identity provider compatible with OpenID Connect (OIDC). Find the required settings at [Kiali: OpenID Connect strategy](https://kiali.io/docs/configuration/authentication/openid/).
 
@@ -106,11 +106,11 @@ When you're done, you can remove the example and all its resources from the clus
 1. Remove the stack by calling Helm:
 
     ```bash
-    helm delete -n $KYMA_NS $HELM_KIALI_RELEASE
-    kubectl -n $KYMA_NS delete -f https://raw.githubusercontent.com/kyma-project/examples/main/kiali/apirule.yaml
+    helm delete -n $K8S_NAMESPACE $HELM_KIALI_RELEASE
+    kubectl -n $K8S_NAMESPACE delete -f https://raw.githubusercontent.com/kyma-project/examples/main/kiali/apirule.yaml
     ```
 
-2. If you created the `$KYMA_NS` Namespace specifically for this tutorial, remove the Namespace:
+2. If you created the `$K8S_NAMESPACE` Namespace specifically for this tutorial, remove the Namespace:
     ```bash
-    kubectl delete namespace $KYMA_NS
+    kubectl delete namespace $K8S_NAMESPACE
     ``` 
