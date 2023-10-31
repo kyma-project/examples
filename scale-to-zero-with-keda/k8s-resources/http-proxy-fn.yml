@@ -9,9 +9,9 @@ spec:
   replicas: 1
   source:
     gitRepository:
-      url: https://github.com/kwiatekus/examples.git
+      url: https://github.com/kyma-project/examples.git
       baseDir: /scale-to-zero-with-keda/src/http-proxy-fn
-      reference: scale-with-keda
+      reference: main
   env:
     - name: eventspecversion
       value: "1.0"

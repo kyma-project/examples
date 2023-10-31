@@ -19,12 +19,16 @@ Keda is used to scale the worker Function. [KEDA Prometheus scaler](https://keda
 
 ## Prerequisites
 
-- Kyma as the target deployment environment.
-- Keda module enabled
+- Kyma as the target Kubernetes runtime.
+- [Keda module installed](https://github.com/kyma-project/keda-manager#install-keda-manager-and-keda-from-the-latest-release)
+- [Serverless module installed](https://github.com/kyma-project/serverless-manager#install)
+- [Custom Prometheus stack installed](https://github.com/kyma-project/examples/blob/main/prometheus/README.md#installation) with [Istio scraping enabled](https://github.com/kyma-project/examples/blob/main/prometheus/README.md#installation)
+
+>> NOTE: Serverless and Prometheus are included in Kyma versions up to 2.19.x
 
 ## Installation
 
-Make sure istio sidecar injection is enabled in the target Namesapce:
+Make sure Istio sidecar injection is enabled in the target Namespace:
 
 ```bash
 kubectl label namespace default istio-injection=enabled
@@ -57,7 +61,7 @@ Once you generate a load (even a single request), the non-zero request rate targ
  Call the HTTP proxy Function once:
 
  ```bash
- curl -H "Content-Type: application/cloudevents+json" -X POST -d '{"foo":"bar"}' https://incoming.{your_cluster_domain}
+ curl -H "Content-Type: application/json" -X POST -d '{"foo":"bar"}' https://incoming.{your_cluster_domain}
  ```
 
 The message is pushed to the Kyma Eventing.
