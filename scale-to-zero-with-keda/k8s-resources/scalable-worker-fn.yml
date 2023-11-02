@@ -37,7 +37,7 @@ spec:
   triggers:
   - type: prometheus
     metadata:
-      serverAddress: http://prometheus-operated.kyma-system.svc.cluster.local:9090
+      serverAddress: http://prometheus-operated.{prometheus-namespace}.svc.cluster.local:9090
       query: sum(rate(istio_requests_total{destination_service="scalable-worker-fn.default.svc.cluster.local",reporter="source"}[1m]))
       threshold: '2'
       
