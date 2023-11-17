@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Kyma telemetry module provides collection and integration into observability backends based on OpenTelemetry. OpenTelemetry is the new vendor-neutral player in the cloud-native observability domain and has a growing adoption. However, it still lacks many features and sometimes the typical `kube-prometheus-stack` based on Prometheus, Grafana and the surrounding helper tools is more appropriate.
+The Kyma Telemetry module provides collection and integration into observability backends based on OpenTelemetry. OpenTelemetry is the new vendor-neutral player in the cloud-native observability domain and has a growing adoption. However, it still lacks many features and sometimes the typical `kube-prometheus-stack` based on Prometheus, Grafana, and the surrounding helper tools is more appropriate.
 
 The following instructions describe the complete monitoring flow for your service running in Kyma. You get the gist of monitoring applications, such as Prometheus, Grafana, and Alertmanager. You learn how and where you can observe and visualize your service metrics to monitor them for any alerting values.
 
@@ -16,7 +16,7 @@ The instructions cover the following tasks:
 
 1. [**Deploy a custom Prometheus stack**](./prometheus.md), in which you deploy the [kube-prometheus-stack](https://github.com/prometheus-operator/kube-prometheus) from the upstream Helm chart.
 
-2. [**Observe application metrics**](./monitoring-custom-metrics/README.md), in which you redirect the `cpu_temperature_celsius` metric to the localhost and the Prometheus UI. You later observe how the metric value changes in the predefined 10 seconds interval in which Prometheus scrapes the metric values from the service's `/metrics` endpoint.
+2. [**Observe application metrics**](./monitoring-custom-metrics/README.md), in which you redirect the `cpu_temperature_celsius` metric to the localhost and the Prometheus UI. You later observe how the metric value changes in the predefined 10-second interval in which Prometheus scrapes the metric values from the service's `/metrics` endpoint.
 
 3. [**Create a Grafana dashboard**](./monitoring-grafana-dashboard/README.md), in which you create a Grafana dashboard of a Gauge type for the `cpu_temperature_celsius` metric. This dashboard shows explicitly when the CPU temperature is equal to or higher than the predefined threshold of 75 degrees Celsius, at which point the dashboard turns red.
 

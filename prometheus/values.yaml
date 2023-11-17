@@ -1,5 +1,5 @@
 
-####### This block configures resource limits for the tooling and disables scaping of them via annotation
+####### This block configures resource limits for the tooling and disables scaping of them via annotations
 
 prometheusOperator:
   # Define resource limits
@@ -30,7 +30,7 @@ kube-state-metrics:
       cpu: "500m"
       memory: "2Gi"
 
-####### This block disabled not needed features
+####### This block disables not needed features
 
 kubeEtcd:
   # Disable scraping of control plane component etcd as it is not reachable from the data plane
