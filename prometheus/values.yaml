@@ -1,12 +1,7 @@
-####### This block is required to run in parallel with a Kyma monitoring stack
-prometheusOperator:
-  # exclude the kyma-system Namespace from watching to avoid conflict with the Kyma monitoring stack
-  denyNamespaces:
-    - kyma-system
-  # re-use the kublet service definition of the Kyma monitoring stack.
-  kubeletService:
-    enabled: false
 
+####### This block configures resource limits for the tooling and disables scaping of them via annotations
+
+prometheusOperator:
   # Define resource limits
   resources:
     requests:
@@ -16,16 +11,14 @@ prometheusOperator:
       cpu: "500m"
       memory: "1Gi"
 
-# change the port of the node-exporter to be different from the one used by the Kyma monitoring stack
 prometheus-node-exporter:
+  # Disables prometheus annotations on monitoring components as they are scraped using an explicit config
   service:
-    port: 9101
-    targetPort: 9101
     annotations:
-####### This block disables prometheus annotations on monitoring components in order to be able to enable scraping via annotation for all workloads
       prometheus.io/scrape: "false"
 
 kube-state-metrics:
+  # Disables prometheus annotations on monitoring components as they are scraped using an explicit config
   prometheusScrape: false
 
   # Define resource limits
@@ -37,22 +30,22 @@ kube-state-metrics:
       cpu: "500m"
       memory: "2Gi"
 
-####### This block disables control plane components which are not reachable from within the Gardener data plane
+####### This block disables not needed features
 
-# Disable scraping of etcd
 kubeEtcd:
+  # Disable scraping of control plane component etcd as it is not reachable from the data plane
   enabled: false
 
-# Disable scraping of kubeControllerManager
 kubeControllerManager:
+  # Disable scraping of control plane component kubeControllerManager as it is not reachable from the data plane
   enabled: false
 
-# Disable scraping of kubeProxy
 kubeProxy:
+  # Disable scraping of control plane component kubeProxy as it is not reachable from the data plane
   enabled: false
 
-# Disable scraping of kubeScheduler
 kubeScheduler:
+  # Disable scraping of control plane component kubeScheduler as it is not reachable from the data plane
   enabled: false
 
 ####### This block is required to enable scraping of endpoints with Istio strict mTLS, see also https://istio.io/latest/docs/ops/integrations/prometheus/#tls-settings
@@ -60,22 +53,26 @@ prometheus:
   prometheusSpec:
     podMetadata:
       labels:
+        # Enables istio sidecar injection
         sidecar.istio.io/inject: "true"
       annotations:
-        traffic.sidecar.istio.io/includeOutboundIPRanges: ""  # do not intercept any outbound traffic
+        # Configures istio to not intercept outbound traffic
+        traffic.sidecar.istio.io/includeOutboundIPRanges: "" 
+        # Configures istio to write the client certs into a specific folder
         proxy.istio.io/config: |
           # configure an env variable `OUTPUT_CERTS` to write certificates to the given folder
           proxyMetadata:
             OUTPUT_CERTS: /etc/istio-output-certs
+        # Configures istio to mount the folder to the attached volume
         sidecar.istio.io/userVolumeMount: '[{"name": "istio-certs", "mountPath": "/etc/istio-output-certs"}]' # mount the shared volume at sidecar proxy
 
-    # Additional volumes on the output StatefulSet definition.
+    # Additional volume on the output StatefulSet definition for storing the client certs
     volumes:
       - emptyDir:
           medium: Memory
         name: istio-certs
 
-    # Additional VolumeMounts on the output StatefulSet definition.
+    # Additional VolumeMount on the output StatefulSet definition for storing the client certs
     volumeMounts:
       - mountPath: /etc/prometheus/secrets/istio.default/
         name: istio-certs
@@ -158,7 +155,7 @@ prometheus:
             replacement: $1:$2
           - source_labels: [__meta_kubernetes_namespace]
             action: drop
-            regex: kyma-system|kube-system|compass-system|kyma-integration
+            regex: kyma-system|kube-system
           - source_labels: [__meta_kubernetes_namespace]
             action: replace
             target_label: namespace
@@ -216,7 +213,7 @@ prometheus:
             target_label: __address__
           - source_labels: [__meta_kubernetes_namespace]
             action: drop
-            regex: kyma-system|kube-system|compass-system|kyma-integration
+            regex: kyma-system|kube-system
           - source_labels: [__meta_kubernetes_namespace]
             action: replace
             target_label: namespace
@@ -227,8 +224,10 @@ prometheus:
             action: replace
             target_label: node
 
-# Configures grafana with istio sidecar and alertmanage as additional datasource
+####### This block configures grafana with istio sidecar and alertmanager as additional datasource
+
 grafana:
+  # Add alertmanager as datasource
   additionalDataSources:
     - name: Alertmanager
       type: alertmanager
@@ -236,6 +235,7 @@ grafana:
       access: proxy
       jsonData:
         implementation: prometheus
+  # Configure all grafana sidecars (for loading of dashboards/datasources/rules) with proper security context
   sidecar:
     securityContext:
       privileged: false
@@ -243,7 +243,9 @@ grafana:
       runAsNonRoot: true
       runAsUser: 1337
   podLabels:
+    # Enable istio sidecar for Grafana
     sidecar.istio.io/inject: "true"
+  # Overwrite servicemonitor which scrapes grafana with TLS settings as it runs with mTLS now
   serviceMonitor:
     scheme: https
     tlsConfig:
