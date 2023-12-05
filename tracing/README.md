@@ -1,6 +1,6 @@
 # Example Tracing
 
->**CAUTION** This example is outdated and will be updated soon. Please have a look at the [trace-demo](./../trace-demo/) and [jaeger](./../jaeger/) instead.
+>**CAUTION** This example is outdated and will be updated soon.
 
 ## Overview
 
