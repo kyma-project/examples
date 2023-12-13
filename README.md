@@ -34,7 +34,6 @@ The summary of the documentation in the `examples` repository lists all availabl
 | [Custom serverless runtime image](custom-serverless-runtime-image/README.md) | Build custom runtime image. | Python |
 | [Kiali](kiali/README.md) | Deploy Kiali to Kyma. | Kiali, Istio, Prometheus |
 | [Prometheus](prometheus/README.md) | Deploy a Prometheus stack to monitor custom metrics. | Prometheus, Grafana |
-| [Loki](loki/README.md) | Deploy Loki to store Pod logs. | Loki, Grafana |
 
 ## Installation
 
