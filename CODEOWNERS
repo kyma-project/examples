@@ -17,19 +17,17 @@
 /incluster_eventing/ @m00g3n @pPrecel @dbadura @kwiatekus @cortey
 
 # Custom function runtime image example
-/custom-serverless-runtime-image/ @m00g3n @pPrecel @dbadura @kwiatekus @cortey
+/custom-serverless-runtime-image/ @kyma-project/otters
 
 # Observability
 /jaeger/ @kyma-project/observability
 /kiali/ @kyma-project/observability
 /loki/ @kyma-project/observability
-/metrics-otlp/ @kyma-project/observability
 /prometheus/ @kyma-project/observability
 /trace-demo/ @kyma-project/observability
-/tracing/ @kyma-project/observability
 
 # Scaling functions to zero with KEDA
-/scale-to-zero-with-keda @m00g3n @pPrecel @dbadura @kwiatekus @cortey @anoipm @MichalKalke
+/scale-to-zero-with-keda @kyma-project/otters
 
 # All .md files
-*.md @mmitoraj @NHingerl @grego952 @IwonaLanger @nataliasitko
+*.md @kyma-project/technical-writers
