@@ -84,10 +84,6 @@ All examples are deployable in the cloud. Follow these rules to achieve this and
 
 A CI/CD configuration file accompanies each example to ensure its validity as part of the automation pipeline.
 
-### Acceptance tests
-
-For details on acceptance tests for examples, see the [`acceptance-tests`](tests/README.md) document.
-
 ### Releases
 
 Each example is independently releasable by creating a `tag` in the repository with the `{example-name}/{version}` format. This triggers a release for the given example from its CI/CD configuration. Push released example Docker images to the `example` folder in the Kyma repository, under `eu.gcr.io/kyma-project/example`.
