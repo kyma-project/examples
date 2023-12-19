@@ -13,6 +13,7 @@ The Kyma monitoring stack brings limited configuration options in contrast to th
 ## Prerequisites
 
 - Kyma as the target deployment environment.
+- The [Istio module](https://github.com/kyma-project/istio) is [enabled](https://kyma-project.io/#/02-get-started/01-quick-install).
 - Kubectl > 1.22.x
 - Helm 3.x
 
