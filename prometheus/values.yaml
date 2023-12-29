@@ -2,6 +2,10 @@
 ####### This block configures resource limits for the tooling and disables scaping of them via annotations
 
 prometheusOperator:
+  admissionWebhooks:
+    patch:
+      podAnnotations:
+        sidecar.istio.io/inject: "false"
   # Define resource limits
   resources:
     requests:
