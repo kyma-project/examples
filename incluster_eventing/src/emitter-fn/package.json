@@ -1,7 +1,0 @@
-{
-  "name": "sanitise-fn",
-  "version": "0.0.1",
-  "dependencies": {
-    "@opentelemetry/api": "^1.0.4"
-  }
-}
