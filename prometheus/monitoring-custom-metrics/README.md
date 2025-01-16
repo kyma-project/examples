@@ -1,7 +1,8 @@
 # Expose Custom Metrics in Kyma
 
 > [!WARNING]
-> This guide got reworked and has been moved. Find the updated instructions in [Integrate With Prometheus](https://kyma-project.io/#/telemetry-manager/user/integration/prometheus/README).
+> This guide has been revised and moved. Find the updated instructions in [Integrate With Prometheus](https://kyma-project.io/#/telemetry-manager/user/integration/prometheus/README).
+
 
 ## Overview
 

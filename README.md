@@ -4,7 +4,7 @@
 
 ## :warning: **Archived**
 
-This repository has been deprecated and archived. Replacements can be found in the individual [module pages](https://kyma-project.io/#/06-modules/README). Telemetry related guides moved to the new [telemetry integration guides](https://kyma-project.io/#/telemetry-manager/user/README?id=integration-guides).
+This repository has been deprecated and archived. Replacements can be found in the individual [module pages](https://kyma-project.io/#/06-modules/README). Telemetry-related guides moved to the new [Telemetry integration guides](https://kyma-project.io/#/telemetry-manager/user/README?id=integration-guides).
 
 
 ## Overview
