@@ -1,5 +1,9 @@
 # Expose Custom Metrics in Kyma
 
+> [!WARNING]
+> This guide has been revised and moved. Find the updated instructions in [Integrate With Prometheus](https://kyma-project.io/#/telemetry-manager/user/integration/prometheus/README).
+
+
 ## Overview
 
 This example shows how to expose custom metrics to Prometheus with a Golang service in Kyma. To do so, follow these steps:
