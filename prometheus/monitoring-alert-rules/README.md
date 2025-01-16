@@ -1,5 +1,8 @@
 # Alert Rules Example
 
+> [!WARNING]
+> This guide got reworked and has been moved. Find the updated instructions in [Integrate With Prometheus](https://kyma-project.io/#/telemetry-manager/user/integration/prometheus/README).
+
 ## Overview
 
 This example shows how to deploy and view alerting rules in Kyma.
