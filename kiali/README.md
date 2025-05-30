@@ -1,5 +1,8 @@
 # Install custom Kiali in Kyma
 
+> [!WARNING]
+> This guide is archived and not maintained anymore. Current integration guides around observability are located [here](https://kyma-project.io/#/telemetry-manager/user/README?id=integration-guides).
+
 ## Overview
 
 The following instructions outline how to install [`Kiali`](https://github.com/kiali/helm-charts/tree/master/kiali-operator) in Kyma.
